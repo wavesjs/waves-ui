@@ -22,6 +22,8 @@ var _ = _dereq_('underscore');
       return dashed;
     };
 
+var timeLine;
+
 // property descriptor
 var baseDesc = {
 
@@ -116,9 +118,9 @@ var baseDesc = {
   draw: {
     enumerable: true, value: function(sel){
 
-      var that = this;
-      this.selection = sel;
-      this.initLayers();
+      var that = timeLine; // binding fix when called from d3
+      that.selection = sel;
+      that.initLayers();
 
       sel.each(function() {
 
@@ -308,7 +310,7 @@ var baseDesc = {
 // exported factory
 // ----------------
 module.exports = function createBaseTimeline(options){
-  var timeLine = Object.create({}, baseDesc);
+  timeLine = Object.create({}, baseDesc);
   return timeLine.init(options); // return initiated object
 };
 },{"events":12,"get-set":13,"shortid":17,"underscore":19,"underscore.string":18}],2:[function(_dereq_,module,exports){
