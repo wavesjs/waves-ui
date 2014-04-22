@@ -9,7 +9,7 @@
 var events = _dereq_('events');
 var eventEmitter = new events.EventEmitter();
 var shortId = _dereq_('shortid');
-var getSet = _dereq_('getSet');
+var getSet = _dereq_('get-set');
 
 var _ = _dereq_('underscore');
     _.str = _dereq_('underscore.string');
@@ -311,7 +311,7 @@ module.exports = function createBaseTimeline(options){
   var timeLine = Object.create({}, baseDesc);
   return timeLine.init(options); // return initiated object
 };
-},{"events":12,"getSet":13,"shortid":17,"underscore":19,"underscore.string":18}],2:[function(_dereq_,module,exports){
+},{"events":12,"get-set":13,"shortid":17,"underscore":19,"underscore.string":18}],2:[function(_dereq_,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *

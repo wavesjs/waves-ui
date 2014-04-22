@@ -8,7 +8,7 @@
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
 var shortId = require('shortid');
-var getSet = require('getSet');
+var getSet = require('get-set');
 
 var _ = require('underscore');
     _.str = require('underscore.string');

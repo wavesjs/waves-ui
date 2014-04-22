@@ -12,7 +12,7 @@
   "dependencies": {
     "underscore": "~1.6.0",
     "underscore.string": "~2.3.3",
-    "getset": "git+https://github.com/vectorsize/getset.git#master",
+    "get-set": "git+https://github.com/vectorsize/get-set.git#master",
     "shortid": "~2.0.0",
     "events": "~1.0.0"
   },
