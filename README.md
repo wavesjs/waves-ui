@@ -14,3 +14,8 @@ var myGraph2 = createBaseTimeline();
   .layer(seg) // segment editor layer
   .draw(d3.select('.edit'));
 ```
+
+## Status
+
+You can [find a demo blog post over here](http://wave.ircam.fr/publications/segment-components/).
+More docs and tests to come!
