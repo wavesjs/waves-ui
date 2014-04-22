@@ -22,4 +22,5 @@ var myGraph = createBaseTimeline()
 
 ## Status
 
+You can [find a demo blog post over here](http://wave.ircam.fr/publications/segment-components/).
 work in progress, docs and tests to come.
