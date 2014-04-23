@@ -5,8 +5,8 @@ Turns your simple visualizer into a segment editor!
 
 ```js
 var seg = createSegEdit({name: 'segedit', data: collection.models});
-var myGraph2 = createBaseTimeline();
-  myGraph2.xDomain([0, max])
+var myGraph2 = createBaseTimeline()
+  .xDomain([0, max])
   .width(500)
   .height(80)
   .model(collection.models)
