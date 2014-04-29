@@ -1,0 +1,11 @@
+{
+  "name": "make-editable",
+  "version": "0.1.0",
+  "description": "Takes in a graph element and adds in editing capabilities",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victor Saiz <vectorsize@gmail.com>",
+  "license": "BSD-3"
+}
