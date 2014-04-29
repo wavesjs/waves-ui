@@ -1,4 +1,4 @@
-!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.createBaseTimeline=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.timeLine=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 /* global d3 */
 
 // TODO:
@@ -61,16 +61,10 @@ var baseDesc = {
     value: function(options) {
       options = options || {}; // fail safe
       
-      var addGS = getSet(this);
-
       // generic getters(setters) accessors and defaults
-      addGS('id');
-      addGS('margin');
-      addGS('xDomain');
-      addGS('yDomain');
-      addGS('height');
-      addGS('width');
-      addGS('model');
+      var addGS = getSet(this)([
+          'id', 'margin', 'xDomain', 'yDomain', 'height', 'width', 'data'
+        ]);
 
       // initialize
       this.layers = {};
@@ -131,6 +125,7 @@ var baseDesc = {
         that.el = that.svg;
         
         // events
+        // !!! remember to unbind when deleting element !!!
         that.svg.on('mousedown', function() {
           that.dragInit = d3.event.target;
           that.trigger(that.id() + ':mousedown', d3.event );
@@ -251,10 +246,9 @@ var baseDesc = {
 
       _.each(layers, function(layer){
         layer.load(that);
-        layer.dname = _.dash(layer.name); // dashed name
+        layer.dname = _.dash(layer.name()); // dashed name
         layer.xScale = that.xScale;
         layer.yScale = d3.scale.linear();
-        if(that.model() && layer.hasOwnProperty('model')) layer.model(that.model());
       });
 
     }
@@ -282,10 +276,10 @@ var baseDesc = {
         that.delegateScales(layer);
 
         // margin/position handling
-        if(!layer.height) layer.height = that.height();
-        
-        var top = layer.top || 0;
-        var height = layer.height;
+        if(!!!layer.height()) layer.height(that.height());
+
+        var top = layer.top() || 0;
+        var height = layer.height();
         var width = that.width();
 
         // layer group
@@ -309,7 +303,7 @@ var baseDesc = {
 
 // exported factory
 // ----------------
-module.exports = function createBaseTimeline(options){
+module.exports = function timeline(options){
   timeLine = Object.create({}, baseDesc);
   return timeLine.init(options); // return initiated object
 };
@@ -2807,8 +2801,8 @@ module.exports.seed     = seed;
 module.exports.worker   = worker;
 module.exports.characters = characters;
 module.exports.decode   = decode;
-}).call(this,_dereq_("/Users/vsaiz/Documents/WAVE/repo/lib/wave/ui/base-timeline/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"./lib/alphabet":14,"./lib/encode":15,"/Users/vsaiz/Documents/WAVE/repo/lib/wave/ui/base-timeline/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":11}],18:[function(_dereq_,module,exports){
+}).call(this,_dereq_("/Users/vsaiz/Documents/WAVE/repo/lib/wave/ui/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
+},{"./lib/alphabet":14,"./lib/encode":15,"/Users/vsaiz/Documents/WAVE/repo/lib/wave/ui/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":11}],18:[function(_dereq_,module,exports){
 //  Underscore.string
 //  (c) 2010 Esa-Matti Suuronen <esa-matti aet suuronen dot org>
 //  Underscore.string is freely distributable under the terms of the MIT license.

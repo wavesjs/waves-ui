@@ -1,5 +1,5 @@
 {
-  "name": "timeline",
+  "name": "timeLine",
   "version": "0.1.0",
   "description": "Time based visualization layout manager",
   "main": "index.js",
