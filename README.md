@@ -17,6 +17,7 @@ var collection = new Backbone.Collection([{
 ```
 
 ## DataView
+A data view tells us how to access and manipulate the data.
 ```js
 // Sample dataView tells us how to access the data
 var view = {
