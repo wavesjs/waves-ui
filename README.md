@@ -58,7 +58,6 @@ var seg = segmentVis()
 ```
 
 ## The timeLine layout
-In order to do this you need the [timeLine](https://github.com/Ircam-RnD/timeLine) module.
 ```js
 var graph = timeLine()
   .xDomain([0, max]) // computed last segment's end position
