@@ -1,41 +1,41 @@
-!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.createSegVis=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.segmentVis=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 
 "use strict";
 
-var selfInit = _dereq_('self-init');
-var filter = _dereq_('filter-object');
 var getSet = _dereq_('get-set');
-// var eventEmitter = new events.EventEmitter(); // inherits from basetimeline events
-
-// allowed options to be passed in
-var allowedOptions = ['data', 'name'];
 
 var segDesc = {
 
-  name: { writable: true },
   dname: { writable: true },
   xBaseDomain: { writable: true },
+  xScale: { writable: true },
+  yScale: { writable: true },
   base: { writable: true },
   g: { writable: true },
-  selectable: { writable: true },
-  handleWidth: { writable: true },
+ 
+  // handler width
+  hdWidth: { writable: true },
 
   // "inherit" events,
   on: { enumerable: true, writable: true},
   trigger: {writable: true},
-
+  
   init: {
-    value: function(options) {
-      // we use the selfInit module here to
-      // automatically set the state bases on the filtered
-      // passed in options
-      var addGS = getSet(this);
-      addGS('model');
-      addGS('data');
+    value: function() {
 
-      selfInit(this, options);
+      // getters(setters) to be added
+      getSet(this)([
+        'name', 'height', 'top', 'opacity',
+        'dataView'
+      ]);
+      
+      // defaults
+      var minWidth = 1;
       this.selectable = false;
-      this.handleWidth = 3;
+      this.hdWidth = 3;
+      this.height(0);
+      this.opacity(0.70);
+
       return this;
     }
   },
@@ -43,15 +43,12 @@ var segDesc = {
   load: {
     enumerable: true, configurable: true, value: function(base){
       this.base = base; // bind the baseTimeLine
-      this.on = base.on;
-      this.trigger = base.trigger;
     }
   },
 
   bind: {
-    enumerable: true, value: function(g) {
+    value: function(g) {
       this.g = g;
-
       this.update();
     }
   },
@@ -59,39 +56,37 @@ var segDesc = {
   update: {
     enumerable: true, value: function() {
       var that = this;
-      var sel = this.g.selectAll('.block')
-      .data(this.data(), function(d) {
-        //set the sorting index to d.begin
-        return d.get('begin');
-      });
+      var data = this.base.data();
+      var dataView = this.dataView();
 
-      var opacity = 0.60;
+      var sel = this.g.selectAll('.item')
+            .data(data, dataView.sortIndex || null); // ! we may or may not pass a sorting index
 
       var g = sel.enter()
       .append('g')
-        .attr("class", 'block')
+        .attr("class", 'item')
         .attr("transform", "translate(0, 0)");
-      
+
       g.append('rect')
         .attr("class", 'seg')
         .attr('y', 0)
-        .attr('fill-opacity', opacity)
-        .attr('height', that.height);
+        .attr('fill-opacity', this.opacity())
+        .attr('height', this.height());
       
       g.append("line")
-        .attr("class", 'handle l-handle')
+        .attr("class", 'handle left')
         .attr("y1", 0)
-        .style("stroke-width", this.handleWidth)
-        .attr("y2", that.height)
+        .style("stroke-width", this.hdWidth)
+        .attr("y2", this.height())
         .attr('stroke-opacity', 0);
       
       g.append("line")
-        .attr("class", 'handle r-handle')
+        .attr("class", 'handle right')
         .attr("y1", 0)
-        .style("stroke-width", this.handleWidth)
-        .attr("y2", that.height)
+        .style("stroke-width", this.hdWidth)
+        .attr("y2", this.height())
         .attr('stroke-opacity', 0);
-
+      
       sel.exit().remove();
       this.draw();
     }
@@ -108,73 +103,47 @@ var segDesc = {
 
   draw: {
     enumerable: true, configurable: true, value: function(el) {
-      el = el || this.g.selectAll('.block');
+      el = el || this.g.selectAll('.item');
 
-      var ly = this;
+      var that = this;
       var g = this.g;
-      var halfHandle = this.handleWidth * 0.5;
+      var halfHandler = this.hdWidth * 0.5;
+      var dataView = this.dataView();
 
       // offset handles
-      var lx = function(d){return ly.xScale(parseFloat(d.get('begin'))) + halfHandle;};
-      var rx = function(d){return ly.xScale(parseFloat(d.get('begin'))) + ly.xScale(parseFloat(d.get('duration'))) - halfHandle;};
-
-      var x = function(d){return ly.xScale(parseFloat(d.get('begin')));};
-      var w = function(d){return ly.xScale(parseFloat(d.get('duration')));};
-      var y = function(d){return ly.xScale(parseFloat(d.get('begin'))) + ly.xScale(parseFloat(d.get('duration')));};
-      var color = function(d, i){return d.get('color');};
-
-      el.attr("x", x);
-      el.attr("y", y);
-
-      el.selectAll('.l-handle')
-        .attr("x1", lx)
-        .attr("x2", lx)
-        .attr("fill", color)
-        .style("stroke", color);
-
-      el.selectAll('.r-handle')
-        .attr("x1", rx)
-        .attr("x2", rx)
-        .attr("fill", color)
-        .style("stroke", color);
+      var lx = function(d) { return that.xScale(dataView.start(d)) + halfHandler; };
+      var rx = function(d) { return that.xScale(dataView.start(d) + dataView.duration(d)) - halfHandler; };
+      var x = function(d) { return that.xScale(dataView.start(d)); };
+      var w = function(d) { return that.xScale(dataView.duration(d)); };
+      var color = dataView.color;
 
       el.selectAll('.seg')
         .attr('fill', color)
         .attr('width', w)
         .attr('x', x);
 
-      if(this.selectable) this.bindEvents();
+      el.selectAll('.handle.left')
+        .attr("x1", lx)
+        .attr("x2", lx)
+        .attr("fill", color)
+        .style("stroke", color);
 
-    }
-  },
+      el.selectAll('.handle.right')
+        .attr("x1", rx)
+        .attr("x2", rx)
+        .attr("fill", color)
+        .style("stroke", color);
 
-  bindEvents: {
-    value: function() {
-      this.g.selectAll('.block')
-        .classed('selectable', true);
-    }
-  },
-
-  unbindEvents: {
-    value: function() {
-      this.g.selectAll('.block')
-        .classed('selectable', false);
     }
   }
 
 };
 
-// exported factory
-// ----------------
-// exports initiated object with the passed in options
-// the filter module allows only the specified keys to
-// pass through
-
 module.exports = function createBaseTimeline(options){
   var segmenter = Object.create({}, segDesc);
-  return segmenter.init(filter(options, allowedOptions));
+  return segmenter.init();
 };
-},{"filter-object":3,"get-set":4,"self-init":5}],2:[function(_dereq_,module,exports){
+},{"get-set":3}],2:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -478,22 +447,6 @@ function isUndefined(arg) {
 
 },{}],3:[function(_dereq_,module,exports){
 
-'use strict';
-// module.exports = function (obj, pass) {
-//   return Object.keys(obj).reduce(function(prev, val) {
-//     if (pass.indexOf(val) !== -1) prev[val] = obj[val];
-//     return prev;
-//   }, {});
-// };
-
-module.exports = function filter(obj, valid) {
-  var filtered = {};
-  for(var prop in obj) if(valid.indexOf(prop) !== -1) filtered[prop] = obj[prop];
-  return filtered;
-};
-
-},{}],4:[function(_dereq_,module,exports){
-
 "use strict";
 
 var events = _dereq_('events');
@@ -551,18 +504,6 @@ function getSet(obj) {
     return add;
   };
 }
-},{"events":2}],5:[function(_dereq_,module,exports){
-
-module.exports = function selfInit(o, opts){ "use strict";
-  for(var op in opts){
-    if(o.hasOwnProperty(op)) {
-      if(typeof o[op] === 'function')
-        o[op](opts[op]);
-      else
-        o[op] = opts[op];
-    }
-  }
-};
-},{}]},{},[1])
+},{"events":2}]},{},[1])
 (1)
 });

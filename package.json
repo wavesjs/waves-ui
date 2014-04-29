@@ -1,6 +1,5 @@
 {
-  "name": "seg-vis",
-  "exports": "createSegVis",
+  "name": "segment-vis",
   "version": "0.1.0",
   "description": "Segment visualizer component",
   "main": "index.js",

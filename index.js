@@ -1,40 +1,40 @@
 
 "use strict";
 
-var selfInit = require('self-init');
-var filter = require('filter-object');
 var getSet = require('get-set');
-// var eventEmitter = new events.EventEmitter(); // inherits from basetimeline events
-
-// allowed options to be passed in
-var allowedOptions = ['data', 'name'];
 
 var segDesc = {
 
-  name: { writable: true },
   dname: { writable: true },
   xBaseDomain: { writable: true },
+  xScale: { writable: true },
+  yScale: { writable: true },
   base: { writable: true },
   g: { writable: true },
-  selectable: { writable: true },
-  handleWidth: { writable: true },
+ 
+  // handler width
+  hdWidth: { writable: true },
 
   // "inherit" events,
   on: { enumerable: true, writable: true},
   trigger: {writable: true},
-
+  
   init: {
-    value: function(options) {
-      // we use the selfInit module here to
-      // automatically set the state bases on the filtered
-      // passed in options
-      var addGS = getSet(this);
-      addGS('model');
-      addGS('data');
+    value: function() {
 
-      selfInit(this, options);
+      // getters(setters) to be added
+      getSet(this)([
+        'name', 'height', 'top', 'opacity',
+        'dataView'
+      ]);
+      
+      // defaults
+      var minWidth = 1;
       this.selectable = false;
-      this.handleWidth = 3;
+      this.hdWidth = 3;
+      this.height(0);
+      this.opacity(0.70);
+
       return this;
     }
   },
@@ -42,15 +42,12 @@ var segDesc = {
   load: {
     enumerable: true, configurable: true, value: function(base){
       this.base = base; // bind the baseTimeLine
-      this.on = base.on;
-      this.trigger = base.trigger;
     }
   },
 
   bind: {
-    enumerable: true, value: function(g) {
+    value: function(g) {
       this.g = g;
-
       this.update();
     }
   },
@@ -58,39 +55,37 @@ var segDesc = {
   update: {
     enumerable: true, value: function() {
       var that = this;
-      var sel = this.g.selectAll('.block')
-      .data(this.data(), function(d) {
-        //set the sorting index to d.begin
-        return d.get('begin');
-      });
+      var data = this.base.data();
+      var dataView = this.dataView();
 
-      var opacity = 0.60;
+      var sel = this.g.selectAll('.item')
+            .data(data, dataView.sortIndex || null); // ! we may or may not pass a sorting index
 
       var g = sel.enter()
       .append('g')
-        .attr("class", 'block')
+        .attr("class", 'item')
         .attr("transform", "translate(0, 0)");
-      
+
       g.append('rect')
         .attr("class", 'seg')
         .attr('y', 0)
-        .attr('fill-opacity', opacity)
-        .attr('height', that.height);
+        .attr('fill-opacity', this.opacity())
+        .attr('height', this.height());
       
       g.append("line")
-        .attr("class", 'handle l-handle')
+        .attr("class", 'handle left')
         .attr("y1", 0)
-        .style("stroke-width", this.handleWidth)
-        .attr("y2", that.height)
+        .style("stroke-width", this.hdWidth)
+        .attr("y2", this.height())
         .attr('stroke-opacity', 0);
       
       g.append("line")
-        .attr("class", 'handle r-handle')
+        .attr("class", 'handle right')
         .attr("y1", 0)
-        .style("stroke-width", this.handleWidth)
-        .attr("y2", that.height)
+        .style("stroke-width", this.hdWidth)
+        .attr("y2", this.height())
         .attr('stroke-opacity', 0);
-
+      
       sel.exit().remove();
       this.draw();
     }
@@ -107,69 +102,43 @@ var segDesc = {
 
   draw: {
     enumerable: true, configurable: true, value: function(el) {
-      el = el || this.g.selectAll('.block');
+      el = el || this.g.selectAll('.item');
 
-      var ly = this;
+      var that = this;
       var g = this.g;
-      var halfHandle = this.handleWidth * 0.5;
+      var halfHandler = this.hdWidth * 0.5;
+      var dataView = this.dataView();
 
       // offset handles
-      var lx = function(d){return ly.xScale(parseFloat(d.get('begin'))) + halfHandle;};
-      var rx = function(d){return ly.xScale(parseFloat(d.get('begin'))) + ly.xScale(parseFloat(d.get('duration'))) - halfHandle;};
-
-      var x = function(d){return ly.xScale(parseFloat(d.get('begin')));};
-      var w = function(d){return ly.xScale(parseFloat(d.get('duration')));};
-      var y = function(d){return ly.xScale(parseFloat(d.get('begin'))) + ly.xScale(parseFloat(d.get('duration')));};
-      var color = function(d, i){return d.get('color');};
-
-      el.attr("x", x);
-      el.attr("y", y);
-
-      el.selectAll('.l-handle')
-        .attr("x1", lx)
-        .attr("x2", lx)
-        .attr("fill", color)
-        .style("stroke", color);
-
-      el.selectAll('.r-handle')
-        .attr("x1", rx)
-        .attr("x2", rx)
-        .attr("fill", color)
-        .style("stroke", color);
+      var lx = function(d) { return that.xScale(dataView.start(d)) + halfHandler; };
+      var rx = function(d) { return that.xScale(dataView.start(d) + dataView.duration(d)) - halfHandler; };
+      var x = function(d) { return that.xScale(dataView.start(d)); };
+      var w = function(d) { return that.xScale(dataView.duration(d)); };
+      var color = dataView.color;
 
       el.selectAll('.seg')
         .attr('fill', color)
         .attr('width', w)
         .attr('x', x);
 
-      if(this.selectable) this.bindEvents();
+      el.selectAll('.handle.left')
+        .attr("x1", lx)
+        .attr("x2", lx)
+        .attr("fill", color)
+        .style("stroke", color);
 
-    }
-  },
+      el.selectAll('.handle.right')
+        .attr("x1", rx)
+        .attr("x2", rx)
+        .attr("fill", color)
+        .style("stroke", color);
 
-  bindEvents: {
-    value: function() {
-      this.g.selectAll('.block')
-        .classed('selectable', true);
-    }
-  },
-
-  unbindEvents: {
-    value: function() {
-      this.g.selectAll('.block')
-        .classed('selectable', false);
     }
   }
 
 };
 
-// exported factory
-// ----------------
-// exports initiated object with the passed in options
-// the filter module allows only the specified keys to
-// pass through
-
 module.exports = function createBaseTimeline(options){
   var segmenter = Object.create({}, segDesc);
-  return segmenter.init(filter(options, allowedOptions));
+  return segmenter.init();
 };
