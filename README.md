@@ -73,6 +73,6 @@ d3.select('.timeline').call(graph);
 Currently subject to change, for a latest status explanation you can visit [this blogpost](http://wave.ircam.fr/publications/segment-components-updates/)
 For an in depth  explanation on the philosophy and usage of this library please refer to [this blog post](http://wave.ircam.fr/publications/visual-tools/).
 
-You can find a *broken demo blog post* [over here](http://wave.ircam.fr/publications/segment-components/).
+You can find a **broken demo blog post** [over here](http://wave.ircam.fr/publications/segment-components/).
 
 work in progress, docs and tests to come.
