@@ -1,39 +1,30 @@
-!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.createSegEdit=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.segmentEdit=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 
 /* global d3 */
 "use strict";
 
-var createSegVis = _dereq_('../seg-vis');
+module.exports = function makeEditable(graph){
 
-// exports an augmented segment
-// ----------------------------
-
-module.exports = function createSegmentEditor(options){
-
-  // a simple segment visualizer to decorate
-  var edit = createSegVis(options);
+  // a visualiser to decorate
+  var edit = graph;
 
   // keep old methods to override
-  edit.defaultDraw = edit.draw;
-  edit.defaultLoad = edit.load;
+  var defaultDraw = edit.draw;
+  var defaultLoad = edit.load;
 
   // overrides load to add editing capablilities
   Object.defineProperty(edit, 'load', {
     value: function(base) {
 
       // default load
-      this.defaultLoad(base);
-      var id = this.base.id();
-      var g = this.base.g;
-      // edition events handling
+      defaultLoad.call(this, base);
+      var id = base.id();
+      var g = base.g;
 
-      this.base.on(id + ':mousedown', this.mouseDown.bind(this));
-      this.base.on(id + ':drag', this.onDrag.bind(this));
-      this.base.on(id + ':mouseup', function () {
-        // has to be the svg because the group is virtually not there :(
-        this.base.svg.classed('handle-resize', false);
-        this.base.svg.classed('handle-drag', false);
-      }.bind(this));
+      // edition events handling
+      base.on(id + ':mousedown', this.mouseDown.bind(this));
+      base.on(id + ':drag', this.onDrag.bind(this));
+      base.on(id + ':mouseup', this.mouseUp.bind(this));
       
       // clicking anywhere ouside the container deselects
       document.body.addEventListener('mousedown', this.mouseDown.bind(this));
@@ -45,9 +36,17 @@ module.exports = function createSegmentEditor(options){
   Object.defineProperty(edit, 'draw', {
     enumerable: true, value: function(el) {
       // add css for cursors
-      this.g.selectAll('.block').classed('selectable', true);
-      this.defaultDraw(el);
+      this.g.selectAll('.item').classed('selectable', true);
+      defaultDraw.call(this, el);
     }
+  });
+
+  Object.defineProperty(edit, 'mouseUp', {
+    value: function () {
+        // has to be the svg because the group is virtually not there :(
+        this.base.svg.classed('handle-resize', false);
+        this.base.svg.classed('handle-drag', false);
+      }
   });
 
   // mouse down ev handler
@@ -55,93 +54,27 @@ module.exports = function createSegmentEditor(options){
     value: function(ev) {
       if(ev.button === 0) {
         var item = ev.target;
-        var svg = this.base.svg.node();
-        
-        switch (item.tagName){
-          case 'rect':
-            this.segMousedown.call(this, ev);
-            break;
 
-          case 'line':
-            this.segMousedown.call(this, ev);
-            break;
-
-          default:
-            this.svgMousedown.call(svg, ev);
-            break;
+        if(this.hits(item)) {
+          this.itemMousedown(ev);
+        } else {
+          this.unselectAll();
         }
+
       }
-    }
-  });
-
-  // mouse drag ev switcher depending on drag (left|right|block) levels
-  Object.defineProperty(edit, 'onDrag', {
-    value: function(e) {
-      var classes = e.dragged.classList;
-      var mode = 'mv';
-      if(classes.contains('l-handle') > 0) mode = 'l';
-      if(classes.contains('r-handle') > 0) mode = 'r';
-      this.handleDrag.call(this, mode, e);
-    }
-  });
-
-  // handles all the dragging possibilities
-  Object.defineProperty(edit, 'handleDrag', {
-    value: function handleDrag(mode, res) {
-
-      var d = res.d;
-      var delta = res.event;
-      var item = res.target;
-      var minDur = 0.0001;
-
-      // has to be the svg because the group is virtually not there :(
-      if(mode === 'l' || mode === 'r') {
-        this.base.svg.classed('handle-resize', true);
-      } else {
-        this.base.svg.classed('handle-drag', true);
-      }
-
-      // update duration
-      // ---------------
-      var duration = parseFloat(d.get('duration'));
-      if(mode === 'l') duration += parseFloat( 1 - this.xScale.invert(delta.dx)); // ms
-      if(mode === 'r') duration += parseFloat( this.xScale.invert(delta.dx)); // ms
-
-      // abort if duration is smaller than the minimum duration
-      if(duration <= minDur) return;
-
-      // apply duration when editing through the handles
-      if(mode === 'l' || mode === 'r') d.set('duration', duration);
-      
-      // update begining
-      // ---------------
-      var begin = parseFloat(d.get('begin'));
-      if(mode === 'l' || mode === 'mv') {
-        begin += this.xScale.invert(delta.dx); // data.begin in ms
-        d.set('begin', begin);
-      }
-
-      // synchronise durations and end
-      d.set('end', d.get('begin') + d.get('duration'));
-
-      // redraw visualization
-      // --------------------
-      this.draw(d3.select(item));
-
     }
   });
 
   // mouse down on the svg element deselects
-  Object.defineProperty(edit, 'svgMousedown', {
-    value: function svgMousedown(ev) {
-
-      d3.select(this).selectAll('.selected').classed('selected', false);
+  Object.defineProperty(edit, 'unselectAll', {
+    value: function svgMousedown() {
+      this.base.svg.selectAll('.selected').classed('selected', false);
     }
   });
 
   // mousedown on the segments selects them and should trigger an event
-  Object.defineProperty(edit, 'segMousedown', {
-    value: function segMousedown(ev) {
+  Object.defineProperty(edit, 'itemMousedown', {
+    value: function itemMousedown(ev) {
 
       var g = this.g;
       var item = ev.target.parentNode; // containing g
@@ -150,7 +83,7 @@ module.exports = function createSegmentEditor(options){
       var isSelectable = item.classList.contains('selectable');
 
       if((selects.length < 1 || !isFound) && !ev.shiftKey){
-        g.selectAll('.selected').classed('selected', false);
+        this.unselectAll();
       }
       if(isSelectable) d3.select(item).classed('selected', true);
     }
@@ -158,7 +91,87 @@ module.exports = function createSegmentEditor(options){
 
   return edit;
 };
-},{"../seg-vis":3}],2:[function(_dereq_,module,exports){
+},{}],2:[function(_dereq_,module,exports){
+
+/* global d3 */
+"use strict";
+
+var segVis = _dereq_('segment-vis');
+var makeEditable = _dereq_('../make-editable');
+
+// exports an augmented segment
+// ----------------------------
+
+module.exports = function segmentEditor(){
+  var seg = segVis();
+
+  // hit test tells wheter we are acting on our visualiser or not
+  Object.defineProperty(seg, 'hits', {
+    value: function(item) {
+      return item.classList.contains('seg') || item.tagName === 'line';
+    }
+  });
+
+  // mouse drag ev switcher depending on drag (left|right|block) levels
+  Object.defineProperty(seg, 'onDrag', {
+    value: function(e) {
+      var classes = e.dragged.classList;
+
+      var mode = 'mv';
+      if(classes.contains('left') > 0) mode = 'l';
+      if(classes.contains('right') > 0) mode = 'r';
+      this.handleDrag.call(this, mode, e);
+    }
+  });
+
+
+  // handles all the dragging possibilities
+  Object.defineProperty(seg, 'handleDrag', {
+    value: function handleDrag(mode, res) {
+
+      var d = res.d;
+      var delta = res.event;
+      var item = res.target;
+      var minDur = 0.0001;
+
+      var dataView = this.dataView();
+
+      // has to be the svg because the group is virtually not there :(
+      if(mode === 'l' || mode === 'r') {
+        this.base.svg.classed('handle-resize', true);
+      } else {
+        this.base.svg.classed('handle-drag', true);
+      }
+
+      var duration = dataView.duration(d);
+
+      if(mode === 'l') duration += parseFloat( 1 - this.xScale.invert(delta.dx)); // ms
+      if(mode === 'r') duration += parseFloat( this.xScale.invert(delta.dx)); // ms
+
+      // abort if duration is smaller than the minimum duration
+      if(duration <= minDur) return;
+      // apply duration when editing through the handles
+      if(mode === 'l' || mode === 'r') dataView.duration(d, duration);
+      
+      // update begining
+      // ---------------
+      var begin = dataView.start(d);
+      if(mode === 'l' || mode === 'mv') {
+        begin += this.xScale.invert(delta.dx); // data.begin in ms
+        dataView.start(d, begin);
+      }
+
+      // redraw visualization
+      // --------------------
+      this.draw(d3.select(item));
+
+    }
+  });
+
+
+  return makeEditable(seg);
+};
+},{"../make-editable":1,"segment-vis":4}],3:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -460,44 +473,44 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],3:[function(_dereq_,module,exports){
+},{}],4:[function(_dereq_,module,exports){
 
 "use strict";
 
-var selfInit = _dereq_('self-init');
-var filter = _dereq_('filter-object');
 var getSet = _dereq_('get-set');
-// var eventEmitter = new events.EventEmitter(); // inherits from basetimeline events
-
-// allowed options to be passed in
-var allowedOptions = ['data', 'name'];
 
 var segDesc = {
 
-  name: { writable: true },
   dname: { writable: true },
   xBaseDomain: { writable: true },
+  xScale: { writable: true },
+  yScale: { writable: true },
   base: { writable: true },
   g: { writable: true },
-  selectable: { writable: true },
-  handleWidth: { writable: true },
+ 
+  // handler width
+  hdWidth: { writable: true },
 
   // "inherit" events,
   on: { enumerable: true, writable: true},
   trigger: {writable: true},
-
+  
   init: {
-    value: function(options) {
-      // we use the selfInit module here to
-      // automatically set the state bases on the filtered
-      // passed in options
-      var addGS = getSet(this);
-      addGS('model');
-      addGS('data');
+    value: function() {
 
-      selfInit(this, options);
+      // getters(setters) to be added
+      getSet(this)([
+        'name', 'height', 'top', 'opacity',
+        'dataView'
+      ]);
+      
+      // defaults
+      var minWidth = 1;
       this.selectable = false;
-      this.handleWidth = 3;
+      this.hdWidth = 3;
+      this.height(0);
+      this.opacity(0.70);
+
       return this;
     }
   },
@@ -505,15 +518,12 @@ var segDesc = {
   load: {
     enumerable: true, configurable: true, value: function(base){
       this.base = base; // bind the baseTimeLine
-      this.on = base.on;
-      this.trigger = base.trigger;
     }
   },
 
   bind: {
-    enumerable: true, value: function(g) {
+    value: function(g) {
       this.g = g;
-
       this.update();
     }
   },
@@ -521,39 +531,37 @@ var segDesc = {
   update: {
     enumerable: true, value: function() {
       var that = this;
-      var sel = this.g.selectAll('.block')
-      .data(this.data(), function(d) {
-        //set the sorting index to d.begin
-        return d.get('begin');
-      });
+      var data = this.base.data();
+      var dataView = this.dataView();
 
-      var opacity = 0.60;
+      var sel = this.g.selectAll('.item')
+            .data(data, dataView.sortIndex || null); // ! we may or may not pass a sorting index
 
       var g = sel.enter()
       .append('g')
-        .attr("class", 'block')
+        .attr("class", 'item')
         .attr("transform", "translate(0, 0)");
-      
+
       g.append('rect')
         .attr("class", 'seg')
         .attr('y', 0)
-        .attr('fill-opacity', opacity)
-        .attr('height', that.height);
+        .attr('fill-opacity', this.opacity())
+        .attr('height', this.height());
       
       g.append("line")
-        .attr("class", 'handle l-handle')
+        .attr("class", 'handle left')
         .attr("y1", 0)
-        .style("stroke-width", this.handleWidth)
-        .attr("y2", that.height)
+        .style("stroke-width", this.hdWidth)
+        .attr("y2", this.height())
         .attr('stroke-opacity', 0);
       
       g.append("line")
-        .attr("class", 'handle r-handle')
+        .attr("class", 'handle right')
         .attr("y1", 0)
-        .style("stroke-width", this.handleWidth)
-        .attr("y2", that.height)
+        .style("stroke-width", this.hdWidth)
+        .attr("y2", this.height())
         .attr('stroke-opacity', 0);
-
+      
       sel.exit().remove();
       this.draw();
     }
@@ -570,89 +578,47 @@ var segDesc = {
 
   draw: {
     enumerable: true, configurable: true, value: function(el) {
-      el = el || this.g.selectAll('.block');
+      el = el || this.g.selectAll('.item');
 
-      var ly = this;
+      var that = this;
       var g = this.g;
-      var halfHandle = this.handleWidth * 0.5;
+      var halfHandler = this.hdWidth * 0.5;
+      var dataView = this.dataView();
 
       // offset handles
-      var lx = function(d){return ly.xScale(parseFloat(d.get('begin'))) + halfHandle;};
-      var rx = function(d){return ly.xScale(parseFloat(d.get('begin'))) + ly.xScale(parseFloat(d.get('duration'))) - halfHandle;};
-
-      var x = function(d){return ly.xScale(parseFloat(d.get('begin')));};
-      var w = function(d){return ly.xScale(parseFloat(d.get('duration')));};
-      var y = function(d){return ly.xScale(parseFloat(d.get('begin'))) + ly.xScale(parseFloat(d.get('duration')));};
-      var color = function(d, i){return d.get('color');};
-
-      el.attr("x", x);
-      el.attr("y", y);
-
-      el.selectAll('.l-handle')
-        .attr("x1", lx)
-        .attr("x2", lx)
-        .attr("fill", color)
-        .style("stroke", color);
-
-      el.selectAll('.r-handle')
-        .attr("x1", rx)
-        .attr("x2", rx)
-        .attr("fill", color)
-        .style("stroke", color);
+      var lx = function(d) { return that.xScale(dataView.start(d)) + halfHandler; };
+      var rx = function(d) { return that.xScale(dataView.start(d) + dataView.duration(d)) - halfHandler; };
+      var x = function(d) { return that.xScale(dataView.start(d)); };
+      var w = function(d) { return that.xScale(dataView.duration(d)); };
+      var color = dataView.color;
 
       el.selectAll('.seg')
         .attr('fill', color)
         .attr('width', w)
         .attr('x', x);
 
-      if(this.selectable) this.bindEvents();
+      el.selectAll('.handle.left')
+        .attr("x1", lx)
+        .attr("x2", lx)
+        .attr("fill", color)
+        .style("stroke", color);
 
-    }
-  },
+      el.selectAll('.handle.right')
+        .attr("x1", rx)
+        .attr("x2", rx)
+        .attr("fill", color)
+        .style("stroke", color);
 
-  bindEvents: {
-    value: function() {
-      this.g.selectAll('.block')
-        .classed('selectable', true);
-    }
-  },
-
-  unbindEvents: {
-    value: function() {
-      this.g.selectAll('.block')
-        .classed('selectable', false);
     }
   }
 
 };
 
-// exported factory
-// ----------------
-// exports initiated object with the passed in options
-// the filter module allows only the specified keys to
-// pass through
-
 module.exports = function createBaseTimeline(options){
   var segmenter = Object.create({}, segDesc);
-  return segmenter.init(filter(options, allowedOptions));
+  return segmenter.init();
 };
-},{"filter-object":4,"get-set":5,"self-init":6}],4:[function(_dereq_,module,exports){
-
-'use strict';
-// module.exports = function (obj, pass) {
-//   return Object.keys(obj).reduce(function(prev, val) {
-//     if (pass.indexOf(val) !== -1) prev[val] = obj[val];
-//     return prev;
-//   }, {});
-// };
-
-module.exports = function filter(obj, valid) {
-  var filtered = {};
-  for(var prop in obj) if(valid.indexOf(prop) !== -1) filtered[prop] = obj[prop];
-  return filtered;
-};
-
-},{}],5:[function(_dereq_,module,exports){
+},{"get-set":5}],5:[function(_dereq_,module,exports){
 
 "use strict";
 
@@ -711,18 +677,6 @@ function getSet(obj) {
     return add;
   };
 }
-},{"events":2}],6:[function(_dereq_,module,exports){
-
-module.exports = function selfInit(o, opts){ "use strict";
-  for(var op in opts){
-    if(o.hasOwnProperty(op)) {
-      if(typeof o[op] === 'function')
-        o[op](opts[op]);
-      else
-        o[op] = opts[op];
-    }
-  }
-};
-},{}]},{},[1])
-(1)
+},{"events":3}]},{},[2])
+(2)
 });

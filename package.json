@@ -1,6 +1,5 @@
 {
-  "name": "seg-edit",
-  "exports": "createSegEdit",
+  "name": "segment-edit",
   "version": "0.1.0",
   "description": "Plun-g-play editing tunctionality companion to the segment visualizer ",
   "main": "index.js",
@@ -10,7 +9,8 @@
   "author": "Victor Saiz",
   "license": "BSD-3",
   "dependencies": {
-    "seg-vis": "git://github.com/Ircam-RnD/seg-vis.git"
+    "segment-vis": "git://github.com/Ircam-RnD/segment-vis.git",
+    "make-editable": "git://github.com/Ircam-RnD/make-editable.git"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
