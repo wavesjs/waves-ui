@@ -3,6 +3,20 @@
 Use this module to visualise data segments over a shared timeline.  
 The module relies on a [timeline](https://github.com/Ircam-RnD/timeLine) instance, and requires data to visualise and a `dataView` that describes how to use the data.  
 
+## Data
+Will be passed to a timeLine later. In this case a Backbone collection.
+```js
+var collection = new Backbone.Collection([{
+    "begin": "0",
+    "duration": "16121",
+    "end": "16121",
+    "color": "#A9d"
+  }, { "begin": "1" …},
+  }, { "begin": "3" …},
+]);
+```
+
+## DataView
 ```js
 // Sample dataView tells us how to access the data
 var view = {
@@ -30,14 +44,7 @@ var view = {
 };
 ```
 
-## The data
-Will be passed to a timeLine later. In this case a Backbone collection.
-```js
-var collection = new Backbone.Collection(data);
-```
-
 ## The Visualiser layer
-
 ```js
 var seg = segmentVis()
   .dataView(view) // aforementioned dataView
