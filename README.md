@@ -1,7 +1,7 @@
 #Segment visualizer
 
-Use this module to visualise data segments over a shared timeline.  
-The module relies on a [timeline](https://github.com/Ircam-RnD/timeLine) instance, and requires data to visualise and a `dataView` that describes how to use the data.  
+Use this module to visualize data segments over a shared timeline.
+The module relies on a [timeline](https://github.com/Ircam-RnD/timeLine) instance, and requires data to visualize and a `dataView` that describes how to use the data.
 
 ## Data
 Will be passed to a timeLine later. In this case a Backbone collection.
@@ -45,7 +45,7 @@ var view = {
 };
 ```
 
-## The Visualiser layer
+## The Visualizer layer
 ```js
 var seg = segmentVis()
   .dataView(view) // aforementioned dataView
@@ -63,7 +63,7 @@ var graph = timeLine()
   .height(80)
   .data(collection.models)
   .margin({top: 60, right: 60, bottom: 20, left: 0})
-  .layer(seg) // segment visualiser layer
+  .layer(seg) // segment visualizer layer
   .draw; // the callable endpoint
 
 d3.select('.timeline').call(graph);
