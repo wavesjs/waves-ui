@@ -102,7 +102,7 @@ var baseDesc = {
   // adds new layers to layout
   layer: {
     enumerable: true, value: function(layer){
-      this.layers[layer.name] = layer;
+      this.layers[layer.name()] = layer;
       return this;
     }
   },
@@ -242,8 +242,9 @@ var baseDesc = {
         
       var that = this;
       var layers = this.layers;
-
+      // console.log(layers)
       _.each(layers, function(layer){
+        // console.log(layer)
         layer.load(that);
         layer.dname = _.dash(layer.name()); // dashed name
         layer.xScale = that.xScale;
