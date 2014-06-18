@@ -1,0 +1,15 @@
+{
+  "name": "waveform",
+  "version": "0.1.0",
+  "description": "Waveform drawing utility",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "get-set": "git+https://github.com/vectorsize/get-set.git#master",
+    "brfs": "^1.1.1"
+  },
+  "author": "Victor Saiz <vectorsize@gmail.com>",
+  "license": "BSD-3"
+}
