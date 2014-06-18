@@ -35,6 +35,10 @@ var graph = timeLine()
 d3.select('.timeline').call(graph);
 ```
 
+## Demo
+
+https://ircam-rnd.github.io/waveform-vis/
+
 ## Status
 
 This is a first working version that works with a snapshot of the original data. A more elaborate solution is on the way, for the time being you can set the "resolution" of the waveform in samples per pixel.
