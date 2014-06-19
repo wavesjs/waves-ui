@@ -65,9 +65,9 @@ For an in depth  explanation on the philosophy and usage of this library please 
 <p>This code is part of the <a href="http://wave.ircam.fr">WAVE project</a>, funded by ANR (The French National Research Agency), <em>ContInt</em> program, 2012-2015.</p>
 </div>
 
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="https://rawgit.com/ircam-rnd/segment-vis/master/segment-vis.min.js"></script>
-<script src="https://rawgit.com/ircam-rnd/timeLine/master/timeLine.min.js"></script>
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="//rawgit.com/ircam-rnd/segment-vis/master/segment-vis.min.js"></script>
+<script src="//rawgit.com/ircam-rnd/timeLine/master/timeLine.min.js"></script>
 <script>
 
     var data = [{
