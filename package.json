@@ -1,7 +1,7 @@
 {
   "name": "segment-vis",
-  "version": "0.1.0",
-  "description": "Segment visualizer component",
+  "version": "0.1.1",
+  "description": "Segment visualiser component",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,8 +10,7 @@
   "license": "BSD-3",
   "dependencies": {
     "get-set": "git://github.com/vectorsize/get-set.git#master",
-    "self-init": "git://github.com/vectorsize/self-init.git#master",
-    "filter-object": "git://github.com/vectorsize/filter-object.git#master"
+    "extend": "^1.2.1"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

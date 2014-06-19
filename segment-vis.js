@@ -3,12 +3,13 @@
 "use strict";
 
 var getSet = _dereq_('get-set');
+var extend = _dereq_('extend');
 
 var segDesc = {
 
+  unitClass: { writable: true },
   dname: { writable: true },
   xBaseDomain: { writable: true },
-  xScale: { writable: true },
   yScale: { writable: true },
   base: { writable: true },
   g: { writable: true },
@@ -25,12 +26,12 @@ var segDesc = {
 
       // getters(setters) to be added
       getSet(this)([
-        'name', 'height', 'top', 'opacity',
-        'dataView'
+        'name', 'height', 'top', 'data', 'opacity',
+        'dataView', 'xDomain', 'xRange', 'yDomain', 'yRange'
       ]);
       
       // defaults
-      var minWidth = 1;
+      this.minWidth = 1;
       this.selectable = false;
       this.hdWidth = 3;
       this.height(0);
@@ -40,9 +41,39 @@ var segDesc = {
     }
   },
 
+  // default dataView to be overriden by the user's
+  defaultDataView: {
+    value: function() {
+      var that = this;
+      return {
+                start: function(d, v) {
+                  if(!v) return +d.start || 0;
+                  d.start = (+v);
+                },
+                duration: function(d, v) {
+                  if(!v) return +d.duration || 1;
+                  d.duration = (+v);
+                },
+                height: function(d, v) {
+                  if(!v) return +d.height || that.base.height();
+                  d.height = (+v);
+                },
+                y: function(d, v) {
+                  if(!v) return +d.y || 0;
+                  d.y = (+v);
+                },
+                color: function(d, v) {
+                  if(!v) return d.color || '#000000';
+                  d.color = v;
+                }
+              };
+    }
+  },
+
   load: {
     enumerable: true, configurable: true, value: function(base){
       this.base = base; // bind the baseTimeLine
+      this.unitClass = this.name() + '-item';
     }
   },
 
@@ -54,37 +85,39 @@ var segDesc = {
   },
 
   update: {
-    enumerable: true, value: function() {
+    enumerable: true, value: function(data) {
       var that = this;
-      var data = this.base.data();
-      var dataView = this.dataView();
 
-      var sel = this.g.selectAll('.item')
-            .data(data, dataView.sortIndex || null); // ! we may or may not pass a sorting index
+      this.data(this.data() || this.base.data());
+
+      data = data || this.data();
+
+      var dv = extend(this.defaultDataView(), this.dataView());
+
+      // this.untouchedXscale = this.base.xScale.copy();
+      // this.untouchedYscale = this.base.yScale.copy();
+      this.zoomFactor = this.base.zoomFactor;
+
+      var sel = this.g.selectAll('.' + this.unitClass)
+            .data(data, dv.sortIndex || null); // ! we may or may not pass a sorting index
 
       var g = sel.enter()
       .append('g')
-        .attr("class", 'item')
-        .attr("transform", "translate(0, 0)");
+        .attr("class", this.unitClass);
+        // .attr("transform", "translate(0, 0)");
 
       g.append('rect')
         .attr("class", 'seg')
-        .attr('y', 0)
-        .attr('fill-opacity', this.opacity())
-        .attr('height', this.height());
+        .attr('fill-opacity', this.opacity());
       
       g.append("line")
         .attr("class", 'handle left')
-        .attr("y1", 0)
         .style("stroke-width", this.hdWidth)
-        .attr("y2", this.height())
         .attr('stroke-opacity', 0);
       
       g.append("line")
         .attr("class", 'handle right')
-        .attr("y1", 0)
         .style("stroke-width", this.hdWidth)
-        .attr("y2", this.height())
         .attr('stroke-opacity', 0);
       
       sel.exit().remove();
@@ -92,45 +125,95 @@ var segDesc = {
     }
   },
 
-  // xZoon: {
-  //   enumerable: true, value: function(val){
-  //     var xAxis = this.graph[this.iName];
-  //     xAxis.scale(this.xScale);
+  xZoom: {
+    enumerable: true, value: function(val) {
+      // console.log(this.xBaseDomain);
+      // console.log('zooom');
+      var xScale = this.base.xScale;
+      var min = xScale.domain()[0],
+          max = xScale.domain()[1];
 
-  //     this.g.call(xAxis);
-  //   }
-  // },
+      var nuData = [];
+      var dv = extend(this.defaultDataView(), this.dataView());
+      var that = this;
+
+      this.data().forEach(function(d, i) {
+        var start = dv.start(d);
+        var duration = dv.duration(d);
+        var end = start + duration;
+        // if((dv.start(d) + dv.duration(d)) <= max && dv.start(d) >= min) nuData.push(d);
+        if((start > min && end < max) || (start < min && end < max && end > min) || (start > min && start < max && end > max) || (end > max && start < min)) nuData.push(d);
+        // if((end < min && start < min) || (end > max && start > max)) nuData.push(d);
+      });
+      
+      this.update(nuData);
+      // var xAxis = this.graph[this.iName];
+      // xAxis.scale(xScale);
+
+      // this.g.call(xAxis);
+    }
+  },
 
   draw: {
     enumerable: true, configurable: true, value: function(el) {
-      el = el || this.g.selectAll('.item');
+      el = el || this.g.selectAll('.' + this.unitClass);
 
       var that = this;
       var g = this.g;
       var halfHandler = this.hdWidth * 0.5;
-      var dataView = this.dataView();
+      var dv = extend(this.defaultDataView(), this.dataView());
+      var base = this.base;
+      var xScale = this.base.xScale;
+      var max = Math.max;
 
-      // offset handles
-      var lx = function(d) { return that.xScale(dataView.start(d)) + halfHandler; };
-      var rx = function(d) { return that.xScale(dataView.start(d) + dataView.duration(d)) - halfHandler; };
-      var x = function(d) { return that.xScale(dataView.start(d)); };
-      var w = function(d) { return that.xScale(dataView.duration(d)); };
-      var color = dataView.color;
+      var x = function(d) { return xScale(dv.start(d)); };
+      var w = function(d) {
+        var _w = (xScale(dv.start(d) + dv.duration(d))) - xScale(dv.start(d));
+        return max(that.minWidth, _w);
+      };
+ 
+      // var h = function(d) { return that.height() - that.yScale(dv.height(d)); };
+      var h = function(d) { return max(that.yScale(dv.height(d)), 1); };
+      var y = function(d) { return that.yScale(dv.y(d)) - h(d); };
+
+      // handlers
+      var lx = function(d) { return xScale(dv.start(d)) + halfHandler; };
+      var rx = function(d) {
+        var _w = (xScale(dv.start(d) + dv.duration(d))) - xScale(dv.start(d));
+        var rpos = xScale(dv.start(d) + dv.duration(d)) - halfHandler;
+        return (_w < that.minWidth) ? dv.start(d) + ((that.minWidth + that.hdWidth) * 2 ) : rpos;
+      };
+
+      var lrh = function(d) { return y(d) + h(d); };
+
+      var color = function(d) { return dv.color(d); };
 
       el.selectAll('.seg')
-        .attr('fill', color)
+        .attr('x', x)
+        .attr('y', y)
+        
         .attr('width', w)
-        .attr('x', x);
+        .attr('height', h)
+
+        .attr('fill', color);
 
       el.selectAll('.handle.left')
         .attr("x1", lx)
         .attr("x2", lx)
+
+        .attr("y1", y)
+        .attr("y2", lrh)
+        
         .attr("fill", color)
         .style("stroke", color);
 
       el.selectAll('.handle.right')
         .attr("x1", rx)
         .attr("x2", rx)
+
+        .attr("y1", y)
+        .attr("y2", lrh)
+        
         .attr("fill", color)
         .style("stroke", color);
 
@@ -143,7 +226,7 @@ module.exports = function createBaseTimeline(options){
   var segmenter = Object.create({}, segDesc);
   return segmenter.init();
 };
-},{"get-set":3}],2:[function(_dereq_,module,exports){
+},{"extend":3,"get-set":4}],2:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -446,6 +529,86 @@ function isUndefined(arg) {
 }
 
 },{}],3:[function(_dereq_,module,exports){
+var hasOwn = Object.prototype.hasOwnProperty;
+var toString = Object.prototype.toString;
+
+function isPlainObject(obj) {
+	if (!obj || toString.call(obj) !== '[object Object]' || obj.nodeType || obj.setInterval)
+		return false;
+
+	var has_own_constructor = hasOwn.call(obj, 'constructor');
+	var has_is_property_of_method = hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
+	// Not own constructor property must be Object
+	if (obj.constructor && !has_own_constructor && !has_is_property_of_method)
+		return false;
+
+	// Own properties are enumerated firstly, so to speed up,
+	// if last one is own, then all properties are own.
+	var key;
+	for ( key in obj ) {}
+
+	return key === undefined || hasOwn.call( obj, key );
+};
+
+module.exports = function extend() {
+	var options, name, src, copy, copyIsArray, clone,
+	    target = arguments[0] || {},
+	    i = 1,
+	    length = arguments.length,
+	    deep = false;
+
+	// Handle a deep copy situation
+	if ( typeof target === "boolean" ) {
+		deep = target;
+		target = arguments[1] || {};
+		// skip the boolean and the target
+		i = 2;
+	}
+
+	// Handle case when target is a string or something (possible in deep copy)
+	if ( typeof target !== "object" && typeof target !== "function") {
+		target = {};
+	}
+
+	for ( ; i < length; i++ ) {
+		// Only deal with non-null/undefined values
+		if ( (options = arguments[ i ]) != null ) {
+			// Extend the base object
+			for ( name in options ) {
+				src = target[ name ];
+				copy = options[ name ];
+
+				// Prevent never-ending loop
+				if ( target === copy ) {
+					continue;
+				}
+
+				// Recurse if we're merging plain objects or arrays
+				if ( deep && copy && ( isPlainObject(copy) || (copyIsArray = Array.isArray(copy)) ) ) {
+					if ( copyIsArray ) {
+						copyIsArray = false;
+						clone = src && Array.isArray(src) ? src : [];
+
+					} else {
+						clone = src && isPlainObject(src) ? src : {};
+					}
+
+					// Never move original objects, clone them
+					target[ name ] = extend( deep, clone, copy );
+
+				// Don't bring in undefined values
+				} else if ( copy !== undefined ) {
+					target[ name ] = copy;
+				}
+			}
+		}
+	}
+
+	// Return the modified object
+	return target;
+};
+
+},{}],4:[function(_dereq_,module,exports){
 
 "use strict";
 
