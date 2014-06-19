@@ -3,11 +3,10 @@
 This module is a layer/layout manager for time based visualisations written on top of [d3.js](http://d3js.org/).  
 The module by itself doesn't accomplish much as long as you don't pass it in some visualisation layer or component so for this example we used a [segment visualiser](https://github.com/ircam-rnd/segment-vis).
 
-<p class="only-readme">
-# Demo
-
-You can find a demo [here](https://ircam-rnd.github.io/timeLine/)
-</p>
+<div class="only-readme">
+<h2>Demo</h2>
+<p>You can find a demo [here](https://ircam-rnd.github.io/timeLine/)</p>
+</div>
 
 <div class="timeline"></div>
 
@@ -58,15 +57,13 @@ Evert new API breaking change we will be adding snapshots to the repository so y
 
 For an in depth  explanation on the philosophy and usage of this library please refer to [this blog post](http://wave.ircam.fr/publications/visual-tools/).
 
-<p class="only-readme">
-## License
+<div class="only-readme">
+<h2>License</h2>
+<p>This module is released under the [BSD-3-Clause license](http://opensource.org/licenses/BSD-3-Clause).</p>
 
-This module is released under the [BSD-3-Clause license](http://opensource.org/licenses/BSD-3-Clause).
-
-## Acknowledgments
-
-This code is part of the [WAVE project](http://wave.ircam.fr), funded by ANR (The French National Research Agency), *ContInt* program, 2012-2015.
-</p>
+<h2>Acknowledgments</h2>
+<p>This code is part of the [WAVE project](http://wave.ircam.fr), funded by ANR (The French National Research Agency), <em>ContInt</em> program, 2012-2015.</p>
+</div>
 
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="https://rawgit.com/ircam-rnd/segment-vis/master/segment-vis.min.js"></script>
