@@ -20,7 +20,7 @@ module.exports = function(grunt) {
       dist: {
         files: brwsFiles
       },
-      options: {standalone: name}
+      options: {standalone: name, transform: ['brfs']}
     },
 
     uglify: {
