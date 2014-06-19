@@ -59,10 +59,10 @@ For an in depth  explanation on the philosophy and usage of this library please 
 
 <div class="only-readme">
 <h2>License</h2>
-<p>This module is released under the [BSD-3-Clause license](http://opensource.org/licenses/BSD-3-Clause).</p>
+<p>This module is released under the <a href="http://opensource.org/licenses/BSD-3-Clause">BSD-3-Clause license</a>.</p>
 
 <h2>Acknowledgments</h2>
-<p>This code is part of the [WAVE project](http://wave.ircam.fr), funded by ANR (The French National Research Agency), <em>ContInt</em> program, 2012-2015.</p>
+<p>This code is part of the <a href="http://wave.ircam.fr">WAVE project</a>, funded by ANR (The French National Research Agency), <em>ContInt</em> program, 2012-2015.</p>
 </div>
 
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
