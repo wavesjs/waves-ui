@@ -1,5 +1,5 @@
 {
-  "name": "waveform",
+  "name": "waveform-vis",
   "version": "0.1.0",
   "description": "Waveform drawing utility",
   "main": "index.js",
