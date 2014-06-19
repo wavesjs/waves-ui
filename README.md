@@ -4,7 +4,7 @@ This module is a layer/layout manager for time based visualisations written on t
 The module by itself doesn't accomplish much as long as you don't pass it in some visualisation layer or component so for this example we used a [segment visualiser](https://github.com/ircam-rnd/segment-vis).
 
 <p class="only-readme">
-# Demo {.callout}
+# Demo
 
 You can find a demo [here](https://ircam-rnd.github.io/timeLine/)
 </p>
