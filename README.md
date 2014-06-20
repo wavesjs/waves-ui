@@ -1,8 +1,8 @@
 
 #Segment visualiser
 
-Use this module to visualise data segments over a shared timeline.
-The module relies on a [timeline](https://github.com/Ircam-RnD/timeLine) instance, and requires data to visualise and a `dataView` that describes how to use the data.
+Use this module to visualise data segments over a shared timeline.  
+The module relies on a [timeline](https://github.com/Ircam-RnD/timeLine) instance.
 
 <div class="only-readme">
 <h2>Demo</h2>
