@@ -5,7 +5,7 @@ The module by itself doesn't accomplish much as long as you don't pass it in som
 
 <div class="only-readme">
 <h2>Demo</h2>
-<p>You can find a demo <a href="https://ircam-rnd.github.io/timeLine/">here</a></p>
+<p>A woring demo for this module can be found here <a href="https://ircam-rnd.github.io/timeLine/">here</a></p>
 </div>
 
 <div class="timeline"></div>
