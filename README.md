@@ -13,8 +13,17 @@ For an in depth  explanation on the philosophy and usage of this library please 
 
 ## Usage
 
+### Creating the timeLine layout
+```js
+var graph = timeLine()
+  .width(800)
+  .height(150)
+  .xDomain([0, 100]);
+
+```
+
 ### Data
-Will be passed to a timeLine.
+Will be passed to a visualiser.
 ```js
 var data = 
   [{
@@ -25,16 +34,6 @@ var data =
     { "start": …}
   ];
 ```
-
-### Creating the timeLine layout
-```js
-var graph = timeLine()
-  .width(800)
-  .height(150)
-  .xDomain([0, 100]);
-
-```
-
 
 ### Creating the Visualiser layer
 ```js
