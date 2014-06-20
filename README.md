@@ -10,7 +10,16 @@ The module by itself doesn't accomplish much as long as you don't pass it in som
 
 <div class="timeline"></div>
 
-## Data
+## Status
+
+This library is under heavy development and subject to change.  
+Evert new API breaking change we will be adding snapshots to the repository so you can always fetch a working copy.
+
+For an in depth  explanation on the philosophy and usage of this library please refer to [this blog post](http://wave.ircam.fr/publications/visual-tools/).
+
+## Usage
+
+### Data
 Will be passed to a timeLine.
 ```js
 var data = 
@@ -23,7 +32,7 @@ var data =
   ];
 ```
 
-## Creating the timeLine layout
+### Creating the timeLine layout
 ```js
 var graph = timeLine()
   .width(800)
@@ -33,7 +42,7 @@ var graph = timeLine()
 ```
 
 
-## Creating the Visualiser layer
+### Creating the Visualiser layer
 ```js
 var seg = segmentVis()
   .data(data)
@@ -41,7 +50,7 @@ var seg = segmentVis()
   .opacity(0.5);
 ```
 
-## Adding the Visualiser layer and drawing everything
+### Adding the Visualiser layer and drawing everything
 ```js
 // we add layers like this
 graph.layer(seg);
@@ -49,13 +58,6 @@ graph.layer(seg);
 d3.select('.timeline').call(graph.draw);
 
 ```
-
-## Status
-
-This library is under heavy development and subject to change.  
-Evert new API breaking change we will be adding snapshots to the repository so you can always fetch a working copy.
-
-For an in depth  explanation on the philosophy and usage of this library please refer to [this blog post](http://wave.ircam.fr/publications/visual-tools/).
 
 <div class="only-readme">
 <h2>License</h2>
