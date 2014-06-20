@@ -1,10 +1,27 @@
 # Segment editor
 
-Use this module to visualise and edit data segments over a shared timeline.  
-The module relies on a [timeline](https://github.com/Ircam-RnD/timeLine) instance, and requires data to visualise and a `dataView` that describes how to use the data.  
+Use this module to visualise data segments over a shared timeline.  
+The module relies on a [timeline](https://github.com/Ircam-RnD/timeLine) instance.
 
-## Data
+<div class="only-readme">
+<h2>Demo</h2>
+<p>A woring demo for this module can be found here <a href="https://ircam-rnd.github.io/segment-edit/">here</a></p>
+</div>
+
+<div class="timeline"></div>
+
+## Status
+
+This library is under heavy development and subject to change.  
+Evert new API breaking change we will be adding snapshots to the repository so you can always fetch a working copy.
+
+For an in depth  explanation on the philosophy and usage of this library please refer to [this blog post](http://wave.ircam.fr/publications/visual-tools/).
+
+## Usage
+
+### Data
 Will be passed to a timeLine later. In this case a Backbone collection.
+
 ```js
 var collection = new Backbone.Collection([{
     "begin": "0",
@@ -17,7 +34,8 @@ var collection = new Backbone.Collection([{
 ```
 
 ## DataView
-A data view tells us how to access and manipulate the data.
+If your data doesn't match the spected structure you can pass in a dataView that lets the visualizer how to access and manipulate the data.
+
 ```js
 // Sample dataView tells us how to access the data
 var view = {
@@ -45,35 +63,108 @@ var view = {
 };
 ```
 
-## The Visualiser layer
+### Creating the Visualiser layer
 ```js
-var seg = segmentEdit()
-  .dataView(view) // aforementioned dataView
-  .name('segments') // layer name
-  .top(0) // optional vertical offset
-  .opacity(0.60); // optional opacity
+var seg = segmentVis()
+  .data(collection.models)
+  .dataView(view)
+  .name('segments')  
+  .opacity(0.5);
 ```
 
-## The timeLine layout
-In order to do this you need the [timeLine](https://github.com/Ircam-RnD/timeLine) module.
+### Creating the timeLine layout
 ```js
 var graph = timeLine()
-  .xDomain([0, max]) // computed last segment's end position
-  .width(500)
-  .height(80)
-  .data(collection.models)
-  .margin({top: 60, right: 60, bottom: 20, left: 0})
-  .layer(seg) // segment visualiser layer
-  .draw; // the callable endpoint
+  .width(800)
+  .height(150)
+  .xDomain([0, 100]);
 
-d3.select('.timeline').call(graph);
 ```
 
-## Status
+### Adding the Visualiser layer and drawing everything
 
-Currently subject to change, for a latest status explanation you can visit [this blogpost](http://wave.ircam.fr/publications/segment-components-updates/)
-For an in depth  explanation on the philosophy and usage of this library please refer to [this blog post](http://wave.ircam.fr/publications/visual-tools/).
+```js
+// we add layers like this
+graph.layer(seg);
+// we pass in the drawing method from our timeline object
+d3.select('.timeline').call(graph.draw);
 
-You can find a **broken demo blog post** [over here](http://wave.ircam.fr/publications/segment-components/).
+```
 
-work in progress, docs and tests to come.
+<div class="only-readme">
+<h2>License</h2>
+<p>This module is released under the <a href="http://opensource.org/licenses/BSD-3-Clause">BSD-3-Clause license</a>.</p>
+
+<h2>Acknowledgments</h2>
+<p>This code is part of the <a href="http://wave.ircam.fr">WAVE project</a>, funded by ANR (The French National Research Agency), <em>ContInt</em> program, 2012-2015.</p>
+</div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
+<script src="//rawgit.com/ircam-rnd/segment-vis/master/segment-edit.min.js"></script>
+<script src="//rawgit.com/ircam-rnd/timeLine/master/timeLine.min.js"></script>
+<script>
+  var data = [{
+                  "start": 0,
+                  "duration": 4,
+                  "color": "#414FBA"
+                }, {
+                  "start": 5,
+                  "duration": 7,
+                  "color": "#2A2E68"
+                }, {
+                  "start": 18,
+                  "duration": 9,
+                  "color": "#5A281E"
+                }, {
+                  "start": 30,
+                  "duration": 7,
+                  "color": "#BE7C7A"
+                }, {
+                  "start": 16,
+                  "duration": 6,
+                  "color": "#BE7C7A"
+                }, {
+                  "start": 8,
+                  "duration": 3,
+                  "color": "#2A2E68"
+                }, {
+                  "start": 1,
+                  "duration": 4,
+                  "color": "#C52599"
+                }, {
+                  "start": 63,
+                  "duration": 9,
+                  "color": "#CA56F4"
+                }, {
+                  "start": 90,
+                  "duration": 9,
+                  "color": "#5A281E"
+                }, {
+                  "start": 20,
+                  "duration": 6,
+                  "color": "#CA56F4"
+                }];
+
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    document.querySelector('.timeline').innerHTML = '';
+    
+    // Timeline
+    // --------
+    var graph = timeLine()
+      .width(750)
+      .height(150)
+      .xDomain([0, 100]);
+
+    // segments layer
+    // --------------
+    graph.layer(
+      segmentEdit()
+      .data(data)
+      .name('segments')
+      .opacity(0.5));
+
+    d3.select('.timeline').call(graph.draw);
+
+    });
+</script>

@@ -1,8 +1,8 @@
 /* global d3 */
 "use strict";
 
-var segment = require('../segment-vis');
-var makeEditable = require('../make-editable');
+var segment = require('segment-vis');
+var makeEditable = require('make-editable');
 
 // exports an augmented segment
 // ----------------------------
