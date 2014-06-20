@@ -7,7 +7,7 @@ The module relies on the [timeline](https://github.com/Ircam-RnD/timeLine) objec
 
 <div class="only-readme">
 <h2>Demo</h2>
-<p>A woring demo of this module can be found here <a href="https://ircam-rnd.github.io/waveform-vis/">here</a></p>
+<p>A woring demo for this module can be found here <a href="https://ircam-rnd.github.io/waveform-vis/">here</a></p>
 </div>
 
 <div class="soom"></div>
