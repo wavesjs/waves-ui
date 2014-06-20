@@ -21,17 +21,17 @@ For an in depth  explanation on the philosophy and usage of this library please 
 ## Usage
 
 ### Data
-Will be passed to a timeLine.
+Will be passed to a timeLine later. In this case a Backbone collection.
 
 ```js
-var data = 
-  [{
-      "start": 37,
-      "duration": 4,
-      "color": "#414FBA" },
-    { "start": …},
-    { "start": …}
-  ];
+var collection = new Backbone.Collection([{
+    "begin": "0",
+    "duration": "16121",
+    "end": "16121",
+    "color": "#A9d"
+  }, { "begin": "1" …},
+  }, { "begin": "3" …},
+]);
 ```
 
 ## DataView
@@ -67,7 +67,7 @@ var view = {
 ### Creating the Visualiser layer
 ```js
 var seg = segmentVis()
-  .data(data)
+  .data(collection.models)
   .dataView(view)
   .name('segments')  
   .opacity(0.5);
@@ -83,6 +83,7 @@ var graph = timeLine()
 ```
 
 ### Adding the Visualiser layer and drawing everything
+
 ```js
 // we add layers like this
 graph.layer(seg);
@@ -103,69 +104,68 @@ d3.select('.timeline').call(graph.draw);
 <script src="//rawgit.com/ircam-rnd/segment-vis/master/segment-vis.min.js"></script>
 <script src="//rawgit.com/ircam-rnd/timeLine/master/timeLine.min.js"></script>
 <script>
+  var data = [{
+                  "start": 0,
+                  "duration": 4,
+                  "color": "#414FBA"
+                }, {
+                  "start": 5,
+                  "duration": 7,
+                  "color": "#2A2E68"
+                }, {
+                  "start": 18,
+                  "duration": 9,
+                  "color": "#5A281E"
+                }, {
+                  "start": 30,
+                  "duration": 7,
+                  "color": "#BE7C7A"
+                }, {
+                  "start": 16,
+                  "duration": 6,
+                  "color": "#BE7C7A"
+                }, {
+                  "start": 8,
+                  "duration": 3,
+                  "color": "#2A2E68"
+                }, {
+                  "start": 1,
+                  "duration": 4,
+                  "color": "#C52599"
+                }, {
+                  "start": 63,
+                  "duration": 9,
+                  "color": "#CA56F4"
+                }, {
+                  "start": 90,
+                  "duration": 9,
+                  "color": "#5A281E"
+                }, {
+                  "start": 20,
+                  "duration": 6,
+                  "color": "#CA56F4"
+                }];
 
-    var data = [{
-                    "start": 0,
-                    "duration": 4,
-                    "color": "#414FBA"
-                  }, {
-                    "start": 5,
-                    "duration": 7,
-                    "color": "#2A2E68"
-                  }, {
-                    "start": 18,
-                    "duration": 9,
-                    "color": "#5A281E"
-                  }, {
-                    "start": 30,
-                    "duration": 7,
-                    "color": "#BE7C7A"
-                  }, {
-                    "start": 16,
-                    "duration": 6,
-                    "color": "#BE7C7A"
-                  }, {
-                    "start": 8,
-                    "duration": 3,
-                    "color": "#2A2E68"
-                  }, {
-                    "start": 1,
-                    "duration": 4,
-                    "color": "#C52599"
-                  }, {
-                    "start": 63,
-                    "duration": 9,
-                    "color": "#CA56F4"
-                  }, {
-                    "start": 90,
-                    "duration": 9,
-                    "color": "#5A281E"
-                  }, {
-                    "start": 20,
-                    "duration": 6,
-                    "color": "#CA56F4"
-                  }];
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    document.querySelector('.timeline').innerHTML = '';
+    
+    // Timeline
+    // --------
+    var graph = timeLine()
+      .width(750)
+      .height(150)
+      .xDomain([0, 100]);
 
-    document.addEventListener('DOMContentLoaded', function() {
-      
-      document.querySelector('.timeline').innerHTML = '';
-      
-      // Timeline
-      // --------
-      var graph = timeLine()
-        .width(750)
-        .height(150)
-        .xDomain([0, 100]);
+    // segments layer
+    // --------------
+    graph.layer(
+      segmentVis()
+      .data(data)
+      .name('segments')
+      .opacity(0.5));
 
-      // segments layer
-      // --------------
-      graph.layer(
-        segmentVis()
-        .data(data)
-        .name('segments')
-        .opacity(0.5));
-
-      d3.select('.timeline').call(graph.draw);
+    d3.select('.timeline').call(graph.draw);
 
     });
-  </script>
+</script>
