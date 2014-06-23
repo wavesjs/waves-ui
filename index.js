@@ -325,6 +325,19 @@ var baseDesc = {
   },
 
   // initialize layers
+  update: {
+    value: function(){
+        
+      var that = this;
+      var layers = this.layers;
+      _.each(layers, function(layer){
+        layer.update();
+      });
+
+    }
+  },
+
+  // initialize layers
   initLayers: {
     value: function(){
         
