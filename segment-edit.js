@@ -10,7 +10,7 @@ var makeEditable = _dereq_('make-editable');
 
 module.exports = function segmentEditor() {
   var seg = segment();
-  console.log(seg)
+
   // logic performed to select an item from the brush
   Object.defineProperty(seg, 'brushItem', {
     enumerable: true, value: function(extent, mode) {
@@ -460,11 +460,12 @@ module.exports = function makeEditable(graph){
       var g = base.g;
 
       // edition events handling
-      base.on(id + ':mousedown', this.mouseDown.bind(this));
+      // base.on(id + ':mousedown', this.mouseDown.bind(this));
       base.on(id + ':drag', this.onDrag.bind(this));
       base.on(id + ':mouseup', this.mouseUp.bind(this));
+      base.on(id + ':mouseout', this.base.xZoomSet.bind(this.base));
       
-      // clicking anywhere ouside the container deselects
+      // clicking anywhere ouside or inside the container deselects
       document.body.addEventListener('mousedown', this.mouseDown.bind(this));
 
       return this;
@@ -474,13 +475,14 @@ module.exports = function makeEditable(graph){
   Object.defineProperty(edit, 'draw', {
     enumerable: true, value: function(el) {
       // add css for cursors
-      this.g.selectAll('.item').classed('selectable', true);
+      this.g.selectAll('.' + this.unitClass).classed('selectable', true);
       defaultDraw.call(this, el);
     }
   });
 
   Object.defineProperty(edit, 'mouseUp', {
-    value: function () {
+    value: function (ev) {
+
         // has to be the svg because the group is virtually not there :(
         this.base.svg.classed('handle-resize', false);
         this.base.svg.classed('handle-drag', false);
@@ -493,7 +495,7 @@ module.exports = function makeEditable(graph){
       if(ev.button === 0) {
         var item = ev.target;
 
-        if(this.hits(item)) {
+        if(this.clicked(item)) {
           this.itemMousedown(ev);
         } else {
           this.unselectAll();
@@ -519,11 +521,23 @@ module.exports = function makeEditable(graph){
       var selects = g.node().querySelectorAll('.selected');
       var isFound = [].indexOf.call(selects, item) >= 0;
       var isSelectable = item.classList.contains('selectable');
+      var isSelected = d3.select(item).classed('selected');
 
+      // move selected item to the front
+      this.base.toFront(item);
+
+      // we click away or in some other block without shift
       if((selects.length < 1 || !isFound) && !ev.shiftKey){
         this.unselectAll();
       }
-      if(isSelectable) d3.select(item).classed('selected', true);
+
+      // shift + was selected: deselect
+      if(ev.shiftKey && isSelected){
+        d3.select(item).classed('selected', false);
+      } else {
+        if(isSelectable) d3.select(item).classed('selected', true);
+      }
+
     }
   });
 
@@ -760,74 +774,75 @@ module.exports = function createBaseTimeline(options){
 },{"extend":5,"get-set":6}],5:[function(_dereq_,module,exports){
 var hasOwn = Object.prototype.hasOwnProperty;
 var toString = Object.prototype.toString;
+var undefined;
 
-function isPlainObject(obj) {
-	if (!obj || toString.call(obj) !== '[object Object]' || obj.nodeType || obj.setInterval)
+var isPlainObject = function isPlainObject(obj) {
+	"use strict";
+	if (!obj || toString.call(obj) !== '[object Object]' || obj.nodeType || obj.setInterval) {
 		return false;
+	}
 
 	var has_own_constructor = hasOwn.call(obj, 'constructor');
-	var has_is_property_of_method = hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
+	var has_is_property_of_method = obj.constructor && obj.constructor.prototype && hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
 	// Not own constructor property must be Object
-	if (obj.constructor && !has_own_constructor && !has_is_property_of_method)
+	if (obj.constructor && !has_own_constructor && !has_is_property_of_method) {
 		return false;
+	}
 
 	// Own properties are enumerated firstly, so to speed up,
 	// if last one is own, then all properties are own.
 	var key;
-	for ( key in obj ) {}
+	for (key in obj) {}
 
-	return key === undefined || hasOwn.call( obj, key );
+	return key === undefined || hasOwn.call(obj, key);
 };
 
 module.exports = function extend() {
+	"use strict";
 	var options, name, src, copy, copyIsArray, clone,
-	    target = arguments[0] || {},
-	    i = 1,
-	    length = arguments.length,
-	    deep = false;
+		target = arguments[0],
+		i = 1,
+		length = arguments.length,
+		deep = false;
 
 	// Handle a deep copy situation
-	if ( typeof target === "boolean" ) {
+	if (typeof target === "boolean") {
 		deep = target;
 		target = arguments[1] || {};
 		// skip the boolean and the target
 		i = 2;
+	} else if (typeof target !== "object" && typeof target !== "function" || target == undefined) {
+			target = {};
 	}
 
-	// Handle case when target is a string or something (possible in deep copy)
-	if ( typeof target !== "object" && typeof target !== "function") {
-		target = {};
-	}
-
-	for ( ; i < length; i++ ) {
+	for (; i < length; ++i) {
 		// Only deal with non-null/undefined values
-		if ( (options = arguments[ i ]) != null ) {
+		if ((options = arguments[i]) != null) {
 			// Extend the base object
-			for ( name in options ) {
-				src = target[ name ];
-				copy = options[ name ];
+			for (name in options) {
+				src = target[name];
+				copy = options[name];
 
 				// Prevent never-ending loop
-				if ( target === copy ) {
+				if (target === copy) {
 					continue;
 				}
 
 				// Recurse if we're merging plain objects or arrays
-				if ( deep && copy && ( isPlainObject(copy) || (copyIsArray = Array.isArray(copy)) ) ) {
-					if ( copyIsArray ) {
+				if (deep && copy && (isPlainObject(copy) || (copyIsArray = Array.isArray(copy)))) {
+					if (copyIsArray) {
 						copyIsArray = false;
 						clone = src && Array.isArray(src) ? src : [];
-
 					} else {
 						clone = src && isPlainObject(src) ? src : {};
 					}
 
 					// Never move original objects, clone them
-					target[ name ] = extend( deep, clone, copy );
+					target[name] = extend(deep, clone, copy);
 
 				// Don't bring in undefined values
-				} else if ( copy !== undefined ) {
-					target[ name ] = copy;
+				} else if (copy !== undefined) {
+					target[name] = copy;
 				}
 			}
 		}
@@ -836,6 +851,7 @@ module.exports = function extend() {
 	// Return the modified object
 	return target;
 };
+
 
 },{}],6:[function(_dereq_,module,exports){
 
