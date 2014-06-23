@@ -9,7 +9,7 @@ var makeEditable = require('make-editable');
 
 module.exports = function segmentEditor() {
   var seg = segment();
-  console.log(seg)
+
   // logic performed to select an item from the brush
   Object.defineProperty(seg, 'brushItem', {
     enumerable: true, value: function(extent, mode) {
