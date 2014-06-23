@@ -3,6 +3,7 @@
 
 var segment = require('segment-vis');
 var makeEditable = require('make-editable');
+var extend = require('extend');
 
 // exports an augmented segment
 // ----------------------------
@@ -15,7 +16,7 @@ module.exports = function segmentEditor() {
     enumerable: true, value: function(extent, mode) {
       mode = mode || 'xy'; // default tries to match both
       var that = this;
-      var dv = this.dataView();
+      var dv = extend(this.defaultDataView(), this.dataView());
       var modex = mode.indexOf('x') >= 0;
       var modey = mode.indexOf('y') >= 0;
       var matchX = false, matchY = false;
@@ -87,7 +88,7 @@ module.exports = function segmentEditor() {
       var delta = res.event;
       var item = res.target;
       var minDur = 0.001;
-      var dv = this.dataView();
+      var dv = extend(this.defaultDataView(), this.dataView());
       var xScale = this.base.xScale;
 
       // has to be the svg because the group is virtually not there :(
