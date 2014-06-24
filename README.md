@@ -100,7 +100,6 @@ var graph = timeLine()
 graph.layer(seg);
 // we pass in the drawing method from our timeline object
 d3.select('.timeline').call(graph.draw);
-
 ```
 
 
