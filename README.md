@@ -3,6 +3,13 @@
 Use this module to visualise data segments over a shared timeline.  
 The module relies on a [timeline](https://github.com/Ircam-RnD/timeLine) instance.
 
+<div class="only-demo" style="visibillity:hidden">
+  <link rel="stylesheet" href="//rawgit.com/ircam-rnd/segment-edit/master/segment-edit.css">
+  <h2>Demo</h2>
+  <p>In this demo you can select one ( or multiple segments by holding shift) and move/resize them.</p>
+  <p>You can also <span class="keep-selection" name="delete">delete selected items</span>.</p>
+</div>
+
 <div class="only-readme">
 <h2>Demo</h2>
 <p>A woring demo for this module can be found here <a href="https://ircam-rnd.github.io/segment-edit/">here</a></p>
@@ -100,54 +107,65 @@ d3.select('.timeline').call(graph.draw);
 </div>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
-<script src="//rawgit.com/ircam-rnd/segment-vis/master/segment-edit.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script src="//rawgit.com/ircam-rnd/segment-edit/master/segment-edit.min.js"></script>
 <script src="//rawgit.com/ircam-rnd/timeLine/master/timeLine.min.js"></script>
 <script>
   var data = [{
                   "start": 0,
+                  "id": 'segment-' + 0,
                   "duration": 4,
                   "color": "#414FBA"
                 }, {
                   "start": 5,
+                  "id": 'segment-' + 5,
                   "duration": 7,
                   "color": "#2A2E68"
                 }, {
                   "start": 18,
+                  "id": 'segment-' + 18,
                   "duration": 9,
                   "color": "#5A281E"
                 }, {
                   "start": 30,
+                  "id": 'segment-' + 30,
                   "duration": 7,
                   "color": "#BE7C7A"
                 }, {
                   "start": 16,
+                  "id": 'segment-' + 16,
                   "duration": 6,
                   "color": "#BE7C7A"
                 }, {
                   "start": 8,
+                  "id": 'segment-' + 8,
                   "duration": 3,
                   "color": "#2A2E68"
                 }, {
                   "start": 1,
+                  "id": 'segment-' + 1,
                   "duration": 4,
                   "color": "#C52599"
                 }, {
                   "start": 63,
+                  "id": 'segment-' + 63,
                   "duration": 9,
                   "color": "#CA56F4"
                 }, {
                   "start": 90,
+                  "id": 'segment-' + 90,
                   "duration": 9,
                   "color": "#5A281E"
                 }, {
                   "start": 20,
+                  "id": 'segment-' + 20,
                   "duration": 6,
                   "color": "#CA56F4"
                 }];
 
   document.addEventListener('DOMContentLoaded', function() {
     
-    document.querySelector('.timeline').innerHTML = '';
+    document.querySelector('.only-demo').style.visibility = 'inherit';
     
     // Timeline
     // --------
@@ -158,13 +176,23 @@ d3.select('.timeline').call(graph.draw);
 
     // segments layer
     // --------------
-    graph.layer(
-      segmentEdit()
+    var seg = segmentEdit()
       .data(data)
       .name('segments')
-      .opacity(0.5));
+      .opacity(0.5);
 
+    graph.layer(seg);
     d3.select('.timeline').call(graph.draw);
+
+    document.querySelector('.keep-selection').addEventListener('click', function(){
+        var selected = d3.selectAll('.layout .selected');
+        var ids = _.pluck(selected.data(), 'id');
+        data = _.reject(data, function(d){ return ids.indexOf(d.id) != -1; });
+        
+        seg.data(data);
+        seg.update();
+      });
+
 
     });
 </script>
