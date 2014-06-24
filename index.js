@@ -54,12 +54,13 @@ module.exports = function makeEditable(graph){
   Object.defineProperty(edit, 'mouseDown', {
     value: function(ev) {
       if(ev.button === 0) {
+
         var item = ev.target;
 
         if(this.clicked(item)) {
           this.itemMousedown(ev);
         } else {
-          this.unselectAll();
+          if(!item.classList.contains('keep-selection')) this.unselectAll();
         }
 
       }
