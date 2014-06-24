@@ -1,5 +1,6 @@
 {
   "name": "segment-edit",
+  "exports": "segment-edit",
   "version": "0.1.0",
   "description": "Plun-g-play editing tunctionality companion to the segment visualizer ",
   "main": "index.js",

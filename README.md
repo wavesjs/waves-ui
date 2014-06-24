@@ -6,16 +6,35 @@ The module relies on a [timeline](https://github.com/Ircam-RnD/timeLine) instanc
 <div class="only-demo" style="visibillity:hidden">
   <link rel="stylesheet" href="//rawgit.com/ircam-rnd/segment-edit/master/segment-edit.css">
   <h2>Demo</h2>
-  <p>In this demo you can select one ( or multiple segments by holding shift) and move/resize them.</p>
-  <p>You can also <span class="keep-selection" name="delete">delete selected items</span>.</p>
+</div>
+
+<div class="timeline"></div>
+
+<div class="only-demo" style="visibillity:hidden">
+  <p>In this demo you can select one ( or multiple segments by holding shift) and move/resize them.<br>
+    You can also <a class="keep-selection delete" name="delete">delete selected items</a> by just editing your data and calling the update method on the timeline.<br>
+    <em>Please not that the element that will call the delete action must have the css class of <code>.keep-selection</code> in order to keep the selection active</em>.</p>
+</div>
+
+```js
+// find selected segments and delete each of them from the collection
+var selected = d3.selectAll('.layout .selected');
+selected.each(function(segment){
+  collection.remove(segment);
+});
+// pass again the modified data and call update
+seg.data(collection.models);
+graph.update();
+```
+
+<div class="only-demo" style="visibillity:hidden">
+  <p><a class="keep-selection add" name="add">Adding elemts</a> is also easy by just adding elements to our data collection.</p>
 </div>
 
 <div class="only-readme">
 <h2>Demo</h2>
 <p>A woring demo for this module can be found here <a href="https://ircam-rnd.github.io/segment-edit/">here</a></p>
 </div>
-
-<div class="timeline"></div>
 
 ## Status
 
@@ -108,57 +127,57 @@ d3.select('.timeline').call(graph.draw);
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
-<script src="//rawgit.com/ircam-rnd/segment-edit/master/segment-edit.min.js"></script>
 <script src="//rawgit.com/ircam-rnd/timeLine/master/timeLine.min.js"></script>
+<script src="//rawgit.com/ircam-rnd/segment-edit/master/segment-edit.min.js"></script>
 <script>
   var data = [{
                   "start": 0,
-                  "id": 'segment-' + 0,
+                  "id": 'segment-0',
                   "duration": 4,
                   "color": "#414FBA"
                 }, {
                   "start": 5,
-                  "id": 'segment-' + 5,
+                  "id": 'segment-5',
                   "duration": 7,
                   "color": "#2A2E68"
                 }, {
                   "start": 18,
-                  "id": 'segment-' + 18,
+                  "id": 'segment-18',
                   "duration": 9,
                   "color": "#5A281E"
                 }, {
                   "start": 30,
-                  "id": 'segment-' + 30,
+                  "id": 'segment-30',
                   "duration": 7,
                   "color": "#BE7C7A"
                 }, {
                   "start": 16,
-                  "id": 'segment-' + 16,
+                  "id": 'segment-16',
                   "duration": 6,
                   "color": "#BE7C7A"
                 }, {
                   "start": 8,
-                  "id": 'segment-' + 8,
+                  "id": 'segment-8',
                   "duration": 3,
                   "color": "#2A2E68"
                 }, {
                   "start": 1,
-                  "id": 'segment-' + 1,
+                  "id": 'segment-1',
                   "duration": 4,
                   "color": "#C52599"
                 }, {
                   "start": 63,
-                  "id": 'segment-' + 63,
+                  "id": 'segment-63',
                   "duration": 9,
                   "color": "#CA56F4"
                 }, {
                   "start": 90,
-                  "id": 'segment-' + 90,
+                  "id": 'segment-90',
                   "duration": 9,
                   "color": "#5A281E"
                 }, {
                   "start": 20,
-                  "id": 'segment-' + 20,
+                  "id": 'segment-20',
                   "duration": 6,
                   "color": "#CA56F4"
                 }];
@@ -184,15 +203,36 @@ d3.select('.timeline').call(graph.draw);
     graph.layer(seg);
     d3.select('.timeline').call(graph.draw);
 
-    document.querySelector('.keep-selection').addEventListener('click', function(){
+    document.querySelector('.add').addEventListener('click', function(){
+
+      var ids = _.pluck(data, 'id');
+      
+      if(ids.indexOf('segment-100') <= 0) {
+        console.log('yep')
+        data.push({
+          "start": 40,
+          "id": 'segment-100',
+          "duration": 10,
+          "color": "#174345"
+        });
+        update(data);
+      }
+      // quick and dirty avoid adding multiple items ^^
+      // update(_.reject(data, function(d){ return d.id === 'segment-100'; }));
+      // console.log(data.length)
+    });
+
+    document.querySelector('.delete').addEventListener('click', function(){
         var selected = d3.selectAll('.layout .selected');
         var ids = _.pluck(selected.data(), 'id');
         data = _.reject(data, function(d){ return ids.indexOf(d.id) != -1; });
-        
-        seg.data(data);
-        seg.update();
+        update(data);
       });
 
+    function update(data) {
+      seg.data(data);
+      seg.update();
+    }
 
-    });
+  });
 </script>
