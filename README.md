@@ -17,12 +17,12 @@ For an in depth  explanation on the philosophy and usage of this library please 
 
 <div class="timeline"></div>
 
-<div class="only-demo" style="display:none">
+<demo>
   <p>In this demo you can select one ( or multiple segments by holding shift) and move/resize them.<br>
   You can <a class="keep-selection delete" name="delete">delete selected items</a> (<a href="#deleting">see below</a>).<br>
   <em>Please not that the element that will call the delete action must have the css class of <code>.keep-selection</code> in order to keep the selection active</em>.<br>
   <a class="keep-selection add" name="add">Adding elemts</a> is also easy (<a href="#deleting">see below</a>).<br><em>Note that this only adds one hardcoded segment to the timeline</em>.</p>
-</div>
+</demo>
 
 <div class="only-readme">
 <h2>Demo</h2>
@@ -90,7 +90,6 @@ var graph = timeLine()
   .width(800)
   .height(150)
   .xDomain([0, 100]);
-
 ```
 
 ### Adding the Visualiser layer and drawing everything
