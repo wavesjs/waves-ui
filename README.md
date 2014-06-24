@@ -3,45 +3,31 @@
 Use this module to visualise data segments over a shared timeline.  
 The module relies on a [timeline](https://github.com/Ircam-RnD/timeLine) instance.
 
-<div class="only-demo" style="visibillity:hidden">
-  <link rel="stylesheet" href="//rawgit.com/ircam-rnd/segment-edit/master/segment-edit.css">
-  <h2>Demo</h2>
-</div>
-
-<div class="timeline"></div>
-
-<div class="only-demo" style="visibillity:hidden">
-  <p>In this demo you can select one ( or multiple segments by holding shift) and move/resize them.<br>
-    You can also <a class="keep-selection delete" name="delete">delete selected items</a> by just editing your data and calling the update method on the timeline.<br>
-    <em>Please not that the element that will call the delete action must have the css class of <code>.keep-selection</code> in order to keep the selection active</em>.</p>
-</div>
-
-```js
-// find selected segments and delete each of them from the collection
-var selected = d3.selectAll('.layout .selected');
-selected.each(function(segment){
-  collection.remove(segment);
-});
-// pass again the modified data and call update
-seg.data(collection.models);
-graph.update();
-```
-
-<div class="only-demo" style="visibillity:hidden">
-  <p><a class="keep-selection add" name="add">Adding elemts</a> is also easy by just adding elements to our data collection.</p>
-</div>
-
-<div class="only-readme">
-<h2>Demo</h2>
-<p>A woring demo for this module can be found here <a href="https://ircam-rnd.github.io/segment-edit/">here</a></p>
-</div>
-
 ## Status
 
 This library is under heavy development and subject to change.  
 Evert new API breaking change we will be adding snapshots to the repository so you can always fetch a working copy.
 
 For an in depth  explanation on the philosophy and usage of this library please refer to [this blog post](http://wave.ircam.fr/publications/visual-tools/).
+
+<div class="only-demo" style="display:none">
+  <link rel="stylesheet" href="//rawgit.com/ircam-rnd/segment-edit/master/segment-edit.css">
+  <h2>Demo</h2>
+</div>
+
+<div class="timeline"></div>
+
+<div class="only-demo" style="display:none">
+  <p>In this demo you can select one ( or multiple segments by holding shift) and move/resize them.<br>
+  You can <a class="keep-selection delete" name="delete">delete selected items</a> (<a href="#deleting">see below</a>).<br>
+  <em>Please not that the element that will call the delete action must have the css class of <code>.keep-selection</code> in order to keep the selection active</em>.<br>
+  <a class="keep-selection add" name="add">Adding elemts</a> is also easy (<a href="#deleting">see below</a>).<br><em>Note that this only adds one hardcoded segment to the timeline</em>.</p>
+</div>
+
+<div class="only-readme">
+<h2>Demo</h2>
+<p>A woring demo for this module can be found here <a href="https://ircam-rnd.github.io/segment-edit/">here</a></p>
+</div>
 
 ## Usage
 
@@ -60,7 +46,7 @@ var collection = new Backbone.Collection([{
 ```
 
 ## DataView
-If your data doesn't match the spected structure you can pass in a dataView that lets the visualizer how to access and manipulate the data.
+If your data doesn't match the expected structure you can pass in a dataView that lets the visualizer how to access and manipulate the data.
 
 ```js
 // Sample dataView tells us how to access the data
@@ -115,6 +101,35 @@ graph.layer(seg);
 // we pass in the drawing method from our timeline object
 d3.select('.timeline').call(graph.draw);
 
+```
+
+
+<h2 id="deleting">Deleting segments</h2>
+
+```js
+// find selected segments and delete each of them from the collection
+var selected = d3.selectAll('.layout .selected');
+selected.each(function(segment){
+  collection.remove(segment);
+});
+// pass again the modified data and call update
+seg.data(collection.models);
+graph.update();
+```
+
+## Adding segments
+
+```js
+// add one segment to the collection
+data.push({
+  "start": 40,
+  "id": 'segment-100',
+  "duration": 10,
+  "color": "#174345"
+});
+// pass again the modified data and call update
+seg.data(collection.models);
+graph.update();
 ```
 
 <div class="only-readme">
@@ -184,7 +199,7 @@ d3.select('.timeline').call(graph.draw);
 
   document.addEventListener('DOMContentLoaded', function() {
     
-    document.querySelector('.only-demo').style.visibility = 'inherit';
+    document.querySelector('.only-demo').style.display = 'block';
     
     // Timeline
     // --------
