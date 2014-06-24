@@ -576,12 +576,13 @@ module.exports = function makeEditable(graph){
   Object.defineProperty(edit, 'mouseDown', {
     value: function(ev) {
       if(ev.button === 0) {
+
         var item = ev.target;
 
         if(this.clicked(item)) {
           this.itemMousedown(ev);
         } else {
-          this.unselectAll();
+          if(!item.classList.contains('keep-selection')) this.unselectAll();
         }
 
       }
@@ -854,9 +855,7 @@ module.exports = function createBaseTimeline(options){
   var segmenter = Object.create({}, segDesc);
   return segmenter.init();
 };
-},{"extend":6,"get-set":7}],6:[function(_dereq_,module,exports){
-module.exports=_dereq_(3)
-},{}],7:[function(_dereq_,module,exports){
+},{"extend":3,"get-set":6}],6:[function(_dereq_,module,exports){
 
 "use strict";
 
