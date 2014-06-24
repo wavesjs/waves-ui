@@ -10,10 +10,10 @@ Evert new API breaking change we will be adding snapshots to the repository so y
 
 For an in depth  explanation on the philosophy and usage of this library please refer to [this blog post](http://wave.ircam.fr/publications/visual-tools/).
 
-<div class="only-demo" style="display:none">
+<script type="text/demo">
   <link rel="stylesheet" href="//rawgit.com/ircam-rnd/segment-edit/master/segment-edit.css">
   <h2>Demo</h2>
-</div>
+</script>
 
 <div class="timeline"></div>
 
@@ -197,7 +197,7 @@ graph.update();
 
   document.addEventListener('DOMContentLoaded', function() {
     
-    document.querySelector('.only-demo').style.display = 'block';
+    // document.querySelector('.only-demo').style.display = 'block';
     
     // Timeline
     // --------
