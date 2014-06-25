@@ -326,7 +326,7 @@ var baseDesc = {
 
   // initialize layers
   update: {
-    value: function(){
+    enumerable: true, value: function(){
         
       var that = this;
       var layers = this.layers;
