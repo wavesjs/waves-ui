@@ -13,7 +13,7 @@ For an in depth  explanation on the philosophy and usage of this library please 
 
 #Demo
 
-A woring demo for this module can be found here [here]("https://ircam-rnd.github.io/segment-edit/")
+A woring demo for this module can be found [here](https://ircam-rnd.github.io/segment-edit/)
 
 ## Usage
 
@@ -117,7 +117,7 @@ graph.update();
 ```
 
 ## License
-This module is released under the [BSD-3-Clause license]("http://opensource.org/licenses/BSD-3-Clause")>.
+This module is released under the [BSD-3-Clause license](http://opensource.org/licenses/BSD-3-Clause)>.
 
 ## Acknowledgments
-This code is part of the [WAVE project]("http://wave.ircam.fr"), funded by ANR (The French National Research Agency), _ContInt_ program, 2012-2015.
+This code is part of the [WAVE project](http://wave.ircam.fr), funded by ANR (The French National Research Agency), _ContInt_ program, 2012-2015.
