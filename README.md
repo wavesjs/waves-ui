@@ -105,9 +105,8 @@ graph.update();
 
 ```js
 // add one segment to the collection
-data.push({
-  "start": 40,
-  "id": 'segment-100',
+collection.add({
+  "begin": 40,
   "duration": 10,
   "color": "#174345"
 });
