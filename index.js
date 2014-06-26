@@ -62,9 +62,9 @@ var baseDesc = {
       options = options || {}; // fail safe
       
       // generic getters(setters) accessors and defaults
-      var addGS = getSet(this)([
-          'id', 'margin', 'xDomain', 'yDomain', 'height', 'width', 'data'
-        ]);
+      getSet(this)([
+        'id', 'margin', 'xDomain', 'yDomain', 'height', 'width', 'data'
+      ]);
 
       // initialize
       this.layers = {};
@@ -324,7 +324,6 @@ var baseDesc = {
     }
   },
 
-  // initialize layers
   update: {
     enumerable: true, value: function(){
         
