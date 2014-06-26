@@ -63,9 +63,9 @@ var baseDesc = {
       options = options || {}; // fail safe
       
       // generic getters(setters) accessors and defaults
-      var addGS = getSet(this)([
-          'id', 'margin', 'xDomain', 'yDomain', 'height', 'width', 'data'
-        ]);
+      getSet(this)([
+        'id', 'margin', 'xDomain', 'yDomain', 'height', 'width', 'data'
+      ]);
 
       // initialize
       this.layers = {};
@@ -83,6 +83,7 @@ var baseDesc = {
       // this.swapY = false;
       // this.zoom = false;
 
+      // for throttling
       this.fps = 60;
  
       return this;
@@ -225,79 +226,35 @@ var baseDesc = {
     }
   },
 
-  // xZoom: {
-  //   enumerable: true, value: function(zoom) {
-  //     // TODO:
-  //     // if (deltax === 0) we didnt move, we avoid calculating
-  //     // if (deltaY === 0) we didnt move, we avoid calculating
-     
-  //     var that = this;
-  //     var layers = this.layers;
+  // only call on requestAnimationFrame ticks
+  // throttle: {
+  //   enumerable: true, value: function(func) {
+  //     var wait, args, context, now, delta;
+  //     var then = Date.now();
+  //     var interval = 1000/this.fps;
 
-  //     this.zoomFactor = zoom.factor;
-  //     this.zoomFactor = 1;
+  //     console.log(this.fps);
 
-  //     // var anchor = this.globalXscale.invert(zoom.anchor);
-  //     var anchor = zoom.anchor; // in px
-  //     var domainAnchor = this.originalXscale.invert(anchor); // to domain
-  //     var deltaY = zoom.delta.y;
-  //     var deltax = zoom.delta.x;
-     
-  //     // panning
-  //     // -------
-  //     // var targetStart = Math.max(0, this.originalXscale.domain()[0]);
-  //     var targetStart = this.originalXscale.domain()[0];
-  //     var currentLength = this.originalXscale.domain()[1] - targetStart;
-  //     var targetLength = currentLength * this.zoomFactor;
+  //     return function () {
+  //       if (wait) return;
+  //       wait = true;
+  //       args = arguments;
+  //       context = this;
+        
+  //       window.requestAnimationFrame(function () {
+  //         wait = false;
 
-  //     targetStart += this.originalXscale.invert(deltax) * this.zoomFactor ; // to domain
-  //     this.xScale.domain([targetStart, targetStart + targetLength]);
-
-  //     // centering
-  //     // ---------
-  //     var originAnchor = this.originalXscale(domainAnchor); // to px
-  //     var movingAnchor = this.xScale(domainAnchor); // to px
-
-  //     targetStart += this.xScale.invert(movingAnchor - originAnchor); // to domain
-  //     this.xScale.domain([targetStart, targetStart + targetLength]);
-
-  //     // redraw layers
-  //     _.each(layers, function(layer){
-  //       if(layer.xZoom) layer.xZoom();
-  //     });
-
+  //         now = Date.now();
+  //         delta = now - then;
+           
+  //         if (delta > interval) {
+  //             func.apply(context, args);
+  //             then = now - (delta % interval);
+  //         }
+  //       });
+  //     };
   //   }
   // },
-
-  // only call on requestAnimationFrame ticks
-  throttle: {
-    enumerable: true, value: function(func) {
-      var wait, args, context, now, delta;
-      var then = Date.now();
-      var interval = 1000/this.fps;
-
-      console.log(this.fps);
-
-      return function () {
-        if (wait) return;
-        wait = true;
-        args = arguments;
-        context = this;
-        
-        window.requestAnimationFrame(function () {
-          wait = false;
-
-          now = Date.now();
-          delta = now - then;
-           
-          if (delta > interval) {
-              func.apply(context, args);
-              then = now - (delta % interval);
-          }
-        });
-      };
-    }
-  },
 
   xZoom: {
     enumerable: true, value: function(zoom) {
@@ -318,12 +275,13 @@ var baseDesc = {
     }
   },
 
-  // thanks to Charles Picasso <charles.picasso@ircam.fr> for the algorithm
+  // thanks Charles Picasso <charles.picasso@ircam.fr> !!
   xZoomCompute: {
     enumerable: true, value: function(zoom, ly) {
       var deltaY = zoom.delta.y;
       var deltaX = zoom.delta.x;
       var anchor = ly.originalXscale.invert(zoom.anchor); // in px to domain
+      
       // start and length (instead of end)
       var targetStart = ly.originalXscale.domain()[0];
       var currentLength = ly.originalXscale.domain()[1] - targetStart;
@@ -362,6 +320,18 @@ var baseDesc = {
 
       _.each(layers, function(layer){
          if (layer.hasOwnProperty('xScale')) layer.originalXscale = layer.xScale.copy();
+      });
+
+    }
+  },
+
+  update: {
+    enumerable: true, value: function(){
+        
+      var that = this;
+      var layers = this.layers;
+      _.each(layers, function(layer){
+        layer.update();
       });
 
     }
@@ -1590,7 +1560,6 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
     ? Uint8Array
     : Array
 
-	var ZERO   = '0'.charCodeAt(0)
 	var PLUS   = '+'.charCodeAt(0)
 	var SLASH  = '/'.charCodeAt(0)
 	var NUMBER = '0'.charCodeAt(0)
@@ -1699,9 +1668,9 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 		return output
 	}
 
-	module.exports.toByteArray = b64ToByteArray
-	module.exports.fromByteArray = uint8ToBase64
-}())
+	exports.toByteArray = b64ToByteArray
+	exports.fromByteArray = uint8ToBase64
+}(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
 },{}],4:[function(_dereq_,module,exports){
 exports.read = function(buffer, offset, isLE, mLen, nBytes) {
@@ -2510,7 +2479,10 @@ EventEmitter.prototype.addListener = function(type, listener) {
                     'leak detected. %d listeners added. ' +
                     'Use emitter.setMaxListeners() to increase limit.',
                     this._events[type].length);
-      console.trace();
+      if (typeof console.trace === 'function') {
+        // not supported in IE 10
+        console.trace();
+      }
     }
   }
 
@@ -2963,8 +2935,8 @@ module.exports.seed     = seed;
 module.exports.worker   = worker;
 module.exports.characters = characters;
 module.exports.decode   = decode;
-}).call(this,_dereq_("/Users/vsaiz/Documents/WAVE/repo/lib/wave/ui/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"./lib/alphabet":14,"./lib/encode":15,"/Users/vsaiz/Documents/WAVE/repo/lib/wave/ui/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":11}],18:[function(_dereq_,module,exports){
+}).call(this,_dereq_("/Users/vsaiz/Documents/WAVE/repo/lib/github/ui/timeLine/timeLine-master/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
+},{"./lib/alphabet":14,"./lib/encode":15,"/Users/vsaiz/Documents/WAVE/repo/lib/github/ui/timeLine/timeLine-master/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":11}],18:[function(_dereq_,module,exports){
 //  Underscore.string
 //  (c) 2010 Esa-Matti Suuronen <esa-matti aet suuronen dot org>
 //  Underscore.string is freely distributable under the terms of the MIT license.
