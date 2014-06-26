@@ -87,9 +87,8 @@ var segDesc = {
     enumerable: true, value: function(data) {
       var that = this;
 
-      this.data(this.data() || this.base.data());
-
-      data = data || this.data();
+      data = data || this.data() || this.base.data();
+      this.data(data);
 
       var dv = extend(this.defaultDataView(), this.dataView());
 
@@ -102,7 +101,10 @@ var segDesc = {
 
       var g = sel.enter()
       .append('g')
-        .attr("class", this.unitClass);
+        .attr("class", this.unitClass)
+        .attr('id', function(d) {
+          return d.id;
+        });
         // .attr("transform", "translate(0, 0)");
 
       g.append('rect')
@@ -164,7 +166,7 @@ var segDesc = {
       var base = this.base;
       var xScale = this.base.xScale;
       var max = Math.max;
-
+      
       var x = function(d) { return xScale(dv.start(d)); };
       var w = function(d) {
         var _w = (xScale(dv.start(d) + dv.duration(d))) - xScale(dv.start(d));
@@ -184,7 +186,6 @@ var segDesc = {
       };
 
       var lrh = function(d) { return y(d) + h(d); };
-
       var color = function(d) { return dv.color(d); };
 
       el.selectAll('.seg')
