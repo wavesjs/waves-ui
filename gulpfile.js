@@ -4,7 +4,6 @@ var uglify = require('gulp-uglify');
 var streamify = require('gulp-streamify');
 var connect = require('gulp-connect');
 var source = require('vinyl-source-stream');
-var args   = require('yargs').argv;
 var verb = require("gulp-verb");
 var deploy = require("gulp-gh-pages");
 
@@ -99,10 +98,8 @@ gulp.task('verb-gh-pages', function () {
       jsstart : '<script>',
       jsend : '</script>'
     }))
-    .pipe(gulp.dest('./gh-pages'));
-
-  gulp.src('./gh-pages')
-    .pipe(deploy({remoteUrl : 'packageJson.repository.url'}));
+    .pipe(gulp.dest('./gh-pages'))
+	.pipe(deploy(packageJson.repository.url));
 });
 
 //var type = args.type || "build";
