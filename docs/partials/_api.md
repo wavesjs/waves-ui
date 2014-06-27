@@ -71,7 +71,7 @@ d3.select('.timeline').call(graph.draw);
 ```
 
 
-<h2 id="deleting">Deleting segments</h2>
+<h3 id="deleting">Deleting segments</h3>
 ```js
 // find selected segments and delete each of them from the collection
 var selected = d3.selectAll('.layout .selected');
@@ -83,7 +83,7 @@ seg.data(collection.models);
 graph.update();
 ```
 
-## Adding segments
+### Adding segments
 
 ```js
 // add one segment to the collection

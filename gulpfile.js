@@ -86,7 +86,7 @@ gulp.task('verb-gh-pages', function () {
   gulp.src('./docs/js/highlight.pack.js', {base: './docs/'})
     .pipe(gulp.dest('./gh-pages/'));
 
-  gulp.src(['./docs/index.tmpl.md'])
+  gulp.src(['./docs/index.tmpl.html'])
     // dest filename is defined in options,
     // otherwise gulp will overwrite .verbrc.md
     .pipe(verb({
