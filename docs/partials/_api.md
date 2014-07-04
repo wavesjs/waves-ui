@@ -5,12 +5,12 @@ Will be passed to a timeLine later. In this case a Backbone collection.
 
 ```js
 var collection = new Backbone.Collection([{
-    "begin": "0",
-    "duration": "16121",
-    "end": "16121",
-    "color": "#A9d"
-  }, { "begin": "1" …},
-  }, { "begin": "3" …},
+    cx: 43,
+    cy: 67,
+    r: 5,
+    color: 'green' // optional
+  }, { "cx": "23" …},
+  }, { "cx": "64" …},
 ]);
 ```
 
@@ -20,43 +20,45 @@ If your data doesn't match the expected structure you can pass in a dataView tha
 ```js
 // Sample dataView tells us how to access the data
 var view = {
-  // tell d3 which is our key for sorting
-  sortIndex: function(d) {
-    return d.get('begin');
+  cx: function(d, v) {
+    if(!v) return +d.get('cx');
+    d.set('cx', (+v));
   },
-   // how to retrieve or set the value used as the start of the segment
-  start: function(d, v) {
-    // no value, we retrieve
-    if(!v) return +d.get('begin');
-    // yesvalue we set :)
-    d.set('begin', v);
+  cy: function(d, v) {
+    if(!v) return +d.get('cy');
+    d.set('cy', (+v));
   },
-  // how to retrieve or set the value used as the duration of the segment
-  duration: function(d, v) {
-    if(!v) return +d.get('duration');
-    d.set('duration', v);
-  },
-  // how to retrieve or set the value used for the color of the segment
-  color: function(d, v) {
-    if(!v) return d.get('color');
-    d.set('color', v);
+  r: function(d, v) {
+    if(!v) return +d.get('r');
+    d.set('r', (+v));
   }
 };
 ```
 
 ### Creating the Visualiser layer
 ```js
-var seg = segmentVis()
-  .data(collection.models)
-  .dataView(view)
-  .name('segments')  
-  .opacity(0.5);
+var bkp = breakpointVis()
+  .data(collection.models) // the data array
+  .dataView(bkpView) // the corresponding dataView
+  .name('breakpoints')
+  .lineColor(color) // Color for the line (defaults to black)
+  .color('red') // Color for the dot (defaults to black)
+  .opacity(1); // global opacity
 ```
 
 ### Creating the timeLine layout
 ```js
 var graph = timeLine()
-  .width(800)
+  .width(750)
   .height(150)
-  .xDomain([0, 100]);
+  .xDomain([0, 350])
+  .yDomain([0, 350]);
+```
+
+### Adding the layer and drawing the graph
+```js
+// add the layer
+graph.layer(bkp);
+// Draw the layer
+d3.select('.timeline').call(graph.draw);
 ```

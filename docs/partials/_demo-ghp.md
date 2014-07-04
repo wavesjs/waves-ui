@@ -2,74 +2,95 @@
 
 <div class="timeline"></div>
 
-This demo shows a simple segmented data visualization.
-
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
-<script src="//rawgit.com/ircam-rnd/segment-vis/master/segment-vis.min.js"></script>
 <script src="//rawgit.com/ircam-rnd/timeLine/master/timeLine.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.backbone.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+<script src="//rawgit.com/ircam-rnd/breakpoint-vis/master/breakpoint-vis.min.js"></script>
 <script>
-  var data = [{
-                  "start": 0,
-                  "duration": 4,
-                  "color": "#414FBA"
-                }, {
-                  "start": 5,
-                  "duration": 7,
-                  "color": "#2A2E68"
-                }, {
-                  "start": 18,
-                  "duration": 9,
-                  "color": "#5A281E"
-                }, {
-                  "start": 30,
-                  "duration": 7,
-                  "color": "#BE7C7A"
-                }, {
-                  "start": 16,
-                  "duration": 6,
-                  "color": "#BE7C7A"
-                }, {
-                  "start": 8,
-                  "duration": 3,
-                  "color": "#2A2E68"
-                }, {
-                  "start": 1,
-                  "duration": 4,
-                  "color": "#C52599"
-                }, {
-                  "start": 63,
-                  "duration": 9,
-                  "color": "#CA56F4"
-                }, {
-                  "start": 90,
-                  "duration": 9,
-                  "color": "#5A281E"
-                }, {
-                  "start": 20,
-                  "duration": 6,
-                  "color": "#CA56F4"
-                }];
+  var radius = 5;
+  var color = 'lightblue';
+  var data = [
+    {
+      cx: 43,
+      cy: 67,
+      r: radius,
+      color: 'green'
+    },
+    {
+      cx: 50,
+      cy: 250,
+      r: radius,
+      // color: color
+    },
+    {
+      cx: 90,
+      cy: 170,
+      r: radius,
+      // color: color
+    },
+    {
+      cx: 200,
+      cy: 250,
+      r: radius,
+      // color: color
+    },
+    {
+      cx: 300,
+      cy: 320,
+      r: radius,
+      // color: color
+    },
+    {
+      cx: 340,
+      cy: 150,
+      r: radius,
+      // color: color
+    }
+  ];
+
+  var collection = new Backbone.Collection(data);
+
+  var bkpView = {
+    cx: function(d, v) {
+      if(!v) return +d.get('cx') || 0;
+      d.set('cx', (+v));
+    },
+    cy: function(d, v) {
+      if(!v) return +d.get('cy') || 1;
+      d.set('cy', (+v));
+    },
+    r: function(d, v) {
+      if(!v) return +d.get('r') || 5;
+      d.set('r', (+v));
+    }
+  };
 
   document.addEventListener('DOMContentLoaded', function() {
-    
-    document.querySelector('.timeline').innerHTML = '';
-    
+  
     // Timeline
     // --------
     var graph = timeLine()
       .width(750)
       .height(150)
-      .xDomain([0, 100]);
+      .xDomain([0, 350])
+      .yDomain([0, 350]);
 
-    // segments layer
-    // --------------
-    graph.layer(
-      segmentVis()
-      .data(data)
-      .name('segments')
-      .opacity(0.5));
+    // breakpoints layer
+    // ----------------
+    var bkp = breakpointVis()
+      .data(collection.models)
+      .dataView(bkpView)
+      .name('breakpoints')
+      .lineColor(color)
+      .color('red')
+      .interpolate('linear')
+      .opacity(1);
 
+    // we add layers
+    graph.layer(bkp);
+  
     d3.select('.timeline').call(graph.draw);
 
-    });
+  });
 </script>

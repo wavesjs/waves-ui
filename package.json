@@ -18,7 +18,7 @@
     "extend": "^1.2.1"
   },
   "devDependencies": {
-    "fs-utils" : "0.4.3",
+    "module-boilerplate": "git://github.com/Ircam-RnD/module-boilerplate.git#master",
     "browserify": "~4.1.2",
     "mocha": "~1.17.1",
     "chai": "~1.9.0",
