@@ -261,14 +261,16 @@ var baseDesc = {
 
       var that = this;
       var layers = this.layers;
+      
+      zoom.anchor = this.originalXscale.invert(zoom.anchor); // in px to domain
 
-      this.zoomFactor = zoom.factor;
+      // this.zoomFactor = zoom.factor;
       this.xZoomCompute(zoom, this);
 
       // redraw layers
       _.each(layers, function(layer){
         if(layer.hasOwnProperty('xScale')) that.xZoomCompute(zoom, layer);
-        if(layer.xZoom) layer.xZoom(zoom);
+        if(layer.hasOwnProperty('xZoom')) layer.xZoom(zoom);
         // if(layer.xZoom) that.throttle(layer.xZoom());
       });
 
@@ -280,14 +282,15 @@ var baseDesc = {
     enumerable: true, value: function(zoom, ly) {
       var deltaY = zoom.delta.y;
       var deltaX = zoom.delta.x;
-      var anchor = ly.originalXscale.invert(zoom.anchor); // in px to domain
-      
+      var anchor = zoom.anchor;
+      var factor = zoom.factor;
+
       // start and length (instead of end)
       var targetStart = ly.originalXscale.domain()[0];
       var currentLength = ly.originalXscale.domain()[1] - targetStart;
 
       // length after scaling
-      var targetLength = currentLength * this.zoomFactor;
+      var targetLength = currentLength * factor;
       // unchanged length in px
       var rangeLength = ly.originalXscale.range()[1] - ly.originalXscale.range()[0];
 
@@ -304,7 +307,7 @@ var baseDesc = {
         targetStart += translation;
       }
 
-      ly.targetStart = targetStart;
+      // ly.targetStart = targetStart;
       // updating the scale
       ly.xScale.domain([targetStart, targetStart + targetLength]);
 
@@ -351,6 +354,20 @@ var baseDesc = {
         that.delegateScales(layer);
         // layer.xScale = that.xScale;
         // layer.yScale = d3.scale.linear();
+      });
+
+    }
+  },
+
+  drawLayers: {
+    value: function(name){
+      name = name || '';
+      var layers = this.layers;
+
+      // update all layers excepthe one passed
+      // rethink this later
+      _.each(layers, function(layer){
+        if(layer.draw && layer.name !== name) layer.draw();
       });
 
     }
@@ -424,9 +441,7 @@ var baseDesc = {
   // moves selected item to front
   toFront: {
     value: function(item) {
-      return d3.select(item).each(function(){
-        this.parentNode.appendChild(this);
-      });
+      item.parentNode.appendChild(item);
     }
   }
 
@@ -2935,8 +2950,8 @@ module.exports.seed     = seed;
 module.exports.worker   = worker;
 module.exports.characters = characters;
 module.exports.decode   = decode;
-}).call(this,_dereq_("/Users/vsaiz/Documents/WAVE/repo/lib/github/ui/timeLine/timeLine-master/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"./lib/alphabet":14,"./lib/encode":15,"/Users/vsaiz/Documents/WAVE/repo/lib/github/ui/timeLine/timeLine-master/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":11}],18:[function(_dereq_,module,exports){
+}).call(this,_dereq_("/Users/vsaiz/Documents/WAVE/repo/lib/github/ui/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
+},{"./lib/alphabet":14,"./lib/encode":15,"/Users/vsaiz/Documents/WAVE/repo/lib/github/ui/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":11}],18:[function(_dereq_,module,exports){
 //  Underscore.string
 //  (c) 2010 Esa-Matti Suuronen <esa-matti aet suuronen dot org>
 //  Underscore.string is freely distributable under the terms of the MIT license.
