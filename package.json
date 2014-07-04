@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "make-editable": "git://github.com/Ircam-RnD/make-editable.git",
+    "breakpoint-vis": "git://github.com/Ircam-RnD/breakpoint-vis.git",
     "extend": "^1.3.0"
   },
   "devDependencies": {

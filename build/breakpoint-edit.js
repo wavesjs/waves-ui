@@ -1,118 +1,9 @@
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.breakpointEdit=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
-
 /* global d3 */
 "use strict";
 
-module.exports = function makeEditable(graph){
-
-  // a visualiser to decorate
-  var edit = graph;
-
-  // keep old methods to override
-  var defaultDraw = edit.draw;
-  var defaultLoad = edit.load;
-
-  // overrides load to add editing capablilities
-  Object.defineProperty(edit, 'load', {
-    value: function(base) {
-
-      // default load
-      defaultLoad.call(this, base);
-      var id = base.id();
-      var g = base.g;
-
-      // edition events handling
-      // base.on(id + ':mousedown', this.mouseDown.bind(this));
-      base.on(id + ':drag', this.onDrag.bind(this));
-      base.on(id + ':mouseup', this.mouseUp.bind(this));
-      base.on(id + ':mouseout', this.base.xZoomSet.bind(this.base));
-      
-      // clicking anywhere ouside or inside the container deselects
-      document.body.addEventListener('mousedown', this.mouseDown.bind(this));
-
-      return this;
-    }
-  });
- 
-  Object.defineProperty(edit, 'draw', {
-    enumerable: true, value: function(el) {
-      // add css for cursors
-      // avoid performing this every draw!
-      this.g.selectAll('.' + this.unitClass).classed('selectable', true);
-      defaultDraw.call(this, el);
-    }
-  });
-
-  Object.defineProperty(edit, 'mouseUp', {
-    value: function (ev) {
-
-        // has to be the svg because the group is virtually not there :(
-        this.base.svg.classed('handle-resize', false);
-        this.base.svg.classed('handle-drag', false);
-      }
-  });
-
-  // mouse down ev handler
-  Object.defineProperty(edit, 'mouseDown', {
-    value: function(ev) {
-      if(ev.button === 0) {
-
-        var item = ev.target;
-
-        if(this.clicked(item)) {
-          this.itemMousedown(ev);
-        } else {
-          if(!item.classList.contains('keep-selection')) this.unselectAll();
-        }
-
-      }
-    }
-  });
-
-  // mouse down on the svg element deselects
-  Object.defineProperty(edit, 'unselectAll', {
-    value: function svgMousedown() {
-      this.base.svg.selectAll('.selected').classed('selected', false);
-    }
-  });
-
-  // mousedown on the segments selects them and should trigger an event
-  Object.defineProperty(edit, 'itemMousedown', {
-    value: function itemMousedown(ev) {
-
-      var g = this.g;
-      var item = ev.target.parentNode; // containing g
-      var selects = g.node().querySelectorAll('.selected');
-      var isFound = [].indexOf.call(selects, item) >= 0;
-      var isSelectable = item.classList.contains('selectable');
-      var isSelected = d3.select(item).classed('selected');
-
-      // move selected item to the front
-      this.base.toFront(item);
-
-      // we click away or in some other block without shift
-      if((selects.length < 1 || !isFound) && !ev.shiftKey){
-        this.unselectAll();
-      }
-
-      // shift + was selected: deselect
-      if(ev.shiftKey && isSelected){
-        d3.select(item).classed('selected', false);
-      } else {
-        if(isSelectable) d3.select(item).classed('selected', true);
-      }
-
-    }
-  });
-
-  return edit;
-};
-},{}],2:[function(_dereq_,module,exports){
-/* global d3 */
-"use strict";
-
-var breakpoint = _dereq_('../breakpoint-vis');
-var makeEditable = _dereq_('../../../github/ui/make-editable');
+var breakpoint = _dereq_('breakpoint-vis');
+var makeEditable = _dereq_('make-editable');
 var extend = _dereq_('extend');
 
 // exports an augmented breakpoint
@@ -217,7 +108,264 @@ module.exports = function breakpointEditor() {
 
   return makeEditable(bkpt);
 };
-},{"../../../github/ui/make-editable":1,"../breakpoint-vis":5,"extend":4}],3:[function(_dereq_,module,exports){
+},{"breakpoint-vis":2,"extend":5,"make-editable":6}],2:[function(_dereq_,module,exports){
+/* global d3 */
+
+"use strict";
+
+var getSet = _dereq_('get-set');
+var extend = _dereq_('extend');
+
+var bkptDesc = {
+
+  unitClass: { writable: true },
+  base: { writable: true },
+  g: { writable: true },
+  xBaseDomain: { writable: true },
+  line: { writable: true },
+ 
+  // "inherit" events,
+  on: { enumerable: true, writable: true},
+  trigger: {writable: true},
+  
+  init: {
+    value: function() {
+
+      // getters(setters) to be added
+      getSet(this)([
+        'name', 'height', 'top', 'data', 'opacity',
+        'color', 'lineColor',
+        'dataView', 'xDomain', 'xRange', 'yDomain', 'yRange', 'interpolate'
+      ]);
+      
+      // defaults
+      this.selectable = false;
+      this.height(0);
+      this.opacity(0.70);
+      this.line = d3.svg.line();
+      this.interpolate('linear');
+
+      return this;
+    }
+  },
+
+  // default dataView to be overriden by the user's
+  defaultDataView: {
+    value: function() {
+      var that = this;
+      return {
+        cx: function(d, v) {
+          if(!v) return +d.cx || 0;
+          d.cx = (+v);
+        },
+        cy: function(d, v) {
+          if(!v) return +d.cy || 1;
+          d.cy = (+v);
+        },
+        r: function(d, v) {
+          if(!v) return +d.r || 5;
+          d.r = (+v);
+        },
+        color: function(d, v) {
+          if(!v) return d.color || that.color() || '#000';
+          d.color = v;
+        },
+        lineColor: function(d) {
+          return that.lineColor() || that.color() || '#000';
+        }
+      };
+    }
+  },
+
+  load: {
+    enumerable: true, configurable: true, value: function(base){
+      this.base = base; // bind the baseTimeLine
+      this.unitClass = this.name() + '-item';
+    }
+  },
+
+  bind: {
+    value: function(g) {
+      this.g = g;
+      this.update();
+    }
+  },
+
+  sortData: {
+    value: function(data) {
+
+      var dv = extend(this.defaultDataView(), this.dataView());
+      data.sort(function(a, b) {
+        return (dv.cx(a) < dv.cx(b) ? -1 : (dv.cx(a) > dv.cx(b) ? 1 : 0));
+      });
+    }
+  },
+
+  update: {
+    enumerable: true, value: function(data) {
+
+      data = data || this.data() || this.base.data();
+      this.data(data);
+     
+      var that = this;
+
+      var xScale = this.base.xScale;
+      var yScale = this.base.yScale;
+      var dv = extend(this.defaultDataView(), this.dataView());
+
+      this._linedata = data.slice();
+      this.sortData(this._linedata);
+
+      var sel = this.g.selectAll('.' + this.unitClass)
+            .data(data, dv.sortIndex || null);
+      
+      var path =  this.g.select('.bkpt-line');
+      if(!path.node()) path = this.g.append("path");
+
+      path.attr("class", 'bkpt-line')
+        .attr('stroke-opacity', this.opacity());
+
+      this.line
+        .x(function(d){ return xScale(dv.cx(d));})
+        .y(function(d){ return yScale(dv.cy(d));})
+        .interpolate(this.interpolate());
+
+      var g = sel.enter()
+      .append('g')
+        .attr("class", this.unitClass)
+        .attr('id', function(d, i) {
+          return d.id || that.unitClass + '-' + i;
+        });
+
+      g.append("circle")
+        .attr("class", 'bkpt')
+        .attr('fill-opacity', this.opacity());
+      
+      sel.exit().remove();
+      this.draw();
+    }
+  },
+
+  xZoom: {
+    enumerable: true, value: function(val) {
+
+      // var xScale = this.base.xScale;
+      // var min = xScale.domain()[0],
+      //     max = xScale.domain()[1];
+
+      // // var nuData = [];
+      // var dv = extend(this.defaultDataView(), this.dataView());
+      // var that = this;
+
+      // this.data().forEach(function(d, i) {
+      //   var start = dv.xc(d);
+      //   var duration = dv.duration(d);
+      //   var end = start + duration;
+
+      //   // rethink when feeling smarter
+      //   if((start > min && end < max) || (start < min && end < max && end > min) || (start > min && start < max && end > max) || (end > max && start < min)) nuData.push(d);
+      // });
+      // this.update();
+      this.draw();
+    }
+  },
+
+  draw: {
+    enumerable: true, configurable: true, value: function(el) {
+      el = el || this.g.selectAll('.' + this.unitClass);
+
+      var dv = extend(this.defaultDataView(), this.dataView());
+      var base = this.base;
+      var xScale = base.xScale;
+      var yScale = base.yScale;
+      
+      var cx = function(d) { return xScale(dv.cx(d)); };
+      var cy = function(d) { return yScale(dv.cy(d)); };
+      var r = function(d) { return dv.r(d); };
+     
+    
+      this.g.selectAll('.bkpt-line')
+        .attr("d", this.line(this._linedata))
+        .attr("stroke", dv.lineColor)
+        .attr("stroke-width", 1)
+        .attr("fill", "none");
+
+      el.selectAll('.bkpt')
+        .attr('fill', dv.color)
+        .attr('cx', cx)
+        .attr('cy', cy)
+        .attr("stroke-width", 1)
+        .attr('r', r);
+
+    }
+  }
+
+};
+
+module.exports = function breakpointVis(options){
+  var breakpoint = Object.create({}, bkptDesc);
+  return breakpoint.init();
+};
+},{"extend":5,"get-set":3}],3:[function(_dereq_,module,exports){
+
+"use strict";
+
+var events = _dereq_('events');
+var ee = new events.EventEmitter();
+
+module.exports = getSet;
+
+
+function add(obj, prop, triggers) {
+
+  var _prop = '_' + prop;
+
+    // does it trigger on change?
+    triggers = triggers || false;
+
+    // define private properties
+    Object.defineProperty(obj, _prop, { // defaults
+      configurable: true,
+      writable: true
+    });
+
+    // d3/jquery getter(setter) paradigm
+    Object.defineProperty(obj, prop, {
+      enumerable: true, configurable: true, value: function(val) {
+
+        if (arguments.length === 0) return obj[_prop];
+        obj[_prop] = val;
+
+        // bind events if
+        if (triggers) {
+          if (!obj.hasOwnProperty('on')) obj.on = ee.on;
+          if (!obj.hasOwnProperty('emit')) obj.trigger = ee.emit;
+          obj.trigger(prop + ':changed', val);
+        }
+
+        return obj;
+      }
+    });
+}
+
+function getSet(obj) {
+
+  return function (prop, triggers) {
+
+    if (Array.isArray(prop)) {
+      
+      prop.forEach(function (p) {
+        add(obj, p, triggers);
+      });
+
+    } else {
+      add(obj, prop, triggers);
+    }
+
+    return add;
+  };
+}
+},{"events":4}],4:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -522,7 +670,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],4:[function(_dereq_,module,exports){
+},{}],5:[function(_dereq_,module,exports){
 var hasOwn = Object.prototype.hasOwnProperty;
 var toString = Object.prototype.toString;
 var undefined;
@@ -604,265 +752,114 @@ module.exports = function extend() {
 };
 
 
-},{}],5:[function(_dereq_,module,exports){
-/* global d3 */
+},{}],6:[function(_dereq_,module,exports){
 
+/* global d3 */
 "use strict";
 
-var getSet = _dereq_('get-set');
-var extend = _dereq_('extend');
+module.exports = function makeEditable(graph){
 
-var bkptDesc = {
+  // a visualiser to decorate
+  var edit = graph;
 
-  unitClass: { writable: true },
-  base: { writable: true },
-  g: { writable: true },
-  xBaseDomain: { writable: true },
-  line: { writable: true },
- 
-  // "inherit" events,
-  on: { enumerable: true, writable: true},
-  trigger: {writable: true},
-  
-  init: {
-    value: function() {
+  // keep old methods to override
+  var defaultDraw = edit.draw;
+  var defaultLoad = edit.load;
 
-      // getters(setters) to be added
-      getSet(this)([
-        'name', 'height', 'top', 'data', 'opacity',
-        'color', 'lineColor',
-        'dataView', 'xDomain', 'xRange', 'yDomain', 'yRange', 'interpolate'
-      ]);
+  // overrides load to add editing capablilities
+  Object.defineProperty(edit, 'load', {
+    value: function(base) {
+
+      // default load
+      defaultLoad.call(this, base);
+      var id = base.id();
+      var g = base.g;
+
+      // edition events handling
+      // base.on(id + ':mousedown', this.mouseDown.bind(this));
+      base.on(id + ':drag', this.onDrag.bind(this));
+      base.on(id + ':mouseup', this.mouseUp.bind(this));
+      base.on(id + ':mouseout', this.base.xZoomSet.bind(this.base));
       
-      // defaults
-      this.selectable = false;
-      this.height(0);
-      this.opacity(0.70);
-      this.line = d3.svg.line();
-      this.interpolate('linear');
+      // clicking anywhere ouside or inside the container deselects
+      document.body.addEventListener('mousedown', this.mouseDown.bind(this));
 
       return this;
     }
-  },
-
-  // default dataView to be overriden by the user's
-  defaultDataView: {
-    value: function() {
-      var that = this;
-      return {
-        cx: function(d, v) {
-          if(!v) return +d.cx || 0;
-          d.cx = (+v);
-        },
-        cy: function(d, v) {
-          if(!v) return +d.cy || 1;
-          d.cy = (+v);
-        },
-        r: function(d, v) {
-          if(!v) return +d.r || 5;
-          d.r = (+v);
-        },
-        color: function(d, v) {
-          if(!v) return d.color || that.color() || '#000';
-          d.color = v;
-        },
-        lineColor: function(d) {
-          return that.lineColor() || that.color() || '#000';
-        }
-      };
+  });
+ 
+  Object.defineProperty(edit, 'draw', {
+    enumerable: true, value: function(el) {
+      // add css for cursors
+      this.g.selectAll('.' + this.unitClass).classed('selectable', true);
+      defaultDraw.call(this, el);
     }
-  },
+  });
 
-  load: {
-    enumerable: true, configurable: true, value: function(base){
-      this.base = base; // bind the baseTimeLine
-      this.unitClass = this.name() + '-item';
-    }
-  },
+  Object.defineProperty(edit, 'mouseUp', {
+    value: function (ev) {
 
-  bind: {
-    value: function(g) {
-      this.g = g;
-      this.update();
-    }
-  },
-
-  sortData: {
-    value: function(data) {
-
-      var dv = extend(this.defaultDataView(), this.dataView());
-      data.sort(function(a, b) {
-        return (dv.cx(a) < dv.cx(b) ? -1 : (dv.cx(a) > dv.cx(b) ? 1 : 0));
-      });
-    }
-  },
-
-  update: {
-    enumerable: true, value: function(data) {
-
-      data = data || this.data() || this.base.data();
-      this.data(data);
-     
-      var that = this;
-
-      var xScale = this.base.xScale;
-      var yScale = this.base.yScale;
-      var dv = extend(this.defaultDataView(), this.dataView());
-
-      this._linedata = data.slice();
-      this.sortData(this._linedata);
-
-      var sel = this.g.selectAll('.' + this.unitClass)
-            .data(data, dv.sortIndex || null);
-      
-      var path =  this.g.select('.bkpt-line');
-      if(!path.node()) path = this.g.append("path");
-
-      path.attr("class", 'bkpt-line')
-        .attr('stroke-opacity', this.opacity());
-
-      this.line
-        .x(function(d){ return xScale(dv.cx(d));})
-        .y(function(d){ return yScale(dv.cy(d));})
-        .interpolate(this.interpolate());
-
-      var g = sel.enter()
-      .append('g')
-        .attr("class", this.unitClass)
-        .attr('id', function(d, i) {
-          return d.id || that.unitClass + '-' + i;
-        });
-
-      g.append("circle")
-        .attr("class", 'bkpt')
-        .attr('fill-opacity', this.opacity());
-      
-      sel.exit().remove();
-      this.draw();
-    }
-  },
-
-  xZoom: {
-    enumerable: true, value: function(val) {
-
-      // var xScale = this.base.xScale;
-      // var min = xScale.domain()[0],
-      //     max = xScale.domain()[1];
-
-      // // var nuData = [];
-      // var dv = extend(this.defaultDataView(), this.dataView());
-      // var that = this;
-
-      // this.data().forEach(function(d, i) {
-      //   var start = dv.xc(d);
-      //   var duration = dv.duration(d);
-      //   var end = start + duration;
-
-      //   // rethink when feeling smarter
-      //   if((start > min && end < max) || (start < min && end < max && end > min) || (start > min && start < max && end > max) || (end > max && start < min)) nuData.push(d);
-      // });
-      // this.update();
-      this.draw();
-    }
-  },
-
-  draw: {
-    enumerable: true, configurable: true, value: function(el) {
-      el = el || this.g.selectAll('.' + this.unitClass);
-
-      var dv = extend(this.defaultDataView(), this.dataView());
-      var base = this.base;
-      var xScale = base.xScale;
-      var yScale = base.yScale;
-      
-      var cx = function(d) { return xScale(dv.cx(d)); };
-      var cy = function(d) { return yScale(dv.cy(d)); };
-      var r = function(d) { return dv.r(d); };
-     
-    
-      this.g.selectAll('.bkpt-line')
-        .attr("d", this.line(this._linedata))
-        .attr("stroke", dv.lineColor)
-        .attr("stroke-width", 1)
-        .attr("fill", "none");
-
-      el.selectAll('.bkpt')
-        .attr('fill', dv.color)
-        .attr('cx', cx)
-        .attr('cy', cy)
-        .attr("stroke-width", 1)
-        .attr('r', r);
-
-    }
-  }
-
-};
-
-module.exports = function breakpointVis(options){
-  var breakpoint = Object.create({}, bkptDesc);
-  return breakpoint.init();
-};
-},{"extend":6,"get-set":7}],6:[function(_dereq_,module,exports){
-module.exports=_dereq_(4)
-},{}],7:[function(_dereq_,module,exports){
-
-"use strict";
-
-var events = _dereq_('events');
-var ee = new events.EventEmitter();
-
-module.exports = getSet;
-
-
-function add(obj, prop, triggers) {
-
-  var _prop = '_' + prop;
-
-    // does it trigger on change?
-    triggers = triggers || false;
-
-    // define private properties
-    Object.defineProperty(obj, _prop, { // defaults
-      configurable: true,
-      writable: true
-    });
-
-    // d3/jquery getter(setter) paradigm
-    Object.defineProperty(obj, prop, {
-      enumerable: true, configurable: true, value: function(val) {
-
-        if (arguments.length === 0) return obj[_prop];
-        obj[_prop] = val;
-
-        // bind events if
-        if (triggers) {
-          if (!obj.hasOwnProperty('on')) obj.on = ee.on;
-          if (!obj.hasOwnProperty('emit')) obj.trigger = ee.emit;
-          obj.trigger(prop + ':changed', val);
-        }
-
-        return obj;
+        // has to be the svg because the group is virtually not there :(
+        this.base.svg.classed('handle-resize', false);
+        this.base.svg.classed('handle-drag', false);
       }
-    });
-}
+  });
 
-function getSet(obj) {
+  // mouse down ev handler
+  Object.defineProperty(edit, 'mouseDown', {
+    value: function(ev) {
+      if(ev.button === 0) {
 
-  return function (prop, triggers) {
+        var item = ev.target;
 
-    if (Array.isArray(prop)) {
-      
-      prop.forEach(function (p) {
-        add(obj, p, triggers);
-      });
+        if(this.clicked(item)) {
+          this.itemMousedown(ev);
+        } else {
+          if(!item.classList.contains('keep-selection')) this.unselectAll();
+        }
 
-    } else {
-      add(obj, prop, triggers);
+      }
     }
+  });
 
-    return add;
-  };
-}
-},{"events":3}]},{},[2])
-(2)
+  // mouse down on the svg element deselects
+  Object.defineProperty(edit, 'unselectAll', {
+    value: function svgMousedown() {
+      this.base.svg.selectAll('.selected').classed('selected', false);
+    }
+  });
+
+  // mousedown on the segments selects them and should trigger an event
+  Object.defineProperty(edit, 'itemMousedown', {
+    value: function itemMousedown(ev) {
+
+      var g = this.g;
+      var item = ev.target.parentNode; // containing g
+      var selects = g.node().querySelectorAll('.selected');
+      var isFound = [].indexOf.call(selects, item) >= 0;
+      var isSelectable = item.classList.contains('selectable');
+      var isSelected = d3.select(item).classed('selected');
+
+      // move selected item to the front
+      this.base.toFront(item);
+
+      // we click away or in some other block without shift
+      if((selects.length < 1 || !isFound) && !ev.shiftKey){
+        this.unselectAll();
+      }
+
+      // shift + was selected: deselect
+      if(ev.shiftKey && isSelected){
+        d3.select(item).classed('selected', false);
+      } else {
+        if(isSelectable) d3.select(item).classed('selected', true);
+      }
+
+    }
+  });
+
+  return edit;
+};
+},{}]},{},[1])
+(1)
 });

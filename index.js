@@ -1,8 +1,8 @@
 /* global d3 */
 "use strict";
 
-var breakpoint = require('../breakpoint-vis');
-var makeEditable = require('../../../github/ui/make-editable');
+var breakpoint = require('breakpoint-vis');
+var makeEditable = require('make-editable');
 var extend = require('extend');
 
 // exports an augmented breakpoint
