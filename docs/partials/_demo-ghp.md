@@ -1,13 +1,17 @@
 ##Demo
 
+In this demo you can select one ( or multiple points by holding shift) and move them across the timeline.
+
+<div class="soom"></div>
 <div class="timeline"></div>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
-<script src="//rawgit.com/ircam-rnd/timeLine/master/timeLine.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.backbone.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
-<script src="//rawgit.com/ircam-rnd/breakpoint-edit/master/build/breakpoint-edit.min.js"></script>
-
+<script src="//rawgit.com/ircam-rnd/timeLine/master/timeLine.min.js"></script>
+<script src="//rawgit.com/ircam-rnd/breakpoint-edit/master/build/breakpoint-edit.js"></script>
+<script src="js/zoomer.min.js"></script>
+<link rel="stylesheet" href="css/style.css">
 <script>
   var radius = 5;
   var color = 'lightblue';
@@ -91,7 +95,48 @@
     // we add layers
     graph.layer(bkp);
   
+    // Zoom behaviour/layer
+    // ---------------------
+    var zoomr = zoomer()
+      .graph(graph)
+      .on('mousemove', function(evt) {
+        // sends evt {anchor: zx, factor: zFactor, delta: {x: deltaX, y: deltaY}}
+        graph.xZoom(evt);
+        d3.select('.xaxis').call(xAxis); // redraw axis
+      })
+      .on('mouseup', function(evt) {
+        graph.xZoomSet();
+        xAxis.scale(graph.xScale);
+        d3.select('.xaxis').call(xAxis); // redraw axis
+      });
+
+    d3.select('.soom')
+      .append('svg')
+      .attr('width', 800)
+      .attr('height', 30)
+      .call(zoomr.draw);
+
+    // draw
+    // -----
+    // we pass in the drawing method from our timeline object
     d3.select('.timeline').call(graph.draw);
+
+    // axis for the zoom
+    // ------------------
+    var xAxis = d3.svg.axis()
+      .scale(graph.xScale)
+      .tickSize(1)
+      // .tickFormat(function(d){
+      //   var date = new Date(d);
+      //   var format = d3.time.format("%M:%S");
+      //   return format(date);
+      // });
+
+    d3.select('.soom svg')
+      .append('g')
+      .attr('class', 'xaxis')
+      .attr("transform", "translate(0,0)")
+      .attr('fill', '#555').call(xAxis);
 
   });
 </script>
