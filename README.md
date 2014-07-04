@@ -12,7 +12,7 @@ Evert new API breaking change we will be adding snapshots to the repository so y
 For an in depth  explanation on the philosophy and usage of this library please refer to [this blog post](http://wave.ircam.fr/publications/visual-tools/).
 ###Demo
 
-A woring demo for this module can be found [here](https://github.com/ircam-rnd/breakpoint-vis)
+A woring demo for this module can be found [here](https://ircam-rnd.github.io/breakpoint-vis)
 ### Usage
 
 #### Data

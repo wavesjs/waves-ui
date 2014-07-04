@@ -6,7 +6,7 @@
 <script src="//rawgit.com/ircam-rnd/timeLine/master/timeLine.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.backbone.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
-<script src="//rawgit.com/ircam-rnd/breakpoint-vis/master/breakpoint-vis.min.js"></script>
+<script src="//rawgit.com/ircam-rnd/breakpoint-vis/master/build/breakpoint-vis.min.js"></script>
 <script>
   var radius = 5;
   var color = 'lightblue';
