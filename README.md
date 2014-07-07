@@ -6,7 +6,7 @@ This module is a simple zoom implementation that interacts with the internal zXo
 The zoom values can be passed from any external source such as a slider or user interaction, this is just an implementation bases on vertical and horizontal dragging in a div.
 ###Demo
 
-To see the zoomer in action you can visit this demo [here](https://ircam-rnd.github.io/waveform-vis) And click+scroll for zooming and panning on the waveform.
+To see the zoomer in action you can visit this demo [here](https://ircam-rnd.github.io/waveform-vis) and click+scroll for zooming and panning on the waveform.
 ### Usage
 
 #### Creating a brush layer
