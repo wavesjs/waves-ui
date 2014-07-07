@@ -2,14 +2,21 @@
 
 In this demo you can select one ( or multiple points by holding shift) and move them across the timeline.
 
-<div class="soom"></div>
+You can <a class="keep-selection delete" name="delete">delete selected items</a> (<a href="#deleting">see below</a>).  
+_Please not that the element that will call the delete action must have the css class of `.keep-selection` in order to keep the selection active_. 
+
+<a class="keep-selection add" name="add">Adding elemts</a> is also easy (<a href="#deleting">see below</a>).  
+_Note that this only adds one hardcoded segment to the timeline_.
+
+<div class="soom keep-selection"></div>
 <div class="timeline"></div>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.backbone.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
 <script src="//rawgit.com/ircam-rnd/timeLine/master/timeLine.min.js"></script>
-<script src="//rawgit.com/ircam-rnd/breakpoint-edit/master/build/breakpoint-edit.js"></script>
+<!-- <script src="//rawgit.com/ircam-rnd/breakpoint-edit/master/build/breakpoint-edit.js"></script> -->
+<script src="js/breakpoint-edit.js"></script>
 <script src="js/zoomer.min.js"></script>
 <link rel="stylesheet" href="css/style.css">
 <script>
@@ -57,6 +64,9 @@ In this demo you can select one ( or multiple points by holding shift) and move 
   var collection = new Backbone.Collection(data);
 
   var bkpView = {
+    sortIndex: function(d) {
+      return +d.get('cx');
+    },
     cx: function(d, v) {
       if(!v) return +d.get('cx') || 0;
       d.set('cx', (+v));
@@ -137,6 +147,39 @@ In this demo you can select one ( or multiple points by holding shift) and move 
       .attr('class', 'xaxis')
       .attr("transform", "translate(0,0)")
       .attr('fill', '#555').call(xAxis);
+
+
+    // Adding / deletting
+    // ------------------
+
+    function deleteSelected() {
+      // find selected segments and delete each of them from the collection
+      var selected = d3.selectAll('.layout .selected');
+      selected.each(function(item){
+        collection.remove(item);
+      });
+      // pass again the modified data and call update
+      bkp.data(collection.models);
+      graph.update();
+    }
+
+    function addItem() {
+      // add one segment to the collection
+      collection.add({
+        cx: 250,
+        cy: 100,
+        r: radius,
+        color: 'blue'
+      });
+
+      // console.dir(collection.models);
+      // pass again the modified data and call update
+      bkp.data(collection.models);
+      graph.update();
+    }
+
+    document.querySelector('.add').addEventListener('click', addItem);
+    document.querySelector('.delete').addEventListener('click', deleteSelected);
 
   });
 </script>

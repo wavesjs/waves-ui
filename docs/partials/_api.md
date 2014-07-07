@@ -62,3 +62,29 @@ graph.layer(bkp);
 // Draw the layer
 d3.select('.timeline').call(graph.draw);
 ```
+
+<h3 id="deleting">Deleting items</h3>
+```js
+// find selected items and delete each of them from the collection
+var selected = d3.selectAll('.layout .selected');
+selected.each(function(item){
+  collection.remove(item);
+});
+// pass again the modified data and call update
+seg.data(collection.models);
+graph.update();
+```
+
+#### Adding items
+
+```js
+// add one item to the collection
+collection.add({
+  cx: 250,
+  cy: 100,
+  r: radius
+});
+// pass again the modified data and call update
+seg.data(collection.models);
+graph.update();
+```

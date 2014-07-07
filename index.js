@@ -83,7 +83,7 @@ module.exports = function breakpointEditor() {
       // has to be the svg because the group is virtually not there :(
       base.svg.classed('handle-drag', true);
 
-      this.sortData(this._linedata);
+      this.sortData();
 
       // update positions
       // ----------------

@@ -84,7 +84,7 @@ module.exports = function breakpointEditor() {
       // has to be the svg because the group is virtually not there :(
       base.svg.classed('handle-drag', true);
 
-      this.sortData(this._linedata);
+      this.sortData();
 
       // update positions
       // ----------------
@@ -192,57 +192,11 @@ var bkptDesc = {
   },
 
   sortData: {
-    value: function(data) {
-
+    value: function() {
       var dv = extend(this.defaultDataView(), this.dataView());
-      data.sort(function(a, b) {
-        return (dv.cx(a) < dv.cx(b) ? -1 : (dv.cx(a) > dv.cx(b) ? 1 : 0));
+      this.data().sort(function(a, b) {
+        return dv.cx(a) - dv.cx(b);
       });
-    }
-  },
-
-  update: {
-    enumerable: true, value: function(data) {
-
-      data = data || this.data() || this.base.data();
-      this.data(data);
-     
-      var that = this;
-
-      var xScale = this.base.xScale;
-      var yScale = this.base.yScale;
-      var dv = extend(this.defaultDataView(), this.dataView());
-
-      this._linedata = data.slice();
-      this.sortData(this._linedata);
-
-      var sel = this.g.selectAll('.' + this.unitClass)
-            .data(data, dv.sortIndex || null);
-      
-      var path =  this.g.select('.bkpt-line');
-      if(!path.node()) path = this.g.append("path");
-
-      path.attr("class", 'bkpt-line')
-        .attr('stroke-opacity', this.opacity());
-
-      this.line
-        .x(function(d){ return xScale(dv.cx(d));})
-        .y(function(d){ return yScale(dv.cy(d));})
-        .interpolate(this.interpolate());
-
-      var g = sel.enter()
-      .append('g')
-        .attr("class", this.unitClass)
-        .attr('id', function(d, i) {
-          return d.id || that.unitClass + '-' + i;
-        });
-
-      g.append("circle")
-        .attr("class", 'bkpt')
-        .attr('fill-opacity', this.opacity());
-      
-      sel.exit().remove();
-      this.draw();
     }
   },
 
@@ -265,7 +219,47 @@ var bkptDesc = {
       //   // rethink when feeling smarter
       //   if((start > min && end < max) || (start < min && end < max && end > min) || (start > min && start < max && end > max) || (end > max && start < min)) nuData.push(d);
       // });
-      // this.update();
+      this.update();
+    }
+  },
+
+  update: {
+    enumerable: true, value: function(data) {
+
+      data = data || this.data() || this.base.data();
+      // this.data(data);
+      var that = this;
+
+      var xScale = this.base.xScale;
+      var yScale = this.base.yScale;
+      var dv = extend(this.defaultDataView(), this.dataView());
+
+      this.sortData();
+      // line logic
+      var path =  this.g.select('.bkpt-line');
+      if(!path.node()) path = this.g.append("path");
+
+      path.attr("class", 'bkpt-line')
+        .attr('stroke-opacity', this.opacity());
+
+      this.line.interpolate(this.interpolate());
+
+      var sel = this.g.selectAll('.' + this.unitClass)
+            .data(data, dv.sortIndex || null);
+      
+
+      var g = sel.enter()
+      .append('g')
+        .attr("class", this.unitClass)
+        .attr('id', function(d, i) {
+          return d.id || that.unitClass + '-' + i;
+        });
+
+      g.append("circle")
+        .attr("class", 'bkpt')
+        .attr('fill-opacity', this.opacity());
+      
+      sel.exit().remove();
       this.draw();
     }
   },
@@ -281,21 +275,23 @@ var bkptDesc = {
       
       var cx = function(d) { return xScale(dv.cx(d)); };
       var cy = function(d) { return yScale(dv.cy(d)); };
-      var r = function(d) { return dv.r(d); };
-     
     
+      this.line
+        .x(cx)
+        .y(cy);
+
       this.g.selectAll('.bkpt-line')
-        .attr("d", this.line(this._linedata))
+        .attr("d", this.line(this.data()))
         .attr("stroke", dv.lineColor)
         .attr("stroke-width", 1)
         .attr("fill", "none");
-
+      
       el.selectAll('.bkpt')
         .attr('fill', dv.color)
         .attr('cx', cx)
         .attr('cy', cy)
         .attr("stroke-width", 1)
-        .attr('r', r);
+        .attr('r', dv.r);
 
     }
   }
