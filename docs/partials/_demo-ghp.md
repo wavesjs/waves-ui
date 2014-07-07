@@ -3,8 +3,8 @@
 <div class="timeline"></div>
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
 <script src="//rawgit.com/Ircam-RnD/timeLine/master/timeLine.min.js"></script>
-<script src="js/zoomer.min.js"></script>
-<script src="//rawgit.com/Ircam-RnD/waveform-vis/master/buils/waveform-vis.min.js"></script>
+<script src="//rawgit.com/Ircam-RnD/zoomer/master/build/zoomer.min.js"></script>
+<script src="//rawgit.com/Ircam-RnD/waveform-vis/master/build/waveform-vis.min.js"></script>
 <script>
   (function () {
   
