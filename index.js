@@ -1,7 +1,7 @@
 /* global d3 */
 "use strict";
 
-var breakpoint = require('breakpoint-vis');
+var breakpoint = require('../breakpoint-vis');
 var makeEditable = require('make-editable');
 var extend = require('extend');
 
@@ -25,11 +25,11 @@ module.exports = function breakpointEditor() {
 
         // var offsetTop = (that.top() || 0) + (that.base.margin().top || 0);
         // var offsetLeft = (that.left || 0) + (that.base.margin().left || 0);
-
+        var halfR = dv.r(d) * 0.5;
         // X match
         if( modex ) {
-          var x1 = dv.start(d);
-          var x2 = x1 + dv.duration(d);
+          var x1 = dv.cx(d) - halfR;
+          var x2 = dv.cx(d) + halfR;
 
           //            begining sel               end sel
           var matchX1 = extent[0][0] <= x1 && x2 < extent[1][0];
@@ -42,8 +42,8 @@ module.exports = function breakpointEditor() {
 
         // Y match
         if( modey ) {
-          var y1 = dv.y(d);
-          var y2 = y1 + dv.height(d);
+          var y1 = dv.cy(d) - halfR;
+          var y2 = dv.cy(d) + halfR;
           //            begining sel               end sel
           var matchY1 = extent[0][1] <= y1 && y2 < extent[1][1];
           var matchY2 = extent[0][1] <= y2 && y1 <= extent[1][1];
@@ -68,39 +68,40 @@ module.exports = function breakpointEditor() {
   // mouse drag ev switcher depending on drag (left|right|block) levels
   Object.defineProperty(bkpt, 'onDrag', {
     value: function(res) {
+      if (!this.base.brushing()) {
+        var d = res.d;
+        var delta = res.event;
+        var item = res.target;
+        var base = this.base;
 
-      var d = res.d;
-      var delta = res.event;
-      var item = res.target;
-      var base = this.base;
+        var dv = extend(this.defaultDataView(), this.dataView());
+        var xScale = base.xScale;
+        var yScale = base.yScale;
+        var cx = xScale(dv.cx(d));
+        var cy = yScale(dv.cy(d));
 
-      var dv = extend(this.defaultDataView(), this.dataView());
-      var xScale = base.xScale;
-      var yScale = base.yScale;
-      var cx = xScale(dv.cx(d));
-      var cy = yScale(dv.cy(d));
+        // has to be the svg because the group is virtually not there :(
+        base.svg.classed('handle-drag', true);
 
-      // has to be the svg because the group is virtually not there :(
-      base.svg.classed('handle-drag', true);
+        this.sortData();
 
-      this.sortData();
+        // update positions
+        // ----------------
 
-      // update positions
-      // ----------------
+        cx += delta.dx;
+        dv.cx(d, xScale.invert(cx));
 
-      cx += delta.dx;
-      dv.cx(d, xScale.invert(cx));
+        cy += delta.dy;
+        dv.cy(d, yScale.invert(cy));
 
-      cy += delta.dy;
-      dv.cy(d, yScale.invert(cy));
+        // redraw visualization
+        // --------------------
+        // update myself
+        this.draw(d3.select(item));
+        // tell the timeline to update the rest except me
+        base.drawLayers(this.name);
 
-      // redraw visualization
-      // --------------------
-      // update myself
-      this.draw(d3.select(item));
-      // tell the timeline to update the rest except me
-      base.drawLayers(this.name);
-
+      }
     }
   });
 
