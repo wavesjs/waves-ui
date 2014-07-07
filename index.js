@@ -124,18 +124,20 @@ var bkptDesc = {
       var dv = extend(this.defaultDataView(), this.dataView());
 
       this.sortData();
+
       // line logic
-      var path =  this.g.select('.bkpt-line');
-      if(!path.node()) path = this.g.append("path");
+      if(this.data().length > 0){
+        var path =  this.g.select('.bkpt-line');
+        if(!path.node()) path = this.g.append("path");
 
-      path.attr("class", 'bkpt-line')
-        .attr('stroke-opacity', this.opacity());
+        path.attr("class", 'bkpt-line')
+          .attr('stroke-opacity', this.opacity());
 
-      this.line.interpolate(this.interpolate());
+        this.line.interpolate(this.interpolate());
+      }
 
       var sel = this.g.selectAll('.' + this.unitClass)
             .data(data, dv.sortIndex || null);
-      
 
       var g = sel.enter()
       .append('g')
@@ -169,11 +171,15 @@ var bkptDesc = {
         .x(cx)
         .y(cy);
 
-      this.g.selectAll('.bkpt-line')
-        .attr("d", this.line(this.data()))
-        .attr("stroke", dv.lineColor)
-        .attr("stroke-width", 1)
-        .attr("fill", "none");
+      var ln = this.g.selectAll('.bkpt-line');
+      if(this.data().length > 0){
+          ln.attr("d", this.line(this.data()))
+          .attr("stroke", dv.lineColor)
+          .attr("stroke-width", 1)
+          .attr("fill", "none");
+      } else {
+        ln.remove();
+      }
       
       el.selectAll('.bkpt')
         .attr('fill', dv.color)
