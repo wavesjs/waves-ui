@@ -1,7 +1,7 @@
 /* global d3 */
 "use strict";
 
-var breakpoint = require('../breakpoint-vis');
+var breakpoint = require('breakpoint-vis');
 var makeEditable = require('make-editable');
 var extend = require('extend');
 
