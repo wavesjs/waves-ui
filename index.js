@@ -205,13 +205,12 @@ var baseDesc = {
       // global drag behaviours
       return d3.behavior.drag()
         .on("drag", function(){
-          
           // executes local drag for each selected element
           that.selection.selectAll('.selected')
             .each(function(d) {
               cb.call(this, d);
             });
-          });
+        });
 
     }
   },
