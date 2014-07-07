@@ -30,7 +30,7 @@ Object.defineProperty(waveform, 'init', {
     this.color("#000");
 
     // content of the worker loaded as text via brfs transform
-    var blob = new Blob([fs.readFileSync(__dirname + '/resampler.js', 'utf8')], { type: "text/javascript" });
+    var blob = new Blob([fs.readFileSync(__dirname + '/lib/resampler.js', 'utf8')], { type: "text/javascript" });
 
     // inlined worker
     this.resampler = new Worker(window.URL.createObjectURL(blob));
