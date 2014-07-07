@@ -1,7 +1,7 @@
 /* globals d3 */
 "use strict";
 
-var getSet = window.getSet || require('get-set');
+var getSet = require('get-set');
 var fs = require('fs'); // used with brfs transform
 
 var waveform = {};
