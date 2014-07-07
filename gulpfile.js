@@ -12,8 +12,8 @@ loadTasks(gulp, packageJson);
 var libName = packageJson.exports || packageJson.name;
 gulp.task('standalone', function () {
     return browserify('./index.js')
+      .transform('brfs')
       .bundle({
-        transform: ['brfs'],
         standalone : libName
       })
       .pipe(source(packageJson.name + '.js'))
@@ -22,11 +22,13 @@ gulp.task('standalone', function () {
 
 gulp.task('uglify', function() {
   return browserify('./index.js')
+    .transform('brfs')
     .bundle({
-      transform: ['brfs'],
       standalone : libName
     })
     .pipe(source(packageJson.name + '.min.js'))
     .pipe(streamify(uglify))
     .pipe(gulp.dest('./build/'));
 });
+
+gulp.task('default', ['standalone', 'uglify']);

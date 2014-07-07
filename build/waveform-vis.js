@@ -1,10 +1,9 @@
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.waveformVis=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
-(function (__dirname){
 /* globals d3 */
 "use strict";
 
 var getSet = _dereq_('get-set');
-var fs = _dereq_('fs'); // used with brfs transform
+ // used with brfs transform
 
 var waveform = {};
 
@@ -32,7 +31,7 @@ Object.defineProperty(waveform, 'init', {
     this.color("#000");
 
     // content of the worker loaded as text via brfs transform
-    var blob = new Blob([fs.readFileSync(__dirname + '/lib/resampler.js', 'utf8')], { type: "text/javascript" });
+    var blob = new Blob(["self.addEventListener('message', function(e) {\n\n  var data = e.data;\n  var message = data.message;\n\n  switch (data.cmd) {\n    \n    case 'downSample':\n      downSample(message.data, message.width, message.step);\n      break;\n  }\n\n}, false);\n\nfunction downSample(data, width, step) {\n  var ret = [];\n\n  for (var i = 0; i < width; i++) {\n    var o = {};\n    var min = 1.0;\n    var max = -1.0;\n    \n    for (var j = 0; j < step; j++) {\n      var datum = data[(i * step) + j];\n      if (datum < min) min = datum;\n      if (datum > max) max = datum;\n    }\n\n    o.max = max;\n    o.min = min;\n    ret.push(o);\n  }\n\n  postMessage({cmd: 'downSample', message: ret});\n}"], { type: "text/javascript" });
 
     // inlined worker
     this.resampler = new Worker(window.URL.createObjectURL(blob));
@@ -222,10 +221,7 @@ Object.defineProperty(waveform, 'draw', {
 module.exports = function(options) {
   return Object.create(waveform.init(options));
 };
-}).call(this,"/")
-},{"fs":2,"get-set":4}],2:[function(_dereq_,module,exports){
-
-},{}],3:[function(_dereq_,module,exports){
+},{"get-set":3}],2:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -530,7 +526,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],4:[function(_dereq_,module,exports){
+},{}],3:[function(_dereq_,module,exports){
 
 "use strict";
 
@@ -589,6 +585,6 @@ function getSet(obj) {
     return add;
   };
 }
-},{"events":3}]},{},[1])
+},{"events":2}]},{},[1])
 (1)
 });
