@@ -75,7 +75,7 @@ seg.data(collection.models);
 graph.update();
 ```
 
-#### Adding items
+### Adding items
 
 ```js
 // add one item to the collection

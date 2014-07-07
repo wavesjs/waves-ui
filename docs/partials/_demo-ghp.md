@@ -15,8 +15,7 @@ _Note that this only adds one hardcoded segment to the timeline_.
 <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.backbone.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
 <script src="//rawgit.com/ircam-rnd/timeLine/master/timeLine.min.js"></script>
-<!-- <script src="//rawgit.com/ircam-rnd/breakpoint-edit/master/build/breakpoint-edit.js"></script> -->
-<script src="js/breakpoint-edit.js"></script>
+<script src="//rawgit.com/ircam-rnd/breakpoint-edit/master/build/breakpoint-edit.js"></script>
 <script src="js/zoomer.min.js"></script>
 <link rel="stylesheet" href="css/style.css">
 <script>
