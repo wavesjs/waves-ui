@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+svg {
+  float: left;
+  border-bottom: solid 1px #ccc;
+  border-right: solid 1px #ccc;
+  margin-right: -1px;
+  margin-bottom: -1px;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+var width = 240,
+    height = 125,
+    radius = 20;
+
+var drag = d3.behavior.drag()
+    .origin(function(d) { return d; })
+    .on("drag", dragmove);
+
+var svg = d3.select("body").append("div").selectAll("svg")
+    .data(d3.range(16).map(function() { return {x: width / 2, y: height / 2}; }))
+  .enter().append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("circle")
+    .attr("r", radius)
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; })
+    .on("click", function(){
+        console.log("ok");
+    })
+    .call(drag);
+
+function dragmove(d) {
+  console.log(d3.event);
+  d3.select(this)
+      .attr("cx", d.x = Math.max(radius, Math.min(width - radius, d3.event.x)))
+      .attr("cy", d.y = Math.max(radius, Math.min(height - radius, d3.event.y)));
+}
+
+// test
+var circle = d3.select('circle');
+var target = circle[0][0];
+
+function triggerMouseEvent(target, type, dx, dy){
+  var event = document.createEvent("MouseEvent");
+  var dx = dx || 0,
+      dy = dy || 0;
+  // initMouseEvent(type, bubbles, cancelable, windowObject, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget)
+  event.initMouseEvent(type, true, true, window, 0, 0, 0, dx, dy, false, false, false, false, 0, null);
+  target.dispatchEvent(event);
+}
+
+triggerMouseEvent(target, 'mousedown');
+triggerMouseEvent(target, 'mousemove', 10, 20);
+triggerMouseEvent(target, 'mouseup')
+
+
+</script>
