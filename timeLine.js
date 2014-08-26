@@ -2802,8 +2802,8 @@ module.exports.seed     = seed;
 module.exports.worker   = worker;
 module.exports.characters = characters;
 module.exports.decode   = decode;
-}).call(this,_dereq_("/Users/vsaiz/Documents/WAVE/repo/lib/wave/ui/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"./lib/alphabet":14,"./lib/encode":15,"/Users/vsaiz/Documents/WAVE/repo/lib/wave/ui/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":11}],18:[function(_dereq_,module,exports){
+}).call(this,_dereq_("/Users/goldszmidt/sam/pro/dev/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
+},{"./lib/alphabet":14,"./lib/encode":15,"/Users/goldszmidt/sam/pro/dev/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":11}],18:[function(_dereq_,module,exports){
 //  Underscore.string
 //  (c) 2010 Esa-Matti Suuronen <esa-matti aet suuronen dot org>
 //  Underscore.string is freely distributable under the terms of the MIT license.

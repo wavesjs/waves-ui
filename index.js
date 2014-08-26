@@ -52,14 +52,14 @@ var baseDesc = {
 
   on: { enumerable: true, writable: true },
   trigger: { writable: true },
-  
+
   // init
   // ----
 
   init: {
     value: function(options) {
       options = options || {}; // fail safe
-      
+
       // generic getters(setters) accessors and defaults
       var addGS = getSet(this)([
           'id', 'margin', 'xDomain', 'yDomain', 'height', 'width', 'data'
@@ -122,18 +122,18 @@ var baseDesc = {
           .attr("height", that.height() + that.margin().top + that.margin().bottom);
 
         that.el = that.svg;
-        
+
         // events
         // !!! remember to unbind when deleting element !!!
         that.svg.on('mousedown', function() {
           that.dragInit = d3.event.target;
           that.trigger(that.id() + ':mousedown', d3.event );
         });
-                    
+
         that.svg.on('mouseup', function() {
           that.trigger(that.id() + ':mouseup', d3.event );
         });
-          
+
         that.svg.call(that.drag(function(d) {
           that.trigger(that.id() + ':drag', {target: this, event: d3.event, d:d, dragged: that.dragInit} );
         }));
@@ -177,7 +177,7 @@ var baseDesc = {
         // enter layers
         that.enterLayers(g);
       });
-      
+
       return this;
     }
   },
@@ -187,7 +187,7 @@ var baseDesc = {
     enumerable: true, value: function(cb) {
       var that = this;
       var delta; // null unless we pass through drag
-      
+
       // global drag behaviours
       return d3.behavior.drag()
         .on("drag", function(){
@@ -200,7 +200,7 @@ var baseDesc = {
           //   x: parseInt(d3.event.dx, 10),
           //   y: parseInt(d3.event.dy, 10)
           // };
-          
+
           // executes local drag for each selected element
           that.selection.selectAll('.selected')
             .each(function(d) {
@@ -239,7 +239,7 @@ var baseDesc = {
   // initialize layers
   initLayers: {
     value: function(){
-        
+
       var that = this;
       var layers = this.layers;
       // console.log(layers)
@@ -266,10 +266,10 @@ var baseDesc = {
   // call layer enter method
   enterLayers: {
     value: function(g){
-        
+
       var that = this;
       var layers = this.layers;
-      
+
       // setup external layers containers and dimensions
       _.each(layers, function(layer){
         // rebind Scales in case they changed
@@ -286,7 +286,7 @@ var baseDesc = {
         // var klen = Object.keys(that.layers).length;
         // var lg = (klen > 1) ? g.append("g") // if there are more than one layer we append a layer group
         //                     : g; // otherwise we work only with the inner group
-        
+
         var lg = g.append("g");
         // apply all the dimensions to our group
         lg.classed(layer.dname, true)
