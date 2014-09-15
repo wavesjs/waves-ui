@@ -54,14 +54,14 @@ var baseDesc = {
 
   on: { enumerable: true, writable: true },
   trigger: { writable: true },
-  
+
   // init
   // ----
 
   init: {
     value: function(options) {
       options = options || {}; // fail safe
-      
+
       // generic getters(setters) accessors and defaults
       getSet(this)([
         'id', 'margin', 'xDomain', 'yDomain', 'height', 'width', 'data'
@@ -133,7 +133,7 @@ var baseDesc = {
           .attr("height", that.height() + that.margin().top + that.margin().bottom);
 
         that.el = that.svg;
-        
+
         // events
         
         // !!! remember to unbind when deleting element !!!
@@ -141,13 +141,14 @@ var baseDesc = {
           that.dragInit = d3.event.target;
           that.trigger(that.id() + ':mousedown', d3.event );
         });
-                    
+
         that.svg.on('mouseup', function() {
           that.trigger(that.id() + ':mouseup', d3.event );
         });
 
         // for mousedrag we call a configured d3.drag behaviour returned from the objects drag method
         // that.svg.on('drag'...
+
         that.svg.call(that.drag(function(d) {
           // that.throttle(that.trigger(that.id() + ':drag', {target: this, event: d3.event, d:d, dragged: that.dragInit} ));
           that.trigger(that.id() + ':drag', {target: this, event: d3.event, d:d, dragged: that.dragInit} );
@@ -192,7 +193,7 @@ var baseDesc = {
         // enter layers
         that.enterLayers(g);
       });
-      
+
       return this;
     }
   },
@@ -202,17 +203,26 @@ var baseDesc = {
     enumerable: true, value: function(cb) {
       var that = this;
       var delta; // null unless we pass through drag
-      
+
       // global drag behaviours
       return d3.behavior.drag()
         .on("drag", function(){
-          
+
+          // var parentDragged = that.dragInit.parentNode;
+
+          // still used?
+          // get the delta values
+          // delta = {
+          //   x: parseInt(d3.event.dx, 10),
+          //   y: parseInt(d3.event.dy, 10)
+          // };
+
           // executes local drag for each selected element
           that.selection.selectAll('.selected')
             .each(function(d) {
               cb.call(this, d);
             });
-          });
+        });
 
     }
   },
@@ -343,7 +353,7 @@ var baseDesc = {
   // initialize layers
   initLayers: {
     value: function(){
-        
+
       var that = this;
       var layers = this.layers;
       // console.log(layers)
@@ -397,10 +407,10 @@ var baseDesc = {
   // call layer enter method
   enterLayers: {
     value: function(g){
-        
+
       var that = this;
       var layers = this.layers;
-      
+
       // setup external layers containers and dimensions
       _.each(layers, function(layer){
         // rebind Scales in case they updated
@@ -417,6 +427,8 @@ var baseDesc = {
         // var klen = Object.keys(that.layers).length;
         // var lg = (klen > 1) ? g.append("g") // if there are more than one layer we append a layer group
         //                     : g; // otherwise we work only with the inner group
+
+        // var lg = g.append("g");
         var prevLg = g.select('.' + layer.dname);
         var lg = (!!prevLg.node())?
           prevLg
@@ -454,6 +466,7 @@ module.exports = function timeline(options){
   timeLine = Object.create({}, baseDesc);
   return timeLine.init(options); // return initiated object
 };
+
 },{"events":12,"get-set":13,"shortid":17,"underscore":19,"underscore.string":18}],2:[function(_dereq_,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
@@ -2406,10 +2419,8 @@ EventEmitter.prototype.emit = function(type) {
       er = arguments[1];
       if (er instanceof Error) {
         throw er; // Unhandled 'error' event
-      } else {
-        throw TypeError('Uncaught, unspecified "error" event.');
       }
-      return false;
+      throw TypeError('Uncaught, unspecified "error" event.');
     }
   }
 
@@ -2850,13 +2861,14 @@ module.exports.seed = function (_seed_) {
 var alphabet = _dereq_('./lib/alphabet'),
     encode = _dereq_('./lib/encode');
 
-// Ignore all milliseconds before shortID was created to reduce the size of the date entropy
-// without sacrificing uniqueness. This number can be updated if we also bump the version below.
-var REDUCE_TIME = 1374349322543;
+// Ignore all milliseconds before a certain time to reduce the size of the date entropy without sacrificing uniqueness.
+// This number should be updated every year or so to keep the generated id short.
+// To regenerate `new Date() - 0` and bump the version. Always bump the version!
+var REDUCE_TIME = 1403265799803;
 
 // don't change unless we change the algos or REDUCE_TIME
 // must be an integer and less than 16
-var version = 1;
+var version = 2;
 
 // if you are using cluster or multiple servers use this to make each instance
 // has a unique value for worker
@@ -2867,7 +2879,6 @@ var counter;
 
 // Remember the last time shortId was called in case counter is needed.
 var previousSeconds;
-
 
 /**
  * Generate unique id
@@ -2950,13 +2961,9 @@ module.exports.seed     = seed;
 module.exports.worker   = worker;
 module.exports.characters = characters;
 module.exports.decode   = decode;
-<<<<<<< HEAD
-}).call(this,_dereq_("/Users/goldszmidt/sam/pro/dev/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"./lib/alphabet":14,"./lib/encode":15,"/Users/goldszmidt/sam/pro/dev/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":11}],18:[function(_dereq_,module,exports){
-=======
-}).call(this,_dereq_("/Users/vsaiz/Documents/WAVE/repo/lib/github/ui/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"./lib/alphabet":14,"./lib/encode":15,"/Users/vsaiz/Documents/WAVE/repo/lib/github/ui/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":11}],18:[function(_dereq_,module,exports){
->>>>>>> a9a08a8da48f0006f2b3dff5dfa6566b6b7a0bb0
+
+}).call(this,_dereq_("/Volumes/Home/Documents/wave/repo/lib/github/ui/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
+},{"./lib/alphabet":14,"./lib/encode":15,"/Volumes/Home/Documents/wave/repo/lib/github/ui/timeLine/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":11}],18:[function(_dereq_,module,exports){
 //  Underscore.string
 //  (c) 2010 Esa-Matti Suuronen <esa-matti aet suuronen dot org>
 //  Underscore.string is freely distributable under the terms of the MIT license.

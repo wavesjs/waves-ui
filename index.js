@@ -145,11 +145,9 @@ var baseDesc = {
           that.trigger(that.id() + ':mouseup', d3.event );
         });
 
-<<<<<<< HEAD
-=======
         // for mousedrag we call a configured d3.drag behaviour returned from the objects drag method
         // that.svg.on('drag'...
->>>>>>> a9a08a8da48f0006f2b3dff5dfa6566b6b7a0bb0
+
         that.svg.call(that.drag(function(d) {
           // that.throttle(that.trigger(that.id() + ':drag', {target: this, event: d3.event, d:d, dragged: that.dragInit} ));
           that.trigger(that.id() + ':drag', {target: this, event: d3.event, d:d, dragged: that.dragInit} );
@@ -208,7 +206,6 @@ var baseDesc = {
       // global drag behaviours
       return d3.behavior.drag()
         .on("drag", function(){
-<<<<<<< HEAD
 
           // var parentDragged = that.dragInit.parentNode;
 
@@ -219,8 +216,6 @@ var baseDesc = {
           //   y: parseInt(d3.event.dy, 10)
           // };
 
-=======
->>>>>>> a9a08a8da48f0006f2b3dff5dfa6566b6b7a0bb0
           // executes local drag for each selected element
           that.selection.selectAll('.selected')
             .each(function(d) {
@@ -431,16 +426,13 @@ var baseDesc = {
         // var klen = Object.keys(that.layers).length;
         // var lg = (klen > 1) ? g.append("g") // if there are more than one layer we append a layer group
         //                     : g; // otherwise we work only with the inner group
-<<<<<<< HEAD
 
-        var lg = g.append("g");
-=======
+        // var lg = g.append("g");
         var prevLg = g.select('.' + layer.dname);
         var lg = (!!prevLg.node())?
           prevLg
           : g.append("g");
 
->>>>>>> a9a08a8da48f0006f2b3dff5dfa6566b6b7a0bb0
         // apply all the dimensions to our group
         lg.classed(layer.dname, true)
           .attr('height', height)
