@@ -1,0 +1,64 @@
+/* disable text selection */
+::-moz-selection {
+  background: transparent; }
+
+::-webkit-selection {
+  background: transparent; }
+
+::-o-selection {
+  background: transparent; }
+
+::-ms-selection {
+  background: transparent; }
+
+::selection {
+  background: transparent; }
+
+rect.background {
+  cursor: default !important; }
+
+body.zooming {
+  -webkit-touch-callout: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default; }
+
+body:not(.brushing):not(.zooming) svg .handle-drag {
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+  cursor: -o-grabbing;
+  cursor: -ms-grabbing;
+  cursor: grabbing; }
+
+body:not(.brushing):not(.zooming) svg:not(.handle-drag) .selectable .handle, .handle-resize {
+  cursor: ew-resize; }
+
+.soom { margin-top: 3rem;}
+.timeline { margin-bottom: 3rem;}
+
+.soom .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges; }
+
+canvas {
+  pointer-events: none; }
+
+.timeline{
+  background-color: #fdf6e3;
+  width: 800px;
+}
+
+.bkp-line, .anch-item{ shape-rendering: crispEdges; }
+
+.selected circle{
+  stroke:darkblue;
+}
+
+.extent {
+  fill-opacity: .1;
+  stroke: #fff;
+  shape-rendering: crispEdges; }
