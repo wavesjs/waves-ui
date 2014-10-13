@@ -68,8 +68,8 @@ var baseDesc = {
 
       // initialize
       this.layers = {};
-      this.xScale = d3.scale.linear();
-      this.yScale = d3.scale.linear();
+      this.xScale = d3.scale.linear().clamp(true);
+      this.yScale = d3.scale.linear().clamp(true);
 
       this.on = eventEmitter.on;
       this.trigger = eventEmitter.emit;
@@ -77,7 +77,7 @@ var baseDesc = {
       this.id(options.id || shortId.generate());
       this.margin({top: 0, right: 0, bottom: 0, left: 0});
       this.xDomain([0, 0]);
-      this.yDomain([0, 0]);
+      this.yDomain([0, 1]);
       // this.swapX = false;
       // this.swapY = false;
       // this.zoom = false;
