@@ -4,6 +4,23 @@
 var getSet = require('get-set');
 var extend = require('extend');
 
+function isFunction(functionToCheck) {
+ var getType = {};
+ return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
+// helper data mapping functions
+function defDataMap(prop, def) {
+  
+  if(arguments.length<2) def = null;
+
+  return function(d, v) {
+    if(isFunction(def)) def = def(); // allows passing in an accessor
+    if (!v) return d && d[prop] || def;
+    d[prop] = v;
+  };
+}
+
 var segDesc = {
 
   unitClass: { writable: true },
@@ -26,7 +43,9 @@ var segDesc = {
       // getters(setters) to be added
       getSet(this)([
         'name', 'height', 'top', 'data', 'opacity',
-        'dataView', 'xDomain', 'xRange', 'yDomain', 'yRange'
+        'dataView', 'xDomain', 'xRange', 'yDomain', 'yRange',
+        'dStart', 'dDuration', 'dHeight', 'dY', 'dColor', 'dSortIndex',
+        'each'
       ]);
       
       // defaults
@@ -36,38 +55,46 @@ var segDesc = {
       this.height(0);
       this.opacity(0.70);
 
+      // default data accessors defDataMap(property, defaultvalue)
+      this.dStart(defDataMap('start', 0));
+      this.dDuration(defDataMap('duration', 0));
+      this.dHeight(defDataMap('height', this.height));
+      this.dY(defDataMap('y', 0));
+      this.dColor(defDataMap('color', '#ccc'));
+      this.dSortIndex(defDataMap('sortIndex', null));
+
       return this;
     }
   },
 
   // default dataView to be overriden by the user's
-  defaultDataView: {
-    value: function() {
-      var that = this;
-      return {
-                start: function(d, v) {
-                  if(!v) return +d.start || 0;
-                  d.start = (+v);
-                },
-                duration: function(d, v) {
-                  if(!v) return +d.duration || 1;
-                  d.duration = (+v);
-                },
-                height: function(d, v) {
-                  if(!v) return +d.height || that.base.height();
-                  d.height = (+v);
-                },
-                y: function(d, v) {
-                  if(!v) return +d.y || 0;
-                  d.y = (+v);
-                },
-                color: function(d, v) {
-                  if(!v) return d.color || '#000000';
-                  d.color = v;
-                }
-              };
-    }
-  },
+  // defaultDataView: {
+  //   value: function() {
+  //     var that = this;
+  //     return {
+  //               start: function(d, v) {
+  //                 if(!v) return +d.start || 0;
+  //                 d.start = (+v);
+  //               },
+  //               duration: function(d, v) {
+  //                 if(!v) return +d.duration || 1;
+  //                 d.duration = (+v);
+  //               },
+  //               height: function(d, v) {
+  //                 if(!v) return +d.height || that.base.height();
+  //                 d.height = (+v);
+  //               },
+  //               y: function(d, v) {
+  //                 if(!v) return +d.y || 0;
+  //                 d.y = (+v);
+  //               },
+  //               color: function(d, v) {
+  //                 if(!v) return d.color || '#000000';
+  //                 d.color = v;
+  //               }
+  //             };
+  //   }
+  // },
 
   load: {
     enumerable: true, configurable: true, value: function(base){
@@ -85,19 +112,15 @@ var segDesc = {
 
   update: {
     enumerable: true, value: function(data) {
-      var that = this;
-
       data = data || this.data() || this.base.data();
       this.data(data);
-
-      var dv = extend(this.defaultDataView(), this.dataView());
 
       // this.untouchedXscale = this.base.xScale.copy();
       // this.untouchedYscale = this.base.yScale.copy();
       this.zoomFactor = this.base.zoomFactor;
 
       var sel = this.g.selectAll('.' + this.unitClass)
-            .data(data, dv.sortIndex || null); // ! we may or may not pass a sorting index
+            .data(data, this.dSortIndex());
 
       var g = sel.enter()
       .append('g')
@@ -130,24 +153,25 @@ var segDesc = {
     enumerable: true, value: function(val) {
       // console.log(this.xBaseDomain);
       // console.log('zooom');
+      var that = this;
       var xScale = this.base.xScale;
       var min = xScale.domain()[0],
           max = xScale.domain()[1];
 
       var nuData = [];
-      var dv = extend(this.defaultDataView(), this.dataView());
-      var that = this;
+      // var dv = extend(this.defaultDataView(), this.dataView());
 
       this.data().forEach(function(d, i) {
-        var start = dv.start(d);
-        var duration = dv.duration(d);
+        var start = that.dStart()(d);
+        var duration = that.dDuration()(d);
         var end = start + duration;
-        // if((dv.start(d) + dv.duration(d)) <= max && dv.start(d) >= min) nuData.push(d);
+        // if((start + dv.duration(d)) <= max && start >= min) nuData.push(d);
         if((start > min && end < max) || (start < min && end < max && end > min) || (start > min && start < max && end > max) || (end > max && start < min)) nuData.push(d);
         // if((end < min && start < min) || (end > max && start > max)) nuData.push(d);
       });
       
-      this.update(nuData);
+      // this.update(nuData);
+      this.update();
       // var xAxis = this.graph[this.iName];
       // xAxis.scale(xScale);
 
@@ -162,40 +186,48 @@ var segDesc = {
       var that = this;
       var g = this.g;
       var halfHandler = this.hdWidth * 0.5;
-      var dv = extend(this.defaultDataView(), this.dataView());
+      // var dv = extend(this.defaultDataView(), this.dataView());
       var base = this.base;
       var xScale = this.base.xScale;
       var max = Math.max;
       
-      var x = function(d) { return xScale(dv.start(d)); };
-      var w = function(d) {
-        var _w = (xScale(dv.start(d) + dv.duration(d))) - xScale(dv.start(d));
-        return max(that.minWidth, _w);
-      };
+      // data mappers
+      var dStart = this.dStart();
+      var dDuration = this.dDuration();
+      var dY = this.dY();
+      var dColor = this.dColor();
+      var dHeight = this.dHeight();
+
+      var x = function(d) {return xScale(dStart(d));};
+      var w = function(d) { return max(that.minWidth,
+        (xScale(dStart(d) + dDuration(d))) - xScale(dStart(d))); };
  
-      // var h = function(d) { return that.height() - that.yScale(dv.height(d)); };
-      var h = function(d) { return max(that.yScale(dv.height(d)), 1); };
-      var y = function(d) { return that.yScale(dv.y(d)) - h(d); };
+      // var h = function(d) { return max(that.yScale(dv.height(d)), 1); };
+      var h = function(d) { return max(base.height() - that.yScale(dHeight(d)), 1); };
+      var y = function(d) { return that.yScale(dY(d)) - h(d); };
 
       // handlers
-      var lx = function(d) { return xScale(dv.start(d)) + halfHandler; };
+      var lx = function(d) { return xScale(dStart(d)) + halfHandler; };
       var rx = function(d) {
-        var _w = (xScale(dv.start(d) + dv.duration(d))) - xScale(dv.start(d));
-        var rpos = xScale(dv.start(d) + dv.duration(d)) - halfHandler;
-        return (_w < that.minWidth) ? dv.start(d) + ((that.minWidth + that.hdWidth) * 2 ) : rpos;
+        var _w = (xScale(dStart(d) + dDuration(d))) - xScale(dStart(d));
+        var rpos = xScale(dStart(d) + dDuration(d)) - halfHandler;
+        return (_w < that.minWidth) ? dStart(d) + ((that.minWidth + that.hdWidth) * 2 ) : rpos;
       };
 
       var lrh = function(d) { return y(d) + h(d); };
-      var color = function(d) { return dv.color(d); };
+      var color = function(d) { return dColor(d); };
 
-      el.selectAll('.seg')
-        .attr('x', x)
+      var segs = el.selectAll('.seg');
+      
+      segs.attr('x', x)
         .attr('y', y)
         
         .attr('width', w)
         .attr('height', h)
 
         .attr('fill', color);
+
+      if(!!this.each()) segs.each(this.each());
 
       el.selectAll('.handle.left')
         .attr("x1", lx)
