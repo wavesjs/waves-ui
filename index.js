@@ -4,19 +4,17 @@
 var getSet = require('get-set');
 var extend = require('extend');
 
-function isFunction(functionToCheck) {
- var getType = {};
- return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+function isFunction(func) {
+  return Object.prototype.toString.call(func) === '[object Function]';
 }
 
 // helper data mapping functions
 function defDataMap(prop, def) {
-  
-  if(arguments.length<2) def = null;
+  if (arguments.length < 2) def = null;
 
   return function(d, v) {
-    if(isFunction(def)) def = def(); // allows passing in an accessor
-    if (!v) return d && d[prop] || def;
+    if (isFunction(def)) def = def();
+    if (arguments.length === 1) return d && d[prop] || def;
     d[prop] = v;
   };
 }
@@ -29,14 +27,14 @@ var segDesc = {
   yScale: { writable: true },
   base: { writable: true },
   g: { writable: true },
- 
+
   // handler width
   hdWidth: { writable: true },
 
   // "inherit" events,
   on: { enumerable: true, writable: true},
   trigger: {writable: true},
-  
+
   init: {
     value: function() {
 
@@ -47,7 +45,7 @@ var segDesc = {
         'dStart', 'dDuration', 'dHeight', 'dY', 'dColor', 'dSortIndex',
         'each'
       ]);
-      
+
       // defaults
       this.minWidth = 1;
       this.selectable = false;
@@ -61,40 +59,10 @@ var segDesc = {
       this.dHeight(defDataMap('height', this.height));
       this.dY(defDataMap('y', 0));
       this.dColor(defDataMap('color', '#ccc'));
-      this.dSortIndex(defDataMap('sortIndex', null));
 
       return this;
     }
   },
-
-  // default dataView to be overriden by the user's
-  // defaultDataView: {
-  //   value: function() {
-  //     var that = this;
-  //     return {
-  //               start: function(d, v) {
-  //                 if(!v) return +d.start || 0;
-  //                 d.start = (+v);
-  //               },
-  //               duration: function(d, v) {
-  //                 if(!v) return +d.duration || 1;
-  //                 d.duration = (+v);
-  //               },
-  //               height: function(d, v) {
-  //                 if(!v) return +d.height || that.base.height();
-  //                 d.height = (+v);
-  //               },
-  //               y: function(d, v) {
-  //                 if(!v) return +d.y || 0;
-  //                 d.y = (+v);
-  //               },
-  //               color: function(d, v) {
-  //                 if(!v) return d.color || '#000000';
-  //                 d.color = v;
-  //               }
-  //             };
-  //   }
-  // },
 
   load: {
     enumerable: true, configurable: true, value: function(base){
@@ -114,7 +82,6 @@ var segDesc = {
     enumerable: true, value: function(data) {
       data = data || this.data() || this.base.data();
       this.data(data);
-
       // this.untouchedXscale = this.base.xScale.copy();
       // this.untouchedYscale = this.base.yScale.copy();
       this.zoomFactor = this.base.zoomFactor;
@@ -133,17 +100,17 @@ var segDesc = {
       g.append('rect')
         .attr("class", 'seg')
         .attr('fill-opacity', this.opacity());
-      
+
       g.append("line")
         .attr("class", 'handle left')
         .style("stroke-width", this.hdWidth)
         .attr('stroke-opacity', 0);
-      
+
       g.append("line")
         .attr("class", 'handle right')
         .style("stroke-width", this.hdWidth)
         .attr('stroke-opacity', 0);
-      
+
       sel.exit().remove();
       this.draw();
     }
@@ -169,7 +136,7 @@ var segDesc = {
         if((start > min && end < max) || (start < min && end < max && end > min) || (start > min && start < max && end > max) || (end > max && start < min)) nuData.push(d);
         // if((end < min && start < min) || (end > max && start > max)) nuData.push(d);
       });
-      
+
       // this.update(nuData);
       this.update();
       // var xAxis = this.graph[this.iName];
@@ -190,7 +157,7 @@ var segDesc = {
       var base = this.base;
       var xScale = this.base.xScale;
       var max = Math.max;
-      
+
       // data mappers
       var dStart = this.dStart();
       var dDuration = this.dDuration();
@@ -198,10 +165,10 @@ var segDesc = {
       var dColor = this.dColor();
       var dHeight = this.dHeight();
 
-      var x = function(d) {return xScale(dStart(d));};
+      var x = function(d) { return xScale(dStart(d)); };
       var w = function(d) { return max(that.minWidth,
         (xScale(dStart(d) + dDuration(d))) - xScale(dStart(d))); };
- 
+
       // var h = function(d) { return max(that.yScale(dv.height(d)), 1); };
       var h = function(d) { return max(base.height() - that.yScale(dHeight(d)), 1); };
       var y = function(d) { return that.yScale(dY(d)) - h(d); };
@@ -218,10 +185,10 @@ var segDesc = {
       var color = function(d) { return dColor(d); };
 
       var segs = el.selectAll('.seg');
-      
+
       segs.attr('x', x)
         .attr('y', y)
-        
+
         .attr('width', w)
         .attr('height', h)
 
@@ -235,7 +202,7 @@ var segDesc = {
 
         .attr("y1", y)
         .attr("y2", lrh)
-        
+
         .attr("fill", color)
         .style("stroke", color);
 
@@ -245,10 +212,9 @@ var segDesc = {
 
         .attr("y1", y)
         .attr("y2", lrh)
-        
+
         .attr("fill", color)
         .style("stroke", color);
-
     }
   }
 

@@ -5,6 +5,21 @@
 var getSet = _dereq_('get-set');
 var extend = _dereq_('extend');
 
+function isFunction(func) {
+  return Object.prototype.toString.call(func) === '[object Function]';
+}
+
+// helper data mapping functions
+function defDataMap(prop, def) {
+  if (arguments.length < 2) def = null;
+
+  return function(d, v) {
+    if (isFunction(def)) def = def();
+    if (arguments.length === 1) return d && d[prop] || def;
+    d[prop] = v;
+  };
+}
+
 var segDesc = {
 
   unitClass: { writable: true },
@@ -13,23 +28,25 @@ var segDesc = {
   yScale: { writable: true },
   base: { writable: true },
   g: { writable: true },
- 
+
   // handler width
   hdWidth: { writable: true },
 
   // "inherit" events,
   on: { enumerable: true, writable: true},
   trigger: {writable: true},
-  
+
   init: {
     value: function() {
 
       // getters(setters) to be added
       getSet(this)([
         'name', 'height', 'top', 'data', 'opacity',
-        'dataView', 'xDomain', 'xRange', 'yDomain', 'yRange'
+        'dataView', 'xDomain', 'xRange', 'yDomain', 'yRange',
+        'dStart', 'dDuration', 'dHeight', 'dY', 'dColor', 'dSortIndex',
+        'each'
       ]);
-      
+
       // defaults
       this.minWidth = 1;
       this.selectable = false;
@@ -37,36 +54,14 @@ var segDesc = {
       this.height(0);
       this.opacity(0.70);
 
-      return this;
-    }
-  },
+      // default data accessors defDataMap(property, defaultvalue)
+      this.dStart(defDataMap('start', 0));
+      this.dDuration(defDataMap('duration', 0));
+      this.dHeight(defDataMap('height', this.height));
+      this.dY(defDataMap('y', 0));
+      this.dColor(defDataMap('color', '#ccc'));
 
-  // default dataView to be overriden by the user's
-  defaultDataView: {
-    value: function() {
-      var that = this;
-      return {
-                start: function(d, v) {
-                  if(!v) return +d.start || 0;
-                  d.start = (+v);
-                },
-                duration: function(d, v) {
-                  if(!v) return +d.duration || 1;
-                  d.duration = (+v);
-                },
-                height: function(d, v) {
-                  if(!v) return +d.height || that.base.height();
-                  d.height = (+v);
-                },
-                y: function(d, v) {
-                  if(!v) return +d.y || 0;
-                  d.y = (+v);
-                },
-                color: function(d, v) {
-                  if(!v) return d.color || '#000000';
-                  d.color = v;
-                }
-              };
+      return this;
     }
   },
 
@@ -86,40 +81,37 @@ var segDesc = {
 
   update: {
     enumerable: true, value: function(data) {
-      var that = this;
-
-      this.data(this.data() || this.base.data());
-
-      data = data || this.data();
-
-      var dv = extend(this.defaultDataView(), this.dataView());
-
+      data = data || this.data() || this.base.data();
+      this.data(data);
       // this.untouchedXscale = this.base.xScale.copy();
       // this.untouchedYscale = this.base.yScale.copy();
       this.zoomFactor = this.base.zoomFactor;
 
       var sel = this.g.selectAll('.' + this.unitClass)
-            .data(data, dv.sortIndex || null); // ! we may or may not pass a sorting index
+            .data(data, this.dSortIndex());
 
       var g = sel.enter()
       .append('g')
-        .attr("class", this.unitClass);
+        .attr("class", this.unitClass)
+        .attr('id', function(d) {
+          return d.id;
+        });
         // .attr("transform", "translate(0, 0)");
 
       g.append('rect')
         .attr("class", 'seg')
         .attr('fill-opacity', this.opacity());
-      
+
       g.append("line")
         .attr("class", 'handle left')
         .style("stroke-width", this.hdWidth)
         .attr('stroke-opacity', 0);
-      
+
       g.append("line")
         .attr("class", 'handle right')
         .style("stroke-width", this.hdWidth)
         .attr('stroke-opacity', 0);
-      
+
       sel.exit().remove();
       this.draw();
     }
@@ -129,24 +121,25 @@ var segDesc = {
     enumerable: true, value: function(val) {
       // console.log(this.xBaseDomain);
       // console.log('zooom');
+      var that = this;
       var xScale = this.base.xScale;
       var min = xScale.domain()[0],
           max = xScale.domain()[1];
 
       var nuData = [];
-      var dv = extend(this.defaultDataView(), this.dataView());
-      var that = this;
+      // var dv = extend(this.defaultDataView(), this.dataView());
 
       this.data().forEach(function(d, i) {
-        var start = dv.start(d);
-        var duration = dv.duration(d);
+        var start = that.dStart()(d);
+        var duration = that.dDuration()(d);
         var end = start + duration;
-        // if((dv.start(d) + dv.duration(d)) <= max && dv.start(d) >= min) nuData.push(d);
+        // if((start + dv.duration(d)) <= max && start >= min) nuData.push(d);
         if((start > min && end < max) || (start < min && end < max && end > min) || (start > min && start < max && end > max) || (end > max && start < min)) nuData.push(d);
         // if((end < min && start < min) || (end > max && start > max)) nuData.push(d);
       });
-      
-      this.update(nuData);
+
+      // this.update(nuData);
+      this.update();
       // var xAxis = this.graph[this.iName];
       // xAxis.scale(xScale);
 
@@ -161,41 +154,48 @@ var segDesc = {
       var that = this;
       var g = this.g;
       var halfHandler = this.hdWidth * 0.5;
-      var dv = extend(this.defaultDataView(), this.dataView());
+      // var dv = extend(this.defaultDataView(), this.dataView());
       var base = this.base;
       var xScale = this.base.xScale;
       var max = Math.max;
 
-      var x = function(d) { return xScale(dv.start(d)); };
-      var w = function(d) {
-        var _w = (xScale(dv.start(d) + dv.duration(d))) - xScale(dv.start(d));
-        return max(that.minWidth, _w);
-      };
- 
-      // var h = function(d) { return that.height() - that.yScale(dv.height(d)); };
-      var h = function(d) { return max(that.yScale(dv.height(d)), 1); };
-      var y = function(d) { return that.yScale(dv.y(d)) - h(d); };
+      // data mappers
+      var dStart = this.dStart();
+      var dDuration = this.dDuration();
+      var dY = this.dY();
+      var dColor = this.dColor();
+      var dHeight = this.dHeight();
+
+      var x = function(d) { return xScale(dStart(d)); };
+      var w = function(d) { return max(that.minWidth,
+        (xScale(dStart(d) + dDuration(d))) - xScale(dStart(d))); };
+
+      // var h = function(d) { return max(that.yScale(dv.height(d)), 1); };
+      var h = function(d) { return max(base.height() - that.yScale(dHeight(d)), 1); };
+      var y = function(d) { return that.yScale(dY(d)) - h(d); };
 
       // handlers
-      var lx = function(d) { return xScale(dv.start(d)) + halfHandler; };
+      var lx = function(d) { return xScale(dStart(d)) + halfHandler; };
       var rx = function(d) {
-        var _w = (xScale(dv.start(d) + dv.duration(d))) - xScale(dv.start(d));
-        var rpos = xScale(dv.start(d) + dv.duration(d)) - halfHandler;
-        return (_w < that.minWidth) ? dv.start(d) + ((that.minWidth + that.hdWidth) * 2 ) : rpos;
+        var _w = (xScale(dStart(d) + dDuration(d))) - xScale(dStart(d));
+        var rpos = xScale(dStart(d) + dDuration(d)) - halfHandler;
+        return (_w < that.minWidth) ? dStart(d) + ((that.minWidth + that.hdWidth) * 2 ) : rpos;
       };
 
       var lrh = function(d) { return y(d) + h(d); };
+      var color = function(d) { return dColor(d); };
 
-      var color = function(d) { return dv.color(d); };
+      var segs = el.selectAll('.seg');
 
-      el.selectAll('.seg')
-        .attr('x', x)
+      segs.attr('x', x)
         .attr('y', y)
-        
+
         .attr('width', w)
         .attr('height', h)
 
         .attr('fill', color);
+
+      if(!!this.each()) segs.each(this.each());
 
       el.selectAll('.handle.left')
         .attr("x1", lx)
@@ -203,7 +203,7 @@ var segDesc = {
 
         .attr("y1", y)
         .attr("y2", lrh)
-        
+
         .attr("fill", color)
         .style("stroke", color);
 
@@ -213,10 +213,9 @@ var segDesc = {
 
         .attr("y1", y)
         .attr("y2", lrh)
-        
+
         .attr("fill", color)
         .style("stroke", color);
-
     }
   }
 
@@ -226,6 +225,7 @@ module.exports = function createBaseTimeline(options){
   var segmenter = Object.create({}, segDesc);
   return segmenter.init();
 };
+
 },{"extend":3,"get-set":4}],2:[function(_dereq_,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -286,10 +286,8 @@ EventEmitter.prototype.emit = function(type) {
       er = arguments[1];
       if (er instanceof Error) {
         throw er; // Unhandled 'error' event
-      } else {
-        throw TypeError('Uncaught, unspecified "error" event.');
       }
-      return false;
+      throw TypeError('Uncaught, unspecified "error" event.');
     }
   }
 
@@ -374,7 +372,10 @@ EventEmitter.prototype.addListener = function(type, listener) {
                     'leak detected. %d listeners added. ' +
                     'Use emitter.setMaxListeners() to increase limit.',
                     this._events[type].length);
-      console.trace();
+      if (typeof console.trace === 'function') {
+        // not supported in IE 10
+        console.trace();
+      }
     }
   }
 
@@ -531,74 +532,75 @@ function isUndefined(arg) {
 },{}],3:[function(_dereq_,module,exports){
 var hasOwn = Object.prototype.hasOwnProperty;
 var toString = Object.prototype.toString;
+var undefined;
 
-function isPlainObject(obj) {
-	if (!obj || toString.call(obj) !== '[object Object]' || obj.nodeType || obj.setInterval)
+var isPlainObject = function isPlainObject(obj) {
+	"use strict";
+	if (!obj || toString.call(obj) !== '[object Object]' || obj.nodeType || obj.setInterval) {
 		return false;
+	}
 
 	var has_own_constructor = hasOwn.call(obj, 'constructor');
-	var has_is_property_of_method = hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
+	var has_is_property_of_method = obj.constructor && obj.constructor.prototype && hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
 	// Not own constructor property must be Object
-	if (obj.constructor && !has_own_constructor && !has_is_property_of_method)
+	if (obj.constructor && !has_own_constructor && !has_is_property_of_method) {
 		return false;
+	}
 
 	// Own properties are enumerated firstly, so to speed up,
 	// if last one is own, then all properties are own.
 	var key;
-	for ( key in obj ) {}
+	for (key in obj) {}
 
-	return key === undefined || hasOwn.call( obj, key );
+	return key === undefined || hasOwn.call(obj, key);
 };
 
 module.exports = function extend() {
+	"use strict";
 	var options, name, src, copy, copyIsArray, clone,
-	    target = arguments[0] || {},
-	    i = 1,
-	    length = arguments.length,
-	    deep = false;
+		target = arguments[0],
+		i = 1,
+		length = arguments.length,
+		deep = false;
 
 	// Handle a deep copy situation
-	if ( typeof target === "boolean" ) {
+	if (typeof target === "boolean") {
 		deep = target;
 		target = arguments[1] || {};
 		// skip the boolean and the target
 		i = 2;
+	} else if (typeof target !== "object" && typeof target !== "function" || target == undefined) {
+			target = {};
 	}
 
-	// Handle case when target is a string or something (possible in deep copy)
-	if ( typeof target !== "object" && typeof target !== "function") {
-		target = {};
-	}
-
-	for ( ; i < length; i++ ) {
+	for (; i < length; ++i) {
 		// Only deal with non-null/undefined values
-		if ( (options = arguments[ i ]) != null ) {
+		if ((options = arguments[i]) != null) {
 			// Extend the base object
-			for ( name in options ) {
-				src = target[ name ];
-				copy = options[ name ];
+			for (name in options) {
+				src = target[name];
+				copy = options[name];
 
 				// Prevent never-ending loop
-				if ( target === copy ) {
+				if (target === copy) {
 					continue;
 				}
 
 				// Recurse if we're merging plain objects or arrays
-				if ( deep && copy && ( isPlainObject(copy) || (copyIsArray = Array.isArray(copy)) ) ) {
-					if ( copyIsArray ) {
+				if (deep && copy && (isPlainObject(copy) || (copyIsArray = Array.isArray(copy)))) {
+					if (copyIsArray) {
 						copyIsArray = false;
 						clone = src && Array.isArray(src) ? src : [];
-
 					} else {
 						clone = src && isPlainObject(src) ? src : {};
 					}
 
 					// Never move original objects, clone them
-					target[ name ] = extend( deep, clone, copy );
+					target[name] = extend(deep, clone, copy);
 
 				// Don't bring in undefined values
-				} else if ( copy !== undefined ) {
-					target[ name ] = copy;
+				} else if (copy !== undefined) {
+					target[name] = copy;
 				}
 			}
 		}
@@ -607,6 +609,7 @@ module.exports = function extend() {
 	// Return the modified object
 	return target;
 };
+
 
 },{}],4:[function(_dereq_,module,exports){
 
