@@ -5,23 +5,23 @@ var LayerVis = require('layer-vis');
 var pck = require('./package.json');
 var getSet = require('utils').getSet;
 
-var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,Object.getOwnPropertyDescriptor(s,p));}}return t};MIXIN$0(SegmentVis, super$0);
+class SegmentVis extends LayerVis {
   
 
-  function SegmentVis() {
-    super$0.call(this);
+  constructor() {
+    super();
 
     // set layer defaults
     this.param('name', pck.name.replace('-vis', ''));
     
     this.__minWidth = 1;
     this.__handleWidth = 3;
-  }SegmentVis.prototype = Object.create(super$0.prototype, {"constructor": {"value": SegmentVis, "configurable": true, "writable": true} });DP$0(SegmentVis, "prototype", {"configurable": false, "enumerable": false, "writable": false});
+  }
 
 
-  SegmentVis.prototype.update = function(data) {
+  update(data) {
 
-    super$0.prototype.update.call(this, data);
+    super.update(data);
 
     var sel = this.g.selectAll('.' + this.unitClass)
           .data(this.data(), this.sortIndex());
@@ -53,7 +53,7 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
   }
 
 
-  SegmentVis.prototype.draw = function(el) {
+  draw(el) {
     el = el || this.g.selectAll('.' + this.unitClass);
 
       var that = this;
@@ -124,7 +124,7 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
   }
 
 
-  SegmentVis.prototype.xZoom = function(val) {
+  xZoom(val) {
     // console.log(this.xBaseDomain);
     // console.log('zooom');
     var that = this;
@@ -151,7 +151,7 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
     // this.g.call(xAxis);
   }
 
-;return SegmentVis;})(LayerVis);
+}
 
   // add and initialize our accessors
   getSet(SegmentVis.prototype, ['y', 'width', 'color', 'height', 'duration', 'start', 'sortIndex']);
