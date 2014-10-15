@@ -194,7 +194,7 @@ var segDesc = {
 
         .attr('fill', color);
 
-      if(!!this.each()) segs.each(this.each());
+      if(!!this.each()) el.each(this.each());
 
       el.selectAll('.handle.left')
         .attr("x1", lx)
