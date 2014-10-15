@@ -6,20 +6,10 @@
 "use strict";
 
 var events = window.events || require('events');
-var eventEmitter = new events.EventEmitter();
 var shortId = require('shortid');
 var getSet = require('get-set');
 
-var _ = require('underscore');
-    _.str = require('underscore.string');
-    _.mixin(_.str.exports());
-
-    // l-dash-trim helper
-    _.dash = function(string){
-      var dashed = _.dasherize(string);
-      if(_.startsWith(dashed, '-')) dashed = dashed.substr(1);
-      return dashed;
-    };
+var _ = require('underscore.string');
 
 var timeLine;
 
@@ -71,6 +61,7 @@ var baseDesc = {
       this.xScale = d3.scale.linear().clamp(true);
       this.yScale = d3.scale.linear().clamp(true);
 
+      var eventEmitter = new events.EventEmitter();
       this.on = eventEmitter.on;
       this.trigger = eventEmitter.emit;
 
@@ -84,8 +75,14 @@ var baseDesc = {
 
       // for throttling
       this.fps = 60;
- 
+
       return this;
+    }
+  },
+
+  params: {
+    enumerable: true, value: function(params){
+      this._params = _.extend(this._params, params);
     }
   },
 
@@ -277,11 +274,12 @@ var baseDesc = {
       this.xZoomCompute(zoom, this);
 
       // redraw layers
-      _.each(layers, function(layer){
+      for(var key in layers) {
+        var layer = layers[key];
         if(layer.hasOwnProperty('xScale')) that.xZoomCompute(zoom, layer);
         if(layer.hasOwnProperty('xZoom')) layer.xZoom(zoom);
         // if(layer.xZoom) that.throttle(layer.xZoom());
-      });
+      }
 
     }
   },
@@ -330,9 +328,10 @@ var baseDesc = {
       
       this.originalXscale = this.xScale.copy();
 
-      _.each(layers, function(layer){
+      for(var key in layers) {
+        var layer = layers[key];
          if (layer.hasOwnProperty('xScale')) layer.originalXscale = layer.xScale.copy();
-      });
+      }
 
     }
   },
@@ -342,9 +341,10 @@ var baseDesc = {
         
       var that = this;
       var layers = this.layers;
-      _.each(layers, function(layer){
+      for(var key in layers) {
+        var layer = layers[key];
         layer.update();
-      });
+      }
 
     }
   },
@@ -355,15 +355,22 @@ var baseDesc = {
 
       var that = this;
       var layers = this.layers;
-      // console.log(layers)
-      _.each(layers, function(layer){
-        // console.log(layer)
-        layer.load(that);
-        layer.dname = _.dash(layer.name()); // dashed name
-        that.delegateScales(layer);
+      for(var key in layers) {
+        var layer = layers[key];
+
+        // should we keep this?
+        // we can do it here but maybe we want a hook on the layer's
+        // lifecycle for this
+        // if(layer.hasOwnProperty('load')) layer.load(this);
+
+        layer.base = this; // bind the baseTimeLine
+        layer.unitClass = layer.name() + '-item';
+        layer.dname = _.slugify(layer.name()); // dashed name
+        
+        this.delegateScales(layer);
         // layer.xScale = that.xScale;
         // layer.yScale = d3.scale.linear();
-      });
+      }
 
     }
   },
@@ -375,9 +382,10 @@ var baseDesc = {
 
       // update all layers excepthe one passed
       // rethink this later
-      _.each(layers, function(layer){
-        if(layer.draw && layer.name !== name) layer.draw();
-      });
+      for(var key in layers) {
+        var layer = layers[key];
+        if(layer.draw && layer.name() !== name) layer.draw();
+      }
 
     }
   },
@@ -411,15 +419,16 @@ var baseDesc = {
       var layers = this.layers;
 
       // setup external layers containers and dimensions
-      _.each(layers, function(layer){
+      for(var key in layers) {
+        var layer = layers[key];
         // rebind Scales in case they updated
         that.delegateScales(layer);
 
         // margin/position handling
-        var top = layer.top && layer.top() || 0;
-        // be more elegantl please 
-        if(layer.height && !!!layer.height()) layer.height(that.height());
-        var height = layer.height && layer.height() || that.height();
+        var top = layer.param('top') || 0;
+        if(layer.param('height') === null) layer.param('height', that.height());
+        
+        var height = layer.param('height');
         var width = that.width();
 
         // layer group
@@ -437,8 +446,15 @@ var baseDesc = {
         lg.classed(layer.dname, true)
           .attr('height', height)
           .attr("transform", "translate(0, " + top + ")");
-        if(layer.hasOwnProperty('bind')) layer.bind(lg);
-      });
+          
+        // keep this?
+        // we might still want this hook in the layer
+        // if(layer.hasOwnProperty('bind')) layer.bind(lg);
+
+        layer.g = lg;
+        layer.update();
+
+      }
 
     }
   },
