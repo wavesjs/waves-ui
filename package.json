@@ -1,6 +1,6 @@
 {
   "name": "segment-vis",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "Segment visualiser component",
   "main": "index.js",
   "scripts": {
