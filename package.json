@@ -1,7 +1,7 @@
 {
   "name": "timeLine",
   "exports": "timeLine",
-  "version": "0.1.2",
+  "version": "0.1.1",
   "description": "Time based visualization layout manager",
   "main": "index.js",
   "scripts": {
