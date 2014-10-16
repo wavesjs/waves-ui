@@ -6,14 +6,14 @@ var pck = require('./package.json');
 var getSet = require('utils').getSet;
 
 class SegmentVis extends LayerVis {
-  
+
 
   constructor() {
     super();
 
     // set layer defaults
     this.param('name', pck.name.replace('-vis', ''));
-    
+
     this.__minWidth = 1;
     this.__handleWidth = 3;
   }
@@ -153,7 +153,7 @@ class SegmentVis extends LayerVis {
 
 }
 
-  // add and initialize our accessors
-  getSet(SegmentVis.prototype, ['y', 'width', 'color', 'height', 'duration', 'start', 'sortIndex']);
+// add and initialize our accessors
+getSet(SegmentVis.prototype, ['y', 'width', 'color', 'height', 'duration', 'start', 'sortIndex']);
 
 module.exports = SegmentVis;
