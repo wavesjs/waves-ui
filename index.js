@@ -155,7 +155,8 @@ var segDesc = {
       var halfHandler = this.hdWidth * 0.5;
       // var dv = extend(this.defaultDataView(), this.dataView());
       var base = this.base;
-      var xScale = this.base.xScale;
+
+      var xScale = base.xScale;
       var max = Math.max;
 
       // data mappers
@@ -166,8 +167,7 @@ var segDesc = {
       var dHeight = this.dHeight();
 
       var x = function(d) { return xScale(dStart(d)); };
-      var w = function(d) { return max(that.minWidth,
-        (xScale(dStart(d) + dDuration(d))) - xScale(dStart(d))); };
+      var w = function(d) { return max(that.minWidth, (xScale(dStart(d) + dDuration(d))) - xScale(dStart(d))); };
 
       // var h = function(d) { return max(that.yScale(dv.height(d)), 1); };
       var h = function(d) { return max(base.height() - that.yScale(dHeight(d)), 1); };
