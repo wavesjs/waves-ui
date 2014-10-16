@@ -5,6 +5,8 @@ class Layer {
 
   constructor() {
 
+    if (!(this instanceof Layer)) return new Layer;
+
     this.unitClass = null;
     this.dname = null;
     this.xBaseDomain = null;
@@ -14,7 +16,7 @@ class Layer {
     this.on = null;
     this.trigger = null;
     this.selectable = false;
-    
+
     this.__params = {};
 
     // general defaults
@@ -41,7 +43,7 @@ class Layer {
   // this.__params getter/setter
   params(_params = null) {
     if(_params === null) return this.__params;
-    
+
     for (var key in _params) {
       this.__params[key] = _params[key];
     }

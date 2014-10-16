@@ -2,7 +2,7 @@
   "name": "layer-vis",
   "version": "0.1.0",
   "description": "Base layer object with common logic",
-  "main": "index.js",
+  "main": "layer-vis.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
