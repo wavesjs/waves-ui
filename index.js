@@ -9,6 +9,8 @@ var events = window.events || require('events');
 var shortId = require('shortid');
 var getSet = require('utils').getSet;
 
+console.log(getSet);
+
 var _ = require('underscore.string');
 
 var timeLine;
@@ -52,7 +54,7 @@ var baseDesc = {
       options = options || {}; // fail safe
 
       // generic getters(setters) accessors and defaults
-      getSet(this)([
+      getSet(this, [
         'id', 'margin', 'xDomain', 'yDomain', 'height', 'width', 'data'
       ]);
 
