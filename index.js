@@ -9,8 +9,6 @@ var events = window.events || require('events');
 var shortId = require('shortid');
 var getSet = require('utils').getSet;
 
-console.log(getSet);
-
 var _ = require('underscore.string');
 
 var timeLine;
