@@ -7,7 +7,7 @@
 
 var events = window.events || require('events');
 var shortId = require('shortid');
-var getSet = require('get-set');
+var getSet = require('utils').getSet;
 
 var _ = require('underscore.string');
 
@@ -35,7 +35,7 @@ var baseDesc = {
   selection: { writable: true },
 
   dragInit: { writable: true },
-  
+
   _brushing: { writable: true },
 
   // swapX: { enumerable: true, writable: true },
@@ -131,7 +131,7 @@ var baseDesc = {
         that.el = that.svg;
 
         // events
-        
+
         // !!! remember to unbind when deleting element !!!
         that.svg.on('mousedown', function() {
           that.dragInit = d3.event.target;
@@ -162,7 +162,7 @@ var baseDesc = {
         var g = (!!prevg.node())?
             prevg
           : that.svg.append("g");
-          
+
           g.attr("class", 'layout')
           .attr("transform", "translate(" + that.margin().left + "," + that.margin().top + ")");
 
@@ -246,13 +246,13 @@ var baseDesc = {
   //       wait = true;
   //       args = arguments;
   //       context = this;
-        
+
   //       window.requestAnimationFrame(function () {
   //         wait = false;
 
   //         now = Date.now();
   //         delta = now - then;
-           
+
   //         if (delta > interval) {
   //             func.apply(context, args);
   //             then = now - (delta % interval);
@@ -267,7 +267,7 @@ var baseDesc = {
 
       var that = this;
       var layers = this.layers;
-      
+
       zoom.anchor = this.originalXscale.invert(zoom.anchor); // in px to domain
 
       // this.zoomFactor = zoom.factor;
@@ -325,7 +325,7 @@ var baseDesc = {
     enumerable: true, value: function() {
       var layers = this.layers;
       // saves new scale reference
-      
+
       this.originalXscale = this.xScale.copy();
 
       for(var key in layers) {
@@ -338,7 +338,7 @@ var baseDesc = {
 
   update: {
     enumerable: true, value: function(){
-        
+
       var that = this;
       var layers = this.layers;
       for(var key in layers) {
@@ -366,7 +366,7 @@ var baseDesc = {
         layer.base = this; // bind the baseTimeLine
         layer.unitClass = layer.name() + '-item';
         layer.dname = _.slugify(layer.name()); // dashed name
-        
+
         this.delegateScales(layer);
         // layer.xScale = that.xScale;
         // layer.yScale = d3.scale.linear();
@@ -393,7 +393,7 @@ var baseDesc = {
   // internal scale update
   delegateScales: {
     value: function(layer){
-      
+
       if(layer.hasOwnProperty('xScale')) {
         var baseXscale = this.xScale.copy();
         if(!!layer.xDomain && !!layer.xDomain()) baseXscale.domain(layer.xDomain());
@@ -427,7 +427,7 @@ var baseDesc = {
         // margin/position handling
         var top = layer.param('top') || 0;
         if(layer.param('height') === null) layer.param('height', that.height());
-        
+
         var height = layer.param('height');
         var width = that.width();
 
@@ -446,7 +446,7 @@ var baseDesc = {
         lg.classed(layer.dname, true)
           .attr('height', height)
           .attr("transform", "translate(0, " + top + ")");
-          
+
         // keep this?
         // we might still want this hook in the layer
         // if(layer.hasOwnProperty('bind')) layer.bind(lg);

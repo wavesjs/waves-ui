@@ -10,10 +10,11 @@
   "author": "Victor Saiz",
   "license": "BSD-3",
   "dependencies": {
+    "events": "~1.0.0",
+    "shortid": "~2.0.0",
     "underscore": "~1.6.0",
     "underscore.string": "~2.3.3",
-    "shortid": "~2.0.0",
-    "events": "~1.0.0"
+    "utils": "0.0.1"
   },
   "devDependencies": {
     "get-set": "git+https://github.com/vectorsize/get-set.git#master",
