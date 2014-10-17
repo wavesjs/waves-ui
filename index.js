@@ -14,7 +14,6 @@ module.exports = function makeEditable(graph){
   // overrides load to add editing capablilities
   Object.defineProperty(edit, 'load', {
     value: function(base) {
-
       // default load
       defaultLoad.call(this, base);
       var id = base.id();
@@ -25,14 +24,14 @@ module.exports = function makeEditable(graph){
       base.on(id + ':drag', this.onDrag.bind(this));
       base.on(id + ':mouseup', this.mouseUp.bind(this));
       base.on(id + ':mouseout', this.base.xZoomSet.bind(this.base));
-      
+
       // clicking anywhere ouside or inside the container deselects
       document.body.addEventListener('mousedown', this.mouseDown.bind(this));
 
       return this;
     }
   });
- 
+
   Object.defineProperty(edit, 'draw', {
     enumerable: true, value: function(el) {
       // add css for cursors
@@ -43,7 +42,6 @@ module.exports = function makeEditable(graph){
 
   Object.defineProperty(edit, 'mouseUp', {
     value: function (ev) {
-
         // has to be the svg because the group is virtually not there :(
         this.base.svg.classed('handle-resize', false);
         this.base.svg.classed('handle-drag', false);
@@ -53,11 +51,10 @@ module.exports = function makeEditable(graph){
   // mouse down ev handler
   Object.defineProperty(edit, 'mouseDown', {
     value: function(ev) {
-      if(ev.button === 0) {
-
+      if (ev.button === 0) {
         var item = ev.target;
 
-        if(this.clicked(item)) {
+        if (this.clicked(item)) {
           this.itemMousedown(ev);
         } else {
           if(!item.classList.contains('keep-selection')) this.unselectAll();
@@ -89,15 +86,15 @@ module.exports = function makeEditable(graph){
       this.base.toFront(item);
 
       // we click away or in some other block without shift
-      if((selects.length < 1 || !isFound) && !ev.shiftKey){
+      if ((selects.length < 1 || !isFound) && !ev.shiftKey){
         this.unselectAll();
       }
 
       // shift + was selected: deselect
-      if(ev.shiftKey && isSelected){
+      if (ev.shiftKey && isSelected){
         d3.select(item).classed('selected', false);
       } else {
-        if(isSelectable) d3.select(item).classed('selected', true);
+        if (isSelectable) d3.select(item).classed('selected', true);
       }
 
     }
