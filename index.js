@@ -355,19 +355,21 @@ var baseDesc = {
 
       var that = this;
       var layers = this.layers;
-      for(var key in layers) {
+      for (var key in layers) {
         var layer = layers[key];
 
         // should we keep this?
         // we can do it here but maybe we want a hook on the layer's
         // lifecycle for this
-        // if(layer.hasOwnProperty('load')) layer.load(this);
+        // if ('load' in layer) layer.load(this);
 
         layer.base = this; // bind the baseTimeLine
         layer.unitClass = layer.name() + '-item';
         layer.dname = _.slugify(layer.name()); // dashed name
+        // is needed for makeEditable - must be called after `layer.base = this;`
+        if ('load' in layer) layer.load(this);
 
-        // this.delegateScales(layer); // timelineScales are not ready here
+        // this.delegateScales(layer); // timelineScales are not setted yet
         // layer.xScale = that.xScale;
         // layer.yScale = d3.scale.linear();
       }
@@ -382,9 +384,9 @@ var baseDesc = {
 
       // update all layers excepthe one passed
       // rethink this later
-      for(var key in layers) {
+      for (var key in layers) {
         var layer = layers[key];
-        if(layer.draw && layer.name() !== name) layer.draw();
+        if (layer.draw && layer.name() !== name) layer.draw();
       }
 
     }
