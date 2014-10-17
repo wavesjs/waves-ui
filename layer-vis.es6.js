@@ -5,8 +5,6 @@ class Layer {
 
   constructor() {
 
-    if (!(this instanceof Layer)) return new Layer;
-
     this.unitClass = null;
     this.dname = null;
     this.xBaseDomain = null;
@@ -27,9 +25,9 @@ class Layer {
       top: 0,
       color: '#000',
       selectable: false,
-      xDomain: [0, 100],
-      yDomain: [0, 100],
-      yRange: [0, 100]
+      xDomain: null,
+      yDomain: null,
+      yRange: null
     });
   }
 

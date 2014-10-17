@@ -5,8 +5,6 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
 
   function Layer() {
 
-    if (!(this instanceof Layer)) return new Layer;
-
     this.unitClass = null;
     this.dname = null;
     this.xBaseDomain = null;
@@ -27,9 +25,9 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
       top: 0,
       color: '#000',
       selectable: false,
-      xDomain: [0, 100],
-      yDomain: [0, 100],
-      yRange: [0, 100]
+      xDomain: null,
+      yDomain: null,
+      yRange: null
     });
   }DP$0(Layer,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
