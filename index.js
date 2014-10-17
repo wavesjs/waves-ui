@@ -367,7 +367,7 @@ var baseDesc = {
         layer.unitClass = layer.name() + '-item';
         layer.dname = _.slugify(layer.name()); // dashed name
 
-        this.delegateScales(layer);
+        // this.delegateScales(layer); // timelineScales are not ready here
         // layer.xScale = that.xScale;
         // layer.yScale = d3.scale.linear();
       }
@@ -392,20 +392,23 @@ var baseDesc = {
 
   // internal scale update
   delegateScales: {
-    value: function(layer){
-
-      if(layer.hasOwnProperty('xScale')) {
+    value: function(layer) {
+      // @NOTE: is the really needed ? - probably yes... see "bachotheque"
+      if (layer.hasOwnProperty('xScale')) {
         var baseXscale = this.xScale.copy();
+
+        // if (!!layer.param('xDomain')) { baseXscale.domain(layer.param('xDomain')); }
         if(!!layer.xDomain && !!layer.xDomain()) baseXscale.domain(layer.xDomain());
+        // if (!!layer.param('xRange')) { baseXscale.domain(layer.param('xRange')); }
         if(!!layer.xRange && !!layer.xRange()) baseXscale.range(layer.xRange());
         layer.xScale = baseXscale;
         layer.originalXscale = baseXscale.copy();
       }
 
-      if(layer.hasOwnProperty('yScale')) {
+      if ('yScale' in layer) {
         var baseYscale = this.yScale.copy();
-        if(!!layer.yDomain && !!layer.yDomain()) baseYscale.domain(layer.yDomain());
-        if(!!layer.yRange && !!layer.yRange()) baseYscale.range(layer.yRange());
+        if (!!layer.param('yDomain')) { baseYscale.domain(layer.param('yDomain')); }
+        if (!!layer.param('yRange')) { baseYscale.domain(layer.param('yRange')); }
         layer.yScale = baseYscale;
       }
     }
@@ -413,7 +416,7 @@ var baseDesc = {
 
   // call layer enter method
   enterLayers: {
-    value: function(g){
+    value: function(g) {
 
       var that = this;
       var layers = this.layers;
