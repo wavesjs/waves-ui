@@ -23,27 +23,27 @@ class SegmentVis extends LayerVis {
     // initialize data accessors
     this.y((d, v = null) => {
       if (v === null) return +d.y || 0;
-      d = (+v);
+      d.y = (+v);
     });
 
     this.height((d, v = null) => {
       if (v === null) return +d.height || 1;
-      d = (+v);
+      d.height = (+v);
     });
 
     this.duration((d, v = null) => {
       if (v === null) return +d.duration || 1;
-      d = (+v);
+      d.duration = (+v);
     });
 
     this.start((d, v = null) => {
       if (v === null) return +d.start || 0;
-      d = (+v);
+      d.start = (+v);
     });
 
     this.color((d, v = null) => {
       if (v === null) return d.color + '';
-      d = v + '';
+      d.color = v + '';
     });
   }
 
@@ -85,71 +85,71 @@ class SegmentVis extends LayerVis {
   draw(el) {
     el = el || this.g.selectAll('.' + this.unitClass);
 
-      var that = this;
-      var g = this.g;
-      var halfHandler = this.__handleWidth * 0.5;
+    var that = this;
+    var g = this.g;
+    var halfHandler = this.__handleWidth * 0.5;
 
-      var base = this.base;
-      var xScale = this.base.xScale;
-      var max = Math.max;
+    var base = this.base;
+    var xScale = this.base.xScale;
+    var max = Math.max;
 
-      // data mappers
-      var _start = this.start();
-      var _duration = this.duration();
-      var _y = this.y();
-      var _color = this.color();
-      var _height = this.height();
+    // data mappers
+    var _start = this.start();
+    var _duration = this.duration();
+    var _y = this.y();
+    var _color = this.color();
+    var _height = this.height();
 
-      var x = function(d) { return xScale(_start(d)); };
-      var w = function(d) { return max(that.__minWidth,
-        (xScale(_start(d) + _duration(d))) - xScale(_start(d))); };
+    var x = function(d) { return xScale(_start(d)); };
+    var w = function(d) { return max(that.__minWidth,
+      (xScale(_start(d) + _duration(d))) - xScale(_start(d))); };
 
-      // var h = function(d) { return max(that.yScale(dv.height(d)), 1); };
-      var h = function(d) { return max(base.height() - that.yScale(_height(d)), 1); };
-      var y = function(d) { return that.yScale(_y(d)) - h(d); };
+    // var h = function(d) { return max(that.yScale(dv.height(d)), 1); };
+    var h = function(d) { return max(base.height() - that.yScale(_height(d)), 1); };
+    var y = function(d) { return that.yScale(_y(d)) - h(d); };
 
-      // handlers
-      var lx = function(d) { return xScale(_start(d)) + halfHandler; };
-      var rx = function(d) {
-        var _w = (xScale(_start(d) + _duration(d))) - xScale(_start(d));
-        var rpos = xScale(_start(d) + _duration(d)) - halfHandler;
-        return (_w < that.__minWidth) ? _start(d) + ((that.__minWidth + that.__handleWidth) * 2 ) : rpos;
-      };
+    // handlers
+    var lx = function(d) { return xScale(_start(d)) + halfHandler; };
+    var rx = function(d) {
+      var _w = (xScale(_start(d) + _duration(d))) - xScale(_start(d));
+      var rpos = xScale(_start(d) + _duration(d)) - halfHandler;
+      return (_w < that.__minWidth) ? _start(d) + ((that.__minWidth + that.__handleWidth) * 2 ) : rpos;
+    };
 
-      var lrh = function(d) { return y(d) + h(d); };
-      var color = function(d) { return _color(d); };
+    var lrh = function(d) { return y(d) + h(d); };
+    var color = function(d) { return _color(d); };
 
-      var segs = el.selectAll('.seg');
+    var segs = el.selectAll('.seg');
 
-      segs.attr('x', x)
-        .attr('y', y)
+    segs.attr('x', x)
+      .attr('y', y)
 
-        .attr('width', w)
-        .attr('height', h)
+      .attr('width', w)
+      .attr('height', h)
 
-        .attr('fill', color);
+      .attr('fill', color);
 
-      if(!!this.each()) el.each(this.each());
+    if (!!this.each()) el.each(this.each());
 
-      el.selectAll('.handle.left')
-        .attr("x1", lx)
-        .attr("x2", lx)
+    el.selectAll('.handle.left')
+      .attr("x1", lx)
+      .attr("x2", lx)
 
-        .attr("y1", y)
-        .attr("y2", lrh)
+      .attr("y1", y)
+      .attr("y2", lrh)
 
-        .attr("fill", color)
-        .style("stroke", color);
+      .attr("fill", color)
+      .style("stroke", color);
 
-      el.selectAll('.handle.right')
-        .attr("x1", rx)
-        .attr("x2", rx)
+    el.selectAll('.handle.right')
+      .attr("x1", rx)
+      .attr("x2", rx)
 
-        .attr("y1", y)
-        .attr("y2", lrh)
+      .attr("y1", y)
+      .attr("y2", lrh)
 
-        .attr("fill", color)
-        .style("stroke", color);
+      .attr("fill", color)
+      .style("stroke", color);
   }
 
 
