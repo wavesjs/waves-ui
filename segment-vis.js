@@ -5,21 +5,50 @@ var LayerVis = require('layer-vis');
 var pck = require('./package.json');
 var getSet = require('utils').getSet;
 
-var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,Object.getOwnPropertyDescriptor(s,p));}}return t};MIXIN$0(SegmentVis, super$0);
-  
+var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(SegmentVis, super$0);var proto$0={};
+
 
   function SegmentVis() {
+
+    if (!(this instanceof SegmentVis)) return new SegmentVis;
+
     super$0.call(this);
 
     // set layer defaults
     this.param('name', pck.name.replace('-vis', ''));
-    
+
     this.__minWidth = 1;
     this.__handleWidth = 3;
-  }SegmentVis.prototype = Object.create(super$0.prototype, {"constructor": {"value": SegmentVis, "configurable": true, "writable": true} });DP$0(SegmentVis, "prototype", {"configurable": false, "enumerable": false, "writable": false});
+
+    // initialize data accessors
+    this.y(function(d)  {var v = arguments[1];if(v === void 0)v = null;
+      if (v === null) return +d.y || 0;
+      d = (+v);
+    });
+
+    this.height(function(d)  {var v = arguments[1];if(v === void 0)v = null;
+      if (v === null) return +d.height || 1;
+      d = (+v);
+    });
+
+    this.duration(function(d)  {var v = arguments[1];if(v === void 0)v = null;
+      if (v === null) return +d.duration || 1;
+      d = (+v);
+    });
+
+    this.start(function(d)  {var v = arguments[1];if(v === void 0)v = null;
+      if (v === null) return +d.start || 0;
+      d = (+v);
+    });
+
+    this.color(function(d)  {var v = arguments[1];if(v === void 0)v = null;
+      if (v === null) return d.color + '';
+      d = v + '';
+    });
+  }if(super$0!==null)SP$0(SegmentVis,super$0);SegmentVis.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":SegmentVis,"configurable":true,"writable":true}});DP$0(SegmentVis,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
 
-  SegmentVis.prototype.update = function(data) {
+  proto$0.update = function(data) {
 
     super$0.prototype.update.call(this, data);
 
@@ -50,10 +79,10 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
 
     sel.exit().remove();
     this.draw();
-  }
+  };
 
 
-  SegmentVis.prototype.draw = function(el) {
+  proto$0.draw = function(el) {
     el = el || this.g.selectAll('.' + this.unitClass);
 
       var that = this;
@@ -121,10 +150,10 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
 
         .attr("fill", color)
         .style("stroke", color);
-  }
+  };
 
 
-  SegmentVis.prototype.xZoom = function(val) {
+  proto$0.xZoom = function(val) {
     // console.log(this.xBaseDomain);
     // console.log('zooom');
     var that = this;
@@ -149,11 +178,11 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
     // xAxis.scale(xScale);
 
     // this.g.call(xAxis);
-  }
+  };
 
-;return SegmentVis;})(LayerVis);
+MIXIN$0(SegmentVis.prototype,proto$0);proto$0=void 0;return SegmentVis;})(LayerVis);
 
-  // add and initialize our accessors
-  getSet(SegmentVis.prototype, ['y', 'width', 'color', 'height', 'duration', 'start', 'sortIndex']);
+// add and initialize our accessors
+getSet(SegmentVis.prototype, ['y', 'width', 'color', 'height', 'duration', 'start', 'sortIndex']);
 
 module.exports = SegmentVis;

@@ -9,6 +9,9 @@ class SegmentVis extends LayerVis {
 
 
   constructor() {
+
+    if (!(this instanceof SegmentVis)) return new SegmentVis;
+
     super();
 
     // set layer defaults
@@ -16,6 +19,32 @@ class SegmentVis extends LayerVis {
 
     this.__minWidth = 1;
     this.__handleWidth = 3;
+
+    // initialize data accessors
+    this.y((d, v = null) => {
+      if (v === null) return +d.y || 0;
+      d = (+v);
+    });
+
+    this.height((d, v = null) => {
+      if (v === null) return +d.height || 1;
+      d = (+v);
+    });
+
+    this.duration((d, v = null) => {
+      if (v === null) return +d.duration || 1;
+      d = (+v);
+    });
+
+    this.start((d, v = null) => {
+      if (v === null) return +d.start || 0;
+      d = (+v);
+    });
+
+    this.color((d, v = null) => {
+      if (v === null) return d.color + '';
+      d = v + '';
+    });
   }
 
 
