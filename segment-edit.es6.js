@@ -5,19 +5,19 @@ var makeEditable = require('make-editable');
 var d3           = require('d3-browserify');
 
 
-var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(SegmentEdit, super$0);var proto$0={};
+class SegmentEdit extends SegmentVis {
 
-  function SegmentEdit() {
+  constructor() {
     if (!(this instanceof SegmentEdit)) return new SegmentEdit;
 
-    super$0.call(this);
+    super();
     // define editable properties - in params
     // this.edits(['x', 'y', 'width', 'height']);
     this.param('edits', ['x', 'y', 'width', 'height']);
-  }if(super$0!==null)SP$0(SegmentEdit,super$0);SegmentEdit.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":SegmentEdit,"configurable":true,"writable":true}});DP$0(SegmentEdit,"prototype",{"configurable":false,"enumerable":false,"writable":false});
+  }
 
   // logic performed to select an item from the brush
-  proto$0.brushItem = function(extent, mode) {
+  brushItem(extent, mode) {
     mode = mode || 'xy'; // default tries to match both
 
     var modeX = mode.indexOf('x') >= 0;
@@ -63,15 +63,15 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
 
       return matchX && matchY;
     });
-  };
+  }
 
   // checks if the clicked item is one of our guys
-  proto$0.clicked = function(item) {
+  clicked(item) {
     return item.classList.contains('seg') || item.tagName === 'line';
-  };
+  }
 
   // mouse drag ev switcher depending on drag (left|right|block) levels
-  proto$0.onDrag = function(e) {
+  onDrag(e) {
     if (!this.base.brushing()) {
       var classes = e.dragged.classList;
 
@@ -80,10 +80,10 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
       if (classes.contains('right') > 0) mode = 'r';
       this.handleDrag.call(this, mode, e);
     }
-  };
+  }
 
   // handles all the dragging possibilities
-  proto$0.handleDrag = function(mode, res) {
+  handleDrag(mode, res) {
     var d = res.d;
     var delta = res.event;
     var item = res.target;
@@ -137,8 +137,8 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     // console.log(item);
     // redraw visualization
     this.draw(d3.select(item));
-  };
-MIXIN$0(SegmentEdit.prototype,proto$0);proto$0=void 0;return SegmentEdit;})(SegmentVis);
+  }
+}
 
 // add a getter/setter for edition behavior - in params now ?
 // getSet(SegmentEdit.prototype, ['edits']);

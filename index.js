@@ -3,7 +3,7 @@
 
 var segment = require('segment-vis');
 var makeEditable = require('make-editable');
-var extend = require('extend');
+// var extend = require('extend');
 var getSet = require('get-set');
 
 
@@ -27,7 +27,7 @@ module.exports = function segmentEditor() {
       var modex = mode.indexOf('x') >= 0;
       var modey = mode.indexOf('y') >= 0;
       var matchX = false, matchY = false;
-      
+
       // data mappers
       var dStart = this.dStart();
       var dDuration = this.dDuration();
