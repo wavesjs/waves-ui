@@ -1,9 +1,7 @@
 var SegmentVis   = require('segment-vis');
 var makeEditable = require('make-editable');
-// var getSet       = require('utils').getSet;
-// problem when transpiling if not importing d3
-var d3           = require('d3-browserify');
 
+'use strict';
 
 class SegmentEdit extends SegmentVis {
 
@@ -11,8 +9,7 @@ class SegmentEdit extends SegmentVis {
     if (!(this instanceof SegmentEdit)) return new SegmentEdit;
 
     super();
-    // define editable properties - in params
-    // this.edits(['x', 'y', 'width', 'height']);
+    // default editable properties
     this.param('edits', ['x', 'y', 'width', 'height']);
   }
 
@@ -30,8 +27,7 @@ class SegmentEdit extends SegmentVis {
     var _y = this.y();
     var _height = this.height();
 
-    this.g.selectAll('.selectable').classed('selected', function(d, i) {
-
+    this.g.selectAll('.selectable').classed('selected', (d, i) => {
       // var offsetTop = (that.top() || 0) + (that.base.margin().top || 0);
       // var offsetLeft = (that.left || 0) + (that.base.margin().left || 0);
 
@@ -39,7 +35,6 @@ class SegmentEdit extends SegmentVis {
       if (modeX) {
         var x1 = _start(d);
         var x2 = x1 + _duration(d);
-
         //            begining sel               end sel
         var matchX1 = extent[0][0] <= x1 && x2 < extent[1][0];
         var matchX2 = extent[0][0] <= x2 && x1 < extent[1][0];
@@ -56,6 +51,7 @@ class SegmentEdit extends SegmentVis {
         //            begining sel               end sel
         var matchY1 = extent[0][1] <= y1 && y2 < extent[1][1];
         var matchY2 = extent[0][1] <= y2 && y1 <= extent[1][1];
+
         matchY = (matchY1 || matchY2);
       } else {
         matchY = true;
@@ -70,16 +66,16 @@ class SegmentEdit extends SegmentVis {
     return item.classList.contains('seg') || item.tagName === 'line';
   }
 
-  // mouse drag ev switcher depending on drag (left|right|block) levels
+  // mouse drag event switcher depending on drag (left|right|block) levels
   onDrag(e) {
-    if (!this.base.brushing()) {
-      var classes = e.dragged.classList;
+    if (this.base.brushing()) { return; }
 
-      var mode = 'mv';
-      if (classes.contains('left') > 0) mode = 'l';
-      if (classes.contains('right') > 0) mode = 'r';
-      this.handleDrag.call(this, mode, e);
-    }
+    var classes = e.dragged.classList;
+    var mode = 'mv';
+    if (classes.contains('left') > 0) mode = 'l';
+    if (classes.contains('right') > 0) mode = 'r';
+
+    this.handleDrag.call(this, mode, e);
   }
 
   // handles all the dragging possibilities
@@ -87,10 +83,8 @@ class SegmentEdit extends SegmentVis {
     var d = res.d;
     var delta = res.event;
     var item = res.target;
-    // var minDur = 0.001; // not used
     var xScale = this.base.xScale;
 
-    // var constrains = this.edits();
     var constrains = this.param('edits');
     var canX = !!~constrains.indexOf('x');
     var canY = !!~constrains.indexOf('y');
@@ -112,37 +106,39 @@ class SegmentEdit extends SegmentVis {
     var duration = xScale(_duration(d));
     var begin = xScale(_start(d));
 
+    // handle resize
     if (mode === 'l' && canW) duration -= delta.dx; // px
     if (mode === 'r' && canW) duration += delta.dx; // px
 
     // apply duration when editing through the handles
     if ((mode === 'l' || mode === 'r') && canW) {
-        _duration(d, xScale.invert(duration));
+      if (duration < 1) { duration = 1; }
+      _duration(d, xScale.invert(duration));
     }
 
-    // update positions
-    if (mode === 'l' || mode === 'mv') {
-      if (mode === 'l' && canW ||  mode === 'mv' && canX){
-        begin += delta.dx;
-        _start(d, xScale.invert(begin));
-      }
-
-      if (mode === 'mv' && canY) {
-        var y = this.yScale(_y(d));
-        y += delta.dy;
-        _y(d, this.yScale.invert(y));
-      }
+    if (mode === 'l' && canW) {
+      begin += delta.dx;
+      _start(d, xScale.invert(begin));
     }
 
-    // console.log(item);
+    // handle move
+    if (mode === 'mv' && canX) {
+      begin += delta.dx;
+      _start(d, xScale.invert(begin));
+    }
+
+    if (mode === 'mv' && canY) {
+      var y = this.yScale(_y(d));
+      y += delta.dy;
+      _y(d, this.yScale.invert(y));
+    }
+
     // redraw visualization
-    this.draw(d3.select(item));
+    this.draw(this.d3.select(item));
   }
 }
 
-// add a getter/setter for edition behavior - in params now ?
-// getSet(SegmentEdit.prototype, ['edits']);
-// make editable decorator/mixin
-makeEditable(SegmentEdit.prototype);
+// make editable mixin
+makeEditable(SegmentEdit);
 
 module.exports = SegmentEdit;
