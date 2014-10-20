@@ -8,8 +8,7 @@
 var events = window.events || require('events');
 var shortId = require('shortid');
 var getSet = require('utils').getSet;
-
-var _ = require('underscore.string');
+var extend = require('utils').extend;
 
 var timeLine;
 
@@ -82,7 +81,7 @@ var baseDesc = {
 
   params: {
     enumerable: true, value: function(params){
-      this._params = _.extend(this._params, params);
+      this._params = extend(this._params, params);
     }
   },
 
@@ -338,42 +337,25 @@ var baseDesc = {
 
   update: {
     enumerable: true, value: function(){
-
-      var that = this;
       var layers = this.layers;
-      for(var key in layers) {
+
+      for (var key in layers) {
         var layer = layers[key];
         layer.update();
       }
-
     }
   },
 
   // initialize layers
   initLayers: {
-    value: function(){
-
-      var that = this;
+    value: function() {
       var layers = this.layers;
+
       for (var key in layers) {
         var layer = layers[key];
-
-        // should we keep this?
-        // we can do it here but maybe we want a hook on the layer's
-        // lifecycle for this
-        // if ('load' in layer) layer.load(this);
-
-        layer.base = this; // bind the baseTimeLine
-        layer.unitClass = layer.name() + '-item';
-        layer.dname = _.slugify(layer.name()); // dashed name
-        // is needed for makeEditable - must be called after `layer.base = this;`
-        if ('load' in layer) layer.load(this);
-
-        // this.delegateScales(layer); // timelineScales are not setted yet
-        // layer.xScale = that.xScale;
-        // layer.yScale = d3.scale.linear();
+        // configure layer
+        layer.load(this, d3);
       }
-
     }
   },
 
