@@ -1,5 +1,8 @@
 var pck = require('./package.json');
 var getSet = require('utils').getSet;
+var _ = require('underscore.string');
+
+'use strict';
 
 class Layer {
 
@@ -62,9 +65,12 @@ class Layer {
     return this;
   }
 
-  load(base){
-    // this.base = base; // bind the baseTimeLine
-    // this.unitClass = this.name() + '-item';
+  load(base, d3) {
+    this.base = base; // bind the baseTimeLine
+    this.unitClass = this.name() + '-item';
+    this.dname = _.slugify(this.name()); // dashed name
+    // add d3 on the layer prototype
+    Object.getPrototypeOf(this).d3 = d3;
   }
 
   bind(g) {

@@ -1,5 +1,8 @@
 var pck = require('./package.json');
 var getSet = require('utils').getSet;
+var _ = require('underscore.string');
+
+'use strict';
 
 var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var proto$0={};
 
@@ -62,9 +65,12 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     return this;
   };
 
-  proto$0.load = function(base){
-    // this.base = base; // bind the baseTimeLine
-    // this.unitClass = this.name() + '-item';
+  proto$0.load = function(base, d3) {
+    this.base = base; // bind the baseTimeLine
+    this.unitClass = this.name() + '-item';
+    this.dname = _.slugify(this.name()); // dashed name
+    // add d3 on the layer prototype
+    Object.getPrototypeOf(this).d3 = d3;
   };
 
   proto$0.bind = function(g) {
