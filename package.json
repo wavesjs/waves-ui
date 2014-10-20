@@ -9,6 +9,7 @@
   "author": "Victor Saiz",
   "license": "BSD-3",
   "dependencies": {
-    "underscore.string": "^2.3.3"
+    "underscore.string": "^2.3.3",
+    "utils": "git://github.com/ircam-rnd/utils"
   }
 }
