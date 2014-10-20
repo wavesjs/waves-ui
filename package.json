@@ -1,8 +1,8 @@
 {
   "name": "make-editable",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Takes in a graph element and adds in editing capabilities",
-  "main": "index.js",
+  "main": "make-editable.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
