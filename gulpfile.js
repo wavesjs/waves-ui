@@ -6,7 +6,14 @@ var source = require('vinyl-source-stream');
 var streamify = require('gulp-streamify');
 var uglify = require('gulp-uglify');
 
-loadTasks(gulp, packageJson);
+require('./node_modules/module-boilerplate/load-dependencies')(packageJson);
+
+tasks = require('./node_modules/module-boilerplate/tasks.json');
+
+for(var i in tasks) {
+  require('./node_modules/module-boilerplate/tasks/' + tasks[i])(gulp, packageJson);
+}
+
 
 // override
 var libName = packageJson.exports || packageJson.name;
