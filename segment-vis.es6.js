@@ -1,9 +1,8 @@
-
-"use strict";
-
 var LayerVis = require('layer-vis');
 var pck = require('./package.json');
 var getSet = require('utils').getSet;
+
+'use strict';
 
 class SegmentVis extends LayerVis {
 
