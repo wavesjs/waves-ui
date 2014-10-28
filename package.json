@@ -1,0 +1,15 @@
+{
+  "name": "label-vis",
+  "version": "0.0.1",
+  "description": "Label visualiser component",
+  "main": "label-vis.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Benjamin Matuszewski",
+  "license": "BSD-3",
+  "dependencies": {
+    "layer-vis": "git://github.com/ircam-rnd/layer-vis",
+    "utils": "git://github.com/ircam-rnd/utils"
+  }
+}
