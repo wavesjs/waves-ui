@@ -36,14 +36,14 @@ class Layer {
 
   // this.__params getter/setter for a single param
   param(name = null, value = null) {
-    if(value === null) return this.__params[name];
+    if (value === null) return this.__params[name];
     this.__params[name] = value;
     return this;
   }
 
   // this.__params getter/setter
   params(_params = null) {
-    if(_params === null) return this.__params;
+    if (_params === null) return this.__params;
 
     for (var key in _params) {
       this.__params[key] = _params[key];
@@ -53,14 +53,14 @@ class Layer {
   }
 
   name(value = null) {
-    if(value === null) return this.__params.name;
+    if (value === null) return this.__params.name;
     this.__params.name = value;
     return this;
   }
 
   // this.__data getter/setter
   data(_data = null) {
-    if(!_data) return this.__data;
+    if (!_data) return this.__data;
     this.__data = _data;
     return this;
   }
@@ -69,8 +69,13 @@ class Layer {
     this.base = base; // bind the baseTimeLine
     this.unitClass = this.name() + '-item';
     this.dname = _.slugify(this.name()); // dashed name
+
+    if (!this.param('height')) {
+      this.param('height', base.height());
+    }
     // add d3 on the layer prototype
-    Object.getPrototypeOf(this).d3 = d3;
+    var proto = Object.getPrototypeOf(this);
+    if (!proto.d3) { proto.d3 = d3; }
   }
 
   bind(g) {

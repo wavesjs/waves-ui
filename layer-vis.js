@@ -36,14 +36,14 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
 
   // this.__params getter/setter for a single param
   proto$0.param = function() {var name = arguments[0];if(name === void 0)name = null;var value = arguments[1];if(value === void 0)value = null;
-    if(value === null) return this.__params[name];
+    if (value === null) return this.__params[name];
     this.__params[name] = value;
     return this;
   };
 
   // this.__params getter/setter
   proto$0.params = function() {var _params = arguments[0];if(_params === void 0)_params = null;
-    if(_params === null) return this.__params;
+    if (_params === null) return this.__params;
 
     for (var key in _params) {
       this.__params[key] = _params[key];
@@ -53,14 +53,14 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
   };
 
   proto$0.name = function() {var value = arguments[0];if(value === void 0)value = null;
-    if(value === null) return this.__params.name;
+    if (value === null) return this.__params.name;
     this.__params.name = value;
     return this;
   };
 
   // this.__data getter/setter
   proto$0.data = function() {var _data = arguments[0];if(_data === void 0)_data = null;
-    if(!_data) return this.__data;
+    if (!_data) return this.__data;
     this.__data = _data;
     return this;
   };
@@ -69,8 +69,13 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     this.base = base; // bind the baseTimeLine
     this.unitClass = this.name() + '-item';
     this.dname = _.slugify(this.name()); // dashed name
+
+    if (!this.param('height')) {
+      this.param('height', base.height());
+    }
     // add d3 on the layer prototype
-    Object.getPrototypeOf(this).d3 = d3;
+    var proto = Object.getPrototypeOf(this);
+    if (!proto.d3) { proto.d3 = d3; }
   };
 
   proto$0.bind = function(g) {
