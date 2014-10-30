@@ -53,7 +53,7 @@ var baseDesc = {
       // generic getters(setters) accessors and defaults
       getSet(this, [
         'id', 'margin', 'xDomain', 'yDomain', 'height', 'width', 'data'
-      ]);
+      ], true);
 
       // initialize
       this.layers = {};
@@ -80,7 +80,7 @@ var baseDesc = {
   },
 
   params: {
-    enumerable: true, value: function(params){
+    enumerable: true, value: function(params) {
       this._params = extend(this._params, params);
     }
   },
@@ -97,7 +97,7 @@ var baseDesc = {
   // layer 'plugin' interface
   // adds new layers to layout
   layer: {
-    enumerable: true, value: function(layer){
+    enumerable: true, value: function(layer) {
       this.layers[layer.name()] = layer;
       return this;
     }
@@ -105,7 +105,7 @@ var baseDesc = {
 
   // draws the layers
   draw: {
-    enumerable: true, value: function(sel){
+    enumerable: true, value: function(sel) {
       var that = timeLine; // binding fix when called from d3
       sel = sel || that.selection;
       that.selection = sel;
@@ -391,8 +391,16 @@ var baseDesc = {
 
       if ('yScale' in layer) {
         var baseYscale = this.yScale.copy();
-        if (!!layer.param('yDomain')) { baseYscale.domain(layer.param('yDomain')); }
-        if (!!layer.param('yRange')) { baseYscale.domain(layer.param('yRange')); }
+
+        if (!!layer.param('yDomain')) {
+          baseYscale.domain(layer.param('yDomain'));
+        }
+
+        if (!!layer.param('height')) {
+          var yRange = [layer.param('height'), 0];
+          baseYscale.range(yRange);
+        }
+
         layer.yScale = baseYscale;
       }
     }
@@ -431,7 +439,6 @@ var baseDesc = {
 
         // apply all the dimensions to our group
         lg.classed(layer.dname, true)
-          .attr('height', height)
           .attr("transform", "translate(0, " + top + ")");
 
         // keep this?
