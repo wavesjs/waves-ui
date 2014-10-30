@@ -389,20 +389,19 @@ var baseDesc = {
         layer.originalXscale = baseXscale.copy();
       }
 
-      if ('yScale' in layer) {
-        var baseYscale = this.yScale.copy();
+      // define layer yScale
+      var baseYscale = this.yScale.copy();
 
-        if (!!layer.param('yDomain')) {
-          baseYscale.domain(layer.param('yDomain'));
-        }
-
-        if (!!layer.param('height')) {
-          var yRange = [layer.param('height'), 0];
-          baseYscale.range(yRange);
-        }
-
-        layer.yScale = baseYscale;
+      if (!!layer.param('yDomain')) {
+        baseYscale.domain(layer.param('yDomain'));
       }
+
+      if (!!layer.param('height')) {
+        var yRange = [layer.param('height'), 0];
+        baseYscale.range(yRange);
+      }
+
+      layer.yScale = baseYscale;
     }
   },
 
