@@ -1,6 +1,7 @@
-var LayerVis = require('layer-vis');
-var pck = require('./package.json');
-var getSet = require('utils').getSet;
+var LayerVis  = require('layer-vis');
+var pck       = require('./package.json');
+var getSet    = require('utils').getSet;
+var uniqueId  = require('utils').uniqueId;
 
 'use strict';
 
@@ -15,7 +16,7 @@ class SegmentVis extends LayerVis {
 
     // set layer defaults
     this.params({
-      name: pck.name.replace('-vis', ''),
+      name: uniqueId(pck.name.replace('-vis', '')),
       handlerWidth: 3,
       handlerOpacity: 0
     });
@@ -126,7 +127,6 @@ class SegmentVis extends LayerVis {
       .attr('width', w)
       .attr('height', h)
       .attr('fill', color);
-
 
     el.selectAll('.handle.left')
       .attr('x1', lhx)
