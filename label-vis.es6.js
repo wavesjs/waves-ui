@@ -1,6 +1,7 @@
 var LayerVis  = require('layer-vis');
 var pck       = require('./package.json');
 var getSet    = require('utils').getSet;
+var uniqueId  = require('utils').uniqueId;
 
 'use strict';
 
@@ -12,7 +13,7 @@ class LabelVis extends LayerVis {
     super();
 
     var defaults = {
-      name: pck.name.replace('-vis', ''),
+      name: uniqueId(pck.name.replace('-vis', '')),
       // expose to allow tweaking vertical alignment for design adjustments
       verticalAlignment: { top: '1em', middle: '0.5em', bottom: '0' }
     };
@@ -96,7 +97,7 @@ class LabelVis extends LayerVis {
   }
 
   draw(el = null) {
-    el = el !== null ? el : this.g.selectAll('.' + this.unitClass);
+    if (el === null) { el = this.g.selectAll('.' + this.unitClass); }
 
     var _xScale = this.base.xScale;
     var _yScale = this.yScale;

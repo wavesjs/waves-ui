@@ -1,6 +1,7 @@
 var LayerVis  = require('layer-vis');
 var pck       = require('./package.json');
 var getSet    = require('utils').getSet;
+var uniqueId  = require('utils').uniqueId;
 
 'use strict';
 
@@ -12,7 +13,7 @@ var LabelVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     super$0.call(this);
 
     var defaults = {
-      name: pck.name.replace('-vis', ''),
+      name: uniqueId(pck.name.replace('-vis', '')),
       // expose to allow tweaking vertical alignment for design adjustments
       verticalAlignment: { top: '1em', middle: '0.5em', bottom: '0' }
     };
@@ -96,7 +97,7 @@ var LabelVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   };
 
   proto$0.draw = function() {var el = arguments[0];if(el === void 0)el = null;var this$0 = this;
-    el = el !== null ? el : this.g.selectAll('.' + this.unitClass);
+    if (el === null) { el = this.g.selectAll('.' + this.unitClass); }
 
     var _xScale = this.base.xScale;
     var _yScale = this.yScale;
