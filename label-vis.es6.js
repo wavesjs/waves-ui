@@ -11,10 +11,13 @@ class LabelVis extends LayerVis {
 
     super();
 
-    this.params({
-      'name': pck.name.replace('-vis', ''),
-      'padding': { top: 0, right: 0, bottom: 0, left: 0 }
-    });
+    var defaults = {
+      name: pck.name.replace('-vis', ''),
+      // expose to allow tweaking vertical alignment for design adjustments
+      verticalAlignment: { top: '1em', middle: '0.5em', bottom: '0' }
+    };
+
+    this.params(defaults);
 
     // data accessors
     this.y((d, v = null) => {
@@ -27,39 +30,43 @@ class LabelVis extends LayerVis {
       d.x = (+v);
     });
 
-    this.width((d, v = null) => {
-      if (v === null) { return +d.width || 0 }
-      d.width = (+v);
-    });
-
-    this.height((d, v = null) => {
-      if (v === null) { return +d.height || 0 }
-      d.height = (+v);
-    });
-
     this.text((d, v = null) => {
       if (v === null) { return (d.text + '') }
       d.text = (v + '');
     });
 
+    // the following can also be setted as global params
+    // which are acting as default values
+    this.width((d, v = null) => {
+      if (v === null) { return +d.width }
+      d.width = (+v);
+    });
+
+    this.height((d, v = null) => {
+      if (v === null) { return +d.height }
+      d.height = (+v);
+    });
+
     this.color((d, v = null) => {
-      if (v === null) { return d.color ? d.color + '' : '#000000' }
+      if (v === null) { return d.color || '#000000' }
       d.color = (v + '');
     });
 
     // 'left', 'center', 'top'
     this.align((d, v = null) => {
-      if (v === null) { return d.align ? d.align + '' : 'left' }
+      if (v === null) { return d.align || 'left' }
       d.align = (v + '');
     });
 
     // 'top', 'middle', 'bottom'
     this.valign((d, v = null) => {
-      if (v === null) { return d.valign ? d.valign + '' : 'top' }
+      if (v === null) { return d.valign || 'top' }
       d.valign = (v + '');
     });
 
-    // 'padding' ?
+    this.margin({ top: 0, right: 0, bottom: 0, left: 0 });
+
+    // 'margin' ?
   }
 
   update(data) {
@@ -81,6 +88,9 @@ class LabelVis extends LayerVis {
     g.append('text')
      .attr('class', 'text');
 
+    g.append('line')
+     .attr('class', 'line')
+
     sel.exit().remove();
     this.draw();
   }
@@ -90,31 +100,33 @@ class LabelVis extends LayerVis {
 
     var _xScale = this.base.xScale;
     var _yScale = this.yScale;
-    var _x = this.x();
-    var _y = this.y();
+
     var _w = this.width();
     var _h = this.height();
-    var _align = this.align();
+    var _x = this.x();
+    var _y = this.y();
+    var _align  = this.align();
     var _valign = this.valign();
-    var _padding = this.param('padding');
+    var _margin = this.margin();
+    var _verticalAlignment = this.params().verticalAlignment;
 
     // scales for bound box position
     var w = (d) => { return _xScale(_w(d)); }
     var x = (d) => { return _xScale(_x(d)); }
-    var h = (d) => { return this.base.height() - _yScale(_h(d)); }
+    var h = (d) => { return this.param('height') - _yScale(_h(d)); }
     var y = (d) => { return _yScale(_y(d)) - h(d); }
 
     // scales for text-position
     var tx = (d) => {
       switch (_align(d)) {
         case 'left':
-          return x(d) + parseInt(_padding.left, 10);
+          return x(d) + parseInt(_margin().left, 10);
           break;
         case 'center':
           return x(d) + (w(d) / 2);
           break;
         case 'right':
-          return x(d) + w(d) - parseInt(_padding.right, 10);
+          return x(d) + w(d) - parseInt(_margin().right, 10);
           break;
       }
     };
@@ -136,28 +148,29 @@ class LabelVis extends LayerVis {
     var ty = (d) => {
       switch (_valign(d)) {
         case 'top':
-          return y(d) + parseInt(_padding.top, 10);
+          return y(d) + parseInt(_margin().top, 10);
           break;
         case 'middle':
           return y(d) + (h(d) / 2);
           break;
         case 'bottom':
-          return y(d) + h(d) - parseInt(_padding.bottom, 10);
+          return y(d) + h(d) - parseInt(_margin().bottom, 10);
           break;
       }
     };
+
 
     // based on small manual testing - can probably be improved
     var dy = (d) => {
       switch (_valign(d)) {
         case 'top':
-          return '1em';
+          return _verticalAlignment.top;
           break;
         case 'middle':
-          return '0.3em';
+          return _verticalAlignment.middle;
           break;
         case 'bottom':
-          return '-0.4em';
+          return _verticalAlignment.bottom;
           break;
       }
     }
@@ -175,12 +188,14 @@ class LabelVis extends LayerVis {
       .attr('y', ty)
       .attr('dy', dy)
       .attr('text-anchor', anchor)
+
+    // testing
   }
 }
 
 getSet(
   LabelVis.prototype,
-  ['x', 'y', 'width', 'height', 'text', 'color', 'align', 'valign', 'sortIndex']
+  ['x', 'y', 'width', 'height', 'text', 'color', 'align', 'valign', 'margin', 'sortIndex']
 );
 
 module.exports = LabelVis;
