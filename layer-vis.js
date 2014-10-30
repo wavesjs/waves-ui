@@ -24,7 +24,7 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     this.params({
       name: pck.name || 'layer',
       opacity: 1,
-      height: 1,
+      height: 0,
       top: 0,
       color: '#000',
       selectable: false,

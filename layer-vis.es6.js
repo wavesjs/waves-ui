@@ -24,7 +24,7 @@ class Layer {
     this.params({
       name: pck.name || 'layer',
       opacity: 1,
-      height: 1,
+      height: 0,
       top: 0,
       color: '#000',
       selectable: false,
