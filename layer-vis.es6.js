@@ -1,6 +1,7 @@
-var pck = require('./package.json');
-var getSet = require('utils').getSet;
-var _ = require('underscore.string');
+var pck       = require('./package.json');
+var getSet    = require('utils').getSet;
+var _         = require('underscore.string');
+var uniqueId  = require('utils').uniqueId;
 
 'use strict';
 
@@ -22,11 +23,11 @@ class Layer {
 
     // general defaults
     this.params({
-      name: pck.name || 'layer',
+      name: uniqueId(pck.name || 'layer'),
+      // color: '#000',
       opacity: 1,
       height: 0,
       top: 0,
-      color: '#000',
       selectable: false,
       xDomain: null,
       yDomain: null,
