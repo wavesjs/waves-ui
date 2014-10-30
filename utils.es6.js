@@ -1,6 +1,9 @@
+var isFunction = function(func) {
+  return Object.prototype.toString.call(func) === '[object Function]';
+}
 
 // combined accessors
-var getSet = function getSet(obj, props = null){
+var getSet = function getSet(obj, props = null, valueMode = false){
 
   if (!props) throw new Error('Property name is mandatory.');
 
@@ -10,18 +13,38 @@ var getSet = function getSet(obj, props = null){
 
     obj[p] = function(value = null) {
       if (value === null) return this[_prop];
-      this[_prop] = value;
+
+      if (!isFunction(value) && !valueMode) {
+        this[_prop] = () => value;
+      } else {
+        this[_prop] = value;
+      }
+
       return this;
     };
   };
 
   if (Array.isArray(props)) {
-    props.forEach( (p) => add(p) );
+    props.forEach((p) => add(p));
   } else {
     add(props);
   }
 
 };
+
+// @TODO test
+var _counters = { '': 0 };
+var uniqueId = function(prefix = '') {
+  if (prefix && !_counters[prefix]) {
+    _counters[prefix] = 0;
+  }
+
+  var id = _counters[prefix];
+  if (prefix) { id = [prefix, id].join('-'); }
+  _counters[prefix] += 1;
+
+  return id;
+}
 
 // create a default data accessor for each given attrs
 /*
@@ -37,6 +60,7 @@ var defaultDataMap = function defaultDataMap(obj, attrs) {
 */
 
 var extend = function extend() {
+  // this can probably improved in es6
   var args = Array.prototype.slice.call(arguments);
   var host = args.shift();
   var copy = args.shift();
@@ -51,5 +75,6 @@ var extend = function extend() {
 
 module.exports = {
   extend: extend,
-  getSet: getSet
+  getSet: getSet,
+  isFunction: isFunction
 };
