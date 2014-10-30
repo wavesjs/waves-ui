@@ -32,8 +32,9 @@ var getSet = function getSet(obj, props = null, valueMode = false){
 
 };
 
-// @TODO test
+// return a unique identifier with an optionnal prefix
 var _counters = { '': 0 };
+
 var uniqueId = function(prefix = '') {
   if (prefix && !_counters[prefix]) {
     _counters[prefix] = 0;
@@ -76,5 +77,6 @@ var extend = function extend() {
 module.exports = {
   extend: extend,
   getSet: getSet,
-  isFunction: isFunction
+  isFunction: isFunction,
+  uniqueId: uniqueId
 };
