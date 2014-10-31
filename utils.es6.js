@@ -1,10 +1,13 @@
-var isFunction = function(func) {
+'use strict';
+
+var utils = {}
+
+utils.isFunction = function(func) {
   return Object.prototype.toString.call(func) === '[object Function]';
 }
 
 // combined accessors
-var getSet = function getSet(obj, props = null, valueMode = false){
-
+utils.getSet = function getSet(obj, props = null, valueMode = false){
   if (!props) throw new Error('Property name is mandatory.');
 
   var add = (p = null) => {
@@ -14,7 +17,7 @@ var getSet = function getSet(obj, props = null, valueMode = false){
     obj[p] = function(value = null) {
       if (value === null) return this[_prop];
 
-      if (!isFunction(value) && !valueMode) {
+      if (!utils.isFunction(value) && !valueMode) {
         this[_prop] = () => value;
       } else {
         this[_prop] = value;
@@ -35,7 +38,7 @@ var getSet = function getSet(obj, props = null, valueMode = false){
 // return a unique identifier with an optionnal prefix
 var _counters = { '': 0 };
 
-var uniqueId = function(prefix = '') {
+utils.uniqueId = function(prefix = '') {
   if (prefix && !_counters[prefix]) {
     _counters[prefix] = 0;
   }
@@ -47,20 +50,7 @@ var uniqueId = function(prefix = '') {
   return id;
 }
 
-// create a default data accessor for each given attrs
-/*
-var defaultDataMap = function defaultDataMap(obj, attrs) {
-  attrs.forEach((attr) => {
-    obj[attr]((d, v = null) => {
-      if (v === null) return d.y;
-      d[attr] = +v;
-      return obj;
-    })
-  });
-};
-*/
-
-var extend = function extend() {
+utils.extend = function extend() {
   // this can probably improved in es6
   var args = Array.prototype.slice.call(arguments);
   var host = args.shift();
@@ -74,9 +64,17 @@ var extend = function extend() {
 };
 
 
-module.exports = {
-  extend: extend,
-  getSet: getSet,
-  isFunction: isFunction,
-  uniqueId: uniqueId
-};
+// create a default data accessor for each given attrs
+
+// var defaultDataMap = function defaultDataMap(obj, attrs) {
+//   attrs.forEach((attr) => {
+//     obj[attr]((d, v = null) => {
+//       if (v === null) return d.y;
+//       d[attr] = +v;
+//       return obj;
+//     })
+//   });
+// };
+
+
+module.exports = utils;
