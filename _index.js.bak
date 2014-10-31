@@ -46,6 +46,7 @@ var baseDesc = {
   // init
   // ----
 
+  // ok
   init: {
     value: function(options) {
       options = options || {}; // fail safe
@@ -79,6 +80,7 @@ var baseDesc = {
     }
   },
 
+  // not used ?
   params: {
     enumerable: true, value: function(params) {
       this._params = extend(this._params, params);
@@ -96,6 +98,7 @@ var baseDesc = {
 
   // layer 'plugin' interface
   // adds new layers to layout
+  // OK
   layer: {
     enumerable: true, value: function(layer) {
       this.layers[layer.name()] = layer;
@@ -187,6 +190,12 @@ var baseDesc = {
 
         // enter layers
         that.enterLayers(g);
+
+        // loop in layers :
+        // delagteScales
+        // enterLayer
+
+        // then `this.update`
       });
 
       return this;
@@ -350,6 +359,7 @@ var baseDesc = {
   },
 
   // initialize layers
+  // OK
   initLayers: {
     value: function() {
       var layers = this.layers;
@@ -362,6 +372,7 @@ var baseDesc = {
     }
   },
 
+  // OK - not used ?
   drawLayers: {
     value: function(name){
       name = name || '';
@@ -379,6 +390,7 @@ var baseDesc = {
   },
 
   // internal scale update
+  // OK
   delegateScales: {
     value: function(layer) {
       // @NOTE: is the really needed ? - probably yes... see "bachotheque"
@@ -410,6 +422,7 @@ var baseDesc = {
   },
 
   // call layer enter method
+  // OK
   enterLayers: {
     value: function(g) {
       var layers = this.layers;

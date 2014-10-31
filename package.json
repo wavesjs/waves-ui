@@ -1,18 +1,18 @@
 {
   "name": "timeline",
   "exports": "timeline",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Time based visualization layout manager",
-  "main": "index.js",
+  "main": "timeline.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Victor Saiz",
   "license": "BSD-3",
   "dependencies": {
+    "d3": "^3.4.13",
     "events": "~1.0.0",
     "shortid": "~2.0.0",
-    "underscore.string": "~2.3.3",
     "utils": "git://github.com/ircam-rnd/utils"
   },
   "devDependencies": {
