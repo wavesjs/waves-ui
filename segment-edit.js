@@ -195,13 +195,15 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     }
 
     if (mode === 'mv' && canY) {
-      var posY = this.yScale(_y(d)); // - (this.param('height') - this.yScale(this.height()(d)));
-      var minY = 0;
+      var posY = this.yScale(_y(d));
+      var minY = this.param('height') - this.yScale(this.height()(d));
       var maxY = this.param('height');
-      // console.log(posY)
+      var targetY = posY + delta.dy;
 
-      posY += delta.dy;
-      _y(d, this.yScale.invert(posY));
+      if (targetY >= minY && targetY <= maxY) {
+        posY = targetY;
+        _y(d, this.yScale.invert(posY));
+      }
     }
 
     // redraw visualization
