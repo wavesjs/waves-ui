@@ -54,9 +54,7 @@ var baseDesc = {
       // generic getters(setters) accessors and defaults
       getSet(this, [
         'id', 'margin', 'xDomain', 'yDomain', 'height', 'width', 'data'
-      ]);
-
-      console.log(this);
+      ], true);
 
       // initialize
       this.layers = {};
@@ -330,9 +328,9 @@ var baseDesc = {
 
       this.originalXscale = this.xScale.copy();
 
-      for(var key in layers) {
+      for (var key in layers) {
         var layer = layers[key];
-         if (layer.hasOwnProperty('xScale')) layer.originalXscale = layer.xScale.copy();
+        if (layer.hasOwnProperty('xScale')) layer.originalXscale = layer.xScale.copy();
       }
 
     }
@@ -342,9 +340,12 @@ var baseDesc = {
     enumerable: true, value: function(){
       var layers = this.layers;
 
+      // @NOTE create to loops for `layer.update` and `layer.draw`
+      // as in a game loop ? does it make sens
       for (var key in layers) {
         var layer = layers[key];
         layer.update();
+        layer.draw();
       }
     }
   },
@@ -371,9 +372,10 @@ var baseDesc = {
       // rethink this later
       for (var key in layers) {
         var layer = layers[key];
-        if (layer.draw && layer.name() !== name) layer.draw();
+        if (layer.draw && layer.name() !== name) {
+          layer.draw();
+        }
       }
-
     }
   },
 
@@ -392,34 +394,39 @@ var baseDesc = {
         layer.originalXscale = baseXscale.copy();
       }
 
-      if ('yScale' in layer) {
-        var baseYscale = this.yScale.copy();
-        if (!!layer.param('yDomain')) { baseYscale.domain(layer.param('yDomain')); }
-        if (!!layer.param('yRange')) { baseYscale.domain(layer.param('yRange')); }
-        layer.yScale = baseYscale;
+      // define layer yScale
+      var baseYscale = this.yScale.copy();
+
+      if (!!layer.param('yDomain')) {
+        baseYscale.domain(layer.param('yDomain'));
       }
+
+      if (!!layer.param('height')) {
+        var yRange = [layer.param('height'), 0];
+        baseYscale.range(yRange);
+      }
+
+      layer.yScale = baseYscale;
     }
   },
 
   // call layer enter method
   enterLayers: {
     value: function(g) {
-
-      var that = this;
       var layers = this.layers;
 
       // setup external layers containers and dimensions
-      for(var key in layers) {
+      for (var key in layers) {
         var layer = layers[key];
         // rebind Scales in case they updated
-        that.delegateScales(layer);
+        this.delegateScales(layer);
 
-        // margin/position handling
-        var top = layer.param('top') || 0;
-        if (layer.param('height') === null) layer.param('height', that.height());
+        if (layer.param('height') === null) {
+          layer.param('height', this.height());
+        }
 
         var height = layer.param('height');
-        var width = that.width();
+        var width = this.width();
 
         // layer group
         // var klen = Object.keys(that.layers).length;
@@ -427,25 +434,27 @@ var baseDesc = {
         //                     : g; // otherwise we work only with the inner group
 
         // var lg = g.append("g");
-        var prevLg = g.select('.' + layer.dname);
-        var lg = (!!prevLg.node())?
-          prevLg
-          : g.append("g");
+        var previousLayerG = g.select('.' + layer.dname);
+        var layerG = (!!previousLayerG.node()) ? previousLayerG : g.append("g");
+
+        // margin/position handling
+        var top = layer.param('top') || 0;
 
         // apply all the dimensions to our group
-        lg.classed(layer.dname, true)
-          .attr('height', height)
+        layerG
+          .classed(layer.dname, true)
           .attr("transform", "translate(0, " + top + ")");
 
         // keep this?
         // we might still want this hook in the layer
         // if(layer.hasOwnProperty('bind')) layer.bind(lg);
 
-        layer.g = lg;
-        layer.update();
-
+        layer.g = layerG;
+        // layer.update();
       }
 
+      // call update and draw on each layer
+      this.update();
     }
   },
 
@@ -1872,7 +1881,7 @@ function hash(alg, key) {
   return {
     update: function (data) {
       if(!Buffer.isBuffer(data)) data = new Buffer(data)
-
+        
       bufs.push(data)
       length += data.length
       return this
@@ -2910,30 +2919,54 @@ module.exports.decode   = decode;
 
 }).call(this,_dereq_("/Users/matuszewski/www/wave/timeline/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
 },{"./lib/alphabet":13,"./lib/encode":14,"/Users/matuszewski/www/wave/timeline/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":11}],17:[function(_dereq_,module,exports){
+var isFunction = function(func) {
+  return Object.prototype.toString.call(func) === '[object Function]';
+}
 
 // combined accessors
-var getSet = function getSet(obj){var props = arguments[1];if(props === void 0)props = null;var this$0 = this;
+var getSet = function getSet(obj){var props = arguments[1];if(props === void 0)props = null;var valueMode = arguments[2];if(valueMode === void 0)valueMode = false;
 
   if (!props) throw new Error('Property name is mandatory.');
 
   var add = function()  {var p = arguments[0];if(p === void 0)p = null;
     var _prop = '__' + p;
-    if(!obj.hasOwnProperty(_prop)) obj[_prop] = null;
+    if (!obj.hasOwnProperty(_prop)) obj[_prop] = null;
 
-    obj[p] = function()  {var value = arguments[0];if(value === void 0)value = null;
-      if (value === null) return this$0[_prop];
-      this$0[_prop] = value;
-      return this$0;
+    obj[p] = function() {var value = arguments[0];if(value === void 0)value = null;
+      if (value === null) return this[_prop];
+
+      if (!isFunction(value) && !valueMode) {
+        this[_prop] = function()  {return value};
+      } else {
+        this[_prop] = value;
+      }
+
+      return this;
     };
   };
 
   if (Array.isArray(props)) {
-    props.forEach( function(p)  {return add(p)} );
+    props.forEach(function(p)  {return add(p)});
   } else {
     add(props);
   }
 
 };
+
+// return a unique identifier with an optionnal prefix
+var _counters = { '': 0 };
+
+var uniqueId = function() {var prefix = arguments[0];if(prefix === void 0)prefix = '';
+  if (prefix && !_counters[prefix]) {
+    _counters[prefix] = 0;
+  }
+
+  var id = _counters[prefix];
+  if (prefix) { id = [prefix, id].join('-'); }
+  _counters[prefix] += 1;
+
+  return id;
+}
 
 // create a default data accessor for each given attrs
 /*
@@ -2949,6 +2982,7 @@ var defaultDataMap = function defaultDataMap(obj, attrs) {
 */
 
 var extend = function extend() {
+  // this can probably improved in es6
   var args = Array.prototype.slice.call(arguments);
   var host = args.shift();
   var copy = args.shift();
@@ -2963,8 +2997,11 @@ var extend = function extend() {
 
 module.exports = {
   extend: extend,
-  getSet: getSet
+  getSet: getSet,
+  isFunction: isFunction,
+  uniqueId: uniqueId
 };
+
 },{}]},{},[1])
 (1)
 });

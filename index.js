@@ -327,9 +327,9 @@ var baseDesc = {
 
       this.originalXscale = this.xScale.copy();
 
-      for(var key in layers) {
+      for (var key in layers) {
         var layer = layers[key];
-         if (layer.hasOwnProperty('xScale')) layer.originalXscale = layer.xScale.copy();
+        if (layer.hasOwnProperty('xScale')) layer.originalXscale = layer.xScale.copy();
       }
 
     }
@@ -339,9 +339,12 @@ var baseDesc = {
     enumerable: true, value: function(){
       var layers = this.layers;
 
+      // @NOTE create to loops for `layer.update` and `layer.draw`
+      // as in a game loop ? does it make sens
       for (var key in layers) {
         var layer = layers[key];
         layer.update();
+        layer.draw();
       }
     }
   },
@@ -368,9 +371,10 @@ var baseDesc = {
       // rethink this later
       for (var key in layers) {
         var layer = layers[key];
-        if (layer.draw && layer.name() !== name) layer.draw();
+        if (layer.draw && layer.name() !== name) {
+          layer.draw();
+        }
       }
-
     }
   },
 
@@ -408,22 +412,20 @@ var baseDesc = {
   // call layer enter method
   enterLayers: {
     value: function(g) {
-
-      var that = this;
       var layers = this.layers;
 
       // setup external layers containers and dimensions
-      for(var key in layers) {
+      for (var key in layers) {
         var layer = layers[key];
         // rebind Scales in case they updated
-        that.delegateScales(layer);
+        this.delegateScales(layer);
 
-        // margin/position handling
-        var top = layer.param('top') || 0;
-        if(layer.param('height') === null) layer.param('height', that.height());
+        if (layer.param('height') === null) {
+          layer.param('height', this.height());
+        }
 
         var height = layer.param('height');
-        var width = that.width();
+        var width = this.width();
 
         // layer group
         // var klen = Object.keys(that.layers).length;
@@ -431,24 +433,27 @@ var baseDesc = {
         //                     : g; // otherwise we work only with the inner group
 
         // var lg = g.append("g");
-        var prevLg = g.select('.' + layer.dname);
-        var lg = (!!prevLg.node())?
-          prevLg
-          : g.append("g");
+        var previousLayerG = g.select('.' + layer.dname);
+        var layerG = (!!previousLayerG.node()) ? previousLayerG : g.append("g");
+
+        // margin/position handling
+        var top = layer.param('top') || 0;
 
         // apply all the dimensions to our group
-        lg.classed(layer.dname, true)
+        layerG
+          .classed(layer.dname, true)
           .attr("transform", "translate(0, " + top + ")");
 
         // keep this?
         // we might still want this hook in the layer
         // if(layer.hasOwnProperty('bind')) layer.bind(lg);
 
-        layer.g = lg;
-        layer.update();
-
+        layer.g = layerG;
+        // layer.update();
       }
 
+      // call update and draw on each layer
+      this.update();
     }
   },
 
