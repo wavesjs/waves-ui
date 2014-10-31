@@ -190,8 +190,6 @@ class Timeline {
     this.width(this.width() - this.margin().left - this.margin().right);
     this.height(this.height() - this.margin().top - this.margin().bottom);
 
-    var this = this;
-
     this.selection.each((d, index) => {
       let el = d3.select(this.selection[index][0]);
 
@@ -205,25 +203,26 @@ class Timeline {
       // create an alias (why ?)
       this.el = this.svg;
 
+      var that = this;
       // 2. event delegation
       // !!! remember to unbind when deleting element !!!
-      this.svg.on('mousedown', () => {
-        this.dragInit = d3.event.target;
-        this.trigger(this.id() + ':mousedown', d3.event );
+      this.svg.on('mousedown', function() {
+        that.dragInit = d3.event.target;
+        that.trigger(that.id() + ':mousedown', d3.event);
       });
 
-      this.svg.on('mouseup', () => {
-        this.trigger(this.id() + ':mouseup', d3.event );
+      this.svg.on('mouseup', function() {
+        that.trigger(that.id() + ':mouseup', d3.event);
       });
 
       // for mousedrag we call a configured d3.drag behaviour returned from the objects drag method
       // this.svg.on('drag'...
 
-      this.svg.call(this.drag((d) => {
-        // this.throttle(this.trigger(this.id() + ':drag', {target: this, event: d3.event, d:d, dragged: this.dragInit} ));
-        this.trigger(
-          this.id() + ':drag',
-          { target: this, event: d3.event, d:d, dragged: this.dragInit }
+      this.svg.call(this.drag(function(d) {
+        // this.throttle(this.trigger(this.id() + ':drag', {target: this, event: d3.event, d:d, dragged: that.dragInit} ));
+        that.trigger(
+          that.id() + ':drag',
+          { target: this, event: d3.event, d:d, dragged: that.dragInit }
         );
       }));
 

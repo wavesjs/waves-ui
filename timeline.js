@@ -184,92 +184,91 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
   // main interface methods
   // --------------------------------------------------
 
-  proto$0.draw = function(sel) {
+  proto$0.draw = function(sel) {var this$0 = this;
     this.selection = sel || this.selection;
     // normalize dimensions based on the margins
     this.width(this.width() - this.margin().left - this.margin().right);
     this.height(this.height() - this.margin().top - this.margin().bottom);
 
-    var that = this;
-
     this.selection.each(function(d, index)  {
-      var el = d3.select(that.selection[index][0]);
+      var el = d3.select(this$0.selection[index][0]);
 
       // 1. create svg element
       var prevSvg = el.select('svg');
-      that.svg = (!!prevSvg.node()) ? prevSvg : el.append('svg');
+      this$0.svg = (!!prevSvg.node()) ? prevSvg : el.append('svg');
 
-      that.svg
-        .attr('width', that.width() + that.margin().left + that.margin().right)
-        .attr('height', that.height() + that.margin().top + that.margin().bottom);
+      this$0.svg
+        .attr('width', this$0.width() + this$0.margin().left + this$0.margin().right)
+        .attr('height', this$0.height() + this$0.margin().top + this$0.margin().bottom);
       // create an alias (why ?)
-      that.el = that.svg;
+      this$0.el = this$0.svg;
 
+      var that = this$0;
       // 2. event delegation
       // !!! remember to unbind when deleting element !!!
-      that.svg.on('mousedown', function() {
+      this$0.svg.on('mousedown', function() {
         that.dragInit = d3.event.target;
-        that.trigger(that.id() + ':mousedown', d3.event );
+        that.trigger(that.id() + ':mousedown', d3.event);
       });
 
-      that.svg.on('mouseup', function() {
-        that.trigger(that.id() + ':mouseup', d3.event );
+      this$0.svg.on('mouseup', function() {
+        that.trigger(that.id() + ':mouseup', d3.event);
       });
 
       // for mousedrag we call a configured d3.drag behaviour returned from the objects drag method
-      // that.svg.on('drag'...
+      // this.svg.on('drag'...
 
-      that.svg.call(that.drag(function(d) {
-        // that.throttle(that.trigger(that.id() + ':drag', {target: this, event: d3.event, d:d, dragged: that.dragInit} ));
+      this$0.svg.call(this$0.drag(function(d) {
+        // this.throttle(this.trigger(this.id() + ':drag', {target: this, event: d3.event, d:d, dragged: that.dragInit} ));
         that.trigger(
           that.id() + ':drag',
           { target: this, event: d3.event, d:d, dragged: that.dragInit }
         );
       }));
 
-      document.body.addEventListener('mouseout', function(e) {
+      document.body.addEventListener('mouseout', function(e)  {
         // console.log(evt.fromElement)
         if (e.fromElement === document.body){
-          that.trigger(that.id() + ':mouseout', d3.event );
+          this$0.trigger(this$0.id() + ':mouseout', d3.event );
         }
       });
 
       // 3. create layout group
-      var prevG = that.svg.select('g');
-      var g = (!!prevG.node())? prevG : that.svg.append('g');
-      var margin = that.margin();
+      var prevG = this$0.svg.select('g');
+      var g = (!!prevG.node())? prevG : this$0.svg.append('g');
+      var margin = this$0.margin();
 
       g.attr('class', 'layout')
        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
       // 4. initialize scales
-      var xRange = [0, that.width()];
-      if (that.swapX) { xRange.reverse(); /* xRange = that.swapRange(xRange); */ }
+      var xRange = [0, this$0.width()];
+      if (this$0.swapX) { xRange.reverse(); /* xRange = this.swapRange(xRange); */ }
 
-      var yRange = [that.height(), 0];
-      if (that.swapY) { yRange.reverse(); /* yRange = that.swapRange(yRange); */ }
+      var yRange = [this$0.height(), 0];
+      if (this$0.swapY) { yRange.reverse(); /* yRange = this.swapRange(yRange); */ }
 
-      that.xScale
-        .domain(that.xDomain())
+      this$0.xScale
+        .domain(this$0.xDomain())
         .range(xRange);
 
-      that.yScale
-        .domain(that.yDomain())
+      this$0.yScale
+        .domain(this$0.yDomain())
         .range(yRange);
 
       // keep a reference unmodified scale range for use in the layers when zooming
-      that.originalXscale = that.xScale.copy();
+      this$0.originalXscale = this$0.xScale.copy();
 
       // 5. configure and initialize layers groups
-      for (var key in that.layers) {
-        var layer = that.layers[key];
+      for (var key in this$0.layers) {
+        var layer = this$0.layers[key];
 
-        that.delegateScales(layer);
-        that.enterLayer(layer, g);
+        this$0.delegateScales(layer);
+        this$0.enterLayer(layer, g);
       }
 
       // 6. draw the graph
-      that.update();
+      this$0.update();
     });
 
     return this;
