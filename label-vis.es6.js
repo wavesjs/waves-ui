@@ -93,7 +93,6 @@ class LabelVis extends LayerVis {
      .attr('class', 'line')
 
     sel.exit().remove();
-    this.draw();
   }
 
   draw(el = null) {

@@ -93,7 +93,6 @@ var LabelVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
      .attr('class', 'line')
 
     sel.exit().remove();
-    this.draw();
   };
 
   proto$0.draw = function() {var el = arguments[0];if(el === void 0)el = null;var this$0 = this;
