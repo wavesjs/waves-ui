@@ -45,8 +45,9 @@ class Timeline {
 
   // register a layer
   layer(layer) {
-    this.layers[layer.name()] = layer;
-    this.initLayer(layer);
+    this.initLayer(layer); // compute `cid`, ...
+    this.layers[layer.param('cid')] = layer;
+
     return this;
   }
 
@@ -90,12 +91,13 @@ class Timeline {
     }
 
     // layer group
-    var prevLayerG = g.select('.' + layer.dname);
+    var prevLayerG = g.select('#' + layer.param('cid'));
     var layerG = (!!prevLayerG.node()) ? prevLayerG : g.append('g');
 
     // add classname to layer group and position it in the timeline
     layerG
-      .classed(layer.dname, true)
+      .classed(layer.param('type'), true)
+      .attr('id', layer.param('cid'))
       .attr('transform', 'translate(0, ' + (layer.param('top') || 0) + ')');
 
     // keep this? we might still want this hook in the layer
