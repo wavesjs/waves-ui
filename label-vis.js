@@ -12,8 +12,11 @@ var LabelVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
 
     super$0.call(this);
 
+    var name = pck.name.replace('-vis', '');
+
     var defaults = {
-      name: uniqueId(pck.name.replace('-vis', '')),
+      type: name,
+      id: uniqueId(name),
       // expose to allow tweaking vertical alignment for design adjustments
       verticalAlignment: { top: '1em', middle: '0.5em', bottom: '0' }
     };
@@ -66,20 +69,19 @@ var LabelVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     });
 
     this.margin({ top: 0, right: 0, bottom: 0, left: 0 });
-
-    // 'margin' ?
   }if(super$0!==null)SP$0(LabelVis,super$0);LabelVis.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":LabelVis,"configurable":true,"writable":true}});DP$0(LabelVis,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
   proto$0.update = function(data) {
     super$0.prototype.update.call(this, data);
 
-    var sel = this.g.selectAll('.' + this.unitClass)
+    console.log(this.param('unitClass'))
+    var sel = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data(), this.sortIndex());
 
     var g = sel.enter()
       .append('g')
-      .attr('class', this.unitClass)
-      .attr('id', function(d)  { return d.id; });
+      .classed('item', true)
+      .classed(this.param('unitClass'), true);
 
     g.append('rect')
       .attr('class', 'bounding-box')
@@ -96,7 +98,7 @@ var LabelVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   };
 
   proto$0.draw = function() {var el = arguments[0];if(el === void 0)el = null;var this$0 = this;
-    if (el === null) { el = this.g.selectAll('.' + this.unitClass); }
+    if (el === null) { el = this.g.selectAll('.' + this.param('unitClass')); }
 
     var _xScale = this.base.xScale;
     var _yScale = this.yScale;

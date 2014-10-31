@@ -12,8 +12,11 @@ class LabelVis extends LayerVis {
 
     super();
 
+    var name = pck.name.replace('-vis', '');
+
     var defaults = {
-      name: uniqueId(pck.name.replace('-vis', '')),
+      type: name,
+      id: uniqueId(name),
       // expose to allow tweaking vertical alignment for design adjustments
       verticalAlignment: { top: '1em', middle: '0.5em', bottom: '0' }
     };
@@ -66,20 +69,19 @@ class LabelVis extends LayerVis {
     });
 
     this.margin({ top: 0, right: 0, bottom: 0, left: 0 });
-
-    // 'margin' ?
   }
 
   update(data) {
     super.update(data);
 
-    var sel = this.g.selectAll('.' + this.unitClass)
+    console.log(this.param('unitClass'))
+    var sel = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data(), this.sortIndex());
 
     var g = sel.enter()
       .append('g')
-      .attr('class', this.unitClass)
-      .attr('id', (d) => { return d.id; });
+      .classed('item', true)
+      .classed(this.param('unitClass'), true);
 
     g.append('rect')
       .attr('class', 'bounding-box')
@@ -96,7 +98,7 @@ class LabelVis extends LayerVis {
   }
 
   draw(el = null) {
-    if (el === null) { el = this.g.selectAll('.' + this.unitClass); }
+    if (el === null) { el = this.g.selectAll('.' + this.param('unitClass')); }
 
     var _xScale = this.base.xScale;
     var _yScale = this.yScale;
