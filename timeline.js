@@ -192,10 +192,12 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
 
     var that = this;
 
-    this.selection.each(function() {
+    this.selection.each(function(d, index)  {
+      var el = d3.select(that.selection[index][0]);
+
       // 1. create svg element
-      var prevSvg = d3.select(this).select('svg');
-      that.svg = (!!prevSvg.node()) ? prevSvg : d3.select(this).append('svg');
+      var prevSvg = el.select('svg');
+      that.svg = (!!prevSvg.node()) ? prevSvg : el.append('svg');
 
       that.svg
         .attr('width', that.width() + that.margin().left + that.margin().right)
