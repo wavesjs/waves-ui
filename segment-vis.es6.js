@@ -7,19 +7,13 @@ var uniqueId  = require('utils').uniqueId;
 
 class SegmentVis extends LayerVis {
 
-
   constructor() {
-
     if (!(this instanceof SegmentVis)) return new SegmentVis;
 
     super();
-
     // set layer defaults
-    this.params({
-      name: uniqueId(pck.name.replace('-vis', '')),
-      handlerWidth: 3,
-      handlerOpacity: 0
-    });
+    this.param('name', uniqueId(pck.name.replace('-vis', '')));
+    this.param('rect-class', 'rect');
 
     this.__minWidth = 1;
     // initialize data accessors
@@ -63,31 +57,34 @@ class SegmentVis extends LayerVis {
       .attr('id', (d) => { return d.id; });
 
     g.append('rect')
-      .attr('class', 'seg')
+      .attr('class', this.param('rect-class'))
       .attr('fill-opacity', this.param('opacity'));
 
-    g.append('line')
-      .attr('class', 'handle left')
-      .attr('stroke-width', this.param('handlerWidth'))
-      .attr('stroke-opacity', this.param('handlerOpacity'));
-
-    g.append('line')
-      .attr('class', 'handle right')
-      .attr('stroke-width', this.param('handlerWidth'))
-      .attr('stroke-opacity', this.param('handlerOpacity'));
-
     sel.exit().remove();
-    this.draw();
-  }
 
+    return g;
+  }
 
   draw(el = null) {
     if (el === null) { el = this.g.selectAll('.' + this.unitClass); }
 
+    var accessors = this.getAccessors();
+
+    el.selectAll('.' + this.param('rect-class'))
+      .attr('x', accessors.x)
+      .attr('y', accessors.y)
+      .attr('width', accessors.w)
+      .attr('height', accessors.h)
+      .attr('fill', accessors.color);
+
+    if (!!this.each()) { el.each(this.each()); }
+
+    return el;
+  }
+
+  getAccessors() {
     var _xScale = this.base.xScale;
     var _yScale = this.yScale;
-
-    var xScale, that = this, halfHandler;
 
     // data mappers
     var _start    = this.start();
@@ -96,55 +93,16 @@ class SegmentVis extends LayerVis {
     var _color    = this.color();
     var _height   = this.height();
 
-    //
-    var _handlerWidth = parseInt(this.param('handlerWidth'), 10)
-    var _halfHandler = _handlerWidth * 0.5;
-    var max = Math.max;
+    // define accesors
+    var w = (d) => { return Math.max(this.__minWidth, _xScale(_duration(d))); };
+    var h = (d) => { return this.param('height') - _yScale(_height(d)); };
+    var x = (d) => { return _xScale(_start(d)); };
+    var y = (d) => { return _yScale(_y(d)) - h(d); };
 
-    // segment positions
-    var x = (d) => { return _xScale(_start(d)); }
-    var w = (d) => { return max(that.__minWidth, _xScale(_duration(d))); }
-    var h = (d) => { return this.param('height') - _yScale(_height(d)); }
-    var y = (d) => { return _yScale(_y(d)) - h(d); }
+    var color = (d) => { return _color(d); };
 
-    // handler positions
-    var lhx = (d) => { return x(d) + _halfHandler; }
-    var rhx = (d) => {
-      let width = w(d);
-      return (width < this.__minWidth) ?
-        x(d) + _handlerWidth : x(d) + width - _halfHandler;
-    }
-    var hh  = (d) => { return y(d) + h(d); }
-
-    // color accessor
-    var color = (d) => { return _color(d); }
-
-    var segs = el.selectAll('.seg');
-
-    segs
-      .attr('x', x)
-      .attr('y', y)
-      .attr('width', w)
-      .attr('height', h)
-      .attr('fill', color);
-
-    el.selectAll('.handle.left')
-      .attr('x1', lhx)
-      .attr('x2', lhx)
-      .attr('y1', y)
-      .attr('y2', hh)
-      .style('stroke', color);
-
-    el.selectAll('.handle.right')
-      .attr('x1', rhx)
-      .attr('x2', rhx)
-      .attr('y1', y)
-      .attr('y2', hh)
-      .style('stroke', color);
-
-    if (!!this.each()) { el.each(this.each()); }
+    return { w: w, h: h, x: x, y: y, color: color };
   }
-
 
   xZoom(val) {
     // console.log(this.xBaseDomain);
