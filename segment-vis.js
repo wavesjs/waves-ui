@@ -11,9 +11,16 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
     if (!(this instanceof SegmentVis)) return new SegmentVis;
 
     super$0.call(this);
+
+    var name = pck.name.replace('-vis', '')
+
+    var defaults = {
+      type: name,
+      id: uniqueId(name),
+      rectClass: 'rect'
+    };
     // set layer defaults
-    this.param('name', uniqueId(pck.name.replace('-vis', '')));
-    this.param('rect-class', 'rect');
+    this.params(defaults);
 
     this.__minWidth = 1;
     // initialize data accessors
@@ -48,16 +55,16 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
 
     super$0.prototype.update.call(this, data);
 
-    var sel = this.g.selectAll('.' + this.unitClass)
+    var sel = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data(), this.sortIndex());
 
     var g = sel.enter()
       .append('g')
-      .attr('class', this.unitClass)
-      .attr('id', function(d)  { return d.id; });
+      .classed('item', true)
+      .classed(this.param('unitClass'), true)
 
     g.append('rect')
-      .attr('class', this.param('rect-class'))
+      .attr('class', this.param('rectClass'))
       .attr('fill-opacity', this.param('opacity'));
 
     sel.exit().remove();
@@ -66,11 +73,11 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
   };
 
   proto$0.draw = function() {var el = arguments[0];if(el === void 0)el = null;
-    if (el === null) { el = this.g.selectAll('.' + this.unitClass); }
+    if (el === null) { el = this.g.selectAll('.' + this.param('unitClass')); }
 
     var accessors = this.getAccessors();
 
-    el.selectAll('.' + this.param('rect-class'))
+    el.selectAll('.' + this.param('rectClass'))
       .attr('x', accessors.x)
       .attr('y', accessors.y)
       .attr('width', accessors.w)
