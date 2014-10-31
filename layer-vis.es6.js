@@ -23,7 +23,8 @@ class Layer {
 
     // general defaults
     this.params({
-      name: uniqueId(pck.name || 'layer'),
+      id: uniqueId(pck.name || 'layer'),
+      type: pck.name,
       // color: '#000',
       opacity: 1,
       height: 0,
@@ -68,8 +69,11 @@ class Layer {
 
   load(base, d3) {
     this.base = base; // bind the baseTimeLine
-    this.unitClass = this.name() + '-item';
-    this.dname = _.slugify(this.name()); // dashed name
+
+    this.params({
+      unitClass: this.param('type') + '-item',
+      cid: _.slugify(this.param('id'))
+    })
 
     if (!this.param('height')) {
       this.param('height', base.height());
