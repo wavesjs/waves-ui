@@ -82,7 +82,12 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
     return el;
   };
 
+  // #NOTE add a caching system ?
   proto$0.getAccessors = function() {var this$0 = this;
+    // if (this.params('accessors')) {
+    //   return this.params('accessors');
+    // }
+
     var _xScale = this.base.xScale;
     var _yScale = this.yScale;
 
@@ -101,6 +106,8 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
 
     var color = function(d)  { return _color(d); };
 
+    // this.params('accessors', { w: w, h: h, x: x, y: y, color: color });
+    // return this.params('accessors');
     return { w: w, h: h, x: x, y: y, color: color };
   };
 

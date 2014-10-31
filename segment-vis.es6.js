@@ -82,7 +82,12 @@ class SegmentVis extends LayerVis {
     return el;
   }
 
+  // #NOTE add a caching system ?
   getAccessors() {
+    // if (this.params('accessors')) {
+    //   return this.params('accessors');
+    // }
+
     var _xScale = this.base.xScale;
     var _yScale = this.yScale;
 
@@ -101,6 +106,8 @@ class SegmentVis extends LayerVis {
 
     var color = (d) => { return _color(d); };
 
+    // this.params('accessors', { w: w, h: h, x: x, y: y, color: color });
+    // return this.params('accessors');
     return { w: w, h: h, x: x, y: y, color: color };
   }
 
