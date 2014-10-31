@@ -9,13 +9,17 @@
   },
   "author": "Victor Saiz",
   "license": "BSD-3",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/Ircam-RnD/segment-edit"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ircam-RnD/segment-edit"
   },
   "dependencies": {
     "segment-vis": "git://github.com/Ircam-RnD/segment-vis.git",
-    "make-editable": "git://github.com/Ircam-RnD/make-editable.git"
+    "make-editable": "git://github.com/Ircam-RnD/make-editable.git",
+    "utils": "git://github.com/Ircam-RnD/utils.git"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "gulp": "^3.8.9",
+    "module-boilerplate": "git://github.com/ircam-rnd/module-boilerplate"
+  }
 }
