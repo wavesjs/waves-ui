@@ -121,7 +121,7 @@ class SegmentEdit extends SegmentVis {
 
   // checks if the clicked item is one of our guys
   clicked(item) {
-    return item.classList.contains(this.param('rect-class')) ||
+    return item.classList.contains(this.param('rectClass')) ||
            item.tagName === 'line';
   }
 

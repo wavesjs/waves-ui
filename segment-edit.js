@@ -121,7 +121,7 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
 
   // checks if the clicked item is one of our guys
   proto$0.clicked = function(item) {
-    return item.classList.contains(this.param('rect-class')) ||
+    return item.classList.contains(this.param('rectClass')) ||
            item.tagName === 'line';
   };
 
