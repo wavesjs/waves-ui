@@ -199,6 +199,10 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
       var prevSvg = el.select('svg');
       this$0.svg = (!!prevSvg.node()) ? prevSvg : el.append('svg');
 
+      // @TODO refactor
+      // keep width and height to 100% and set `viewBox` attribute - make resize easier
+      // cf. http://stackoverflow.com/questions/3120739/resizing-svg-in-html
+      // add a body clip and translate the layout (body of the chart)
       this$0.svg
         .attr('width', this$0.width() + this$0.margin().left + this$0.margin().right)
         .attr('height', this$0.height() + this$0.margin().top + this$0.margin().bottom);

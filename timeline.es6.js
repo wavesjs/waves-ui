@@ -199,6 +199,10 @@ class Timeline {
       var prevSvg = el.select('svg');
       this.svg = (!!prevSvg.node()) ? prevSvg : el.append('svg');
 
+      // @TODO refactor
+      // keep width and height to 100% and set `viewBox` attribute - make resize easier
+      // cf. http://stackoverflow.com/questions/3120739/resizing-svg-in-html
+      // add a body clip and translate the layout (body of the chart)
       this.svg
         .attr('width', this.width() + this.margin().left + this.margin().right)
         .attr('height', this.height() + this.margin().top + this.margin().bottom);
