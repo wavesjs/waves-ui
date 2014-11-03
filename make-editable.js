@@ -3,6 +3,7 @@ var extend = require('utils').extend;
 // is actually not es6...
 'use strict';
 
+// mixin to add editable properties to a visualiser component
 function makeEditable(layer) {
   // a visualiser to decorate
   var proto = layer.prototype;
@@ -26,11 +27,15 @@ function makeEditable(layer) {
 
       return this;
     },
+
     draw: function(el) {
       // add `selectable` css class on each unit
-      this.g.selectAll('.' + this.unitClass).classed('selectable', true);
+      this.g.selectAll('.' + this.param('unitClass'))
+        .classed('selectable', true);
+
       defaultDraw.call(this, el);
     },
+
     mouseUp: function(e) {
       // has to be the svg because the group is virtually not there :(
       var svg = this.base.svg;
@@ -38,6 +43,7 @@ function makeEditable(layer) {
       svg.classed('handle-resize', false);
       svg.classed('handle-drag', false);
     },
+
     mouseDown: function(e) {
       if (e.button !== 0) { return; }
       var item = e.target;
@@ -50,9 +56,11 @@ function makeEditable(layer) {
         }
       }
     },
+
     unselectAll: function() {
       this.base.svg.selectAll('.selected').classed('selected', false);
     },
+
     itemMouseDown: function(e) {
       var d3 = this.d3;
       var g = this.g;
