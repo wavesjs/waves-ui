@@ -10,9 +10,6 @@ class Timeline {
   constructor(options = {}) {
     if (!(this instanceof Timeline)) { return new Timeline(options); }
 
-    console.log('%c-------------------------------', 'color:red');
-    console.log('%ces6 timeline', 'color:red');
-    console.log('%c-------------------------------', 'color:red');
     // initialize
     this.layers = {};
     this.xScale = d3.scale.linear().clamp(true);
