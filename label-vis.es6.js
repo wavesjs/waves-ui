@@ -74,7 +74,6 @@ class LabelVis extends LayerVis {
   update(data) {
     super.update(data);
 
-    console.log(this.param('unitClass'))
     var sel = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data(), this.sortIndex());
 
