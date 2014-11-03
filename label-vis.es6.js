@@ -90,9 +90,6 @@ class LabelVis extends LayerVis {
     g.append('text')
      .attr('class', 'text');
 
-    g.append('line')
-     .attr('class', 'line')
-
     sel.exit().remove();
   }
 
