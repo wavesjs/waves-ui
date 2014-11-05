@@ -1,4 +1,4 @@
-var d3        = require('d3');
+var d3        = window.d3 || require('d3');
 var events    = require('events');
 var shortId   = require('shortid');
 var getSet    = require('utils').getSet;
