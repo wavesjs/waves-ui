@@ -10,9 +10,6 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
   function Timeline() {var options = arguments[0];if(options === void 0)options = {};
     if (!(this instanceof Timeline)) { return new Timeline(options); }
 
-    console.log('%c-------------------------------', 'color:red');
-    console.log('%ces6 timeline', 'color:red');
-    console.log('%c-------------------------------', 'color:red');
     // initialize
     this.layers = {};
     this.xScale = d3.scale.linear().clamp(true);
