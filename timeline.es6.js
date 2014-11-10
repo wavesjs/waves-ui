@@ -277,16 +277,28 @@ class Timeline {
     return this;
   }
 
-  update() {
-    var layers = this.layers;
-    // update layers
-    for (var key in layers) { layers[key].update(); }
+  update(layerIds = null) {
+    var layers;
 
-    var draw = () => {
-      for (var key in layers) { layers[key].draw(); }
-    };
-    // draw in rAF
-    requestAnimationFrame(draw);
+    if (layerIds) {
+      layers = [];
+      // allow string or array as argument
+      if (!Array.isArray(layerIds)) { layerIds = [layerIds]; }
+
+      for (let key in this.layers) {
+        var layer = this.layers[key];
+
+        if (layerIds.indexOf(layer.param('id')) !== -1) {
+          layers.push(layer);
+        }
+      }
+    } else {
+      layers = this.layers;
+    }
+
+    // update layers
+    for (let key in layers) { layers[key].update(); }
+    for (let key in layers) { layers[key].draw(); }
   }
 
   // --------------------------------------------------

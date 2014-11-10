@@ -277,16 +277,28 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
     return this;
   };
 
-  proto$0.update = function() {
-    var layers = this.layers;
-    // update layers
-    for (var key in layers) { layers[key].update(); }
+  proto$0.update = function() {var layerIds = arguments[0];if(layerIds === void 0)layerIds = null;
+    var layers;
 
-    var draw = function()  {
-      for (var key in layers) { layers[key].draw(); }
-    };
-    // draw in rAF
-    requestAnimationFrame(draw);
+    if (layerIds) {
+      layers = [];
+      // allow string or array as argument
+      if (!Array.isArray(layerIds)) { layerIds = [layerIds]; }
+
+      for (var key in this.layers) {
+        var layer = this.layers[key];
+
+        if (layerIds.indexOf(layer.param('id')) !== -1) {
+          layers.push(layer);
+        }
+      }
+    } else {
+      layers = this.layers;
+    }
+
+    // update layers
+    for (var key$0 in layers) { layers[key$0].update(); }
+    for (var key$1 in layers) { layers[key$1].draw(); }
   };
 
   // --------------------------------------------------
