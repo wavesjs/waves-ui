@@ -17,8 +17,10 @@ A working demo for this module can be found [here](https://github.com/Ircam-RnD/
 
   ```javascript
   waveform.params({
-    id: 'my-timeline', // set a unique id, optionnal, if not defined a default unique id is generated
-    yDomain: [-1, 1] // the y domain of the data - default to [-1, 1] according to the domain of an audio buffer
+    // set a unique id, optionnal, if not defined a default unique id is generated
+    id: 'my-timeline',
+    // the y domain of the data - default to [-1, 1] according to the domain of an audio buffer 
+    yDomain: [-1, 1]
   })
   ```
 
@@ -61,7 +63,8 @@ var graph = timeline()
 // create the waveform layer
 var waveform = waveformVis()
   .params({ id: 'my-waveform' })
-  .data(buffer.getChannelData(0).buffer) // pass the raw ArrayBuffer from audio buffer
+  // pass the raw ArrayBuffer from audio buffer
+  .data(buffer.getChannelData(0).buffer)
   .sampleRate(buffer.sampleRate)
   .duration(buffer.duration)
   .color('steelblue');
