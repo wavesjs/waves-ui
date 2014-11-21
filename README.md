@@ -66,7 +66,7 @@ var graph = timeline()
   .height(150)
   .xDomain([0, buffer.duration])
 
-// add some layer
+// add some layers
 graph.layer(segmentVis);
 graph.layer(waveformVis);
 
