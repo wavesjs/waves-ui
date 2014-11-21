@@ -49,7 +49,7 @@ Object.defineProperty(waveform, 'data', {
     this._data = data;
     return this;
   }
-  
+
 });
 
 Object.defineProperty(waveform, 'load', {
@@ -97,13 +97,16 @@ Object.defineProperty(waveform, 'downSample', {
     var resampler = this.resampler;
     var width = data.length / step;
 
-    resampler.postMessage({cmd: 'downSample', message: {data: data, width: width, step: step}});
+    resampler.postMessage({
+      cmd: 'downSample',
+      message: { data: data, width: width, step: step }
+    });
   }
 });
 
 Object.defineProperty(waveform, 'setDownsample', {
   value: function(ret) {
-   
+
     this.cache(ret);
     this.xxScale = d3.scale.linear().domain([0, ret.length]).range(this.base.xScale.domain());
 
@@ -158,7 +161,7 @@ Object.defineProperty(waveform, 'draw', {
     var ctx = this.ctx;
     var width = this.width();
     var height = this.height();
-    
+
     el.width = width;
     el.height = height;
 
@@ -177,31 +180,31 @@ Object.defineProperty(waveform, 'draw', {
 
     // function min(d) {return that.yScale(d.min);}
     // function max(d) {return that.yScale(d.max);}
-    
+
     // function x(d) {return that.xScale(d.x);}
     // ctx.beginPath();
     // ctx.moveTo(x(data[0]), amp);
     // for (i = 2; i < n - 1; i ++) {
-      
+
     //   var xc = [x(data[i]), amp];
 
     //   ctx.quadraticCurveTo(xc[0], xc[1], x(data[i]), max(data[i]));
     //   ctx.lineTo(x(data[i]), min(data[i]));
     // }
     // ctx.stroke();
-    
+
     // trapez
     // ------
     var i, n = data.length;
 
     function min(d) {return that.yScale(d.min);}
     function max(d) {return that.yScale(d.max);}
-    
+
     function x(i) {return that.base.xScale(that.xxScale(i));}
-    
+
     ctx.strokeStyle = this.color();
     ctx.fillStyle = this.color();
-    
+
     for (i = 2; i < n - 1; i ++) {
       ctx.beginPath();
       ctx.moveTo(x(i), amp);
