@@ -59,7 +59,6 @@ var graph = timeline()
   .width(1000)
   .height(150)
   
-
 // create the waveform layer
 var waveform = waveformVis()
   .params({ id: 'my-waveform' })
