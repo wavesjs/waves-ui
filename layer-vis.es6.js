@@ -75,6 +75,10 @@ class Layer {
       cid: _.slugify(this.param('id'))
     })
 
+    if (!this.param('width')) {
+      this.param('width', base.width());
+    }
+
     if (!this.param('height')) {
       this.param('height', base.height());
     }
@@ -83,10 +87,14 @@ class Layer {
     if (!proto.d3) { proto.d3 = d3; }
   }
 
-  bind(g) {
-    this.g = g;
-    this.update();
-  }
+  // entry point to add specific logic to a buffer
+  onload() {}
+
+  // @TODO REMOVE: is not used anymore in Timeline
+  // bind(g) {
+  //   this.g = g;
+  //   this.update();
+  // }
 
   update(data) {
     this.data(data || this.data() || this.base.data());
@@ -98,7 +106,7 @@ class Layer {
     // call draw
   }
 
-  // to be implement in child
+  // to be implement in childs
   draw() {}
   xZoom() {}
 }

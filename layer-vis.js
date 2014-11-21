@@ -75,6 +75,10 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
       cid: _.slugify(this.param('id'))
     })
 
+    if (!this.param('width')) {
+      this.param('width', base.width());
+    }
+
     if (!this.param('height')) {
       this.param('height', base.height());
     }
@@ -83,10 +87,14 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     if (!proto.d3) { proto.d3 = d3; }
   };
 
-  proto$0.bind = function(g) {
-    this.g = g;
-    this.update();
-  };
+  // entry point to add specific logic to a buffer
+  proto$0.onload = function() {};
+
+  // @TODO REMOVE: is not used anymore in Timeline
+  // bind(g) {
+  //   this.g = g;
+  //   this.update();
+  // }
 
   proto$0.update = function(data) {
     this.data(data || this.data() || this.base.data());
@@ -98,7 +106,7 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     // call draw
   };
 
-  // to be implement in child
+  // to be implement in childs
   proto$0.draw = function() {};
   proto$0.xZoom = function() {};
 MIXIN$0(Layer.prototype,proto$0);proto$0=void 0;return Layer;})();
