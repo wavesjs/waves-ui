@@ -12,8 +12,8 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
 
     // initialize
     this.layers = {};
-    this.xScale = d3.scale.linear().clamp(true);
-    this.yScale = d3.scale.linear().clamp(true);
+    this.xScale = d3.scale.linear(); // .clamp(true);
+    this.yScale = d3.scale.linear(); // .clamp(true);
     // event system
     var eventEmitter = new events.EventEmitter();
     this.on = eventEmitter.on;
@@ -51,6 +51,8 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
   // initialize the layer - @NOTE remove ?
   proto$0.initLayer = function(layer) {
     layer.load(this, d3);
+    // check presence of the method for object do not extend LayerVis yet
+    if ('onload' in  layer) { layer.onload() };
   };
 
   // initialize layer scales
@@ -277,6 +279,9 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
     return this;
   };
 
+  // update layers
+  // @param layerIds <string|array> optionnal
+  //      ids of the layers to update
   proto$0.update = function() {var layerIds = arguments[0];if(layerIds === void 0)layerIds = null;
     var layers;
 

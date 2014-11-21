@@ -1,55 +1,69 @@
-# TimeLine
+# timeline
 
-This module is a layer/layout manager for time based visualisations written on top of [d3.js](http://d3js.org/).  
-The module by itself doesn't accomplish much as long as you don't pass it in some visualisation layer or component.  
+This module is a layer/layout manager for time based visualisations written on top of [d3.js](http://d3js.org/).
+The module by itself doesn't accomplish much as long as you don't pass it in some visualisation layer or component.
 This illustrates how you could use with a [segment visualiser](https://github.com/ircam-rnd/segment-vis).
 
 ## Status
 
-This library is under heavy development and subject to change.  
+This library is under heavy development and subject to change.
 Evert new API breaking change we will be adding snapshots to the repository so you can always fetch a working copy.
 
 For an in depth  explanation on the philosophy and usage of this library please refer to [this blog post](http://wave.ircam.fr/publications/visual-tools/).
 
 ## Usage
 
-### Creating the timeLine layout
-```js
-var graph = timeLine()
-  .width(800)
+### Public API
+
+| Method                           | Description                                                       |
+|----------------------------------|-------------------------------------------------------------------|
+| `width(value)`                   | @param `value` <int>                                              |
+|                                  |    set the width of the timeline (in pixels)                      |
+|----------------------------------|-------------------------------------------------------------------|
+| `height(value)`                  | @param `value` <int>                                              |
+|                                  |    set the height of the timeline (in pixels)                     |
+|----------------------------------|-------------------------------------------------------------------|
+| `xDomain(dataDomain)`            | @param `dataDomain` <array> [minValue, maxValue]                  |
+|                                  |    set the data domain of the timeline (internally defines        |
+|                                  |    a d3 scale domain).                                            |
+|                                  |    _example_: `timeline.xDomain([0, buffer.duration])`            |
+|----------------------------------|-------------------------------------------------------------------|
+| `layer(layerInstance)`           | @param `layerInstance` <object>                                   |
+|                                  |    add a visualization layer to the timeline                      |
+|                                  |    the layer should inherit from LayerVis                         |
+|----------------------------------|-------------------------------------------------------------------|
+| `draw(sel)`                      | @param `sel` <object> some d3 selection                           |
+|                                  |    construct all layers registered in the timeline and            |
+|                                  |    initialize event delegation                                    |
+|                                  |    _use_: `d3.select('#timeline').call(timeline.draw);`           |
+|----------------------------------|-------------------------------------------------------------------|
+| `update(layerIds)`               | @param `layerIds` <string|array> _optionnal_                      |
+|                                  |    update layers in the timeline, if layerIds is given            |
+|                                  |    only the layers with given id will be updated                  |
+|----------------------------------|-------------------------------------------------------------------|
+
+### Example use
+
+```javascript
+// import the package - assume a browserify environment
+var timeline = require('timeline');
+var buffer = someAudioBuffer;
+
+// create the timeline
+var graph = timeline()
+  .width(1000)
   .height(150)
-  .xDomain([0, 100]);
+  .xDomain([0, buffer.duration])
 
-```
+// add some layer
+graph.layer(segmentVis);
+graph.layer(waveformVis);
 
-### Data
-Will be passed to a visualiser.
-```js
-var data = 
-  [{
-      "start": 37,
-      "duration": 4,
-      "color": "#414FBA" },
-    { "start": …},
-    { "start": …}
-  ];
-```
+// draw the timeline
+d3.select('#timeline').call(graph.draw);
 
-### Creating the Visualiser layer
-```js
-var seg = segmentVis()
-  .data(data)
-  .name('segments')
-  .opacity(0.5);
-```
-
-### Adding the Visualiser layer and drawing everything
-```js
-// we add layers like this
-graph.layer(seg);
-// we pass in the drawing method from our timeline object
-d3.select('.timeline').call(graph.draw);
-
+// ... later to render some data changes
+graph.update();
 ```
 
 <div class="only-readme">

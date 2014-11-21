@@ -12,8 +12,8 @@ class Timeline {
 
     // initialize
     this.layers = {};
-    this.xScale = d3.scale.linear().clamp(true);
-    this.yScale = d3.scale.linear().clamp(true);
+    this.xScale = d3.scale.linear(); // .clamp(true);
+    this.yScale = d3.scale.linear(); // .clamp(true);
     // event system
     var eventEmitter = new events.EventEmitter();
     this.on = eventEmitter.on;
@@ -51,6 +51,8 @@ class Timeline {
   // initialize the layer - @NOTE remove ?
   initLayer(layer) {
     layer.load(this, d3);
+    // check presence of the method for object do not extend LayerVis yet
+    if ('onload' in  layer) { layer.onload() };
   }
 
   // initialize layer scales
@@ -277,6 +279,9 @@ class Timeline {
     return this;
   }
 
+  // update layers
+  // @param layerIds <string|array> optionnal
+  //      ids of the layers to update
   update(layerIds = null) {
     var layers;
 
