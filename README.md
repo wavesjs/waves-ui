@@ -41,14 +41,14 @@ For an in depth  explanation on the philosophy and usage of this library please 
 
 * `draw(sel)`
 
-    @param `sel` _object_ some d3 selection  
+    @param `sel` _object_ some d3 selection given from d3.call  
     construct all layers registered in the timeline and
     initialize event delegation
     _use_: `d3.select('#timeline').call(timeline.draw);`
 
 * `update(layerIds)`
 
-    @param `layerIds` <string|array> _optionnal_  
+    @param `layerIds` _string|array_ _(optionnal)_  
     update layers in the timeline, if layerIds is given
     only the layers with given id will be updated
 
