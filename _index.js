@@ -17,14 +17,14 @@ var baseDesc = {
 
   on: { enumerable: true, writable: true },
   trigger: { writable: true },
-
+  
   // init
   // ----
 
   init: {
     value: function(options) {
       options = options || {}; // fail safe
-
+      
       // generic getters(setters) accessors and defaults
       var addGS = getSet(this)([
           'graph'
@@ -58,7 +58,7 @@ var baseDesc = {
           zy = d3.event.pageY;
           // zx = d3.event.offsetX;
           zx = parseInt(d3.event.pageX - zoomerX, 10);
-
+          
           // update position of the anchor on click
           graph.layers['anch'].position(zx);
 
@@ -91,7 +91,7 @@ var baseDesc = {
 
         });
       });
-
+      
       return this;
     }
   }
