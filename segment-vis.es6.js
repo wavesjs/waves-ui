@@ -12,7 +12,7 @@ class SegmentVis extends LayerVis {
 
     super();
 
-    var name = pck.name.replace('-vis', '')
+    var name = pck.name.replace('-vis', '');
 
     var defaults = {
       type: name,

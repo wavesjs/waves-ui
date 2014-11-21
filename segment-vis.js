@@ -12,7 +12,7 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
 
     super$0.call(this);
 
-    var name = pck.name.replace('-vis', '')
+    var name = pck.name.replace('-vis', '');
 
     var defaults = {
       type: name,
