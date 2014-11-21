@@ -15,20 +15,24 @@ For an in depth  explanation on the philosophy and usage of this library please 
 
 ### Public API
 
-| Method                           | Description                                                       |
-|----------------------------------|-------------------------------------------------------------------|
-| `width(value)`                   | @param `value` <int>                                              |
-|                                  |    set the width of the timeline (in pixels)                      |
-|----------------------------------|-------------------------------------------------------------------|
-| `height(value)`                  | @param `value` <int>                                              |
-|                                  |    set the height of the timeline (in pixels)                     |
-|----------------------------------|-------------------------------------------------------------------|
-| `xDomain(dataDomain)`            | @param `dataDomain` <array> [minValue, maxValue]                  |
-|                                  |    set the data domain of the timeline (internally defines        |
-|                                  |    a d3 scale domain).                                            |
-|                                  |    _example_: `timeline.xDomain([0, buffer.duration])`            |
-|----------------------------------|-------------------------------------------------------------------|
-| `layer(layerInstance)`           | @param `layerInstance` <object>                                   |
+
+* `width(value)`
+
+    _@param `value` <int>_
+    set the width of the timeline (in pixels)
+
+* `height(value)`
+
+    _@param `value` <int>_
+    set the height of the timeline (in pixels)
+
+* `xDomain(dataDomain)` - @param `dataDomain` <array> [minValue, maxValue]
+
+    set the data domain of the timeline (internally defines
+    a d3 scale domain).
+    _example_: `timeline.xDomain([0, buffer.duration])`
+
+* `layer(layerInstance)` - @param `layerInstance` <object>                                   |
 |                                  |    add a visualization layer to the timeline                      |
 |                                  |    the layer should inherit from LayerVis                         |
 |----------------------------------|-------------------------------------------------------------------|
