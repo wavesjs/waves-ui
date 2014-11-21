@@ -39,6 +39,11 @@ var LabelVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
       d.text = (v + '');
     });
 
+    this.bgColor(function(d, v)  {
+      if (v === null) { return d.bgColor + ''; }
+      d.bgColor = (v + '');
+    });
+
     // the following can also be setted as global params
     // which are acting as default values
     this.width(function(d)  {var v = arguments[1];if(v === void 0)v = null;
@@ -74,7 +79,6 @@ var LabelVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   proto$0.update = function(data) {
     super$0.prototype.update.call(this, data);
 
-    console.log(this.param('unitClass'))
     var sel = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data(), this.sortIndex());
 
@@ -86,13 +90,9 @@ var LabelVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     g.append('rect')
       .attr('class', 'bounding-box')
       .attr('fill', 'transparent')
-      .style('opacity', 0.2)
 
     g.append('text')
      .attr('class', 'text');
-
-    g.append('line')
-     .attr('class', 'line')
 
     sel.exit().remove();
   };
@@ -112,7 +112,7 @@ var LabelVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     var _margin = this.margin();
     var _verticalAlignment = this.params().verticalAlignment;
 
-    // scales for bound box position
+    // scales for bounding box position
     var w = function(d)  { return _xScale(_w(d)); }
     var x = function(d)  { return _xScale(_x(d)); }
     var h = function(d)  { return this$0.param('height') - _yScale(_h(d)); }
@@ -182,22 +182,23 @@ var LabelVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
       .attr('y', y)
       .attr('width', w)
       .attr('height', h)
+      .attr('fill', function(d)  { return this$0.bgColor()(d); });
 
     el.selectAll('.text')
       .text(function(d)  { return this$0.text()(d); })
-      .attr('fill', function(d)  { return this$0.color()(d) })
+      .attr('fill', function(d)  { return this$0.color()(d); })
       .attr('x', tx)
       .attr('y', ty)
       .attr('dy', dy)
       .attr('text-anchor', anchor)
 
-    // testing
+    if (!!this.each()) { el.each(this.each()); }
   };
 MIXIN$0(LabelVis.prototype,proto$0);proto$0=void 0;return LabelVis;})(LayerVis);
 
 getSet(
   LabelVis.prototype,
-  ['x', 'y', 'width', 'height', 'text', 'color', 'align', 'valign', 'margin', 'sortIndex']
+  ['x', 'y', 'width', 'height', 'text', 'color', 'align', 'valign', 'margin', 'sortIndex', 'bgColor']
 );
 
 module.exports = LabelVis;

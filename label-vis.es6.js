@@ -39,6 +39,11 @@ class LabelVis extends LayerVis {
       d.text = (v + '');
     });
 
+    this.bgColor((d, v) => {
+      if (v === null) { return d.bgColor + ''; }
+      d.bgColor = (v + '');
+    });
+
     // the following can also be setted as global params
     // which are acting as default values
     this.width((d, v = null) => {
@@ -85,7 +90,6 @@ class LabelVis extends LayerVis {
     g.append('rect')
       .attr('class', 'bounding-box')
       .attr('fill', 'transparent')
-      .style('opacity', 0.2)
 
     g.append('text')
      .attr('class', 'text');
@@ -108,7 +112,7 @@ class LabelVis extends LayerVis {
     var _margin = this.margin();
     var _verticalAlignment = this.params().verticalAlignment;
 
-    // scales for bound box position
+    // scales for bounding box position
     var w = (d) => { return _xScale(_w(d)); }
     var x = (d) => { return _xScale(_x(d)); }
     var h = (d) => { return this.param('height') - _yScale(_h(d)); }
@@ -178,22 +182,23 @@ class LabelVis extends LayerVis {
       .attr('y', y)
       .attr('width', w)
       .attr('height', h)
+      .attr('fill', (d) => { return this.bgColor()(d); });
 
     el.selectAll('.text')
       .text((d) => { return this.text()(d); })
-      .attr('fill', (d) => { return this.color()(d) })
+      .attr('fill', (d) => { return this.color()(d); })
       .attr('x', tx)
       .attr('y', ty)
       .attr('dy', dy)
       .attr('text-anchor', anchor)
 
-    // testing
+    if (!!this.each()) { el.each(this.each()); }
   }
 }
 
 getSet(
   LabelVis.prototype,
-  ['x', 'y', 'width', 'height', 'text', 'color', 'align', 'valign', 'margin', 'sortIndex']
+  ['x', 'y', 'width', 'height', 'text', 'color', 'align', 'valign', 'margin', 'sortIndex', 'bgColor']
 );
 
 module.exports = LabelVis;
