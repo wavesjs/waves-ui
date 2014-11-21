@@ -18,33 +18,46 @@ For an in depth  explanation on the philosophy and usage of this library please 
 
 * `width(value)`
 
-    _@param `value` <int>_
+    @param `value` _int_
+
     set the width of the timeline (in pixels)
 
 * `height(value)`
 
-    _@param `value` <int>_
+    @param `value` _int_
+
     set the height of the timeline (in pixels)
 
-* `xDomain(dataDomain)` - @param `dataDomain` <array> [minValue, maxValue]
+* `xDomain(dataDomain)`
+
+    @param `dataDomain` _array_ [minValue, maxValue]
 
     set the data domain of the timeline (internally defines
     a d3 scale domain).
     _example_: `timeline.xDomain([0, buffer.duration])`
 
-* `layer(layerInstance)` - @param `layerInstance` <object>                                   |
-|                                  |    add a visualization layer to the timeline                      |
-|                                  |    the layer should inherit from LayerVis                         |
-|----------------------------------|-------------------------------------------------------------------|
-| `draw(sel)`                      | @param `sel` <object> some d3 selection                           |
-|                                  |    construct all layers registered in the timeline and            |
-|                                  |    initialize event delegation                                    |
-|                                  |    _use_: `d3.select('#timeline').call(timeline.draw);`           |
-|----------------------------------|-------------------------------------------------------------------|
-| `update(layerIds)`               | @param `layerIds` <string|array> _optionnal_                      |
-|                                  |    update layers in the timeline, if layerIds is given            |
-|                                  |    only the layers with given id will be updated                  |
-|----------------------------------|-------------------------------------------------------------------|
+* `layer(layerInstance)`
+
+    @param `layerInstance` _object_
+
+    add a visualization layer to the timeline
+    the layer should inherit from LayerVis
+
+* `draw(sel)`
+
+    @param `sel` _object_ some d3 selection
+
+    construct all layers registered in the timeline and
+    initialize event delegation
+    _use_: `d3.select('#timeline').call(timeline.draw);`
+
+* `update(layerIds)`
+
+    @param `layerIds` <string|array> _optionnal_
+
+    update layers in the timeline, if layerIds is given
+    only the layers with given id will be updated
+
 
 ### Example use
 
