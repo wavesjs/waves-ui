@@ -6,40 +6,73 @@ Use this module to visualise waveform data over a shared timeline.
 The module relies on the [timeline](https://github.com/Ircam-RnD/timeLine) object.
 ###Demo
 
-A woring demo for this module can be found [here](https://github.com/Ircam-RnD/waveform-vis)
-### Usage
+A working demo for this module can be found [here](https://github.com/Ircam-RnD/waveform-vis)
 
-#### Data
-Draw any array of data, even `ArrayBuffer`s!
+### Public API
 
-```js
-var buffer = […]; // some array || in this case an audio buffer
-var basexDomain = [0, buffer.duration * 1000]; // to milliseconds
-```
+* `params(parameters)`
 
-#### The Visualiser layer
-```js
+  @param `parameters` _object_  
+  inherited from LayerVis, allow to customize the timeline from a layer perspective. ex:  
+
+  ```javascript
+  waveform.params({
+    id: 'my-timeline', // set a unique id, optionnal, if not defined a default unique id is generated
+    yDomain: [-1, 1] // the y domain of the data - default to [-1, 1] according to the domain of an audio buffer
+  })
+  ```
+
+* `data(data)`
+
+  @param `data` ArrayBuffer  
+  an ArrayBuffer to display
+
+* `duration(duration)`
+
+  @param `duration` _int_ (in second)  
+  duration of the ArrayBuffer to display
+
+* `sampleRate(sampleRate)`
+
+  @param `sampleRate` _int_ (default 441000)  
+  the sample rate of the ArrayBuffer to display
+
+* `color(color)`
+
+  @param `color` _string_  
+  color of the waveform
+
+
+#### Example Use
+
+```javascript
+var d3 = require('d3');
+var timeline = require('timeline');
+var waveformVis = require('waveform-vis');
+var buffer = someAudioBuffer;
+
+// create the graph
+var graph = timeline()
+  .xDomain([0, buffer.duration])
+  .width(1000)
+  .height(150)
+  
+
+// create the waveform layer
 var waveform = waveformVis()
-      .name('wf')
-      .data(buffer)
-      .precision(1024) // data snapshot resoultion in samples per pixel
-      .xDomain(basexDomain)
-      .yDomain([1, -1])
-      .color('#C0CFCF') // optional
+  .params({ id: 'my-waveform' })
+  .data(buffer.getChannelData(0).buffer) // pass the raw ArrayBuffer from audio buffer
+  .sampleRate(buffer.sampleRate)
+  .duration(buffer.duration)
+  .color('steelblue');
+
+// add the waveform layer to the timeline
+graph.layer(waveform);
+
+// draw the timeline
+d3.select('#timeline').call(graph.draw);
 ```
 
-#### The timeLine layout
-In order to do this you need the [timeLine](https://github.com/Ircam-RnD/timeLine) module.
-```js
-var graph = timeLine()
-  .xDomain(basexDomain) // shared time domain
-  .width(500)
-  .height(80)
-  .layer(waveform) // waveform visualiser layer
-  .draw; // the callable endpoint
-
-d3.select('.timeline').call(graph);
-```
 ### Status
 
 This library is under heavy development and subject to change.  
