@@ -56,7 +56,7 @@ For an in depth  explanation on the philosophy and usage of this library please 
 ### Example use
 
 ```javascript
-// import the package - assume a browserify environment
+// import the package - assume a commonjs environment (aka browserify)
 var timeline = require('timeline');
 var buffer = someAudioBuffer;
 
