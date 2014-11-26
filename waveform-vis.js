@@ -24,11 +24,10 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     var defaults = {
       type: name,
       id: uniqueId(name),
-      downSampleStrategy: 'minMax',
       renderingStrategy: 'svg',
       yDomain: [-1, 1], // default yDomain for audioBuffer
       triggerUpdateZoomDelta: 0.01,
-      useWorker: true
+      useWorker: false
     };
 
     this.params(defaults);

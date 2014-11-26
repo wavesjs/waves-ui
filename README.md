@@ -20,7 +20,13 @@ A working demo for this module can be found [here](https://github.com/Ircam-RnD/
     // set a unique id, optionnal, if not defined a default unique id is generated
     id: 'my-timeline',
     // the y domain of the data - default to [-1, 1] according to the domain of an audio buffer 
-    yDomain: [-1, 1]
+    yDomain: [-1, 1],
+    // rendering strategy `canvas` or `svg`, default to svg
+    renderingStrategy: 'svg',
+    // use a web worker to parse data for visualization, may be usefull with many waveforms
+    useWorker: false,
+    // zoom delta before updating underlaying data
+    triggerUpdateZoomDelta: 0.01
   })
   ```
 

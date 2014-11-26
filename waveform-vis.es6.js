@@ -24,11 +24,10 @@ class WaveformVis extends LayerVis {
     var defaults = {
       type: name,
       id: uniqueId(name),
-      downSampleStrategy: 'minMax',
       renderingStrategy: 'svg',
       yDomain: [-1, 1], // default yDomain for audioBuffer
       triggerUpdateZoomDelta: 0.01,
-      useWorker: true
+      useWorker: false
     };
 
     this.params(defaults);
