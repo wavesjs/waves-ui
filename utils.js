@@ -1,10 +1,10 @@
 'use strict';
 
-var utils = {}
+var utils = {};
 
 utils.isFunction = function(func) {
   return Object.prototype.toString.call(func) === '[object Function]';
-}
+};
 
 // combined accessors
 utils.getSet = function getSet(obj){var props = arguments[1];if(props === void 0)props = null;var valueMode = arguments[2];if(valueMode === void 0)valueMode = false;
@@ -48,7 +48,7 @@ utils.uniqueId = function() {var prefix = arguments[0];if(prefix === void 0)pref
   _counters[prefix] += 1;
 
   return id;
-}
+};
 
 utils.extend = function extend() {
   // this can probably improved in es6
@@ -63,6 +63,7 @@ utils.extend = function extend() {
   return host;
 };
 
+utils.UILoop = require('./lib/ui-loop');
 
 // create a default data accessor for each given attrs
 
