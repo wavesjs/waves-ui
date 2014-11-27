@@ -22,7 +22,6 @@ class Zoomer extends LayerVis {
     this.params(defaults);
     // add events ability
     var emitter = new events.EventEmitter();
-
     this.on = emitter.on;
     this.trigger = emitter.emit;
     // bind draw to `this`
@@ -38,9 +37,6 @@ class Zoomer extends LayerVis {
     var graph = this.base; // that.graph();
     var d3 = this.d3;
     var that = this; // binding fix when called from d3
-    // var anch = anchorVis().name('anch');
-    // graph.layer(anch);
-    // graph.draw(); // redraws
 
     sel.each(function() {
       var zx = 0;
@@ -48,43 +44,52 @@ class Zoomer extends LayerVis {
       var xponent = 1.005;
       var zoomerX;
 
-      d3.select(this).on('mousedown', function() {
+      // mouseMove
+      function onMouseMove(evt) {
+        if (evt.which !== 1) { return; } 
+
+        var deltaY = zy - evt.pageY;
+        var deltaX = zx - (parseInt(evt.pageX - zoomerX, 10));
+
+        var zoomVal = Math.abs(deltaY);
+        var zFactor = (deltaY > 0)? Math.pow(xponent, zoomVal) : 1 / Math.pow(xponent, zoomVal);
+        // update event object
+        var e = {
+          anchor: zx,
+          factor: zFactor,
+          delta: { x: deltaX, y: deltaY },
+          originalEvent: evt // keep track of the original event
+        }
+
+        that.trigger('mousemove', e);
+      }
+
+      // mouseUp
+      function onMouseUp(evt) {
+        document.body.removeEventListener('mousemove', onMouseMove);
+        document.body.removeEventListener('mouseup', onMouseUp);
+        document.body.classList.remove('zooming');
+        that.trigger('mouseup', evt);
+      }
+
+      d3.select(this).on('mousedown', function(evt) {
         zoomerX = this.getBoundingClientRect().left;
         zy = d3.event.pageY;
-        // zx = d3.event.offsetX;
         zx = parseInt(d3.event.pageX - zoomerX, 10);
 
         // update position of the anchor on click
         // graph.layers['anch'].position(zx);
+        var e = {
+          anchor: zx,
+          originalEvent: d3.event
+        };
+        
+        that.trigger('mousedown', e);
 
         document.body.classList.add('zooming');
-
-        // mouseMove
-        function mmove(evt) {
-          if (evt.which === 1) {
-            evt.preventDefault();
-
-            var deltaY = zy - evt.pageY;
-            var deltaX = zx - (parseInt(evt.pageX - zoomerX, 10));
-
-            var zoomVal = Math.abs(deltaY);
-            var zFactor = (deltaY > 0)? Math.pow(xponent, zoomVal) : 1 / Math.pow(xponent, zoomVal);
-            var e = {anchor: zx, factor: zFactor, delta: {x: deltaX, y: deltaY}};
-            that.trigger('mousemove', e);
-          }
-        }
-
-        // mouseUp
-        function mup() {
-          document.body.removeEventListener('mousemove', mmove);
-          document.body.removeEventListener('mouseup', mup);
-          document.body.classList.remove('zooming');
-          that.trigger('mouseup');
-        }
-
-        document.body.addEventListener('mousemove', mmove);
-        document.body.addEventListener('mouseup', mup);
-
+        document.body.addEventListener('mousemove', onMouseMove);
+        document.body.addEventListener('mouseup', onMouseUp);
+        document.body.addEventListener('mouseleave', onMouseUp);
       });
     });
 
