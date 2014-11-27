@@ -30,11 +30,34 @@ class Timeline {
     // for throttling
     // this.fps = 60;
 
+    // keep track of scales initialization
+    this.__scalesInitialized = false;
     // bind draw method for call from d3
     this.draw = this.draw.bind(this);
     return this;
   }
 
+  // initialize the scales of the timeline
+  // is called the first time a layer is added
+  initScales() {
+    var xRange = [0, this.width()];
+    if (this.swapX) { xRange.reverse(); /* xRange = this.swapRange(xRange); */ }
+
+    var yRange = [this.height(), 0];
+    if (this.swapY) { yRange.reverse(); /* yRange = this.swapRange(yRange); */ }
+
+    this.xScale
+      .domain(this.xDomain())
+      .range(xRange);
+
+    this.yScale
+      .domain(this.yDomain())
+      .range(yRange);
+
+    // keep a reference unmodified scale range for use in the layers when zooming
+    this.originalXscale = this.xScale.copy();
+    this.__scalesInitialized = true;
+  }
 
   // --------------------------------------------------
   // layers initialization related methods
@@ -42,8 +65,18 @@ class Timeline {
 
   // register a layer
   layer(layer) {
+    if (this.__scalesInitialized === false) { this.initScales(); }
+
     this.initLayer(layer); // compute `cid`, ...
+    this.delegateScales(layer);
+    // add the layer to the stack
     this.layers[layer.param('cid')] = layer;
+
+    // allow to dynamically add a layer after after the timeline has been drawn
+    // @NOTE: create a test case - needs to be tested
+    if (!!this.layout) {
+      this.enterLayer(layer, this.layout);
+    }
 
     return this;
   }
@@ -154,14 +187,14 @@ class Timeline {
     var rangeLength = layer.originalXscale.range()[1] - layer.originalXscale.range()[0];
 
     // zoom
-    if (deltaY){
-      var offsetOrig = ( (anchor - targetStart) / currentLength ) * rangeLength;
-      var offsetFina = ( (anchor - targetStart) / targetLength ) * rangeLength;
-      targetStart += ( (offsetFina - offsetOrig) / rangeLength ) * targetLength;
+    if (deltaY) {
+      var offsetOrigin = ( (anchor - targetStart) / currentLength ) * rangeLength;
+      var offsetFinal = ( (anchor - targetStart) / targetLength ) * rangeLength;
+      targetStart += ( (offsetFinal - offsetOrigin) / rangeLength ) * targetLength;
     }
 
     // translate x
-    if (deltaX){
+    if (deltaX) {
       var translation = (deltaX / rangeLength) * targetLength;
       targetStart += translation;
     }
@@ -231,9 +264,11 @@ class Timeline {
         );
       }));
 
-      document.body.addEventListener('mouseout', (e) => {
-        // console.log(evt.fromElement)
-        if (e.fromElement === document.body){
+      // var body = document.querySelector('#timeline');
+      var body = document.body;
+      body.addEventListener('mouseleave', (e) => {
+        // console.log(e.fromElement);
+        if (e.fromElement === body){
           this.trigger(this.id() + ':mouseout', d3.event );
         }
       });
@@ -246,33 +281,14 @@ class Timeline {
       g.attr('class', 'layout')
        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-      // 4. initialize scales
-      var xRange = [0, this.width()];
-      if (this.swapX) { xRange.reverse(); /* xRange = this.swapRange(xRange); */ }
+      this.layout = g;
 
-      var yRange = [this.height(), 0];
-      if (this.swapY) { yRange.reverse(); /* yRange = this.swapRange(yRange); */ }
-
-      this.xScale
-        .domain(this.xDomain())
-        .range(xRange);
-
-      this.yScale
-        .domain(this.yDomain())
-        .range(yRange);
-
-      // keep a reference unmodified scale range for use in the layers when zooming
-      this.originalXscale = this.xScale.copy();
-
-      // 5. configure and initialize layers groups
+      // 4. create layers groups
       for (var key in this.layers) {
-        var layer = this.layers[key];
-
-        this.delegateScales(layer);
-        this.enterLayer(layer, g);
+        this.enterLayer(this.layers[key], g);
       }
 
-      // 6. draw the graph
+      // 5. draw the graph
       this.update();
     });
 
