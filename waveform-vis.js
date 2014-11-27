@@ -27,6 +27,7 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
       renderingStrategy: 'svg',
       yDomain: [-1, 1], // default yDomain for audioBuffer
       triggerUpdateZoomDelta: 0.01,
+      triggerUpdateDragDelta: 4,
       useWorker: false
     };
 
@@ -35,6 +36,7 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     this.sampleRate(44100);
     // init zoom factor to 1
     this.currentZoomFactor = 1;
+    this.currentDragDeltaX = 0;
   }if(super$0!==null)SP$0(WaveformVis,super$0);WaveformVis.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":WaveformVis,"configurable":true,"writable":true}});DP$0(WaveformVis,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
   // get number of sample per timeline pixels - aka. windowSize
@@ -141,7 +143,6 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     this.xxScale
       .domain([0, data.length])
       .range(this.base.xScale.domain());
-
     // update cache
     this.cache(data);
     this.draw(data);
@@ -153,13 +154,22 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     // - different trigger updates according to zoom in or out
     // - force update when only sliding without zooming
     var triggerUpdateZoomDelta = this.param('triggerUpdateZoomDelta');
+    var triggerUpdateDragDelta = this.param('triggerUpdateDragDelta');
     var deltaZoom = Math.abs(this.currentZoomFactor - e.factor);
-    // if not enought zoom delta render cached data
-    if (deltaZoom < triggerUpdateZoomDelta) {
+    var deltaDrag = Math.abs(this.currentDragDeltaX - e.delta.x);
+    
+    // if not small zoom delta or small drag delta
+    // => render cached data
+    if (
+      (deltaZoom < triggerUpdateZoomDelta) && 
+      (deltaDrag < triggerUpdateDragDelta)
+    ) {
       return this.draw(this.cache()());
     }
 
     this.currentZoomFactor = e.factor;
+    this.currentDragDeltaX = e.delta.x;
+
     this.downSample();
   };
 
