@@ -273,13 +273,24 @@ class Timeline {
         }
       });
 
-      // 3. create layout group
+      // 3. create layout group and clip path
+      this.svg
+        .append('defs')
+        .append('clip-path')
+        .attr('id', 'layout-clip')
+        .append('rect')
+          .attr('x', 0)
+          .attr('y', 0)
+          .attr('width', this.width() + this.margin().left + this.margin().right)
+          .attr('height', this.height() + this.margin().top + this.margin().bottom);
+
       var prevG = this.svg.select('g');
       var g = (!!prevG.node())? prevG : this.svg.append('g');
       var margin = this.margin();
 
       g.attr('class', 'layout')
-       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+       .attr('clip-path', 'url(#layout-clip)');
 
       this.layout = g;
 

@@ -273,13 +273,24 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
         }
       });
 
-      // 3. create layout group
+      // 3. create layout group and clip path
+      this$0.svg
+        .append('defs')
+        .append('clip-path')
+        .attr('id', 'layout-clip')
+        .append('rect')
+          .attr('x', 0)
+          .attr('y', 0)
+          .attr('width', this$0.width() + this$0.margin().left + this$0.margin().right)
+          .attr('height', this$0.height() + this$0.margin().top + this$0.margin().bottom);
+
       var prevG = this$0.svg.select('g');
       var g = (!!prevG.node())? prevG : this$0.svg.append('g');
       var margin = this$0.margin();
 
       g.attr('class', 'layout')
-       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+       .attr('clip-path', 'url(#layout-clip)');
 
       this$0.layout = g;
 
