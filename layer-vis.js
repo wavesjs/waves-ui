@@ -100,7 +100,7 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     this.data(data || this.data() || this.base.data());
     // this.untouchedXscale = this.base.xScale.copy();
     // this.untouchedYscale = this.base.yScale.copy();
-    this.zoomFactor = this.base.zoomFactor;
+    // this.zoomFactor = this.base.zoomFactor;
 
     // implement the update enter delete logic here
     // call draw
