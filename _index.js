@@ -12,11 +12,11 @@ var bkptDesc = {
   g: { writable: true },
   xBaseDomain: { writable: true },
   line: { writable: true },
- 
+
   // "inherit" events,
   on: { enumerable: true, writable: true},
   trigger: {writable: true},
-  
+
   init: {
     value: function() {
 
@@ -26,7 +26,7 @@ var bkptDesc = {
         'color', 'lineColor',
         'dataView', 'xDomain', 'xRange', 'yDomain', 'yRange', 'interpolate'
       ]);
-      
+
       // defaults
       this.selectable = false;
       this.height(0);
@@ -149,7 +149,7 @@ var bkptDesc = {
       g.append("circle")
         .attr("class", 'bkpt')
         .attr('fill-opacity', this.opacity());
-      
+
       sel.exit().remove();
       this.draw();
     }
@@ -163,10 +163,10 @@ var bkptDesc = {
       var base = this.base;
       var xScale = base.xScale;
       var yScale = base.yScale;
-      
+
       var cx = function(d) { return xScale(dv.cx(d)); };
       var cy = function(d) { return yScale(dv.cy(d)); };
-    
+
       this.line
         .x(cx)
         .y(cy);
@@ -180,7 +180,7 @@ var bkptDesc = {
       } else {
         ln.remove();
       }
-      
+
       el.selectAll('.bkpt')
         .attr('fill', dv.color)
         .attr('cx', cx)
