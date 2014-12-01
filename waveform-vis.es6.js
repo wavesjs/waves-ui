@@ -6,7 +6,29 @@ var fs       = require('fs');
 var renderingStrategies = require('./lib/rendering-strategies');
 var minMax   = require('./lib/min-max');
 
+// for test purpose - must be removed
+var _ = require('underscore');
+
 'use strict';
+
+// @NOTES / TODOS:
+// - from: http://www.bbc.co.uk/rd/blog/2013/10/audio-waveforms
+//   audacity creates a cached down sampled version of min / max values
+//   the window size has 256 samples
+// > if samplesPerPIxels > 256 parse data from downsampled extract
+// > else parse raw data
+//   should improve perf when zoomed out
+//   use cached data in zoom in / define what to do on zoom out
+//
+// - webwroker use create a creepy flicking issue due to asynchrony
+//   and is actually not usable - we must find a workaround for that problem
+// > maybe define an incremental index for each call and ignore any 
+//   response that would have a smaller index
+//
+// - throttle 
+//    -> define where it must be implemented
+//
+// - how to integrate "native" d3 component with the rAF loop
 
 var workerBlob = new Blob(
   [fs.readFileSync(__dirname + '/lib/resampler-worker.js', 'utf-8')],
@@ -26,7 +48,7 @@ class WaveformVis extends LayerVis {
       id: uniqueId(name),
       renderingStrategy: 'svg',
       yDomain: [-1, 1], // default yDomain for audioBuffer
-      triggerUpdateZoomDelta: 0.01,
+      triggerUpdateZoomDelta: 0.05,
       triggerUpdateDragDelta: 4,
       useWorker: false
     };
@@ -37,6 +59,10 @@ class WaveformVis extends LayerVis {
     // init zoom factor to 1
     this.currentZoomFactor = 1;
     this.currentDragDeltaX = 0;
+
+    // debounce xZoom call
+    // this.xZoom = _.throttle(this.xZoom, 50);
+    // console.log(this.xZoom);
   }
 
   // get number of sample per timeline pixels - aka. windowSize
@@ -67,6 +93,8 @@ class WaveformVis extends LayerVis {
     this.resampler = new Worker(window.URL.createObjectURL(workerBlob));
     var onResponse = this.resamplerResponse.bind(this);
     this.resampler.addEventListener('message', onResponse, false);
+    // an index to prevent drawing to "come back" in time - fix async problem
+    this.__currentWorkerCallTime = 0;
 
     var message = {
       cmd: 'initialize',
@@ -84,6 +112,9 @@ class WaveformVis extends LayerVis {
     var width = range[1] - range[0];
     var extractAtTimes = [];
 
+    // if (this.__isProcessing) { return; }
+    // this.__isProcessing = true;
+
     // define all times where a minMax snapshot must be done
     for (let pixel = 0; pixel < width; pixel++) {
       var timelineTimeStart = this.base.xScale.invert(pixel);
@@ -96,9 +127,12 @@ class WaveformVis extends LayerVis {
     var sampleRate = this.sampleRate()();
     var windowSize = this.getSamplesPerPixel();
 
+    console.time('downsample');
+
     if (this.param('useWorker')) {
       var message = {
         cmd: 'downSample',
+        time: new Date().getTime(),
         extractAtTimes: extractAtTimes,
         sampleRate: sampleRate,
         windowSize: windowSize,
@@ -126,6 +160,15 @@ class WaveformVis extends LayerVis {
   // @NOTE is this method really needed
   resamplerResponse(message) {
     var data = message.data;
+    // THIS DO NOT WORK
+    // console.log(this.__currentWorkerCallTime, data.time);
+    // // @NOTE: change to a timestamp for consistency ?
+    // if (data.time < this.__currentWorkerCallTime) {
+    //   console.log('ignored', this.__currentWorkerCallTime, data.time);
+    //   return;
+    // }
+
+    // this.__currentWorkerCallTime = data.time;
 
     switch (data.cmd) {
       case 'downSample':
@@ -139,6 +182,8 @@ class WaveformVis extends LayerVis {
 
   // cache the down sampling result and create some scale
   setDownSample(data) {
+    // console.timeEnd('downsample');
+    this.__isProcessing = false;
     // update xxScale according to new base.xScale.domain and data.length
     this.xxScale
       .domain([0, data.length])
