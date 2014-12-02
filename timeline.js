@@ -1,12 +1,12 @@
 var d3        = window.d3 || require('d3');
-var events    = require('events');
+var EventEmitter = require('events').EventEmitter;
 var shortId   = require('shortid');
 var getSet    = require('utils').getSet;
 var extend    = require('utils').extend;
 
 'use strict';
 
-var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var proto$0={};
+var Timeline = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,Object.getOwnPropertyDescriptor(s,p));}}return t};"use strict";MIXIN$0(Timeline, super$0);
   function Timeline() {var options = arguments[0];if(options === void 0)options = {};
     if (!(this instanceof Timeline)) { return new Timeline(options); }
 
@@ -14,10 +14,6 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
     this.layers = {};
     this.xScale = d3.scale.linear(); // .clamp(true);
     this.yScale = d3.scale.linear(); // .clamp(true);
-    // event system
-    var eventEmitter = new events.EventEmitter();
-    this.on = eventEmitter.on;
-    this.trigger = eventEmitter.emit;
 
     // should maybe be consistent with layer API `.name` ? one way or other
     this.id(options.id || shortId.generate());
@@ -35,11 +31,11 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
     // bind draw method for call from d3
     this.draw = this.draw.bind(this);
     return this;
-  }DP$0(Timeline,"prototype",{"configurable":false,"enumerable":false,"writable":false});
+  }Timeline.prototype = Object.create(super$0.prototype, {"constructor": {"value": Timeline, "configurable": true, "writable": true} });DP$0(Timeline, "prototype", {"configurable": false, "enumerable": false, "writable": false});
 
   // initialize the scales of the timeline
   // is called the first time a layer is added
-  proto$0.initScales = function() {
+  Timeline.prototype.initScales = function() {
     var xRange = [0, this.width()];
     if (this.swapX) { xRange.reverse(); /* xRange = this.swapRange(xRange); */ }
 
@@ -57,14 +53,14 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
     // keep a reference unmodified scale range for use in the layers when zooming
     this.originalXscale = this.xScale.copy();
     this.__scalesInitialized = true;
-  };
+  }
 
   // --------------------------------------------------
   // layers initialization related methods
   // --------------------------------------------------
 
   // register a layer
-  proto$0.layer = function(layer) {
+  Timeline.prototype.layer = function(layer) {
     if (this.__scalesInitialized === false) { this.initScales(); }
 
     this.initLayer(layer); // compute `cid`, ...
@@ -79,17 +75,17 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
     }
 
     return this;
-  };
+  }
 
   // initialize the layer - @NOTE remove ?
-  proto$0.initLayer = function(layer) {
+  Timeline.prototype.initLayer = function(layer) {
     layer.load(this, d3);
     // check presence of the method for object do not extend LayerVis yet
-    if ('onload' in  layer) { layer.onload() };
-  };
+    if ('onload' in  layer) { layer.onload(); }
+  }
 
   // initialize layer scales
-  proto$0.delegateScales = function(layer) {
+  Timeline.prototype.delegateScales = function(layer) {
     // @NOTE: is the really needed ? - probably yes... see 'bachotheque'
     // if (layer.hasOwnProperty('xScale')) {
     //   var baseXscale = this.xScale.copy();
@@ -114,10 +110,10 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
     }
 
     layer.yScale = baseYscale;
-  };
+  }
 
   // create a group for the given layer
-  proto$0.enterLayer = function(layer, g) {
+  Timeline.prototype.enterLayer = function(layer, g) {
     if (layer.param('height') === null) {
       layer.param('height', this.height());
     }
@@ -135,30 +131,30 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
     // keep this? we might still want this hook in the layer
     // if (layer.hasOwnProperty('bind')) layer.bind(lg);
     layer.g = layerG;
-  };
+  }
 
   // --------------------------------------------------
   // events
   // --------------------------------------------------
 
   // handles and delegates to local drag behaviours
-  proto$0.drag = function(callback) {var this$0 = this;
+  Timeline.prototype.drag = function(callback) {var this$0 = this;
     return d3.behavior.drag().on('drag', function()  {
       this$0.selection.selectAll('.selected').each(function() {
         callback.apply(this, arguments);
       });
     });
-  };
+  }
 
   // sets the brushing state for interaction and a css class for styles
-  proto$0.brushing = function() {var state = arguments[0];if(state === void 0)state = null;
+  Timeline.prototype.brushing = function() {var state = arguments[0];if(state === void 0)state = null;
     if (state === null) { return this._brushing; }
 
     this._brushing = state;
     d3.select(document.body).classed('brushing', state);
-  };
+  }
 
-  proto$0.xZoom = function(zoom) {
+  Timeline.prototype.xZoom = function(zoom) {
     // in px to domain
     zoom.anchor = this.originalXscale.invert(zoom.anchor);
     // this.zoomFactor = zoom.factor;
@@ -169,9 +165,9 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
       if ('xScale' in layer) { this.xZoomCompute(zoom, layer); }
       if ('xZoom' in layer) { layer.xZoom(zoom); }
     }
-  };
+  }
 
-  proto$0.xZoomCompute = function(zoom, layer) {
+  Timeline.prototype.xZoomCompute = function(zoom, layer) {
     var deltaY = zoom.delta.y;
     var deltaX = zoom.delta.x;
     var anchor = zoom.anchor;
@@ -201,10 +197,10 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
     // layer.targetStart = targetStart;
     // updating the scale
     layer.xScale.domain([targetStart, targetStart + targetLength]);
-  };
+  }
 
   // @NOTE - used ?
-  proto$0.xZoomSet = function() {
+  Timeline.prototype.xZoomSet = function() {
     // saves new scale reference
     this.originalXscale = this.xScale.copy();
 
@@ -212,13 +208,13 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
       var layer = this.layers[key];
       if ('xScale' in layer) { layer.originalXscale = layer.xScale.copy(); }
     }
-  };
+  }
 
   // --------------------------------------------------
   // main interface methods
   // --------------------------------------------------
 
-  proto$0.draw = function(sel) {var this$0 = this;
+  Timeline.prototype.draw = function(sel) {var this$0 = this;
     this.selection = sel || this.selection;
     // normalize dimensions based on the margins
     this.width(this.width() - this.margin().left - this.margin().right);
@@ -304,12 +300,12 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
     });
 
     return this;
-  };
+  }
 
   // update layers
   // @param layerIds <string|array> optionnal
   //      ids of the layers to update
-  proto$0.update = function() {var layerIds = arguments[0];if(layerIds === void 0)layerIds = null;
+  Timeline.prototype.update = function() {var layerIds = arguments[0];if(layerIds === void 0)layerIds = null;
     var layers;
 
     if (layerIds) {
@@ -331,7 +327,7 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
     // update layers
     for (var key$0 in layers) { layers[key$0].update(); }
     for (var key$1 in layers) { layers[key$1].draw(); }
-  };
+  }
 
   // --------------------------------------------------
   // utils
@@ -340,10 +336,10 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
   //   return [range[1], range[0]]
   // }
 
-  proto$0.toFront = function(item) {
+  Timeline.prototype.toFront = function(item) {
     item.parentNode.appendChild(item);
-  };
-MIXIN$0(Timeline.prototype,proto$0);proto$0=void 0;return Timeline;})();
+  }
+;return Timeline;})(EventEmitter);
 
 // generic getters(setters) accessors and defaults
 getSet(Timeline.prototype, [
