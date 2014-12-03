@@ -19,7 +19,6 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
     this.on = eventEmitter.on;
     this.trigger = eventEmitter.emit;
 
-    // should maybe be consistent with layer API `.name` ? one way or other
     this.id(options.id || shortId.generate());
     this.margin({top: 0, right: 0, bottom: 0, left: 0});
     this.xDomain([0, 0]);
@@ -241,37 +240,8 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
       // create an alias (why ?)
       this$0.el = this$0.svg;
 
-      var that = this$0;
       // 2. event delegation
-      // !!! remember to unbind when deleting element !!!
-      this$0.svg.on('mousedown', function() {
-        that.dragInit = d3.event.target;
-        that.trigger(that.id() + ':mousedown', d3.event);
-      });
-
-      this$0.svg.on('mouseup', function() {
-        that.trigger(that.id() + ':mouseup', d3.event);
-      });
-
-      // for mousedrag we call a configured d3.drag behaviour returned from the objects drag method
-      // this.svg.on('drag'...
-
-      this$0.svg.call(this$0.drag(function(d) {
-        // this.throttle(this.trigger(this.id() + ':drag', {target: this, event: d3.event, d:d, dragged: that.dragInit} ));
-        that.trigger(
-          that.id() + ':drag',
-          { target: this, event: d3.event, d:d, dragged: that.dragInit }
-        );
-      }));
-
-      // var body = document.querySelector('#timeline');
-      var body = document.body;
-      body.addEventListener('mouseleave', function(e)  {
-        // console.log(e.fromElement);
-        if (e.fromElement === body){
-          this$0.trigger(this$0.id() + ':mouseout', d3.event );
-        }
-      });
+      this$0.delegateEvents();
 
       // 3. create layout group and clip path
       this$0.svg
@@ -331,6 +301,54 @@ var Timeline = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"
     // update layers
     for (var key$0 in layers) { layers[key$0].update(); }
     for (var key$1 in layers) { layers[key$1].draw(); }
+  };
+
+  proto$0.delegateEvents = function() {var this$0 = this;
+    // !!! remember to unbind when deleting element !!!
+    var body = document.body;
+
+    // is actually not listened in make editable
+    this.svg.on('mousedown', function()  {
+      this$0.dragInit = d3.event.target;
+      this$0.trigger('mousedown', d3.event);
+    });
+
+    this.svg.on('mouseup', function()  {
+      this$0.trigger('mouseup', d3.event);
+    });
+
+    // for mousedrag we call a configured d3.drag behaviour
+    // returned from the objects drag method: `this.svg.on('drag'...`
+    var that = this;
+
+    // @NOTE: how to remove the two following listeners ?
+    this.svg.call(this.drag(function(datum) {
+      var e = {
+        // group - allow to redraw only the given group
+        target: this,
+        // element (which part of the element is actually dragged, 
+        // ex. line or rect in a segment)
+        dragged: that.dragInit,
+        d: datum,
+        event: d3.event
+      }
+
+      that.trigger('drag', e);
+    }));
+
+    body.addEventListener('mouseleave', function(e)  {
+      if (e.fromElement !== body) { return; }
+      this$0.trigger('mouseleave', e);
+    });
+  };
+
+  // should clean event delegation, in conjonction with a `remove` method
+  proto$0.undelegateEvents = function() {
+    // 
+  };
+
+  proto$0.remove = function() {
+    // this.undelegateEvents()
   };
 
   // --------------------------------------------------

@@ -19,7 +19,6 @@ class Timeline {
     this.on = eventEmitter.on;
     this.trigger = eventEmitter.emit;
 
-    // should maybe be consistent with layer API `.name` ? one way or other
     this.id(options.id || shortId.generate());
     this.margin({top: 0, right: 0, bottom: 0, left: 0});
     this.xDomain([0, 0]);
@@ -241,37 +240,8 @@ class Timeline {
       // create an alias (why ?)
       this.el = this.svg;
 
-      var that = this;
       // 2. event delegation
-      // !!! remember to unbind when deleting element !!!
-      this.svg.on('mousedown', function() {
-        that.dragInit = d3.event.target;
-        that.trigger(that.id() + ':mousedown', d3.event);
-      });
-
-      this.svg.on('mouseup', function() {
-        that.trigger(that.id() + ':mouseup', d3.event);
-      });
-
-      // for mousedrag we call a configured d3.drag behaviour returned from the objects drag method
-      // this.svg.on('drag'...
-
-      this.svg.call(this.drag(function(d) {
-        // this.throttle(this.trigger(this.id() + ':drag', {target: this, event: d3.event, d:d, dragged: that.dragInit} ));
-        that.trigger(
-          that.id() + ':drag',
-          { target: this, event: d3.event, d:d, dragged: that.dragInit }
-        );
-      }));
-
-      // var body = document.querySelector('#timeline');
-      var body = document.body;
-      body.addEventListener('mouseleave', (e) => {
-        // console.log(e.fromElement);
-        if (e.fromElement === body){
-          this.trigger(this.id() + ':mouseout', d3.event );
-        }
-      });
+      this.delegateEvents();
 
       // 3. create layout group and clip path
       this.svg
@@ -331,6 +301,54 @@ class Timeline {
     // update layers
     for (let key in layers) { layers[key].update(); }
     for (let key in layers) { layers[key].draw(); }
+  }
+
+  delegateEvents() {
+    // !!! remember to unbind when deleting element !!!
+    var body = document.body;
+
+    // is actually not listened in make editable
+    this.svg.on('mousedown', () => {
+      this.dragInit = d3.event.target;
+      this.trigger('mousedown', d3.event);
+    });
+
+    this.svg.on('mouseup', () => {
+      this.trigger('mouseup', d3.event);
+    });
+
+    // for mousedrag we call a configured d3.drag behaviour
+    // returned from the objects drag method: `this.svg.on('drag'...`
+    var that = this;
+
+    // @NOTE: how to remove the two following listeners ?
+    this.svg.call(this.drag(function(datum) {
+      var e = {
+        // group - allow to redraw only the given group
+        target: this,
+        // element (which part of the element is actually dragged, 
+        // ex. line or rect in a segment)
+        dragged: that.dragInit,
+        d: datum,
+        event: d3.event
+      }
+
+      that.trigger('drag', e);
+    }));
+
+    body.addEventListener('mouseleave', (e) => {
+      if (e.fromElement !== body) { return; }
+      this.trigger('mouseleave', e);
+    });
+  }
+
+  // should clean event delegation, in conjonction with a `remove` method
+  undelegateEvents() {
+    // 
+  }
+
+  remove() {
+    // this.undelegateEvents()
   }
 
   // --------------------------------------------------
