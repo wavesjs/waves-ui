@@ -1,12 +1,12 @@
 var d3        = window.d3 || require('d3');
-var events    = require('events');
+var EventEmitter = require('events').EventEmitter;
 var shortId   = require('shortid');
 var getSet    = require('utils').getSet;
 var extend    = require('utils').extend;
 
 'use strict';
 
-class Timeline {
+class Timeline extends EventEmitter {
   constructor(options = {}) {
     if (!(this instanceof Timeline)) { return new Timeline(options); }
 
@@ -14,10 +14,6 @@ class Timeline {
     this.layers = {};
     this.xScale = d3.scale.linear(); // .clamp(true);
     this.yScale = d3.scale.linear(); // .clamp(true);
-    // event system
-    var eventEmitter = new events.EventEmitter();
-    this.on = eventEmitter.on;
-    this.trigger = eventEmitter.emit;
 
     this.id(options.id || shortId.generate());
     this.margin({top: 0, right: 0, bottom: 0, left: 0});
@@ -84,7 +80,7 @@ class Timeline {
   initLayer(layer) {
     layer.load(this, d3);
     // check presence of the method for object do not extend LayerVis yet
-    if ('onload' in  layer) { layer.onload() };
+    if ('onload' in  layer) { layer.onload(); }
   }
 
   // initialize layer scales
