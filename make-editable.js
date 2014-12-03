@@ -14,16 +14,13 @@ function makeEditable(layer) {
 
   var editableProperties = {
     load: function(base) {
-       // default load
+      // default load
       defaultLoad.apply(this, arguments);
-      var baseId = base.id();
       // layer events handling
-      // base.on(id + ':mousedown', this.mouseDown.bind(this));
-      base.on(baseId + ':drag', this.onDrag.bind(this));
-      base.on(baseId + ':mouseup', this.mouseUp.bind(this));
-      base.on(baseId + ':mouseout', this.base.xZoomSet.bind(this.base));
-      // clicking anywhere ouside or inside the container deselects
-      document.body.addEventListener('mousedown', this.mouseDown.bind(this));
+      base.on('mousedown', this.mouseDown.bind(this));
+      base.on('drag', this.onDrag.bind(this));
+      base.on('mouseup', this.mouseUp.bind(this));
+      base.on('mouseleave', this.base.xZoomSet.bind(this.base));
 
       return this;
     },
@@ -51,10 +48,10 @@ function makeEditable(layer) {
       if (this.clicked(item)) {
         this.itemMouseDown(e);
       } else {
-        if (!item.classList.contains('keep-selection')) {
-          this.unselectAll();
-        }
+        this.unselectAll();
       }
+
+      // @TODO: clicking anywhere ouside or inside the container deselects
     },
 
     unselectAll: function() {
@@ -81,10 +78,8 @@ function makeEditable(layer) {
       // shift + was selected: deselect
       if (e.shiftKey && isSelected) {
         d3.select(item).classed('selected', false);
-      } else {
-        if (isSelectable) {
-          d3.select(item).classed('selected', true);
-        }
+      } else if (isSelectable) {
+        d3.select(item).classed('selected', true);
       }
     }
   }
