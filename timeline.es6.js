@@ -25,10 +25,13 @@ class Timeline extends EventEmitter {
     // for throttling
     // this.fps = 60;
 
+    // alias `EventEmitter.emit`
+    this.trigger = this.emit;
     // keep track of scales initialization
     this.__scalesInitialized = false;
     // bind draw method for call from d3
     this.draw = this.draw.bind(this);
+    
     return this;
   }
 
@@ -343,6 +346,7 @@ class Timeline extends EventEmitter {
     for (let key in layers) { layers[key].draw(); }
   }
 
+  // @TODO implement
   remove() {
     // this.undelegateEvents()
   }

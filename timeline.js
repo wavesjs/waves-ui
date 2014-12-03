@@ -25,10 +25,13 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     // for throttling
     // this.fps = 60;
 
+    // alias `EventEmitter.emit`
+    this.trigger = this.emit;
     // keep track of scales initialization
     this.__scalesInitialized = false;
     // bind draw method for call from d3
     this.draw = this.draw.bind(this);
+    
     return this;
   }if(super$0!==null)SP$0(Timeline,super$0);Timeline.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":Timeline,"configurable":true,"writable":true}});DP$0(Timeline,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
@@ -343,6 +346,7 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     for (var key$1 in layers) { layers[key$1].draw(); }
   };
 
+  // @TODO implement
   proto$0.remove = function() {
     // this.undelegateEvents()
   };
