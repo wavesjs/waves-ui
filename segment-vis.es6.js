@@ -61,11 +61,13 @@ class SegmentVis extends LayerVis {
     var g = sel.enter()
       .append('g')
       .classed('item', true)
-      .classed(this.param('unitClass'), true)
+      .classed(this.param('unitClass'), true);
+
+    var opacity = this.opacity() ? this.opacity() : this.param('opacity');
 
     g.append('rect')
       .attr('class', this.param('rectClass'))
-      .attr('fill-opacity', this.param('opacity'));
+      .attr('fill-opacity', opacity);
 
     sel.exit().remove();
 
@@ -148,6 +150,6 @@ class SegmentVis extends LayerVis {
 }
 
 // add and initialize our accessors
-getSet(SegmentVis.prototype, ['y', 'width', 'color', 'height', 'duration', 'start', 'sortIndex']);
+getSet(SegmentVis.prototype, ['y', 'width', 'color', 'height', 'duration', 'start', 'sortIndex', 'opacity']);
 
 module.exports = SegmentVis;
