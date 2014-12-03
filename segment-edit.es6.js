@@ -129,19 +129,20 @@ class SegmentEdit extends SegmentVis {
   onDrag(e) {
     if (this.base.brushing()) { return; }
 
-    var classes = e.dragged.classList;
+    var classList = e.dragged.classList;
     var mode = 'mv';
-    if (classes.contains('left') > 0) mode = 'l';
-    if (classes.contains('right') > 0) mode = 'r';
+    
+    if (classList.contains('left') > 0) mode = 'l';
+    if (classList.contains('right') > 0) mode = 'r';
 
-    this.handleDrag.call(this, mode, e);
+    this.handleDrag(mode, e);
   }
 
   // handles all the dragging possibilities
-  handleDrag(mode, res) {
-    var d = res.d;
-    var delta = res.event;
-    var item = res.target;
+  handleDrag(mode, e) {
+    var d = e.d;
+    var delta = e.event;
+    var item = e.target;
 
     var xScale = this.base.xScale;
     var yScale = this.yScale;
@@ -206,7 +207,7 @@ class SegmentEdit extends SegmentVis {
       }
     }
 
-    // redraw visualization
+    // redraw `.selected` item(s)
     this.draw(this.d3.select(item));
   }
 }
