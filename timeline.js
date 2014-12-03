@@ -6,7 +6,7 @@ var extend    = require('utils').extend;
 
 'use strict';
 
-var Timeline = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,Object.getOwnPropertyDescriptor(s,p));}}return t};"use strict";MIXIN$0(Timeline, super$0);
+var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(Timeline, super$0);var proto$0={};
   function Timeline() {var options = arguments[0];if(options === void 0)options = {};
     if (!(this instanceof Timeline)) { return new Timeline(options); }
 
@@ -30,16 +30,16 @@ var Timeline = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 =
     // bind draw method for call from d3
     this.draw = this.draw.bind(this);
     return this;
-  }Timeline.prototype = Object.create(super$0.prototype, {"constructor": {"value": Timeline, "configurable": true, "writable": true} });DP$0(Timeline, "prototype", {"configurable": false, "enumerable": false, "writable": false});
+  }if(super$0!==null)SP$0(Timeline,super$0);Timeline.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":Timeline,"configurable":true,"writable":true}});DP$0(Timeline,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
   // initialize the scales of the timeline
   // is called the first time a layer is added
-  Timeline.prototype.initScales = function() {
+  proto$0.initScales = function() {
     var xRange = [0, this.width()];
-    if (this.swapX) { xRange.reverse(); /* xRange = this.swapRange(xRange); */ }
+    if (this.swapX) { xRange.reverse(); }
 
     var yRange = [this.height(), 0];
-    if (this.swapY) { yRange.reverse(); /* yRange = this.swapRange(yRange); */ }
+    if (this.swapY) { yRange.reverse(); }
 
     this.xScale
       .domain(this.xDomain())
@@ -52,14 +52,14 @@ var Timeline = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 =
     // keep a reference unmodified scale range for use in the layers when zooming
     this.originalXscale = this.xScale.copy();
     this.__scalesInitialized = true;
-  }
+  };
 
   // --------------------------------------------------
   // layers initialization related methods
   // --------------------------------------------------
 
   // register a layer
-  Timeline.prototype.layer = function(layer) {
+  proto$0.layer = function(layer) {
     if (this.__scalesInitialized === false) { this.initScales(); }
 
     this.initLayer(layer); // compute `cid`, ...
@@ -74,17 +74,17 @@ var Timeline = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 =
     }
 
     return this;
-  }
+  };
 
   // initialize the layer - @NOTE remove ?
-  Timeline.prototype.initLayer = function(layer) {
+  proto$0.initLayer = function(layer) {
     layer.load(this, d3);
     // check presence of the method for object do not extend LayerVis yet
     if ('onload' in  layer) { layer.onload(); }
-  }
+  };
 
   // initialize layer scales
-  Timeline.prototype.delegateScales = function(layer) {
+  proto$0.delegateScales = function(layer) {
     // @NOTE: is the really needed ? - probably yes... see 'bachotheque'
     // if (layer.hasOwnProperty('xScale')) {
     //   var baseXscale = this.xScale.copy();
@@ -109,10 +109,10 @@ var Timeline = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 =
     }
 
     layer.yScale = baseYscale;
-  }
+  };
 
   // create a group for the given layer
-  Timeline.prototype.enterLayer = function(layer, g) {
+  proto$0.enterLayer = function(layer, g) {
     if (layer.param('height') === null) {
       layer.param('height', this.height());
     }
@@ -130,30 +130,74 @@ var Timeline = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 =
     // keep this? we might still want this hook in the layer
     // if (layer.hasOwnProperty('bind')) layer.bind(lg);
     layer.g = layerG;
-  }
+  };
 
   // --------------------------------------------------
   // events
   // --------------------------------------------------
 
+  proto$0.delegateEvents = function() {var this$0 = this;
+    // !!! remember to unbind when deleting element !!!
+    var body = document.body;
+
+    // is actually not listened in make editable
+    this.svg.on('mousedown', function()  {
+      this$0.dragInit = d3.event.target;
+      this$0.trigger('mousedown', d3.event);
+    });
+
+    this.svg.on('mouseup', function()  {
+      this$0.trigger('mouseup', d3.event);
+    });
+
+    // for mousedrag we call a configured d3.drag behaviour
+    // returned from the objects drag method: `this.svg.on('drag'...`
+    var that = this;
+
+    // @NOTE: how to remove the two following listeners ?
+    this.svg.call(this.drag(function(datum) {
+      var e = {
+        // group - allow to redraw only the given group
+        target: this,
+        // element (which part of the element is actually dragged, 
+        // ex. line or rect in a segment)
+        dragged: that.dragInit,
+        d: datum,
+        event: d3.event
+      }
+
+      that.trigger('drag', e);
+    }));
+
+    body.addEventListener('mouseleave', function(e)  {
+      if (e.fromElement !== body) { return; }
+      this$0.trigger('mouseleave', e);
+    });
+  };
+
+  // should clean event delegation, in conjonction with a `remove` method
+  proto$0.undelegateEvents = function() {
+    // 
+  };
+
   // handles and delegates to local drag behaviours
-  Timeline.prototype.drag = function(callback) {var this$0 = this;
+  proto$0.drag = function(callback) {var this$0 = this;
     return d3.behavior.drag().on('drag', function()  {
       this$0.selection.selectAll('.selected').each(function() {
         callback.apply(this, arguments);
       });
     });
-  }
+  };
 
   // sets the brushing state for interaction and a css class for styles
-  Timeline.prototype.brushing = function() {var state = arguments[0];if(state === void 0)state = null;
+  proto$0.brushing = function() {var state = arguments[0];if(state === void 0)state = null;
     if (state === null) { return this._brushing; }
 
     this._brushing = state;
     d3.select(document.body).classed('brushing', state);
-  }
+  };
 
-  Timeline.prototype.xZoom = function(zoom) {
+  proto$0.xZoom = function(zoom) {
     // in px to domain
     zoom.anchor = this.originalXscale.invert(zoom.anchor);
     // this.zoomFactor = zoom.factor;
@@ -164,9 +208,9 @@ var Timeline = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 =
       if ('xScale' in layer) { this.xZoomCompute(zoom, layer); }
       if ('xZoom' in layer) { layer.xZoom(zoom); }
     }
-  }
+  };
 
-  Timeline.prototype.xZoomCompute = function(zoom, layer) {
+  proto$0.xZoomCompute = function(zoom, layer) {
     var deltaY = zoom.delta.y;
     var deltaX = zoom.delta.x;
     var anchor = zoom.anchor;
@@ -196,10 +240,10 @@ var Timeline = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 =
     // layer.targetStart = targetStart;
     // updating the scale
     layer.xScale.domain([targetStart, targetStart + targetLength]);
-  }
+  };
 
   // @NOTE - used ?
-  Timeline.prototype.xZoomSet = function() {
+  proto$0.xZoomSet = function() {
     // saves new scale reference
     this.originalXscale = this.xScale.copy();
 
@@ -207,13 +251,13 @@ var Timeline = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 =
       var layer = this.layers[key];
       if ('xScale' in layer) { layer.originalXscale = layer.xScale.copy(); }
     }
-  }
+  };
 
   // --------------------------------------------------
   // main interface methods
   // --------------------------------------------------
 
-  Timeline.prototype.draw = function(sel) {var this$0 = this;
+  proto$0.draw = function(sel) {var this$0 = this;
     this.selection = sel || this.selection;
     // normalize dimensions based on the margins
     this.width(this.width() - this.margin().left - this.margin().right);
@@ -270,12 +314,12 @@ var Timeline = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 =
     });
 
     return this;
-  }
+  };
 
   // update layers
   // @param layerIds <string|array> optionnal
   //      ids of the layers to update
-  Timeline.prototype.update = function() {var layerIds = arguments[0];if(layerIds === void 0)layerIds = null;
+  proto$0.update = function() {var layerIds = arguments[0];if(layerIds === void 0)layerIds = null;
     var layers;
 
     if (layerIds) {
@@ -297,50 +341,6 @@ var Timeline = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 =
     // update layers
     for (var key$0 in layers) { layers[key$0].update(); }
     for (var key$1 in layers) { layers[key$1].draw(); }
-  }
-
-  proto$0.delegateEvents = function() {var this$0 = this;
-    // !!! remember to unbind when deleting element !!!
-    var body = document.body;
-
-    // is actually not listened in make editable
-    this.svg.on('mousedown', function()  {
-      this$0.dragInit = d3.event.target;
-      this$0.trigger('mousedown', d3.event);
-    });
-
-    this.svg.on('mouseup', function()  {
-      this$0.trigger('mouseup', d3.event);
-    });
-
-    // for mousedrag we call a configured d3.drag behaviour
-    // returned from the objects drag method: `this.svg.on('drag'...`
-    var that = this;
-
-    // @NOTE: how to remove the two following listeners ?
-    this.svg.call(this.drag(function(datum) {
-      var e = {
-        // group - allow to redraw only the given group
-        target: this,
-        // element (which part of the element is actually dragged, 
-        // ex. line or rect in a segment)
-        dragged: that.dragInit,
-        d: datum,
-        event: d3.event
-      }
-
-      that.trigger('drag', e);
-    }));
-
-    body.addEventListener('mouseleave', function(e)  {
-      if (e.fromElement !== body) { return; }
-      this$0.trigger('mouseleave', e);
-    });
-  };
-
-  // should clean event delegation, in conjonction with a `remove` method
-  proto$0.undelegateEvents = function() {
-    // 
   };
 
   proto$0.remove = function() {
@@ -350,14 +350,11 @@ var Timeline = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 =
   // --------------------------------------------------
   // utils
   // --------------------------------------------------
-  // swapRange(range) {
-  //   return [range[1], range[0]]
-  // }
 
-  Timeline.prototype.toFront = function(item) {
+  proto$0.toFront = function(item) {
     item.parentNode.appendChild(item);
-  }
-;return Timeline;})(EventEmitter);
+  };
+MIXIN$0(Timeline.prototype,proto$0);proto$0=void 0;return Timeline;})(EventEmitter);
 
 // generic getters(setters) accessors and defaults
 getSet(Timeline.prototype, [

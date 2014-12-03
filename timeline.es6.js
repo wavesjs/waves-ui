@@ -36,10 +36,10 @@ class Timeline extends EventEmitter {
   // is called the first time a layer is added
   initScales() {
     var xRange = [0, this.width()];
-    if (this.swapX) { xRange.reverse(); /* xRange = this.swapRange(xRange); */ }
+    if (this.swapX) { xRange.reverse(); }
 
     var yRange = [this.height(), 0];
-    if (this.swapY) { yRange.reverse(); /* yRange = this.swapRange(yRange); */ }
+    if (this.swapY) { yRange.reverse(); }
 
     this.xScale
       .domain(this.xDomain())
@@ -135,6 +135,50 @@ class Timeline extends EventEmitter {
   // --------------------------------------------------
   // events
   // --------------------------------------------------
+
+  delegateEvents() {
+    // !!! remember to unbind when deleting element !!!
+    var body = document.body;
+
+    // is actually not listened in make editable
+    this.svg.on('mousedown', () => {
+      this.dragInit = d3.event.target;
+      this.trigger('mousedown', d3.event);
+    });
+
+    this.svg.on('mouseup', () => {
+      this.trigger('mouseup', d3.event);
+    });
+
+    // for mousedrag we call a configured d3.drag behaviour
+    // returned from the objects drag method: `this.svg.on('drag'...`
+    var that = this;
+
+    // @NOTE: how to remove the two following listeners ?
+    this.svg.call(this.drag(function(datum) {
+      var e = {
+        // group - allow to redraw only the given group
+        target: this,
+        // element (which part of the element is actually dragged, 
+        // ex. line or rect in a segment)
+        dragged: that.dragInit,
+        d: datum,
+        event: d3.event
+      }
+
+      that.trigger('drag', e);
+    }));
+
+    body.addEventListener('mouseleave', (e) => {
+      if (e.fromElement !== body) { return; }
+      this.trigger('mouseleave', e);
+    });
+  }
+
+  // should clean event delegation, in conjonction with a `remove` method
+  undelegateEvents() {
+    // 
+  }
 
   // handles and delegates to local drag behaviours
   drag(callback) {
@@ -299,50 +343,6 @@ class Timeline extends EventEmitter {
     for (let key in layers) { layers[key].draw(); }
   }
 
-  delegateEvents() {
-    // !!! remember to unbind when deleting element !!!
-    var body = document.body;
-
-    // is actually not listened in make editable
-    this.svg.on('mousedown', () => {
-      this.dragInit = d3.event.target;
-      this.trigger('mousedown', d3.event);
-    });
-
-    this.svg.on('mouseup', () => {
-      this.trigger('mouseup', d3.event);
-    });
-
-    // for mousedrag we call a configured d3.drag behaviour
-    // returned from the objects drag method: `this.svg.on('drag'...`
-    var that = this;
-
-    // @NOTE: how to remove the two following listeners ?
-    this.svg.call(this.drag(function(datum) {
-      var e = {
-        // group - allow to redraw only the given group
-        target: this,
-        // element (which part of the element is actually dragged, 
-        // ex. line or rect in a segment)
-        dragged: that.dragInit,
-        d: datum,
-        event: d3.event
-      }
-
-      that.trigger('drag', e);
-    }));
-
-    body.addEventListener('mouseleave', (e) => {
-      if (e.fromElement !== body) { return; }
-      this.trigger('mouseleave', e);
-    });
-  }
-
-  // should clean event delegation, in conjonction with a `remove` method
-  undelegateEvents() {
-    // 
-  }
-
   remove() {
     // this.undelegateEvents()
   }
@@ -350,9 +350,6 @@ class Timeline extends EventEmitter {
   // --------------------------------------------------
   // utils
   // --------------------------------------------------
-  // swapRange(range) {
-  //   return [range[1], range[0]]
-  // }
 
   toFront(item) {
     item.parentNode.appendChild(item);
