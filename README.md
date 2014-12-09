@@ -47,7 +47,7 @@ timeline.xDomain([0, buffer.duration]);
 
 ##### `draw(sel)`
 
->  @param `sel` {object} some d3 selection given from d3.call  
+>  @param `sel` {object} _some d3 selection given from d3.call_  
 >  construct all layers registered in the timeline and initialize event delegation
 
 ```javascript
