@@ -16,13 +16,31 @@ function makeEditable(layer) {
     load: function(base) {
       // default load
       defaultLoad.apply(this, arguments);
+
+      this.param('isEditable', true);
+      // bind events callbacks
+      this.mouseDown = this.mouseDown.bind(this);
+      this.onDrag = this.onDrag.bind(this);
+      this.mouseUp = this.mouseUp.bind(this);
+      this.mouseLeave = this.base.xZoomSet.bind(this.base);
       // layer events handling
-      base.on('mousedown', this.mouseDown.bind(this));
-      base.on('drag', this.onDrag.bind(this));
-      base.on('mouseup', this.mouseUp.bind(this));
-      base.on('mouseleave', this.base.xZoomSet.bind(this.base));
+      this.delegateEvents();
 
       return this;
+    },
+
+    delegateEvents: function() {
+      this.base.on('mousedown', this.mouseDown);
+      this.base.on('drag', this.onDrag);
+      this.base.on('mouseup', this.mouseUp);
+      this.base.on('mouseleave', this.mouseLeave);
+    },
+
+    undelegateEvents: function() {
+      this.base.removeListener('mousedown', this.mouseDown);
+      this.base.removeListener('drag', this.onDrag);
+      this.base.removeListener('mouseup', this.mouseUp);
+      this.base.removeListener('mouseleave', this.mouseLeave);
     },
 
     draw: function(el) {
