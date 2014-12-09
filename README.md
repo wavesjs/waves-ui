@@ -10,7 +10,7 @@ A working demo for this module can be found [here](https://github.com/Ircam-RnD/
 
 ### Public API
 
-#### `params(parameters)`
+###### `params(parameters)`
 
 > @param `parameters` {object}  
 > inherited from LayerVis, allow to customize the timeline from a layer perspective. ex:  
