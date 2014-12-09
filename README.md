@@ -16,41 +16,43 @@ For an in depth  explanation on the philosophy and usage of this library please 
 ### Public API
 
 
-* `width(value)`
+##### `width(value)`
 
-    @param `value` _int_  
-    set the width of the timeline (in pixels)
+>  @param `value` {int}  
+>  set the width of the timeline (in pixels)
 
-* `height(value)`
+##### `height(value)`
 
-    @param `value` _int_  
-    set the height of the timeline (in pixels)
+>  @param `value` {int}  
+>  set the height of the timeline (in pixels)
 
-* `xDomain(dataDomain)`
+##### `xDomain(dataDomain)`
 
-    @param `dataDomain` _array_ [minValue, maxValue]  
-    set the data domain of the timeline (internally defines
-    a d3 scale domain).
-    _example_: `timeline.xDomain([0, buffer.duration])`
+>  @param `dataDomain` {array} [minValue, maxValue]  
+>  set the data domain of the timeline (internally defines a d3 scale domain).
+>  _example_: `timeline.xDomain([0, buffer.duration])`
 
-* `layer(layerInstance)`
+##### `layer(layerInstance)` _alias_ `add(layerInstance)`
 
-    @param `layerInstance` _object_  
-    add a visualization layer to the timeline
-    the layer should inherit from LayerVis
+>  @param `layerInstance` {object}  
+>  add a visualization layer to the timeline the layer should inherit from LayerVis
 
-* `draw(sel)`
+##### `remove(layerInstance)`
 
-    @param `sel` _object_ some d3 selection given from d3.call  
-    construct all layers registered in the timeline and
-    initialize event delegation
-    _use_: `d3.select('#timeline').call(timeline.draw);`
+>  @param `layerInstance` {object}  
+>  remove a layer from the timeline
 
-* `update(layerIds)`
+##### `draw(sel)`
 
-    @param `layerIds` _string|array_ _(optionnal)_  
-    update layers in the timeline, if layerIds is given
-    only the layers with given id will be updated
+>  @param `sel` {object} some d3 selection given from d3.call  
+>  construct all layers registered in the timeline and initialize event delegation
+>  _use_: `d3.select('#timeline').call(timeline.draw);`
+
+##### `update([...layers])`
+
+>  @params `...layers` {list} _optionnal_
+>  any number of layer to update, each argument can be a layer instance or a layer id, 
+>  if no arguments given, update all registered layers
 
 
 ### Example use

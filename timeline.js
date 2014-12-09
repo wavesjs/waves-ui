@@ -3,6 +3,7 @@ var EventEmitter = require('events').EventEmitter;
 var shortId   = require('shortid');
 var getSet    = require('utils').getSet;
 var extend    = require('utils').extend;
+var uniqueId  = require('utils').uniqueId;
 
 'use strict';
 
@@ -12,10 +13,11 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
 
     // initialize
     this.layers = {};
-    this.xScale = d3.scale.linear(); // .clamp(true);
-    this.yScale = d3.scale.linear(); // .clamp(true);
+    this.xScale = d3.scale.linear().clamp(true);
+    this.yScale = d3.scale.linear().clamp(true);
 
     this.id(options.id || shortId.generate());
+    this.cid(uniqueId(this.id()));
     this.margin({top: 0, right: 0, bottom: 0, left: 0});
     this.xDomain([0, 0]);
     this.yDomain([0, 1]);
@@ -31,7 +33,7 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     this.__scalesInitialized = false;
     // bind draw method for call from d3
     this.draw = this.draw.bind(this);
-    
+
     return this;
   }if(super$0!==null)SP$0(Timeline,super$0);Timeline.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":Timeline,"configurable":true,"writable":true}});DP$0(Timeline,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
@@ -61,6 +63,20 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   // layers initialization related methods
   // --------------------------------------------------
 
+    // alias for layer - symetry with remove
+  proto$0.add = function(layer) {
+    this.layer(layer);
+  };
+
+  // remove a layer
+  proto$0.remove = function(layer) {
+    if (layer.param('isEditable') && layer.undelegateEvents) {
+      layer.undelegateEvents();
+    }
+
+    layer.g.remove();
+  };
+
   // register a layer
   proto$0.layer = function(layer) {
     if (this.__scalesInitialized === false) { this.initScales(); }
@@ -71,7 +87,6 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     this.layers[layer.param('cid')] = layer;
 
     // allow to dynamically add a layer after after the timeline has been drawn
-    // @NOTE: create a test case - needs to be tested
     if (!!this.layout) {
       this.enterLayer(layer, this.layout);
     }
@@ -151,6 +166,14 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
 
     this.svg.on('mouseup', function()  {
       this$0.trigger('mouseup', d3.event);
+    });
+
+    this.svg.on('mousemove', function()  {
+      this$0.trigger('mousemove', d3.event);
+    });
+
+    this.svg.on('mouseleave', function()  {
+      this$0.trigger('mouseleave', d3.event);
     });
 
     // for mousedrag we call a configured d3.drag behaviour
@@ -260,95 +283,99 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   // main interface methods
   // --------------------------------------------------
 
-  proto$0.draw = function(sel) {var this$0 = this;
+  proto$0.draw = function(sel) {
+    // draw should be called only once
+    if (this.svg) { return this.update(); }
+
+    // assume a timeline is unique and can be bound only to one element
     this.selection = sel || this.selection;
+    var el = d3.select(this.selection[0][0]);
     // normalize dimensions based on the margins
     this.width(this.width() - this.margin().left - this.margin().right);
     this.height(this.height() - this.margin().top - this.margin().bottom);
+      
+    // 1. create svg element
+    // var prevSvg = el.select('svg');
+    // this.svg = (!!prevSvg.node()) ? prevSvg : el.append('svg');
+    this.svg = el.append('svg');
 
-    this.selection.each(function(d, index)  {
-      var el = d3.select(this$0.selection[index][0]);
+    // @TODO refactor
+    // keep width and height to 100% and set `viewBox` attribute - make resize easier
+    // cf. http://stackoverflow.com/questions/3120739/resizing-svg-in-html
+    // add a body clip and translate the layout (body of the chart)
+    this.svg
+      .attr('width', this.width() + this.margin().left + this.margin().right)
+      .attr('height', this.height() + this.margin().top + this.margin().bottom)
+      // @TODO check with Victor
+      // .attr('id', this.id())
+      // .attr('data-cid', this.cid());
+    // create an alias (why ?)
+    this.el = this.svg;
 
-      // 1. create svg element
-      var prevSvg = el.select('svg');
-      this$0.svg = (!!prevSvg.node()) ? prevSvg : el.append('svg');
+    // 2. event delegation
+    this.delegateEvents();
 
-      // @TODO refactor
-      // keep width and height to 100% and set `viewBox` attribute - make resize easier
-      // cf. http://stackoverflow.com/questions/3120739/resizing-svg-in-html
-      // add a body clip and translate the layout (body of the chart)
-      this$0.svg
-        .attr('width', this$0.width() + this$0.margin().left + this$0.margin().right)
-        .attr('height', this$0.height() + this$0.margin().top + this$0.margin().bottom);
-      // create an alias (why ?)
-      this$0.el = this$0.svg;
+    // 3. create layout group and clip path
+    this.svg
+      .append('defs')
+      .append('clip-path')
+      .attr('id', 'layout-clip')
+      .append('rect')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', this.width() + this.margin().left + this.margin().right)
+        .attr('height', this.height() + this.margin().top + this.margin().bottom);
 
-      // 2. event delegation
-      this$0.delegateEvents();
+    var prevG = this.svg.select('g');
+    var g = (!!prevG.node())? prevG : this.svg.append('g');
+    var margin = this.margin();
 
-      // 3. create layout group and clip path
-      this$0.svg
-        .append('defs')
-        .append('clip-path')
-        .attr('id', 'layout-clip')
-        .append('rect')
-          .attr('x', 0)
-          .attr('y', 0)
-          .attr('width', this$0.width() + this$0.margin().left + this$0.margin().right)
-          .attr('height', this$0.height() + this$0.margin().top + this$0.margin().bottom);
+    g.attr('class', 'layout')
+     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+     .attr('clip-path', 'url(#layout-clip)');
 
-      var prevG = this$0.svg.select('g');
-      var g = (!!prevG.node())? prevG : this$0.svg.append('g');
-      var margin = this$0.margin();
+    this.layout = g;
 
-      g.attr('class', 'layout')
-       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-       .attr('clip-path', 'url(#layout-clip)');
+    // 4. create layers groups
+    for (var key in this.layers) {
+      this.enterLayer(this.layers[key], g);
+    }
 
-      this$0.layout = g;
-
-      // 4. create layers groups
-      for (var key in this$0.layers) {
-        this$0.enterLayer(this$0.layers[key], g);
-      }
-
-      // 5. draw the graph
-      this$0.update();
-    });
+    // 5. draw the graph
+    this.update();
 
     return this;
   };
 
   // update layers
-  // @param layerIds <string|array> optionnal
-  //      ids of the layers to update
-  proto$0.update = function() {var layerIds = arguments[0];if(layerIds === void 0)layerIds = null;
-    var layers;
+  // @param layerIds <string|object|array> optionnal
+  //      layers to update or instance(s)
+  proto$0.update = function() {var SLICE$0 = Array.prototype.slice;var layers = SLICE$0.call(arguments, 0);var this$0 = this;
+    var toUpdate;
 
-    if (layerIds) {
-      layers = [];
-      // allow string or array as argument
-      if (!Array.isArray(layerIds)) { layerIds = [layerIds]; }
-
-      for (var key in this.layers) {
-        var layer = this.layers[key];
-
-        if (layerIds.indexOf(layer.param('id')) !== -1) {
-          layers.push(layer);
-        }
-      }
+    if (layers.length === 0) {
+      toUpdate = this.layers;
     } else {
-      layers = this.layers;
+      toUpdate = {};
+
+      layers.forEach(function(layer)  {
+        if (this$0.layers[layer]) { // `layer` is a layer id
+          toUpdate[layer] = this$0.layers[layer];
+        } else { // `layer is an object`
+          toUpdate[layer.param('id')] = layer;
+        }
+      });
     }
 
-    // update layers
-    for (var key$0 in layers) { layers[key$0].update(); }
-    for (var key$1 in layers) { layers[key$1].draw(); }
+    // update selected layers
+    for (var key in toUpdate) { toUpdate[key].update(); }
+    for (var key$0 in toUpdate) { toUpdate[key$0].draw(); }
   };
 
-  // @TODO implement
-  proto$0.remove = function() {
-    // this.undelegateEvents()
+  // destroy the timeline
+  proto$0.destroy = function() {
+    // this.layers.forEach((layer) => this.remove(layer));
+    // this.undelegateEvents();
   };
 
   // --------------------------------------------------
@@ -362,7 +389,7 @@ MIXIN$0(Timeline.prototype,proto$0);proto$0=void 0;return Timeline;})(EventEmitt
 
 // generic getters(setters) accessors and defaults
 getSet(Timeline.prototype, [
-  'id', 'margin', 'xDomain', 'yDomain', 'height', 'width', 'data'
+  'id', 'cid', 'margin', 'xDomain', 'yDomain', 'height', 'width', 'data'
 ], true);
 
 module.exports = Timeline;
