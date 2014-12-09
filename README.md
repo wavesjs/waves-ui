@@ -15,7 +15,6 @@ For an in depth  explanation on the philosophy and usage of this library please 
 
 ### Public API
 
-
 ##### `width(value)`
 
 >  @param `value` {int}  
@@ -30,7 +29,11 @@ For an in depth  explanation on the philosophy and usage of this library please 
 
 >  @param `dataDomain` {array} [minValue, maxValue]  
 >  set the data domain of the timeline (internally defines a d3 scale domain).
->  _example_: `timeline.xDomain([0, buffer.duration])`
+
+```javascript
+// example
+timeline.xDomain([0, buffer.duration]);
+```
 
 ##### `layer(layerInstance)` _alias_ `add(layerInstance)`
 
@@ -46,7 +49,11 @@ For an in depth  explanation on the philosophy and usage of this library please 
 
 >  @param `sel` {object} some d3 selection given from d3.call  
 >  construct all layers registered in the timeline and initialize event delegation
->  _use_: `d3.select('#timeline').call(timeline.draw);`
+
+```javascript
+// example
+d3.select('#timeline').call(timeline.draw)
+```
 
 ##### `update([...layers])`
 
