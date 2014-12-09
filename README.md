@@ -10,45 +10,49 @@ A working demo for this module can be found [here](https://github.com/Ircam-RnD/
 
 ### Public API
 
-* `params(parameters)`
+##### `params(parameters)`
 
-  @param `parameters` _object_  
-  inherited from LayerVis, allow to customize the timeline from a layer perspective. ex:  
+> @param `parameters` {object}  
+> inherited from LayerVis, allow to customize the timeline from a layer perspective. ex:  
 
-  ```javascript
-  waveform.params({
-    // set a unique id, optionnal, if not defined a default unique id is generated
-    id: 'my-timeline',
-    // the y domain of the data - default to [-1, 1] according to the domain of an audio buffer 
-    yDomain: [-1, 1],
-    // rendering strategy `canvas` or `svg`, default to svg
-    renderingStrategy: 'svg',
-    // use a web worker to parse data for visualization, may be usefull with many waveforms
-    useWorker: false,
-    // zoom delta before updating underlaying data
-    triggerUpdateZoomDelta: 0.01
-  })
-  ```
+```javascript
+var waveform = waveformVis().params({
+  // set a unique id, optionnal, 
+  // if not defined a default unique id is generated
+  id: 'my-timeline',
+  // the y domain of the data - default to [-1, 1] 
+  // according to the domain of an audio buffer 
+  yDomain: [-1, 1],
+  // rendering strategy `canvas` or `svg`, 
+  // defaults to svg
+  renderingStrategy: 'svg',
+  // use a web worker to parse data for visualization, 
+  // may be usefull with many waveforms
+  useWorker: false,
+  // zoom delta before updating underlaying data
+  triggerUpdateZoomDelta: 0.01
+})
+```
 
-* `data(data)`
+##### `data(data)`
 
-  @param `data` ArrayBuffer  
-  an ArrayBuffer to display
+> @param `data` {ArrayBuffer|Array}  
+> an ArrayBuffer to display
 
-* `duration(duration)`
+##### `duration(duration)`
 
-  @param `duration` _int_ (in second)  
-  duration of the ArrayBuffer to display
+> @param `duration` {int}  
+> duration of the ArrayBuffer to display (in second)  
 
-* `sampleRate(sampleRate)`
+##### `sampleRate(sampleRate)`
 
-  @param `sampleRate` _int_ (default 441000)  
-  the sample rate of the ArrayBuffer to display
+> @param `sampleRate` {int}    
+> the sample rate of the ArrayBuffer to display (default 441000)
 
-* `color(color)`
+##### `color(color)`
 
-  @param `color` _string_  
-  color of the waveform
+> @param `color` {string}  
+> color of the waveform
 
 
 #### Example Use
