@@ -11,6 +11,7 @@ class Timeline extends EventEmitter {
   constructor(options = {}) {
     if (!(this instanceof Timeline)) { return new Timeline(options); }
 
+    super(); // init EventEmitter
     // initialize
     this.layers = {};
     this.xScale = d3.scale.linear().clamp(true);
@@ -103,7 +104,7 @@ class Timeline extends EventEmitter {
 
   // initialize layer scales
   delegateScales(layer) {
-    // @NOTE: is the really needed ? - probably yes... see 'bachotheque'
+    // @NOTE: is the really needed ?
     // if (layer.hasOwnProperty('xScale')) {
     //   var baseXscale = this.xScale.copy();
     //   // if (!!layer.param('xDomain')) { baseXscale.domain(layer.param('xDomain')); }
@@ -315,16 +316,17 @@ class Timeline extends EventEmitter {
     // 2. event delegation
     this.delegateEvents();
 
-    // 3. create layout group and clip path
-    this.svg
-      .append('defs')
-      .append('clip-path')
-      .attr('id', 'layout-clip')
-      .append('rect')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', this.width() + this.margin().left + this.margin().right)
-        .attr('height', this.height() + this.margin().top + this.margin().bottom);
+    // 3. create layout group and clip path - 
+    // @FIXME - removed cause of Firefox bug
+    // this.svg
+    //   .append('defs')
+    //   .append('clip-path')
+    //   .attr('id', 'layout-clip-' + this.cid()())
+    //   .append('rect')
+    //     .attr('x', 0)
+    //     .attr('y', 0)
+    //     .attr('width', this.width() + this.margin().left + this.margin().right)
+    //     .attr('height', this.height() + this.margin().top + this.margin().bottom);
 
     var prevG = this.svg.select('g');
     var g = (!!prevG.node())? prevG : this.svg.append('g');
@@ -332,7 +334,7 @@ class Timeline extends EventEmitter {
 
     g.attr('class', 'layout')
      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-     .attr('clip-path', 'url(#layout-clip)');
+     // .attr('clip-path', 'url(#layout-clip-' + this.cid()() + ')');
 
     this.layout = g;
 
