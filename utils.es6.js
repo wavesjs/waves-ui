@@ -50,6 +50,7 @@ utils.uniqueId = function(prefix = '') {
   return id;
 };
 
+// 
 utils.extend = function extend() {
   // this can probably improved in es6
   var args = Array.prototype.slice.call(arguments);
@@ -62,6 +63,29 @@ utils.extend = function extend() {
   if (args.length > 1) { return extend.apply(null, args); }
   return host;
 };
+
+
+// style injection
+var _sheet;
+
+function createStyleSheet() {
+  var el = document.createElement('style');
+  // webkit hack: cf. http://davidwalsh.name/add-rules-stylesheets
+  el.appendChild(document.createTextNode(''));
+  document.body.appendChild(el);
+  _sheet = el.sheet;
+}
+
+utils.addCssRule = function(selector, rules, position = 0) {
+  if (!_sheet) { createStyleSheet(); }
+
+  var rule = Object.keys(rules).map((key) => {
+    return key + ':' + rules[key];
+  }).join(';');
+
+  rule = selector + '{' + rule + '}';
+  _sheet.insertRule(rule, position);
+}
 
 utils.UILoop = require('./lib/ui-loop');
 
