@@ -60,7 +60,23 @@ class BreakpointVis extends LayerVis {
   }
 
   xZoom() {
-    // @TODO
+    // var xScale = this.base.xScale;
+      // var min = xScale.domain()[0],
+      //     max = xScale.domain()[1];
+
+      // // var nuData = [];
+      // var dv = extend(this.defaultDataView(), this.dataView());
+      // var that = this;
+
+      // this.data().forEach(function(d, i) {
+      //   var start = dv.xc(d);
+      //   var duration = dv.duration(d);
+      //   var end = start + duration;
+
+      //   // rethink when feeling smarter
+      //   if((start > min && end < max) || (start < min && end < max && end > min) || (start > min && start < max && end > max) || (end > max && start < min)) nuData.push(d);
+      // });
+      this.update();
   }
 
   update(data) {
