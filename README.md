@@ -1,10 +1,11 @@
-##Waveform visualiser
+## Waveform visualiser
 
 > Waveform drawing utility
 
 Use this module to visualise waveform data over a shared timeline.  
 The module relies on the [timeline](https://github.com/Ircam-RnD/timeLine) object.
-###Demo
+
+### Demo
 
 A working demo for this module can be found [here](https://github.com/Ircam-RnD/waveform-vis)
 
@@ -13,25 +14,28 @@ A working demo for this module can be found [here](https://github.com/Ircam-RnD/
 ##### `params(parameters)`
 
 > @param `parameters` {object}  
-> inherited from LayerVis, allow to customize the timeline from a layer perspective. ex:  
+> inherited from LayerVis, allow to customize the waveform from a layer perspective. 
+
+_example:_ 
 
 ```javascript
-var waveform = waveformVis().params({
-  // set a unique id, optionnal, 
-  // if not defined a default unique id is generated
-  id: 'my-timeline',
-  // the y domain of the data - default to [-1, 1] 
-  // according to the domain of an audio buffer 
-  yDomain: [-1, 1],
-  // rendering strategy `canvas` or `svg`, 
-  // defaults to svg
-  renderingStrategy: 'svg',
-  // use a web worker to parse data for visualization, 
-  // may be usefull with many waveforms
-  useWorker: false,
-  // zoom delta before updating underlaying data
-  triggerUpdateZoomDelta: 0.01
-})
+var waveform = waveformVis()
+  .params({
+    // set a unique id, optionnal, 
+    // if not defined a default unique id is generated
+    id: 'my-timeline',
+    // the y domain of the data - default to [-1, 1] 
+    // according to the domain of an audio buffer 
+    yDomain: [-1, 1],
+    // rendering strategy `canvas` or `svg`, 
+    // defaults to svg
+    renderingStrategy: 'svg',
+    // use a web worker to parse data for visualization, 
+    // may be usefull with many waveforms
+    useWorker: false,
+    // zoom delta before updating underlaying data
+    triggerUpdateZoomDelta: 0.01
+  });
 ```
 
 ##### `data(data)`
@@ -55,7 +59,7 @@ var waveform = waveformVis().params({
 > color of the waveform
 
 
-#### Example Use
+#### Example use
 
 ```javascript
 var d3 = require('d3');

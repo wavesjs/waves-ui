@@ -112,9 +112,6 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     var width = range[1] - range[0];
     var extractAtTimes = [];
 
-    // if (this.__isProcessing) { return; }
-    // this.__isProcessing = true;
-
     // define all times where a minMax snapshot must be done
     for (var pixel = 0; pixel < width; pixel++) {
       var timelineTimeStart = this.base.xScale.invert(pixel);
@@ -126,8 +123,6 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     var defaultValue = (yDomain[0] + yDomain[1]) / 2;
     var sampleRate = this.sampleRate()();
     var windowSize = this.getSamplesPerPixel();
-
-    console.time('downsample');
 
     if (this.param('useWorker')) {
       var message = {
@@ -182,8 +177,6 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
 
   // cache the down sampling result and create some scale
   proto$0.setDownSample = function(data) {
-    // console.timeEnd('downsample');
-    this.__isProcessing = false;
     // update xxScale according to new base.xScale.domain and data.length
     this.xxScale
       .domain([0, data.length])
