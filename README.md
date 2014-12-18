@@ -44,7 +44,7 @@ var breakpoints = breakpointVis()
     // defaults to true
     displayLine: true,
     // type of interpolation between dots
-    // cf. [https://github.com/mbostock/d3/wiki/SVG-Shapes#line_interpolate](https://github.com/mbostock/d3/wiki/SVG-Shapes#line_interpolate)
+    // cf. https://github.com/mbostock/d3/wiki/SVG-Shapes#line_interpolate
     interpolate: 'monotone'
   });
 ```
@@ -54,16 +54,14 @@ var breakpoints = breakpointVis()
 > @param `data` {ArrayBuffer|Array}  
 > pass a reference of the data to visualize to the layer
 
-##### accessors
-
-- `cx(func)`
-- `cy(func)`
-- `r(func)`
-- `opacity(func)`
-- `color(func)`
+##### `cx(func)`
+##### `cy(func)`
+##### `r(func)`
+##### `opacity(func)`
+##### `color(func)`
 
 > @param `func` {function}  
-> function defining how to map your data with the breakpoint representation,   
+> accessors: function defining how to map your data with the breakpoint representation,   
 > the default accessors match the method name.
 
 _example:_ 
