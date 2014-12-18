@@ -18,12 +18,11 @@ class BreakpointVis extends LayerVis {
     var defaults = {
       type: name,
       id: uniqueId(name),
-      interpolate: 'linear',
-      yDomain: [0, 1],
       opacity: 1,
       color: '#000000',
       lineColor: '#000000',
-      displayLine: true
+      displayLine: true,
+      interpolate: 'linear'
     };
 
     this.params(defaults);
@@ -133,7 +132,7 @@ class BreakpointVis extends LayerVis {
 
 // add data accessors
 getSet(BreakpointVis.prototype, [
-  'cx', 'cy', 'r', 'opacity', 'color', 'lineColor'
+  'cx', 'cy', 'r', 'opacity', 'color'
 ]);
 
 module.exports = BreakpointVis;

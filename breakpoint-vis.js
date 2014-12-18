@@ -18,12 +18,11 @@ var BreakpointVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o
     var defaults = {
       type: name,
       id: uniqueId(name),
-      interpolate: 'linear',
-      yDomain: [0, 1],
       opacity: 1,
       color: '#000000',
       lineColor: '#000000',
-      displayLine: true
+      displayLine: true,
+      interpolate: 'linear'
     };
 
     this.params(defaults);
@@ -133,7 +132,7 @@ MIXIN$0(BreakpointVis.prototype,proto$0);proto$0=void 0;return BreakpointVis;})(
 
 // add data accessors
 getSet(BreakpointVis.prototype, [
-  'cx', 'cy', 'r', 'opacity', 'color', 'lineColor'
+  'cx', 'cy', 'r', 'opacity', 'color'
 ]);
 
 module.exports = BreakpointVis;
