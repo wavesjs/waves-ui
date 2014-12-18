@@ -6,19 +6,27 @@ utils.isFunction = function(func) {
   return Object.prototype.toString.call(func) === '[object Function]';
 };
 
+var explode = function(items, cb) {
+  if (Array.isArray(items)) {
+    items.forEach(cb);
+  } else {
+    cb(items);
+  }
+};
+
 // combined accessors
 utils.getSet = function getSet(obj, props = null, valueMode = false){
   if (!props) throw new Error('Property name is mandatory.');
 
   var add = (p = null) => {
-    var _prop = '__' + p;
+    var _prop = '_' + p;
     if (!obj.hasOwnProperty(_prop)) obj[_prop] = null;
 
     obj[p] = function(value = null) {
       if (value === null) return this[_prop];
 
       if (!utils.isFunction(value) && !valueMode) {
-        this[_prop] = () => value;
+        this[_prop] = function() { return value; };
       } else {
         this[_prop] = value;
       }
@@ -27,13 +35,78 @@ utils.getSet = function getSet(obj, props = null, valueMode = false){
     };
   };
 
-  if (Array.isArray(props)) {
-    props.forEach((p) => add(p));
-  } else {
-    add(props);
-  }
+  explode(props, (p) => add(p));
 
 };
+
+// combined accessors
+utils.accessors = {
+
+  identity: function(obj, props = null) {
+    if (!props) throw new Error('Property name is mandatory.');
+    
+    var add = (p = null) => {
+      var _prop = '_' + p;
+      if (!obj.hasOwnProperty(_prop)) obj[_prop] = null;
+
+      obj[p] = function(value = null) {
+        if (value === null) return this[_prop];
+        this[_prop] = value;
+        return this;
+      };
+    };
+
+    explode(props, (p) => add(p));
+  },
+
+  getFunction: function(obj, props = null) {
+    if (!props) throw new Error('Property name is mandatory.');
+
+    var add = (p = null) => {
+      var _prop = '_' + p;
+      if (!obj.hasOwnProperty(_prop)) obj[_prop] = null;
+
+      obj[p] = function(value = null) {
+        if (value === null) return this[_prop];
+
+        if (!utils.isFunction(value)) {
+          this[_prop] = function() { return value; };
+        } else {
+          this[_prop] = value;
+        }
+        return this;
+      };
+    };
+
+    explode(props, (p) => add(p));
+
+  },
+
+  getValue: function(obj, props = null) {
+    if (!props) throw new Error('Property name is mandatory.');
+
+    var add = (p = null) => {
+      var _prop = '_' + p;
+      if (!obj.hasOwnProperty(_prop)) obj[_prop] = null;
+
+      obj[p] = function(value = null) {
+        if (value === null) {
+          if (!utils.isFunction(this[_prop])) {
+            return this[_prop];
+          }
+          
+          return this[_prop]();
+        }
+
+        this[_prop] = value;
+        return this;
+      };
+    };
+
+    explode(props, (p) => add(p));
+  }
+};
+
 
 // return a unique identifier with an optionnal prefix
 var _counters = { '': 0 };
@@ -64,6 +137,7 @@ utils.extend = function extend() {
 };
 
 utils.UILoop = require('./lib/ui-loop');
+utils.observe = require('./lib/observe');
 
 // create a default data accessor for each given attrs
 
