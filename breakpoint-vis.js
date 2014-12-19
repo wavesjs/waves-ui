@@ -1,8 +1,7 @@
 var getSet   = require('utils').getSet;
-// var extend   = require('utils').extend;
 var uniqueId = require('utils').uniqueId;
 var LayerVis = require('layer-vis');
-var pck = require('./package.json');
+var pck      = require('./package.json');
 
 'use strict';
 
@@ -22,23 +21,24 @@ var BreakpointVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o
       color: '#000000',
       lineColor: '#000000',
       displayLine: true,
+      radius: 3,
       interpolate: 'linear'
     };
 
     this.params(defaults);
 
     this.cx(function(d)  {var v = arguments[1];if(v === void 0)v = null;
-      if (v === null) return +d.cx || 1;
+      if (v === null) return +d.cx;
       d.cx = (+v);
     });
 
     this.cy(function(d)  {var v = arguments[1];if(v === void 0)v = null;
-      if (v === null) return +d.cy || 1;
+      if (v === null) return +d.cy;
       d.cy = (+v);
     });
 
     this.r(function(d)  {var v = arguments[1];if(v === void 0)v = null;
-      if (v === null) return +d.r || 3;
+      if (v === null) return +d.r;
       d.r = (+v);
     });
 
@@ -100,9 +100,10 @@ var BreakpointVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o
 
     // create points
     sel.enter()
-      .append('circle')
+      .append('g')
       .classed('item', true)
-      .classed(this.param('unitClass'), true);
+      .classed(this.param('unitClass'), true)
+        .append('circle')
 
     sel.exit().remove();
   };
@@ -120,8 +121,8 @@ var BreakpointVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o
 
     var cx = function(d)  { return _xScale(_cx(d)); };
     var cy = function(d)  { return _yScale(_cy(d)); };
-    var r  = function(d)  { return _r(d); };
-    var color     = function(d)  { return _color(d) || this$0.param('color'); }
+    var r  = function(d)  { return _r(d) || this$0.param('radius'); };
+    var color   = function(d)  { return _color(d) || this$0.param('color'); }
     var opacity = function(d)  { return _opacity(d) || this$0.param('opacity'); }
 
     // draw line
@@ -137,7 +138,8 @@ var BreakpointVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o
     }
 
     // draw circles
-    el.attr('fill', color)
+    el.selectAll('circle')
+      .attr('fill', color)
       .attr('fill-opacity', opacity)
       .attr('cx', cx)
       .attr('cy', cy)

@@ -34,18 +34,17 @@ var breakpoints = breakpointVis()
     // opacity of the line and fallback opacity of the dots
     // defaults to 1
     opacity: 1, 
-    // fallback color of the dots
-    // defaults to '#000000'
+    // fallback color of the dots - defaults to '#000000'
     color: 'red',
-    // color of the line 
-    // defaults to '#000000'
+    // color of the line - defaults to '#000000'
     lineColor: '#242424',
-    // display the line between the dots
-    // defaults to true
+    // display the line between the dots - defaults to true
     displayLine: true,
     // type of interpolation between dots
     // cf. https://github.com/mbostock/d3/wiki/SVG-Shapes#line_interpolate
-    interpolate: 'monotone'
+    interpolate: 'monotone',
+    // fallback for the dots radius - defaults to 3 pixels
+    radius: 3
   });
 ```
 

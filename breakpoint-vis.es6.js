@@ -1,8 +1,7 @@
 var getSet   = require('utils').getSet;
-// var extend   = require('utils').extend;
 var uniqueId = require('utils').uniqueId;
 var LayerVis = require('layer-vis');
-var pck = require('./package.json');
+var pck      = require('./package.json');
 
 'use strict';
 
@@ -22,23 +21,24 @@ class BreakpointVis extends LayerVis {
       color: '#000000',
       lineColor: '#000000',
       displayLine: true,
+      radius: 3,
       interpolate: 'linear'
     };
 
     this.params(defaults);
 
     this.cx((d, v = null) => {
-      if (v === null) return +d.cx || 1;
+      if (v === null) return +d.cx;
       d.cx = (+v);
     });
 
     this.cy((d, v = null) => {
-      if (v === null) return +d.cy || 1;
+      if (v === null) return +d.cy;
       d.cy = (+v);
     });
 
     this.r((d, v = null) => {
-      if (v === null) return +d.r || 3;
+      if (v === null) return +d.r;
       d.r = (+v);
     });
 
@@ -100,9 +100,10 @@ class BreakpointVis extends LayerVis {
 
     // create points
     sel.enter()
-      .append('circle')
+      .append('g')
       .classed('item', true)
-      .classed(this.param('unitClass'), true);
+      .classed(this.param('unitClass'), true)
+        .append('circle')
 
     sel.exit().remove();
   }
@@ -120,8 +121,8 @@ class BreakpointVis extends LayerVis {
 
     var cx = (d) => { return _xScale(_cx(d)); };
     var cy = (d) => { return _yScale(_cy(d)); };
-    var r  = (d) => { return _r(d); };
-    var color     = (d) => { return _color(d) || this.param('color'); }
+    var r  = (d) => { return _r(d) || this.param('radius'); };
+    var color   = (d) => { return _color(d) || this.param('color'); }
     var opacity = (d) => { return _opacity(d) || this.param('opacity'); }
 
     // draw line
@@ -137,7 +138,8 @@ class BreakpointVis extends LayerVis {
     }
 
     // draw circles
-    el.attr('fill', color)
+    el.selectAll('circle')
+      .attr('fill', color)
       .attr('fill-opacity', opacity)
       .attr('cx', cx)
       .attr('cy', cy)
