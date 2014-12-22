@@ -15,6 +15,11 @@ For an in depth  explanation on the philosophy and usage of this library please 
 
 ### Public API
 
+##### `constructor(options)`
+
+> @param `options` {object}
+> `options.name` a unique name to identify the timeline
+
 ##### `width(value)`
 
 >  @param `value` {int}  
@@ -55,10 +60,10 @@ timeline.xDomain([0, buffer.duration]);
 d3.select('#timeline').call(timeline.draw)
 ```
 
-##### `update([...layers])`
+##### `update(...layers)`
 
 >  @params `...layers` {list} _optionnal_
->  any number of layer to update, each argument can be a layer instance or a layer id, 
+>  any number of layer to update, references to the layers to update, 
 >  if no arguments given, update all registered layers
 
 
