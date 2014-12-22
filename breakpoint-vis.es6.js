@@ -141,9 +141,14 @@ class BreakpointVis extends LayerVis {
     el.selectAll('circle')
       .attr('fill', color)
       .attr('fill-opacity', opacity)
-      .attr('cx', cx)
-      .attr('cy', cy)
-      .attr('r', r);
+      .attr('cx', 0)
+      .attr('cy', 0)
+      .attr('r', r)
+      .attr('transform', (d) => {
+        return 'translate(' + cx(d) + ', ' + cy(d) + ')';
+      });
+
+    if (!!this.each()) { el.each(this.each()); }
   }
 
 }

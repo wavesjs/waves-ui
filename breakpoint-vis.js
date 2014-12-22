@@ -141,9 +141,14 @@ var BreakpointVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o
     el.selectAll('circle')
       .attr('fill', color)
       .attr('fill-opacity', opacity)
-      .attr('cx', cx)
-      .attr('cy', cy)
-      .attr('r', r);
+      .attr('cx', 0)
+      .attr('cy', 0)
+      .attr('r', r)
+      .attr('transform', function(d)  {
+        return 'translate(' + cx(d) + ', ' + cy(d) + ')';
+      });
+
+    if (!!this.each()) { el.each(this.each()); }
   };
 
 MIXIN$0(BreakpointVis.prototype,proto$0);proto$0=void 0;return BreakpointVis;})(LayerVis);
