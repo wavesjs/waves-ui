@@ -6,6 +6,19 @@ var addCssRule = require('utils').addCssRule;
 
 'use strict';
 
+/*
+  @TODO:
+  - merge with make editable and brush
+  - add a param `interactions: {
+    selectable: true|false,
+    editable: true|false,
+    brushable: true|false  
+  }`
+  - should listen events from the timeline and react accordingly to its
+    interactions config
+  - layers '-vis' and '-edit' would also be merged at the end of the process
+*/
+
 class Layer {
 
   constructor() {
@@ -112,8 +125,11 @@ class Layer {
     // call draw
   }
 
-  // to be implement in childs
+  // interface - implement in childs
+  // @TODO check Proxies to share common behavior like
+  // if (!!this.each()) { el.each(this.each()); } // in `draw`
   draw() {}
+
   xZoom() {}
 }
 

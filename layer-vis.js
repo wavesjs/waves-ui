@@ -112,8 +112,11 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     // call draw
   };
 
-  // to be implement in childs
+  // implement in childs
+  // @TODO check Proxies to share common behavior like
+  // if (!!this.each()) { el.each(this.each()); } // in `draw`
   proto$0.draw = function() {};
+
   proto$0.xZoom = function() {};
 MIXIN$0(Layer.prototype,proto$0);proto$0=void 0;return Layer;})();
 
