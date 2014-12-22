@@ -2,6 +2,7 @@ var LayerVis  = require('layer-vis');
 var pck       = require('./package.json');
 var getSet    = require('utils').getSet;
 var uniqueId  = require('utils').uniqueId;
+var name = pck.name.replace('-vis', '');
 
 'use strict';
 
@@ -11,16 +12,11 @@ class SegmentVis extends LayerVis {
     if (!(this instanceof SegmentVis)) return new SegmentVis;
 
     super();
-
-    var name = pck.name.replace('-vis', '');
-
-    var defaults = {
-      type: name,
-      id: uniqueId(name),
-      rectClass: 'rect'
-    };
     // set layer defaults
-    this.params(defaults);
+    this.params({ 
+      type: name, 
+      opacity: 1 
+    });
 
     this.__minWidth = 1;
     // initialize data accessors
@@ -48,11 +44,15 @@ class SegmentVis extends LayerVis {
       if (v === null) return d.color ? d.color + '' : '#000000';
       d.color = v + '';
     });
+
+    this.opacity((d, v = null) => {
+      if (v === null) return d.opacity;
+      d.opacity = v + '';
+    });
   }
 
 
   update(data) {
-
     super.update(data);
 
     var sel = this.g.selectAll('.' + this.param('unitClass'))
@@ -63,11 +63,7 @@ class SegmentVis extends LayerVis {
       .classed('item', true)
       .classed(this.param('unitClass'), true);
 
-    var opacity = this.opacity() ? this.opacity() : this.param('opacity');
-
-    g.append('rect')
-      .attr('class', this.param('rectClass'))
-      .attr('fill-opacity', opacity);
+    g.append('rect');
 
     sel.exit().remove();
 
@@ -79,19 +75,24 @@ class SegmentVis extends LayerVis {
 
     var accessors = this.getAccessors();
 
-    el.selectAll('.' + this.param('rectClass'))
-      .attr('x', accessors.x)
-      .attr('y', accessors.y)
+    el.attr('transform', function(d) {
+      return 'translate(' + accessors.x(d) + ', ' + accessors.y(d) + ')';
+    })
+
+    el.selectAll('rect')
+      .attr('x', 0)
+      .attr('y', 0)
       .attr('width', accessors.w)
       .attr('height', accessors.h)
-      .attr('fill', accessors.color);
+      .attr('fill', accessors.color)
+      .attr('fill-opacity', accessors.opacity);
 
     if (!!this.each()) { el.each(this.each()); }
-
+    // return el for segment edit's `draw` method
     return el;
   }
 
-  // #NOTE add a caching system ?
+  // #NOTE add some caching system ?
   getAccessors() {
     // if (this.params('accessors')) {
     //   return this.params('accessors');
@@ -102,10 +103,11 @@ class SegmentVis extends LayerVis {
 
     // data mappers
     var _start    = this.start();
-    var _duration = this.duration();
     var _y        = this.y();
-    var _color    = this.color();
+    var _duration = this.duration();
     var _height   = this.height();
+    var _color    = this.color();
+    var _opacity  = this.opacity();
 
     // define accesors
     var w = (d) => { return Math.max(this.__minWidth, _xScale(_duration(d))); };
@@ -114,10 +116,11 @@ class SegmentVis extends LayerVis {
     var y = (d) => { return _yScale(_y(d)) - h(d); };
 
     var color = (d) => { return _color(d); };
+    var opacity = (d) => { return (_opacity(d) || this.param('opacity')); }
 
     // this.params('accessors', { w: w, h: h, x: x, y: y, color: color });
     // return this.params('accessors');
-    return { w: w, h: h, x: x, y: y, color: color };
+    return { w, h, x, y, color, opacity };
   }
 
   xZoom(val) {
@@ -128,14 +131,21 @@ class SegmentVis extends LayerVis {
     var min = xScale.domain()[0],
         max = xScale.domain()[1];
 
-    var nuData = [];
+    var newData = [];
 
     this.data().forEach(function(d, i) {
       var start = that.start()(d);
       var duration = that.duration()(d);
       var end = start + duration;
       // if((start + dv.duration(d)) <= max && start >= min) nuData.push(d);
-      if((start > min && end < max) || (start < min && end < max && end > min) || (start > min && start < max && end > max) || (end > max && start < min)) nuData.push(d);
+      if (
+        (start > min && end < max) || 
+        (start < min && end < max && end > min) || 
+        (start > min && start < max && end > max) || 
+        (end > max && start < min)
+      ) {
+        newData.push(d);
+      }
       // if((end < min && start < min) || (end > max && start > max)) nuData.push(d);
     });
 

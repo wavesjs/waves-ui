@@ -2,6 +2,7 @@ var LayerVis  = require('layer-vis');
 var pck       = require('./package.json');
 var getSet    = require('utils').getSet;
 var uniqueId  = require('utils').uniqueId;
+var name = pck.name.replace('-vis', '');
 
 'use strict';
 
@@ -11,16 +12,11 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
     if (!(this instanceof SegmentVis)) return new SegmentVis;
 
     super$0.call(this);
-
-    var name = pck.name.replace('-vis', '');
-
-    var defaults = {
-      type: name,
-      id: uniqueId(name),
-      rectClass: 'rect'
-    };
     // set layer defaults
-    this.params(defaults);
+    this.params({ 
+      type: name, 
+      opacity: 1 
+    });
 
     this.__minWidth = 1;
     // initialize data accessors
@@ -48,11 +44,15 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
       if (v === null) return d.color ? d.color + '' : '#000000';
       d.color = v + '';
     });
+
+    this.opacity(function(d)  {var v = arguments[1];if(v === void 0)v = null;
+      if (v === null) return d.opacity;
+      d.opacity = v + '';
+    });
   }if(super$0!==null)SP$0(SegmentVis,super$0);SegmentVis.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":SegmentVis,"configurable":true,"writable":true}});DP$0(SegmentVis,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
 
   proto$0.update = function(data) {
-
     super$0.prototype.update.call(this, data);
 
     var sel = this.g.selectAll('.' + this.param('unitClass'))
@@ -63,11 +63,7 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
       .classed('item', true)
       .classed(this.param('unitClass'), true);
 
-    var opacity = this.opacity() ? this.opacity() : this.param('opacity');
-
-    g.append('rect')
-      .attr('class', this.param('rectClass'))
-      .attr('fill-opacity', opacity);
+    g.append('rect');
 
     sel.exit().remove();
 
@@ -79,19 +75,24 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
 
     var accessors = this.getAccessors();
 
-    el.selectAll('.' + this.param('rectClass'))
-      .attr('x', accessors.x)
-      .attr('y', accessors.y)
+    el.attr('transform', function(d) {
+      return 'translate(' + accessors.x(d) + ', ' + accessors.y(d) + ')';
+    })
+
+    el.selectAll('rect')
+      .attr('x', 0)
+      .attr('y', 0)
       .attr('width', accessors.w)
       .attr('height', accessors.h)
-      .attr('fill', accessors.color);
+      .attr('fill', accessors.color)
+      .attr('fill-opacity', accessors.opacity);
 
     if (!!this.each()) { el.each(this.each()); }
-
+    // return el for segment edit's `draw` method
     return el;
   };
 
-  // #NOTE add a caching system ?
+  // #NOTE add some caching system ?
   proto$0.getAccessors = function() {var this$0 = this;
     // if (this.params('accessors')) {
     //   return this.params('accessors');
@@ -102,10 +103,11 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
 
     // data mappers
     var _start    = this.start();
-    var _duration = this.duration();
     var _y        = this.y();
-    var _color    = this.color();
+    var _duration = this.duration();
     var _height   = this.height();
+    var _color    = this.color();
+    var _opacity  = this.opacity();
 
     // define accesors
     var w = function(d)  { return Math.max(this$0.__minWidth, _xScale(_duration(d))); };
@@ -114,10 +116,11 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
     var y = function(d)  { return _yScale(_y(d)) - h(d); };
 
     var color = function(d)  { return _color(d); };
+    var opacity = function(d)  { return (_opacity(d) || this$0.param('opacity')); }
 
     // this.params('accessors', { w: w, h: h, x: x, y: y, color: color });
     // return this.params('accessors');
-    return { w: w, h: h, x: x, y: y, color: color };
+    return { w: w, h: h, x: x, y: y, color: color, opacity: opacity };
   };
 
   proto$0.xZoom = function(val) {
@@ -128,14 +131,21 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
     var min = xScale.domain()[0],
         max = xScale.domain()[1];
 
-    var nuData = [];
+    var newData = [];
 
     this.data().forEach(function(d, i) {
       var start = that.start()(d);
       var duration = that.duration()(d);
       var end = start + duration;
       // if((start + dv.duration(d)) <= max && start >= min) nuData.push(d);
-      if((start > min && end < max) || (start < min && end < max && end > min) || (start > min && start < max && end > max) || (end > max && start < min)) nuData.push(d);
+      if (
+        (start > min && end < max) || 
+        (start < min && end < max && end > min) || 
+        (start > min && start < max && end > max) || 
+        (end > max && start < min)
+      ) {
+        newData.push(d);
+      }
       // if((end < min && start < min) || (end > max && start > max)) nuData.push(d);
     });
 
