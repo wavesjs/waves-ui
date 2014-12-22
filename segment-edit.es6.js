@@ -1,6 +1,6 @@
 var SegmentVis   = require('segment-vis');
 var makeEditable = require('make-editable');
-var extend       = require('utils').extend;
+// var extend       = require('utils').extend;
 
 'use strict';
 
@@ -11,11 +11,13 @@ class SegmentEdit extends SegmentVis {
 
     super();
     // default editable properties
-    this.params({
+    var defaults = {
       edits: ['x', 'y', 'width', 'height'],
-      handlerWidth: 3,
+      handlerWidth: 2,
       handlerOpacity: 0
-    });
+    };
+
+    this.params(defaults);
   }
 
   // add handler on segment shape
@@ -37,18 +39,24 @@ class SegmentEdit extends SegmentVis {
     el = super.draw(el);
     var accessors = this.getAccesors();
 
+    var _handlerWidth = parseInt(this.param('handlerWidth'), 10)
+    var _halfHandler = _handlerWidth * 0.5;
+
     el.selectAll('.handle.left')
-      .attr('x1', accessors.lhx)
-      .attr('x2', accessors.lhx)
-      .attr('y1', accessors.y)
-      .attr('y2', accessors.hh)
+      .attr('x1', _halfHandler)
+      .attr('x2', _halfHandler)
+      .attr('y1', 0)
+      .attr('y2', accessors.h)
       .style('stroke', accessors.color);
 
     el.selectAll('.handle.right')
-      .attr('x1', accessors.rhx)
-      .attr('x2', accessors.rhx)
-      .attr('y1', accessors.y)
-      .attr('y2', accessors.hh)
+      .attr('x1', 0)
+      .attr('x2', 0)
+      .attr('y1', 0)
+      .attr('y2', accessors.h)
+      .attr('transform', (d) => { 
+        return 'translate(' + accessors.rhx(d) + ', 0)'; 
+      })
       .style('stroke', accessors.color);
   }
 
@@ -59,16 +67,16 @@ class SegmentEdit extends SegmentVis {
     var _halfHandler = _handlerWidth * 0.5;
 
     // handler positions
-    var hh  = (d) => { return accessors.y(d) + accessors.h(d); }
-    var lhx = (d) => { return accessors.x(d) + _halfHandler; }
+    // var hh  = (d) => { return accessors.y(d) + accessors.h(d); }
+    // var lhx = (d) => { return accessors.x(d) + _halfHandler; }
     var rhx = (d) => {
       let width = accessors.w(d);
 
       return (width < (_handlerWidth * 2)) ?
-        accessors.x(d) + _handlerWidth + this.__minWidth : accessors.x(d) + width - _halfHandler;
+        _handlerWidth + this.__minWidth : width - _halfHandler;
     }
 
-    return extend(accessors, { hh: hh, lhx: lhx, rhx: rhx });
+    return Object.assign(accessors, { rhx: rhx });
   }
 
   // logic performed to select an item from the brush
@@ -80,10 +88,10 @@ class SegmentEdit extends SegmentVis {
     var matchX = false, matchY = false;
 
     // data mappers
-    var _start = this.start();
-    var _duration = this.duration();
-    var _y = this.y();
-    var _height = this.height();
+    var start = this.start();
+    var duration = this.duration();
+    var y = this.y();
+    var height = this.height();
 
     this.g.selectAll('.selectable').classed('selected', (d, i) => {
       // var offsetTop = (that.top() || 0) + (that.base.margin().top || 0);
@@ -91,8 +99,8 @@ class SegmentEdit extends SegmentVis {
 
       // X match
       if (modeX) {
-        var x1 = _start(d);
-        var x2 = x1 + _duration(d);
+        var x1 = start(d);
+        var x2 = x1 + duration(d);
         //            begining sel               end sel
         var matchX1 = extent[0][0] <= x1 && x2 < extent[1][0];
         var matchX2 = extent[0][0] <= x2 && x1 < extent[1][0];
@@ -104,8 +112,8 @@ class SegmentEdit extends SegmentVis {
 
       // Y match
       if (modeY) {
-        var y1 = _y(d);
-        var y2 = y1 + _height(d);
+        var y1 = y(d);
+        var y2 = y1 + height(d);
         //            begining sel               end sel
         var matchY1 = extent[0][1] <= y1 && y2 < extent[1][1];
         var matchY2 = extent[0][1] <= y2 && y1 <= extent[1][1];
@@ -121,8 +129,8 @@ class SegmentEdit extends SegmentVis {
 
   // checks if the clicked item is one of our guys
   clicked(item) {
-    return item.classList.contains(this.param('rectClass')) ||
-           item.tagName === 'line';
+    var items = this.g.selectAll('rect, line')[0];
+    return items.indexOf(item) !== -1;
   }
 
   // mouse drag event switcher depending on drag (left|right|block) levels
@@ -158,7 +166,7 @@ class SegmentEdit extends SegmentVis {
     var _duration = this.duration();
     var _y = this.y();
 
-    // has to be the svg because the group is virtually not there :(
+    // has to be the svg because the group is virtually not there :( ??
     if (mode === 'l' || mode === 'r') {
       this.base.svg.classed('handle-resize', true);
     } else {
@@ -206,7 +214,6 @@ class SegmentEdit extends SegmentVis {
         _y(d, this.yScale.invert(posY));
       }
     }
-
     // redraw `.selected` item(s)
     this.draw(this.d3.select(item));
   }
