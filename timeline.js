@@ -15,15 +15,13 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     this.name(options.name || shortId.generate());
     this.cname(uniqueId(this.name()));
     // defaults
-    this.margin({top: 0, right: 0, bottom: 0, left: 0});
+    this.margin({ top: 0, right: 0, bottom: 0, left: 0 });
     this.xDomain([0, 0]);
     this.yDomain([0, 1]);
-
     // initialize
     this.layers = {};
     this.xScale = d3.scale.linear().clamp(true);
     this.yScale = d3.scale.linear().clamp(true);
-
     // alias `EventEmitter.emit`
     this.trigger = this.emit;
     // keep track of scales initialization
@@ -192,6 +190,24 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
       if (e.fromElement !== body) { return; }
       this$0.trigger('mouseleave', e);
     });
+
+    // var brush = d3.svg.brush()
+    //   .x(this.xScale)
+    //   .y(this.yScale);
+    
+    // brush.on('brushstart', function() {
+    //   console.log('brushstart', d3.event);
+    // });
+
+    // brush.on('brush', function() {
+    //   console.log('brush', d3.event);
+    // });
+
+    // brush.on('brushend', function() {
+    //   console.log('brushend', d3.event);
+    // });
+
+    // this.boundingBox.call(brush);
   };
 
   // should clean event delegation, in conjonction with a `remove` method
@@ -260,7 +276,7 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     layer.xScale.domain([targetStart, targetStart + targetLength]);
   };
 
-  // @NOTE - used ?
+  // @NOTE - used ? - is called from make editable
   proto$0.xZoomSet = function() {
     // saves new scale reference
     this.originalXscale = this.xScale.copy();
@@ -288,7 +304,7 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
       
     // 1. create svg element
     // @NOTE viewbox: do we really want this behavior ?
-    // @NOTE doesn't work well with foreignobject canvas
+    //       doesn't work well with foreignobject canvas
     // cf. http://stackoverflow.com/questions/3120739/resizing-svg-in-html
     var margin = this.margin();
     var outerWidth  = this.width() + margin.left + margin.right;
@@ -296,15 +312,14 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     var viewBox = '0 0 ' + outerWidth + ' ' + outerHeight;
 
     this.svg = el.append('svg')
-      .attr('width', '100%')
-      .attr('height', '100%')
-      .attr('viewBox', viewBox)
+      .attr('width', outerWidth)
+      .attr('height', outerHeight)
+      // .attr('width', '100%')
+      // .attr('height', '100%')
+      // .attr('viewBox', viewBox)
       .attr('data-cname', this.cname());
 
-    // 2. delegate events
-    this.delegateEvents();
-
-    // 3. create layout group and clip path
+    // 2. create layout group and clip path
     var clipPathId = 'bouding-box-clip-' + this.cname();
 
     this.svg
@@ -321,6 +336,10 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
       .attr('class', 'bounding-box')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
       .attr('clip-path', 'url(#' + clipPathId + ')');
+
+
+    // 3. delegate events
+    this.delegateEvents();
 
     // 4. create layers groups
     for (var key in this.layers) {
