@@ -1,7 +1,8 @@
-var pck       = require('./package.json');
-var getSet    = require('utils').getSet;
-var _         = require('underscore.string');
-var uniqueId  = require('utils').uniqueId;
+var pck        = require('./package.json');
+var slugify    = require('underscore.string').slugify;
+var accessors  = require('utils').accessors;
+var uniqueId   = require('utils').uniqueId;
+var addCssRule = require('utils').addCssRule;
 
 'use strict';
 
@@ -10,7 +11,7 @@ class Layer {
   constructor() {
 
     this.unitClass = null;
-    this.dname = null;
+    // this.dname = null;
     this.xBaseDomain = null;
     this.yScale = null;
     this.base = null;
@@ -23,16 +24,15 @@ class Layer {
 
     // general defaults
     this.params({
-      id: uniqueId(pck.name || 'layer'),
-      type: pck.name,
-      // color: '#000',
+      type: 'layer',
+      nameAsIdAttribute: false,
       opacity: 1,
       height: 0,
       top: 0,
-      selectable: false,
-      xDomain: null,
       yDomain: null,
       yRange: null
+      // selectable: false,
+      // isEditable: false
     });
   }
 
@@ -54,6 +54,7 @@ class Layer {
     return this;
   }
 
+  // @NOTE - used ?
   name(value = null) {
     if (value === null) return this.__params.name;
     this.__params.name = value;
@@ -68,33 +69,38 @@ class Layer {
   }
 
   load(base, d3) {
-    this.base = base; // bind the baseTimeLine
+    var name  = this.param('name') || this.param('type');
+    var cname = uniqueId(slugify(name));
+    var unitClass = [this.param('type'), 'item'].join('-');
 
-    this.params({
-      unitClass: this.param('type') + '-item',
-      cid: _.slugify(this.param('id'))
-    })
+    this.base = base;
+    this.params({ name, cname, unitClass });
 
     if (!this.param('width')) {
-      this.param('width', base.width());
+      this.param('width', this.base.width());
     }
 
     if (!this.param('height')) {
-      this.param('height', base.height());
+      this.param('height', this.base.height());
     }
+
     // add d3 on the layer prototype
     var proto = Object.getPrototypeOf(this);
     if (!proto.d3) { proto.d3 = d3; }
   }
 
-  // entry point to add specific logic to a buffer
+  // entry point to add specific logic to a layer
   onload() {}
 
-  // @TODO REMOVE: is not used anymore in Timeline
-  // bind(g) {
-  //   this.g = g;
-  //   this.update();
-  // }
+  style(selector, rules) {
+    // @TODO recheck the DOM
+    var selectors = [];
+    selectors.push('svg[data-cname=' + this.base.cname() + ']');
+    selectors.push('g[data-cname=' + this.param('cname') + ']');
+    selectors.push(selector);
+
+    addCssRule(selectors.join(' '), rules);
+  }
 
   update(data) {
     this.data(data || this.data() || this.base.data());
@@ -111,6 +117,6 @@ class Layer {
   xZoom() {}
 }
 
-getSet(Layer.prototype, 'each');
+accessors.identity(Layer.prototype, 'each');
 
 module.exports = Layer;
