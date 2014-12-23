@@ -20,16 +20,16 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     this.params(defaults);
   }if(super$0!==null)SP$0(SegmentEdit,super$0);SegmentEdit.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":SegmentEdit,"configurable":true,"writable":true}});DP$0(SegmentEdit,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
-  // add handler on segment shape
+  // add handlers on segment shape
   proto$0.update = function(data) {
-    var g = super$0.prototype.update.call(this, data);
+    super$0.prototype.update.call(this, data);
 
-    g.append('line')
+    this.items.append('line')
       .attr('class', 'handle left')
       .attr('stroke-width', this.param('handlerWidth'))
       .attr('stroke-opacity', this.param('handlerOpacity'));
 
-    g.append('line')
+    this.items.append('line')
       .attr('class', 'handle right')
       .attr('stroke-width', this.param('handlerWidth'))
       .attr('stroke-opacity', this.param('handlerOpacity'));
@@ -127,27 +127,93 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     });
   };
 
-  // checks if the clicked item is one of our guys
-  proto$0.clicked = function(item) {
-    var items = this.g.selectAll('rect, line')[0];
-    return items.indexOf(item) !== -1;
+  // // checks if the clicked item is one of our guys
+  // clicked(item) {
+  //   var items = this.g.selectAll('rect, line')[0];
+  //   return items.indexOf(item) !== -1;
+  // }
+
+  // // mouse drag event switcher depending on drag (left|right|block) levels
+  // onDrag(e) {
+  //   if (this.base.brushing()) { return; }
+
+  //   var classList = e.dragged.classList;
+  //   var mode = 'mv';
+    
+  //   if (classList.contains('left') > 0) mode = 'l';
+  //   if (classList.contains('right') > 0) mode = 'r';
+
+  //   this.handleDrag(mode, e);
+  // }
+
+  proto$0.handleDrag = function(item, e) {
+    if (item === null) { return; }
+
+    var classList = e.target.classList;
+    var mode = 'move';
+
+    if (classList.contains('left')) { mode = 'extendLeft'; }
+    if (classList.contains('right')) { mode = 'extendRight'; }
+
+    this[mode](item, e.originalEvent.dx, e.originalEvent.dy);
   };
 
-  // mouse drag event switcher depending on drag (left|right|block) levels
-  proto$0.onDrag = function(e) {
-    if (this.base.brushing()) { return; }
+  proto$0.move = function(item, dx, dy) {
+    item = this.d3.select(item);
+    var datum = item.datum();
+    // define constrains
+    var constrains = this.param('edits');
+    var canX = !!~constrains.indexOf('x');
+    var canY = !!~constrains.indexOf('y');
 
-    var classList = e.dragged.classList;
-    var mode = 'mv';
-    
-    if (classList.contains('left') > 0) mode = 'l';
-    if (classList.contains('right') > 0) mode = 'r';
+    if (!canX) { dx = 0; }
+    if (!canY) { dy = 0; }
 
-    this.handleDrag(mode, e);
+    var accessors = this.getAccessors();
+
+    var xScale = accessors.xScale;
+    var yScale = accessors.yScale;
+    var xRange = xScale.range();
+    var yRange = yScale.range();
+
+    var x = accessors.x(datum);
+    var w = accessors.w(datum);
+    var h = accessors.h(datum);
+    var y = yScale(this.y()(datum));
+
+    // handle x position
+    var targetX = x + dx;
+    if (targetX >= xRange[0] && (targetX + w) <= xRange[1]) {
+      x = targetX;
+    }
+
+    // handle x position
+    var targetY = y - dy;
+    var yDisplayed = yRange[1] - h - targetY;
+
+    if (yDisplayed >= yRange[0] && (yDisplayed + h) <= yRange[1]) {
+      y = targetY;
+    }
+
+    var xValue = xScale.invert(x);
+    var yValue = yScale.invert(y);
+
+    this.start()(datum, xValue);
+    this.y()(datum, yValue);
+
+    this.draw(item);
+  };
+
+  proto$0.extendLeft = function(item, dx, dy) {
+
+  };
+
+  proto$0.extendRight = function(item, dx, dy) {
+
   };
 
   // handles all the dragging possibilities
-  proto$0.handleDrag = function(mode, e) {
+  proto$0._handleDrag = function(mode, e) {
     var d = e.d;
     var delta = e.event;
     var item = e.target;
