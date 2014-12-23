@@ -99,17 +99,20 @@ class BreakpointVis extends LayerVis {
     }
 
     // create points
-    sel.enter()
+    this.items = sel.enter()
       .append('g')
       .classed('item', true)
       .classed(this.param('unitClass'), true)
-        .append('circle')
+        
+    this.items.append('circle');
 
     sel.exit().remove();
   }
 
   draw(el) {
-    el = el || this.g.selectAll('.' + this.param('unitClass'));
+    el = el || this.items;
+
+    this.sortData();
 
     var _xScale = this.base.xScale;
     var _yScale = this.yScale;

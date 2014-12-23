@@ -99,17 +99,20 @@ var BreakpointVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o
     }
 
     // create points
-    sel.enter()
+    this.items = sel.enter()
       .append('g')
       .classed('item', true)
       .classed(this.param('unitClass'), true)
-        .append('circle')
+        
+    this.items.append('circle');
 
     sel.exit().remove();
   };
 
   proto$0.draw = function(el) {var this$0 = this;
-    el = el || this.g.selectAll('.' + this.param('unitClass'));
+    el = el || this.items;
+
+    this.sortData();
 
     var _xScale = this.base.xScale;
     var _yScale = this.yScale;
