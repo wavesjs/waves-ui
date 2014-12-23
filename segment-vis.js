@@ -58,24 +58,23 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
     var sel = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data(), this.sortIndex());
 
-    var g = sel.enter()
+    this.items = sel.enter()
       .append('g')
       .classed('item', true)
       .classed(this.param('unitClass'), true);
 
-    g.append('rect');
+    this.items.append('rect');
 
     sel.exit().remove();
-
-    return g;
   };
 
   proto$0.draw = function() {var el = arguments[0];if(el === void 0)el = null;
-    if (el === null) { el = this.g.selectAll('.' + this.param('unitClass')); }
+    el = el || this.items; 
 
     var accessors = this.getAccessors();
 
-    el.attr('transform', function(d) {
+
+    el.attr('transform', function(d)  {
       return 'translate(' + accessors.x(d) + ', ' + accessors.y(d) + ')';
     })
 
@@ -92,35 +91,33 @@ var SegmentVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["_
     return el;
   };
 
-  // #NOTE add some caching system ?
+  // @NOTE add some caching system ?
   proto$0.getAccessors = function() {var this$0 = this;
-    // if (this.params('accessors')) {
-    //   return this.params('accessors');
-    // }
+    // reverse yScale to have logical sizes
+    // only y is problematic this way
+    var xScale = this.base.xScale;
+    var yScale = this.yScale.copy();
+    yScale.range(yScale.range().slice(0).reverse());
+    var height = yScale.range()[1];
 
-    var _xScale = this.base.xScale;
-    var _yScale = this.yScale;
+    var _x = this.start();
+    var _y = this.y();
+    var _w = this.duration();
+    var _h = this.height();
 
-    // data mappers
-    var _start    = this.start();
-    var _y        = this.y();
-    var _duration = this.duration();
-    var _height   = this.height();
     var _color    = this.color();
     var _opacity  = this.opacity();
 
     // define accesors
-    var w = function(d)  { return Math.max(this$0.__minWidth, _xScale(_duration(d))); };
-    var h = function(d)  { return this$0.param('height') - _yScale(_height(d)); };
-    var x = function(d)  { return _xScale(_start(d)); };
-    var y = function(d)  { return _yScale(_y(d)) - h(d); };
+    var x = function(d)  { return xScale(_x(d)) };
+    var w = function(d)  { return xScale(_w(d)); };
+    var h = function(d)  { return yScale(_h(d)); };
+    var y = function(d)  { return height - h(d) - yScale(_y(d)); };
 
     var color = function(d)  { return _color(d); };
     var opacity = function(d)  { return (_opacity(d) || this$0.param('opacity')); }
 
-    // this.params('accessors', { w: w, h: h, x: x, y: y, color: color });
-    // return this.params('accessors');
-    return { w: w, h: h, x: x, y: y, color: color, opacity: opacity };
+    return { w: w, h: h, x: x, y: y, color: color, opacity: opacity, xScale: xScale, yScale: yScale };
   };
 
   proto$0.xZoom = function(val) {

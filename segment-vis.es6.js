@@ -58,24 +58,23 @@ class SegmentVis extends LayerVis {
     var sel = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data(), this.sortIndex());
 
-    var g = sel.enter()
+    this.items = sel.enter()
       .append('g')
       .classed('item', true)
       .classed(this.param('unitClass'), true);
 
-    g.append('rect');
+    this.items.append('rect');
 
     sel.exit().remove();
-
-    return g;
   }
 
   draw(el = null) {
-    if (el === null) { el = this.g.selectAll('.' + this.param('unitClass')); }
+    el = el || this.items; 
 
     var accessors = this.getAccessors();
 
-    el.attr('transform', function(d) {
+
+    el.attr('transform', (d) => {
       return 'translate(' + accessors.x(d) + ', ' + accessors.y(d) + ')';
     })
 
@@ -92,35 +91,33 @@ class SegmentVis extends LayerVis {
     return el;
   }
 
-  // #NOTE add some caching system ?
+  // @NOTE add some caching system ?
   getAccessors() {
-    // if (this.params('accessors')) {
-    //   return this.params('accessors');
-    // }
+    // reverse yScale to have logical sizes
+    // only y is problematic this way
+    var xScale = this.base.xScale;
+    var yScale = this.yScale.copy();
+    yScale.range(yScale.range().slice(0).reverse());
+    var height = yScale.range()[1];
 
-    var _xScale = this.base.xScale;
-    var _yScale = this.yScale;
+    var _x = this.start();
+    var _y = this.y();
+    var _w = this.duration();
+    var _h = this.height();
 
-    // data mappers
-    var _start    = this.start();
-    var _y        = this.y();
-    var _duration = this.duration();
-    var _height   = this.height();
     var _color    = this.color();
     var _opacity  = this.opacity();
 
     // define accesors
-    var w = (d) => { return Math.max(this.__minWidth, _xScale(_duration(d))); };
-    var h = (d) => { return this.param('height') - _yScale(_height(d)); };
-    var x = (d) => { return _xScale(_start(d)); };
-    var y = (d) => { return _yScale(_y(d)) - h(d); };
+    var x = (d) => { return xScale(_x(d)) };
+    var w = (d) => { return xScale(_w(d)); };
+    var h = (d) => { return yScale(_h(d)); };
+    var y = (d) => { return height - h(d) - yScale(_y(d)); };
 
     var color = (d) => { return _color(d); };
     var opacity = (d) => { return (_opacity(d) || this.param('opacity')); }
 
-    // this.params('accessors', { w: w, h: h, x: x, y: y, color: color });
-    // return this.params('accessors');
-    return { w, h, x, y, color, opacity };
+    return { w, h, x, y, color, opacity, xScale, yScale };
   }
 
   xZoom(val) {
