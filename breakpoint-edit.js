@@ -9,7 +9,9 @@ var pck           = require('./package.json');
 var BreakpointEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(BreakpointEdit, super$0);var proto$0={};
 
   function BreakpointEdit() {
-    if (!(this instanceof BreakpointEdit)) return new BreakpointEdit();
+    if (!(this instanceof BreakpointEdit)) {
+      return new BreakpointEdit();
+    }
 
     super$0.call(this);
   }if(super$0!==null)SP$0(BreakpointEdit,super$0);BreakpointEdit.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":BreakpointEdit,"configurable":true,"writable":true}});DP$0(BreakpointEdit,"prototype",{"configurable":false,"enumerable":false,"writable":false});
@@ -59,47 +61,34 @@ var BreakpointEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){
     });
   };
 
-  // checks if the clicked item is one of our guys
-  proto$0.clicked = function(item) {
-    // @TODO should be cached in uppdate
-    var items = this.g.selectAll('circle')[0];
-    return items.indexOf(item) !== -1;
+  proto$0.handleDrag = function(item, e) {
+    if (item === null) { return; }
+
+    this.move(item, e.originalEvent.dx, e.originalEvent.dy);
   };
 
-  proto$0.onDrag = function(e) {
-    if (this.base.brushing()) { return; }
+  proto$0.move = function(item, dx, dy) {
+    item = this.d3.select(item);
+    var datum = item.datum();
 
-    var d = e.d;
-    var delta = e.event;
-    var item = e.target;
-    var base = this.base;
+    var xScale = this.base.xScale;
+    var yScale = this.yScale;
 
-    var _cx = this.cx();
-    var _cy = this.cy();
-    var _xScale = base.xScale;
-    var _yScale = base.yScale;
-
-    var cx = _xScale(_cx(d));
-    var cy = _yScale(_cy(d));
-
-    // has to be the svg because the group is virtually not there :( ??
-    base.svg.classed('handle-drag', true);
-
-    // update position
-    cx += delta.dx;
-    cy += delta.dy;
-    // position to data domain
-    var xValue = _xScale.invert(cx);
-    var yValue = _yScale.invert(cy);
+    var cx = this.cx();
+    var cy = this.cy();
+    var x = xScale(cx(datum));
+    var y = yScale(cy(datum));
+    // update range
+    x += dx;
+    y += dy;
+    // range to domain
+    var xValue = xScale.invert(x);
+    var yValue = yScale.invert(y);
     // update data
-    _cx(d, xValue);
-    _cy(d, yValue);
-
-    // sort data and redraw view
-    this.sortData();
-    this.draw(this.d3.select(item));
-    // tell the timeline to update the rest except me
-    // base.drawLayers(this.name);
+    cx(datum, xValue);
+    cy(datum, yValue);
+    // redraw view
+    this.draw(item);
   };
 MIXIN$0(BreakpointEdit.prototype,proto$0);proto$0=void 0;return BreakpointEdit;})(BreakpointVis);
 

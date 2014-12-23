@@ -9,7 +9,9 @@ var pck           = require('./package.json');
 class BreakpointEdit extends BreakpointVis {
 
   constructor() {
-    if (!(this instanceof BreakpointEdit)) return new BreakpointEdit();
+    if (!(this instanceof BreakpointEdit)) {
+      return new BreakpointEdit();
+    }
 
     super();
   }
@@ -59,44 +61,34 @@ class BreakpointEdit extends BreakpointVis {
     });
   }
 
-  // checks if the clicked item is one of our guys
-  clicked(item) {
-    // @TODO should be cached in uppdate
-    var items = this.g.selectAll('circle')[0];
-    return items.indexOf(item) !== -1;
+  handleDrag(item, e) {
+    if (item === null) { return; }
+
+    this.move(item, e.originalEvent.dx, e.originalEvent.dy);
   }
 
-  onDrag(e) {
-    if (this.base.brushing()) { return; }
+  move(item, dx, dy) {
+    item = this.d3.select(item);
+    var datum = item.datum();
 
-    var d = e.d;
-    var delta = e.event;
-    var item = e.target;
-    var base = this.base;
+    var xScale = this.base.xScale;
+    var yScale = this.yScale;
 
-    var _cx = this.cx();
-    var _cy = this.cy();
-    var _xScale = base.xScale;
-    var _yScale = base.yScale;
-
-    var cx = _xScale(_cx(d));
-    var cy = _yScale(_cy(d));
-    // has to be the svg because the group is virtually not there :( ??
-    base.svg.classed('handle-drag', true);
-    // update position
-    cx += delta.dx;
-    cy += delta.dy;
-    // position to data domain
-    var xValue = _xScale.invert(cx);
-    var yValue = _yScale.invert(cy);
+    var cx = this.cx();
+    var cy = this.cy();
+    var x = xScale(cx(datum));
+    var y = yScale(cy(datum));
+    // update range
+    x += dx;
+    y += dy;
+    // range to domain
+    var xValue = xScale.invert(x);
+    var yValue = yScale.invert(y);
     // update data
-    _cx(d, xValue);
-    _cy(d, yValue);
-    // sort data and redraw view
-    this.sortData();
-    this.draw(this.d3.select(item));
-    // tell the timeline to update the rest except me
-    // base.drawLayers(this.name);
+    cx(datum, xValue);
+    cy(datum, yValue);
+    // redraw view
+    this.draw(item);
   }
 }
 
