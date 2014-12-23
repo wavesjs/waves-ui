@@ -3,6 +3,7 @@ var slugify    = require('underscore.string').slugify;
 var accessors  = require('utils').accessors;
 var uniqueId   = require('utils').uniqueId;
 var addCssRule = require('utils').addCssRule;
+var EventEmitter = require('events').EventEmitter;
 
 'use strict';
 
@@ -20,9 +21,11 @@ var addCssRule = require('utils').addCssRule;
   - layers '-vis' and '-edit' would also be merged at the end of the process
 */
 
-var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var proto$0={};
+var Layer = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(Layer, super$0);var proto$0={};
 
   function Layer() {
+
+    super$0.call(this);
 
     this.unitClass = null;
     // this.dname = null;
@@ -44,11 +47,11 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
       height: 0,
       top: 0,
       yDomain: null,
-      yRange: null
-      // selectable: false,
-      // isEditable: false
+      yRange: null,
+      // define possible interactions: selectable, editable
+      interactions: {}
     });
-  }DP$0(Layer,"prototype",{"configurable":false,"enumerable":false,"writable":false});
+  }if(super$0!==null)SP$0(Layer,super$0);Layer.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":Layer,"configurable":true,"writable":true}});DP$0(Layer,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
   // this.__params getter/setter for a single param
   proto$0.param = function() {var name = arguments[0];if(name === void 0)name = null;var value = arguments[1];if(value === void 0)value = null;
@@ -132,7 +135,7 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
   proto$0.draw = function() {};
 
   proto$0.xZoom = function() {};
-MIXIN$0(Layer.prototype,proto$0);proto$0=void 0;return Layer;})();
+MIXIN$0(Layer.prototype,proto$0);proto$0=void 0;return Layer;})(EventEmitter);
 
 accessors.identity(Layer.prototype, 'each');
 

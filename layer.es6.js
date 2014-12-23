@@ -3,6 +3,7 @@ var slugify    = require('underscore.string').slugify;
 var accessors  = require('utils').accessors;
 var uniqueId   = require('utils').uniqueId;
 var addCssRule = require('utils').addCssRule;
+var EventEmitter = require('events').EventEmitter;
 
 'use strict';
 
@@ -20,9 +21,11 @@ var addCssRule = require('utils').addCssRule;
   - layers '-vis' and '-edit' would also be merged at the end of the process
 */
 
-class Layer {
+class Layer extends EventEmitter {
 
   constructor() {
+
+    super();
 
     this.unitClass = null;
     // this.dname = null;
@@ -44,9 +47,9 @@ class Layer {
       height: 0,
       top: 0,
       yDomain: null,
-      yRange: null
-      // selectable: false,
-      // isEditable: false
+      yRange: null,
+      // define possible interactions: selectable, editable
+      interactions: {}
     });
   }
 
