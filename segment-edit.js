@@ -127,33 +127,14 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     });
   };
 
-  // // checks if the clicked item is one of our guys
-  // clicked(item) {
-  //   var items = this.g.selectAll('rect, line')[0];
-  //   return items.indexOf(item) !== -1;
-  // }
-
-  // // mouse drag event switcher depending on drag (left|right|block) levels
-  // onDrag(e) {
-  //   if (this.base.brushing()) { return; }
-
-  //   var classList = e.dragged.classList;
-  //   var mode = 'mv';
-    
-  //   if (classList.contains('left') > 0) mode = 'l';
-  //   if (classList.contains('right') > 0) mode = 'r';
-
-  //   this.handleDrag(mode, e);
-  // }
-
   proto$0.handleDrag = function(item, e) {
     if (item === null) { return; }
 
     var classList = e.target.classList;
     var mode = 'move';
-
-    if (classList.contains('left')) { mode = 'extendLeft'; }
-    if (classList.contains('right')) { mode = 'extendRight'; }
+    // if the target is an handler
+    if (classList.contains('left')) { mode = 'resizeLeft'; }
+    if (classList.contains('right')) { mode = 'resizeRight'; }
 
     this[mode](item, e.originalEvent.dx, e.originalEvent.dy);
   };
@@ -165,7 +146,9 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     var constrains = this.param('edits');
     var canX = !!~constrains.indexOf('x');
     var canY = !!~constrains.indexOf('y');
-
+    // early return if cannot edit x and y
+    if (!canX && !canY) { return }
+    // else lock the corresponding axis
     if (!canX) { dx = 0; }
     if (!canY) { dy = 0; }
 
@@ -187,7 +170,7 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
       x = targetX;
     }
 
-    // handle x position
+    // handle y position
     var targetY = y - dy;
     var yDisplayed = yRange[1] - h - targetY;
 
@@ -204,84 +187,63 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     this.draw(item);
   };
 
-  proto$0.extendLeft = function(item, dx, dy) {
-
-  };
-
-  proto$0.extendRight = function(item, dx, dy) {
-
-  };
-
-  // handles all the dragging possibilities
-  proto$0._handleDrag = function(mode, e) {
-    var d = e.d;
-    var delta = e.event;
-    var item = e.target;
-
-    var xScale = this.base.xScale;
-    var yScale = this.yScale;
+  proto$0.resizeLeft = function(item, dx, dy) {
+    item = this.d3.select(item);
+    var datum = item.datum();
 
     var constrains = this.param('edits');
-    var canX = !!~constrains.indexOf('x');
-    var canY = !!~constrains.indexOf('y');
     var canW = !!~constrains.indexOf('width');
-    var canH = !!~constrains.indexOf('height');
+    // early return if cannot edit    
+    if (!canW) { return; }
 
-    // data mappers
-    var _start = this.start();
-    var _duration = this.duration();
-    var _y = this.y();
+    var accessors = this.getAccessors();
+    var xRange = accessors.xScale.range();
 
-    // has to be the svg because the group is virtually not there :( ??
-    if (mode === 'l' || mode === 'r') {
-      this.base.svg.classed('handle-resize', true);
-    } else {
-      this.base.svg.classed('handle-drag', true);
+    var x = accessors.x(datum);
+    var w = accessors.w(datum);
+
+    var targetX = x + dx;
+    var targetW = w - dx;
+
+    if (targetX >= xRange[0] && targetW >= this.__minWidth) {
+      x = targetX;
+      w = targetW;
     }
 
-    var width = xScale(_duration(d));
-    var posX = xScale(_start(d));
+    var xValue = accessors.xScale.invert(x);
+    var wValue = accessors.xScale.invert(w);
 
-    // handle resize
-    if (mode === 'l' && canW) width -= delta.dx; // px
-    if (mode === 'r' && canW) width += delta.dx; // px
+    this.start()(datum, xValue);
+    this.duration()(datum, wValue);
 
-    // apply duration when editing through the handles
-    if ((mode === 'l' || mode === 'r') && canW) {
-      if (width < 1) { width = 1; }
-      _duration(d, xScale.invert(width));
+    this.draw(item);
+  };
+
+  proto$0.resizeRight = function(item, dx, dy) {
+    item = this.d3.select(item);
+    var datum = item.datum();
+
+    var constrains = this.param('edits');
+    var canW = !!~constrains.indexOf('width');
+    // early return if cannot edit
+    if (!canW) { return; }
+
+    var accessors = this.getAccessors();
+    var xRange = accessors.xScale.range();
+
+    var x = accessors.x(datum);
+    var w = accessors.w(datum);
+
+    var targetW = w + dx;
+
+    if (targetW >= this.__minWidth && (x + targetW) <= xRange[1]) {
+      w = targetW;
     }
 
-    if (mode === 'l' && canW) {
-      posX += delta.dx;
-      _start(d, xScale.invert(posX));
-    }
+    var wValue = accessors.xScale.invert(w);
+    this.duration()(datum, wValue);
 
-    // handle move
-    if (mode === 'mv' && canX) {
-      var minX = 0;
-      var maxX = this.base.width();
-      var targetX = posX + delta.dx;
-
-      if (targetX >= minX && (targetX + width) <= maxX) {
-        posX = targetX;
-        _start(d, xScale.invert(posX));
-      }
-    }
-
-    if (mode === 'mv' && canY) {
-      var posY = this.yScale(_y(d));
-      var minY = this.param('height') - this.yScale(this.height()(d));
-      var maxY = this.param('height');
-      var targetY = posY + delta.dy;
-
-      if (targetY >= minY && targetY <= maxY) {
-        posY = targetY;
-        _y(d, this.yScale.invert(posY));
-      }
-    }
-    // redraw `.selected` item(s)
-    this.draw(this.d3.select(item));
+    this.draw(item);
   };
 MIXIN$0(SegmentEdit.prototype,proto$0);proto$0=void 0;return SegmentEdit;})(SegmentVis);
 
