@@ -1,6 +1,6 @@
 var LayerVis  = require('layer-vis');
 var pck       = require('./package.json');
-var getSet    = require('utils').getSet;
+var accessors = require('utils').accessors;
 var uniqueId  = require('utils').uniqueId;
 
 'use strict';
@@ -13,6 +13,9 @@ var LabelVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     super$0.call(this);
 
     var name = pck.name.replace('-vis', '');
+
+    // this.xScale().clamp(true);
+    // this.yScale().clamp(true);
 
     var defaults = {
       type: name,
@@ -196,9 +199,10 @@ var LabelVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   };
 MIXIN$0(LabelVis.prototype,proto$0);proto$0=void 0;return LabelVis;})(LayerVis);
 
-getSet(
-  LabelVis.prototype,
-  ['x', 'y', 'width', 'height', 'text', 'color', 'align', 'valign', 'margin', 'sortIndex', 'bgColor']
-);
+accessors.getFunction(LabelVis.prototype,[
+  'x', 'y', 'width', 'height', 'text', 
+  'color', 'align', 'valign', 'margin', 
+  'sortIndex', 'bgColor'
+]);
 
 module.exports = LabelVis;
