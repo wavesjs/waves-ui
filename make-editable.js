@@ -6,7 +6,10 @@ var toFront = require('utils').toFront;
 // example use
 // var segment = segmentEdit()
 //   .params({
-//     interactions: ['editable', 'brushable', 'selectable']
+//     interactions: {
+//       editable: true|false,
+//       selectable: true|false 
+//     }
 //   })
 
 // mixin to add editable properties to a visualiser component
