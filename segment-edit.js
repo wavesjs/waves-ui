@@ -164,18 +164,26 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     var h = accessors.h(datum);
     var y = yScale(this.y()(datum));
 
-    // handle x position
+    // handle x position - lock to boundaries
     var targetX = x + dx;
     if (targetX >= xRange[0] && (targetX + w) <= xRange[1]) {
       x = targetX;
+    } else if (targetX < xRange[0]) {
+      x = xRange[0];
+    } else if ((targetX + w) > xRange[1]) {
+      x = xRange[1] - w;
     }
 
-    // handle y position
+    // handle y position - lock to boundaries
     var targetY = y - dy;
     var yDisplayed = yRange[1] - h - targetY;
 
     if (yDisplayed >= yRange[0] && (yDisplayed + h) <= yRange[1]) {
       y = targetY;
+    } else if (yDisplayed < yRange[0]) {
+      y = yRange[1] - h;
+    } else if ((yDisplayed + h) > yRange[1]) {
+      y = yRange[0];
     }
 
     var xValue = xScale.invert(x);
