@@ -2,7 +2,6 @@ var d3        = window.d3 || require('d3');
 var EventEmitter = require('events').EventEmitter;
 var shortId   = require('shortid');
 var accessors = require('utils').accessors;
-var extend    = require('utils').extend;
 var uniqueId  = require('utils').uniqueId;
 
 'use strict';
