@@ -1,5 +1,4 @@
 var events    = require('events');
-var getSet    = require('utils').getSet;
 var uniqueId  = require('utils').uniqueId;
 var LayerVis  = require('layer-vis');
 // var anchorVis = require('./anchor');
