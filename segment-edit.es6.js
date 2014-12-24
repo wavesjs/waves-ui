@@ -1,6 +1,5 @@
 var SegmentVis   = require('segment-vis');
 var makeEditable = require('make-editable');
-// var extend       = require('utils').extend;
 
 'use strict';
 
