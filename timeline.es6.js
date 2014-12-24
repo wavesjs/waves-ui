@@ -148,10 +148,10 @@ class Timeline extends EventEmitter {
   delegateEvents() {
     // !!! remember to unbind when deleting element !!!
     var body = document.body;
-
+    var target;
     // is actually not listened in make editable
     this.svg.on('mousedown', () => {
-      this.dragInit = d3.event.target;
+      target = d3.event.target;
       this.trigger('mousedown', d3.event);
     });
 
@@ -163,33 +163,43 @@ class Timeline extends EventEmitter {
       this.trigger('mousemove', d3.event);
     });
 
+    // choose which one we really want
     this.svg.on('mouseleave', () => {
+      // this.xZoomSet(); // was in makeEditable - check if really needed
       this.trigger('mouseleave', d3.event);
     });
-
-    // for mousedrag we call a configured d3.drag behaviour
-    // returned from the objects drag method: `this.svg.on('drag'...`
-    var that = this;
-
-    // @NOTE: how to remove the two following listeners ?
-    this.svg.call(this.drag(function(datum) {
-      var e = {
-        // group - allow to redraw only the given group
-        target: this,
-        // element (which part of the element is actually dragged, 
-        // ex. line or rect in a segment)
-        dragged: that.dragInit,
-        d: datum,
-        event: d3.event
-      }
-
-      that.trigger('drag', e);
-    }));
 
     body.addEventListener('mouseleave', (e) => {
       if (e.fromElement !== body) { return; }
       this.trigger('mouseleave', e);
     });
+
+    var that = this;
+    // @NOTE: how removeListeners for drag behavior
+    var dragBehavior = d3.behavior.drag();
+    // dragBehavior.on('dragstart', function() {
+    //   console.log(d3.event);
+    // });
+
+    dragBehavior.on('drag', () => {
+      // we drag only selected items
+      // @NOTE shouldn't rely on `selected` class here
+      this.selection.selectAll('.selected').each(function(datum) {
+        var e = {
+          // group - allow to redraw only the current dragged item
+          currentTarget: this,
+          // element (which part of the element is actually dragged,
+          // ex. line or rect in a segment)
+          target: target,
+          d: datum,
+          originalEvent: d3.event
+        }
+
+        that.trigger('drag', e);
+      });
+    });
+
+    this.svg.call(dragBehavior);
 
     // var brush = d3.svg.brush()
     //   .x(this.xScale)
@@ -215,16 +225,8 @@ class Timeline extends EventEmitter {
     // 
   }
 
-  // handles and delegates to local drag behaviours
-  drag(callback) {
-    return d3.behavior.drag().on('drag', () => {
-      this.selection.selectAll('.selected').each(function() {
-        callback.apply(this, arguments);
-      });
-    });
-  }
-
   // sets the brushing state for interaction and a css class for styles
+  // @TODO define how the brush should work
   brushing(state = null) {
     if (state === null) { return this._brushing; }
 
@@ -375,14 +377,7 @@ class Timeline extends EventEmitter {
   destroy() {
     // this.layers.forEach((layer) => this.remove(layer));
     // this.undelegateEvents();
-  }
-
-  // --------------------------------------------------
-  // utils
-  // --------------------------------------------------
-
-  toFront(item) {
-    item.parentNode.appendChild(item);
+    // this.svg.remove();
   }
 }
 

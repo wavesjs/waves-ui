@@ -148,10 +148,10 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   proto$0.delegateEvents = function() {var this$0 = this;
     // !!! remember to unbind when deleting element !!!
     var body = document.body;
-
+    var target;
     // is actually not listened in make editable
     this.svg.on('mousedown', function()  {
-      this$0.dragInit = d3.event.target;
+      target = d3.event.target;
       this$0.trigger('mousedown', d3.event);
     });
 
@@ -163,33 +163,43 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
       this$0.trigger('mousemove', d3.event);
     });
 
+    // choose which one we really want
     this.svg.on('mouseleave', function()  {
+      // this.xZoomSet(); // was in makeEditable - check if really needed
       this$0.trigger('mouseleave', d3.event);
     });
-
-    // for mousedrag we call a configured d3.drag behaviour
-    // returned from the objects drag method: `this.svg.on('drag'...`
-    var that = this;
-
-    // @NOTE: how to remove the two following listeners ?
-    this.svg.call(this.drag(function(datum) {
-      var e = {
-        // group - allow to redraw only the given group
-        target: this,
-        // element (which part of the element is actually dragged, 
-        // ex. line or rect in a segment)
-        dragged: that.dragInit,
-        d: datum,
-        event: d3.event
-      }
-
-      that.trigger('drag', e);
-    }));
 
     body.addEventListener('mouseleave', function(e)  {
       if (e.fromElement !== body) { return; }
       this$0.trigger('mouseleave', e);
     });
+
+    var that = this;
+    // @NOTE: how removeListeners for drag behavior
+    var dragBehavior = d3.behavior.drag();
+    // dragBehavior.on('dragstart', function() {
+    //   console.log(d3.event);
+    // });
+
+    dragBehavior.on('drag', function()  {
+      // we drag only selected items
+      // @NOTE shouldn't rely on `selected` class here
+      this$0.selection.selectAll('.selected').each(function(datum) {
+        var e = {
+          // group - allow to redraw only the current dragged item
+          currentTarget: this,
+          // element (which part of the element is actually dragged,
+          // ex. line or rect in a segment)
+          target: target,
+          d: datum,
+          originalEvent: d3.event
+        }
+
+        that.trigger('drag', e);
+      });
+    });
+
+    this.svg.call(dragBehavior);
 
     // var brush = d3.svg.brush()
     //   .x(this.xScale)
@@ -215,16 +225,8 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     // 
   };
 
-  // handles and delegates to local drag behaviours
-  proto$0.drag = function(callback) {var this$0 = this;
-    return d3.behavior.drag().on('drag', function()  {
-      this$0.selection.selectAll('.selected').each(function() {
-        callback.apply(this, arguments);
-      });
-    });
-  };
-
   // sets the brushing state for interaction and a css class for styles
+  // @TODO define how the brush should work
   proto$0.brushing = function() {var state = arguments[0];if(state === void 0)state = null;
     if (state === null) { return this._brushing; }
 
@@ -375,14 +377,7 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   proto$0.destroy = function() {
     // this.layers.forEach((layer) => this.remove(layer));
     // this.undelegateEvents();
-  };
-
-  // --------------------------------------------------
-  // utils
-  // --------------------------------------------------
-
-  proto$0.toFront = function(item) {
-    item.parentNode.appendChild(item);
+    // this.svg.remove();
   };
 MIXIN$0(Timeline.prototype,proto$0);proto$0=void 0;return Timeline;})(EventEmitter);
 
