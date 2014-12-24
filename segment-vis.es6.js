@@ -1,6 +1,6 @@
 var LayerVis  = require('layer-vis');
 var pck       = require('./package.json');
-var getSet    = require('utils').getSet;
+var accessors = require('utils').accessors;
 var uniqueId  = require('utils').uniqueId;
 var name = pck.name.replace('-vis', '');
 
@@ -157,6 +157,8 @@ class SegmentVis extends LayerVis {
 }
 
 // add and initialize our accessors
-getSet(SegmentVis.prototype, ['y', 'width', 'color', 'height', 'duration', 'start', 'sortIndex', 'opacity']);
+accessors.getFunction(SegmentVis.prototype, [
+  'y', 'width', 'color', 'height', 'duration', 'start', 'sortIndex', 'opacity'
+]);
 
 module.exports = SegmentVis;
