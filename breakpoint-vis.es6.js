@@ -1,4 +1,4 @@
-var getSet   = require('utils').getSet;
+var accessors = require('utils').accessors;
 var uniqueId = require('utils').uniqueId;
 var LayerVis = require('layer-vis');
 var pck      = require('./package.json');
@@ -157,7 +157,7 @@ class BreakpointVis extends LayerVis {
 }
 
 // add data accessors
-getSet(BreakpointVis.prototype, [
+accessors.getFunction(BreakpointVis.prototype, [
   'cx', 'cy', 'r', 'opacity', 'color'
 ]);
 
