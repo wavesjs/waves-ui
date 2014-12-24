@@ -1,4 +1,4 @@
-var getSet   = require('utils').getSet;
+var accessors = require('utils').accessors;
 var uniqueId = require('utils').uniqueId;
 var LayerVis = require('layer-vis');
 var pck      = require('./package.json');
@@ -224,6 +224,8 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
 MIXIN$0(WaveformVis.prototype,proto$0);proto$0=void 0;return WaveformVis;})(LayerVis);
 
 // data accessors
-getSet(WaveformVis.prototype, ['color', 'sampleRate', 'duration', 'cache']);
+accessors.getFunction(WaveformVis.prototype, [
+  'color', 'sampleRate', 'duration', 'cache'
+]);
 
 module.exports = WaveformVis;
