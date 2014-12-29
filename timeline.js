@@ -3,6 +3,7 @@ var EventEmitter = require('events').EventEmitter;
 var shortId   = require('shortid');
 var accessors = require('utils').accessors;
 var uniqueId  = require('utils').uniqueId;
+var UILoop    = require('utils').UILoop;
 
 'use strict';
 
@@ -25,6 +26,9 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     this.trigger = this.emit;
     // keep track of scales initialization
     this.__scalesInitialized = false;
+    // @TODO define if it should be a getter
+    this.fps = 60;
+    this.uiLoop = new UILoop(this.fps);
     // bind draw method for call from d3
     this.draw = this.draw.bind(this);
   }if(super$0!==null)SP$0(Timeline,super$0);Timeline.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":Timeline,"configurable":true,"writable":true}});DP$0(Timeline,"prototype",{"configurable":false,"enumerable":false,"writable":false});
@@ -77,6 +81,8 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   // alias for layer - symetry with remove
   proto$0.add = function(layer) {
     this.layer(layer);
+    
+    return this;
   };
 
   // remove a layer
@@ -86,7 +92,9 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     }
 
     layer.g.remove();
-    this.layers[layer.param('cname')] = undefined;
+    delete this.layers[layer.param('cname')];
+
+    return this;
   };
 
   // initialize the layer - @NOTE remove ?
@@ -370,6 +378,8 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     // update selected layers
     for (var key in toUpdate) { toUpdate[key].update(); }
     for (var key$0 in toUpdate) { toUpdate[key$0].draw(); }
+    // start rAF
+    this.uiLoop.start();
   };
 
   // destroy the timeline
