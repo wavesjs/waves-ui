@@ -54,7 +54,7 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
       id: uniqueId(name),
       renderingStrategy: 'svg',
       yDomain: [-1, 1], // default yDomain for audioBuffer
-      triggerUpdateZoomDelta: 0.05,
+      triggerUpdateZoomDelta: 0.01,
       triggerUpdateDragDelta: 2,
       useWorker: false
     };
