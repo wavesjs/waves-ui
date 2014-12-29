@@ -155,15 +155,6 @@ class WaveformVis extends LayerVis {
   // @NOTE is this method really needed
   resamplerResponse(message) {
     var data = message.data;
-    // THIS DO NOT WORK
-    // console.log(this.__currentWorkerCallTime, data.time);
-    // // @NOTE: change to a timestamp for consistency ?
-    // if (data.time < this.__currentWorkerCallTime) {
-    //   console.log('ignored', this.__currentWorkerCallTime, data.time);
-    //   return;
-    // }
-
-    // this.__currentWorkerCallTime = data.time;
 
     switch (data.cmd) {
       case 'downSample':
