@@ -20,7 +20,7 @@ var EventEmitter = require('events').EventEmitter;
     interactions config
   - layers '-vis' and '-edit' would also be merged at the end of the process
 */
-
+// @NOTE: does it reallly need to extend EventEmitter ?
 var Layer = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(Layer, super$0);var proto$0={};
 
   function Layer() {
@@ -85,7 +85,7 @@ var Layer = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__prot
     return this;
   };
 
-  proto$0.load = function(base, d3) {
+  proto$0.load = function(base, d3) {var this$0 = this;
     var name  = this.param('name') || this.param('type');
     var cname = uniqueId(slugify(name));
     var unitClass = [this.param('type'), 'item'].join('-');
@@ -104,6 +104,13 @@ var Layer = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__prot
     // add d3 on the layer prototype
     var proto = Object.getPrototypeOf(this);
     if (!proto.d3) { proto.d3 = d3; }
+
+    // pass all draw methods inside UILoop
+    var draw = this.draw;
+
+    this.draw = function()  {
+      base.uiLoop.register(draw, arguments, this$0);
+    }
   };
 
   // entry point to add specific logic to a layer

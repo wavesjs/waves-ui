@@ -20,7 +20,7 @@ var EventEmitter = require('events').EventEmitter;
     interactions config
   - layers '-vis' and '-edit' would also be merged at the end of the process
 */
-
+// @NOTE: does it reallly need to extend EventEmitter ?
 class Layer extends EventEmitter {
 
   constructor() {
@@ -104,6 +104,13 @@ class Layer extends EventEmitter {
     // add d3 on the layer prototype
     var proto = Object.getPrototypeOf(this);
     if (!proto.d3) { proto.d3 = d3; }
+
+    // pass all draw methods inside UILoop
+    var draw = this.draw;
+
+    this.draw = () => {
+      base.uiLoop.register(draw, arguments, this);
+    }
   }
 
   // entry point to add specific logic to a layer
