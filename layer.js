@@ -12,15 +12,19 @@ var EventEmitter = require('events').EventEmitter;
   - merge with make editable and brush
   - add a param `interactions: {
     selectable: true|false,
-    draggable: true|false,
-    brushable: true|false,  
-    editable: true|false
+    editable: true|false,
+    // @TODO
+    brushable: true|false
   }`
+
   - should listen events from the timeline and react accordingly to its
     interactions config
   - layers '-vis' and '-edit' would also be merged at the end of the process
 */
-// @NOTE: does it reallly need to extend EventEmitter ?
+
+// @NOTE:
+//    - does it reallly need to extend EventEmitter ?
+//    - maybe to forward events
 var Layer = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(Layer, super$0);var proto$0={};
 
   function Layer() {
@@ -105,8 +109,13 @@ var Layer = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__prot
     var proto = Object.getPrototypeOf(this);
     if (!proto.d3) { proto.d3 = d3; }
 
-    // pass all draw methods inside UILoop
+    // pass all update/draw methods inside UILoop
+    var update = this.update;
     var draw = this.draw;
+
+    this.update = function()  {
+      base.uiLoop.register(update, arguments, this$0);
+    }
 
     this.draw = function()  {
       base.uiLoop.register(draw, arguments, this$0);

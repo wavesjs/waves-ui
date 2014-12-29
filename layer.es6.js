@@ -12,15 +12,19 @@ var EventEmitter = require('events').EventEmitter;
   - merge with make editable and brush
   - add a param `interactions: {
     selectable: true|false,
-    draggable: true|false,
-    brushable: true|false,  
-    editable: true|false
+    editable: true|false,
+    // @TODO
+    brushable: true|false
   }`
+
   - should listen events from the timeline and react accordingly to its
     interactions config
   - layers '-vis' and '-edit' would also be merged at the end of the process
 */
-// @NOTE: does it reallly need to extend EventEmitter ?
+
+// @NOTE:
+//    - does it reallly need to extend EventEmitter ?
+//    - maybe to forward events
 class Layer extends EventEmitter {
 
   constructor() {
@@ -105,8 +109,13 @@ class Layer extends EventEmitter {
     var proto = Object.getPrototypeOf(this);
     if (!proto.d3) { proto.d3 = d3; }
 
-    // pass all draw methods inside UILoop
+    // pass all update/draw methods inside UILoop
+    var update = this.update;
     var draw = this.draw;
+
+    this.update = () => {
+      base.uiLoop.register(update, arguments, this);
+    }
 
     this.draw = () => {
       base.uiLoop.register(draw, arguments, this);
