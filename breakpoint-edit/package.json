@@ -1,0 +1,23 @@
+{
+  "name": "breakpoint-edit",
+  "version": "0.2.0",
+  "description": "Breakpoint editor component",
+  "main": "breakpoint-edit.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victor Saiz",
+  "contributors": [
+    "Benjamin Matuszewski"
+  ],
+  "license": "BSD-3",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/Ircam-RnD/breakpoint-edit"
+  },
+  "dependencies": {
+    "make-editable": "git://github.com/Ircam-RnD/make-editable.git",
+    "breakpoint-vis": "git://github.com/Ircam-RnD/breakpoint-vis.git"
+  },
+  "devDependencies": {}
+}

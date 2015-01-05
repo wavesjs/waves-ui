@@ -1,0 +1,1 @@
+This module is released under the [BSD-3-Clause license](http://opensource.org/licenses/BSD-3-Clause).
