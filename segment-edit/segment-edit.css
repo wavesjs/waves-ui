@@ -1,0 +1,47 @@
+/* disable text selection */
+::-moz-selection {
+  background: transparent; }
+
+::-webkit-selection {
+  background: transparent; }
+
+::-o-selection {
+  background: transparent; }
+
+::-ms-selection {
+  background: transparent; }
+
+::selection {
+  background: transparent; }
+
+body:not(.brushing) svg .handle-drag {
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+  cursor: -o-grabbing;
+  cursor: -ms-grabbing;
+  cursor: grabbing; }
+
+body:not(.brushing) svg:not(.handle-drag) .selectable .handle, .handle-resize {
+  cursor: ew-resize; }
+
+.selected > rect {
+  fill-opacity: 0.85; }
+
+.extent {
+  fill-opacity: .1;
+  stroke: #fff;
+  shape-rendering: crispEdges; }
+
+rect.background {
+  cursor: default !important; }
+
+rect.selection {
+  shape-rendering: "crispEdges";
+  stroke-width: 0px;
+  stroke: #0000cd;
+  fill: rgba(179, 212, 253, 0.5); }
+
+.timeline svg {
+  border: 1px solid #ddd; }
+
+.delete {color : #2980b9;}

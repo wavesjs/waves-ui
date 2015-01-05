@@ -1,0 +1,89 @@
+@import 'scss/normalize';
+@import 'scss/fontello';
+@import 'scss/solarized_light';
+
+@mixin vendor-prefix($name, $argument) {
+  -webkit-#{$name}: #{$argument};
+  -ms-#{$name}: #{$argument};
+  -moz-#{$name}: #{$argument};
+  -o-#{$name}: #{$argument};
+  #{$name}: #{$argument};
+}
+
+$black: #404040;
+$link:  #2980b9; 
+
+body{
+  font-family: Lato, proxima-nova, 'Helvetica Neue', Arial, sans-serif;
+  padding: 5rem;
+  color: $black;
+  line-height: 1.5rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto Slab', Georgia, serif;
+  font-weight: 400;
+}
+
+hr{
+  border: none;
+  border-bottom: 1px solid lighten($black, 50%);
+  clear: both;
+  margin: 2rem 0;
+}
+
+a{
+  text-decoration: none;
+  color: $link;
+  &:hover, &:active {color: $black; text-decoration: underline;}
+}
+
+header {
+  ul{
+    list-style: none;
+    padding:0 0 1rem 0;
+    margin: 0;
+    li{
+      float: left;
+
+      a.icon-github {
+        color: $link;
+        &:hover, &:active {color: $black; text-decoration: none !important;}
+      }
+
+      &:last-child{
+        float: right;
+      }
+    }
+  }
+}
+
+section{
+  padding: 2rem 0;
+  max-width: 750px;
+}
+
+footer, .updated{
+  font-size: .9rem;
+  color: lighten($black, 20%);
+}
+
+pre{
+  font-size: 0.9rem;
+}
+
+blockquote{
+
+  @include vendor-prefix("margin-before", 0);
+  @include vendor-prefix("margin-after", 0);
+  @include vendor-prefix("margin-start", 0);
+  @include vendor-prefix("margin-end", 0);
+
+  margin:0;
+  padding:0;
+  font-style:italic;
+}
+
+.only-readme{
+  display: none;
+}
