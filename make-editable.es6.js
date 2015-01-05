@@ -8,13 +8,13 @@ var toFront = require('utils').toFront;
 //   .params({
 //     interactions: {
 //       editable: true|false,
-//       selectable: true|false 
+//       selectable: true|false
 //       brushable: true|false
 //     }
 //   })
 
 // mixin to add editable properties to a visualiser component
-function makeEditable(layer) {var SLICE$0 = Array.prototype.slice;
+function makeEditable(layer) {
   // a visualiser to decorate
   var proto = layer.prototype;
 
@@ -51,7 +51,7 @@ function makeEditable(layer) {var SLICE$0 = Array.prototype.slice;
         // being editable implies being selectable
         interactions.selectable = true;
       }
-      
+
       if (interactions.selectable) {
         this.base.on('mousedown', this.onMouseDown);
       }
@@ -68,7 +68,7 @@ function makeEditable(layer) {var SLICE$0 = Array.prototype.slice;
       // should find something more reliable - closest `.item` group ?
       var item = e.target.parentNode;
       // clicked item doesn't belong to this layer
-      if (this.items[0].indexOf(item) === -1) { 
+      if (this.items[0].indexOf(item) === -1) {
         item = null;
       }
 
@@ -86,7 +86,7 @@ function makeEditable(layer) {var SLICE$0 = Array.prototype.slice;
       this.handleDrag(item, e);
     },
 
-    // @NOTE: `handleSelection` and `handleDrag` could be getters/setters
+    // @TODO: `handleSelection` and `handleDrag` could be getters/setters
     // to allow easy override
 
     // default selection handling - can be shared by all layers ?
@@ -94,10 +94,10 @@ function makeEditable(layer) {var SLICE$0 = Array.prototype.slice;
     handleSelection: function(item, e) {
       this.unselect();
 
-      if (item === null) { return; } 
+      if (item === null) { return; }
 
       if (item.classList.contains(SELECTED_CLASS)) {
-        this.unselect(item);
+        this.unselect(item); // @TODO doesn't work
       } else if (!item.classList.contains(SELECTED_CLASS)) {
         this.select(item);
       }
@@ -107,9 +107,9 @@ function makeEditable(layer) {var SLICE$0 = Array.prototype.slice;
     //   throw new Error('must be implemented');
     // },
 
-    select: function() {var els = SLICE$0.call(arguments, 0);
-      els = (els.length === 0) ? 
-        this.items : 
+    select: function(...els) {
+      els = (els.length === 0) ?
+        this.items :
         this.d3.selectAll(els);
 
       els.classed(SELECTED_CLASS, true);
@@ -119,9 +119,9 @@ function makeEditable(layer) {var SLICE$0 = Array.prototype.slice;
       })
     },
 
-    unselect: function() {var els = SLICE$0.call(arguments, 0);
-      els = (els.length === 0) ? 
-        this.items : 
+    unselect: function(...els) {
+      els = (els.length === 0) ?
+        this.items :
         this.d3.selectAll(els);
 
       els.classed(SELECTED_CLASS, false);
