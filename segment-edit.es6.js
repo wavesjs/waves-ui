@@ -3,12 +3,12 @@ var makeEditable = require('make-editable');
 
 'use strict';
 
-var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(SegmentEdit, super$0);var proto$0={};
+class SegmentEdit extends SegmentVis {
 
-  function SegmentEdit() {
+  constructor() {
     if (!(this instanceof SegmentEdit)) { return new SegmentEdit; }
 
-    super$0.call(this);
+    super();
     // default editable properties
     var defaults = {
       edits: ['x', 'y', 'width', 'height'],
@@ -17,11 +17,11 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     };
 
     this.params(defaults);
-  }if(super$0!==null)SP$0(SegmentEdit,super$0);SegmentEdit.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":SegmentEdit,"configurable":true,"writable":true}});DP$0(SegmentEdit,"prototype",{"configurable":false,"enumerable":false,"writable":false});
+  }
 
   // add handlers on segment shape
-  proto$0.update = function(data) {
-    super$0.prototype.update.call(this, data);
+  update(data) {
+    super.update(data);
 
     this.items.append('line')
       .attr('class', 'handle left')
@@ -32,10 +32,10 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
       .attr('class', 'handle right')
       .attr('stroke-width', this.param('handlerWidth'))
       .attr('stroke-opacity', this.param('handlerOpacity'));
-  };
+  }
 
-  proto$0.draw = function(el) {
-    el = super$0.prototype.draw.call(this, el);
+  draw(el) {
+    el = super.draw(el);
     var accessors = this.getAccesors();
 
     var _handlerWidth = parseInt(this.param('handlerWidth'), 10)
@@ -53,14 +53,14 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
       .attr('x2', 0)
       .attr('y1', 0)
       .attr('y2', accessors.h)
-      .attr('transform', function(d)  { 
+      .attr('transform', (d) => { 
         return 'translate(' + accessors.rhx(d) + ', 0)'; 
       })
       .style('stroke', accessors.color);
-  };
+  }
 
-  proto$0.getAccesors = function() {var this$0 = this;
-    var accessors = super$0.prototype.getAccessors.call(this);
+  getAccesors() {
+    var accessors = super.getAccessors();
 
     var _handlerWidth = parseInt(this.param('handlerWidth'), 10)
     var _halfHandler = _handlerWidth * 0.5;
@@ -68,18 +68,18 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     // handler positions
     // var hh  = (d) => { return accessors.y(d) + accessors.h(d); }
     // var lhx = (d) => { return accessors.x(d) + _halfHandler; }
-    var rhx = function(d)  {
-      var width = accessors.w(d);
+    var rhx = (d) => {
+      let width = accessors.w(d);
 
       return (width < (_handlerWidth * 2)) ?
-        _handlerWidth + this$0.__minWidth : width - _halfHandler;
+        _handlerWidth + this.__minWidth : width - _halfHandler;
     }
 
     return Object.assign(accessors, { rhx: rhx });
-  };
+  }
 
   // logic performed to select an item from the brush
-  proto$0.brushItem = function(extent, mode) {
+  brushItem(extent, mode) {
     mode = mode || 'xy'; // default tries to match both
 
     var modeX = mode.indexOf('x') >= 0;
@@ -92,7 +92,7 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     var y = this.y();
     var height = this.height();
 
-    this.g.selectAll('.selectable').classed('selected', function(d, i)  {
+    this.g.selectAll('.selectable').classed('selected', (d, i) => {
       // var offsetTop = (that.top() || 0) + (that.base.margin().top || 0);
       // var offsetLeft = (that.left || 0) + (that.base.margin().left || 0);
 
@@ -124,9 +124,9 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
 
       return matchX && matchY;
     });
-  };
+  }
 
-  proto$0.handleDrag = function(item, e) {
+  handleDrag(item, e) {
     if (item === null) { return; }
 
     var classList = e.target.classList;
@@ -136,9 +136,9 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     if (classList.contains('right')) { mode = 'resizeRight'; }
 
     this[mode](item, e.originalEvent.dx, e.originalEvent.dy);
-  };
+  }
 
-  proto$0.move = function(item, dx, dy) {
+  move(item, dx, dy) {
     item = this.d3.select(item);
     var datum = item.datum();
     // define constrains
@@ -192,9 +192,9 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     this.y()(datum, yValue);
 
     this.draw(item);
-  };
+  }
 
-  proto$0.resizeLeft = function(item, dx, dy) {
+  resizeLeft(item, dx, dy) {
     item = this.d3.select(item);
     var datum = item.datum();
 
@@ -224,9 +224,9 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     this.duration()(datum, wValue);
 
     this.draw(item);
-  };
+  }
 
-  proto$0.resizeRight = function(item, dx, dy) {
+  resizeRight(item, dx, dy) {
     item = this.d3.select(item);
     var datum = item.datum();
 
@@ -251,8 +251,8 @@ var SegmentEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     this.duration()(datum, wValue);
 
     this.draw(item);
-  };
-MIXIN$0(SegmentEdit.prototype,proto$0);proto$0=void 0;return SegmentEdit;})(SegmentVis);
+  }
+}
 
 // make editable mixin
 makeEditable(SegmentEdit);
