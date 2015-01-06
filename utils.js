@@ -22,10 +22,10 @@ utils.isFunction = function(func) {
 // };
 
 var explode = function(items, cb) {
-  if (!Array.isArray(items)) { 
-    items = [items] 
+  if (!Array.isArray(items)) {
+    items = [items];
   }
-  
+
   items.forEach(cb);
 };
 
@@ -60,7 +60,7 @@ utils.accessors = {
 
   identity: function(obj) {var props = arguments[1];if(props === void 0)props = null;
     if (!props) throw new Error('Property name is mandatory.');
-    
+
     var add = function()  {var p = arguments[0];if(p === void 0)p = null;
       var _prop = '_' + p;
       if (!obj.hasOwnProperty(_prop)) obj[_prop] = null;
@@ -110,7 +110,7 @@ utils.accessors = {
           if (!utils.isFunction(this[_prop])) {
             return this[_prop];
           }
-          
+
           return this[_prop]();
         }
 
@@ -142,7 +142,7 @@ utils.uniqueId = function() {var prefix = arguments[0];if(prefix === void 0)pref
 // style injection
 var _sheet;
 
-function createStyleSheet() {
+var createStyleSheet = function() {
   var el = document.createElement('style');
   // webkit hack: cf. http://davidwalsh.name/add-rules-stylesheets
   el.appendChild(document.createTextNode(''));
@@ -161,7 +161,38 @@ utils.addCssRule = function(selector, rules) {var position = arguments[2];if(pos
   _sheet.insertRule(rule, position);
 }
 
-// 
+// from underscore 1.7.0
+utils.throttle = function(func, wait, options) {
+  var context, args, result;
+  var timeout = null;
+  var previous = 0;
+  if (!options) options = {};
+  var later = function() {
+    previous = options.leading === false ? 0 : new Date().getTime();
+    timeout = null;
+    result = func.apply(context, args);
+    if (!timeout) context = args = null;
+  };
+  return function() {
+    var now = new Date().getTime();
+    if (!previous && options.leading === false) previous = now;
+    var remaining = wait - (now - previous);
+    context = this;
+    args = arguments;
+    if (remaining <= 0 || remaining > wait) {
+      clearTimeout(timeout);
+      timeout = null;
+      previous = now;
+      result = func.apply(context, args);
+      if (!timeout) context = args = null;
+    } else if (!timeout && options.trailing !== false) {
+      timeout = setTimeout(later, remaining);
+    }
+    return result;
+  };
+};
+
+//
 utils.toFront = function(item) {
   item.parentNode.appendChild(item);
 };
