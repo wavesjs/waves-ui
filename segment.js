@@ -3,20 +3,23 @@
 var Layer = require('layer');
 var accessors = (uniqueId = require('utils')).accessors, uniqueId = uniqueId.uniqueId;
 
-var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,Object.getOwnPropertyDescriptor(s,p));}}return t};MIXIN$0(SegmentVis, super$0);
+var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(SegmentVis, super$0);var proto$0={};
 
   function SegmentVis() {
     if (!(this instanceof SegmentVis)) return new SegmentVis();
 
     super$0.call(this);
     // set layer defaults
-    this.params({ 
-      type: 'segment', 
-      opacity: 1 
+    this.params({
+      type: 'segment',
+      opacity: 1,
+      edits: ['x', 'y', 'width', 'height'],
+      handlerWidth: 2,
+      handlerOpacity: 0
     });
 
     this.__minWidth = 1;
-    
+
     // initialize data accessors
     this.y(function(d) {var v = arguments[1];if(v === void 0)v = null;
       if (v === null) return +d.y || 0;
@@ -47,84 +50,10 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
       if (v === null) return d.opacity;
       d.opacity = v + '';
     });
-  }SegmentVis.prototype = Object.create(super$0.prototype, {"constructor": {"value": SegmentVis, "configurable": true, "writable": true} });DP$0(SegmentVis, "prototype", {"configurable": false, "enumerable": false, "writable": false});
-
-
-  SegmentVis.prototype.update = function(data) {
-    super$0.prototype.update.call(this, data);
-
-    var sel = this.g.selectAll('.' + this.param('unitClass'))
-      .data(this.data(), this.sortIndex());
-
-    this.items = sel.enter()
-      .append('g')
-      .classed('item', true)
-      .classed(this.param('unitClass'), true);
-
-    this.items.append('rect');
-
-    if (this.params('interaction').editable) {
-      this.items.append('line')
-        .attr('class', 'handle left')
-        .attr('stroke-width', this.param('handlerWidth'))
-        .attr('stroke-opacity', this.param('handlerOpacity'));
-
-      this.items.append('line')
-        .attr('class', 'handle right')
-        .attr('stroke-width', this.param('handlerWidth'))
-        .attr('stroke-opacity', this.param('handlerOpacity'));
-    }
-    
-    sel.exit().remove();
-  }
-
-  SegmentVis.prototype.draw = function() {var el = arguments[0];if(el === void 0)el = null;
-    el = el || this.items; 
-
-    var accessors = this.getAccessors();
-
-
-    el.attr('transform', function(d)  {
-      return 'translate(' + accessors.x(d) + ', ' + accessors.y(d) + ')';
-    });
-
-    el.selectAll('rect')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('width', accessors.w)
-      .attr('height', accessors.h)
-      .attr('fill', accessors.color)
-      .attr('fill-opacity', accessors.opacity);
-
-    if (!!this.each()) { el.each(this.each()); }
-
-    if (this.params('interaction').editable) {
-
-      var _handlerWidth = parseInt(this.param('handlerWidth'), 10);
-      var _halfHandler = _handlerWidth * 0.5;
-
-      el.selectAll('.handle.left')
-        .attr('x1', _halfHandler)
-        .attr('x2', _halfHandler)
-        .attr('y1', 0)
-        .attr('y2', accessors.h)
-        .style('stroke', accessors.color);
-
-      el.selectAll('.handle.right')
-        .attr('x1', 0)
-        .attr('x2', 0)
-        .attr('y1', 0)
-        .attr('y2', accessors.h)
-        .attr('transform', function(d)  { 
-          return 'translate(' + accessors.rhx(d) + ', 0)'; 
-        })
-        .style('stroke', accessors.color);
-    }
-
-  }
+  }if(super$0!==null)SP$0(SegmentVis,super$0);SegmentVis.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":SegmentVis,"configurable":true,"writable":true}});DP$0(SegmentVis,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
   // @NOTE add some caching system ?
-  SegmentVis.prototype.getAccessors = function() {var this$0 = this;
+  proto$0.getAccessors = function() {var this$0 = this;
     // reverse yScale to have logical sizes
     // only y is problematic this way
     var xScale = this.base.xScale;
@@ -152,20 +81,90 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
     var _handlerWidth = parseInt(this.param('handlerWidth'), 10);
     var _halfHandler = _handlerWidth * 0.5;
 
-    // handler positions
-    // var hh  = (d) => { return accessors.y(d) + accessors.h(d); }
-    // var lhx = (d) => { return accessors.x(d) + _halfHandler; }
+    // handler position
     var rhx = function(d)  {
-      var width = accessors.w(d);
+      var width = w(d);
 
       return (width < (_handlerWidth * 2)) ?
         _handlerWidth + this$0.__minWidth : width - _halfHandler;
     };
-    
-    return { w: w, h: h, x: x, y: y, color: color, opacity: opacity, xScale: xScale, yScale: yScale, rhx: rhx };
-  }
 
-  SegmentVis.prototype.xZoom = function(val) {
+    return { w: w, h: h, x: x, y: y, color: color, opacity: opacity, xScale: xScale, yScale: yScale, rhx: rhx };
+  };
+
+  proto$0.update = function(data) {
+    super$0.prototype.update.call(this, data);
+
+    var sel = this.g.selectAll('.' + this.param('unitClass'))
+      .data(this.data(), this.sortIndex());
+
+    this.items = sel.enter()
+      .append('g')
+      .classed('item', true)
+      .classed(this.param('unitClass'), true);
+
+    this.items.append('rect');
+
+    if (this.param('interactions').editable) {
+      this.items.append('line')
+        .attr('class', 'handle left')
+        .attr('stroke-width', this.param('handlerWidth'))
+        .attr('stroke-opacity', this.param('handlerOpacity'));
+
+      this.items.append('line')
+        .attr('class', 'handle right')
+        .attr('stroke-width', this.param('handlerWidth'))
+        .attr('stroke-opacity', this.param('handlerOpacity'));
+    }
+
+    sel.exit().remove();
+  };
+
+  proto$0.draw = function() {var el = arguments[0];if(el === void 0)el = null;
+    el = el || this.items;
+
+    var accessors = this.getAccessors();
+
+
+    el.attr('transform', function(d)  {
+      return 'translate(' + accessors.x(d) + ', ' + accessors.y(d) + ')';
+    });
+
+    el.selectAll('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', accessors.w)
+      .attr('height', accessors.h)
+      .attr('fill', accessors.color)
+      .attr('fill-opacity', accessors.opacity);
+
+    if (!!this.each()) { el.each(this.each()); }
+
+    if (this.param('interactions').editable) {
+
+      var _handlerWidth = parseInt(this.param('handlerWidth'), 10);
+      var _halfHandler = _handlerWidth * 0.5;
+
+      el.selectAll('.handle.left')
+        .attr('x1', _halfHandler)
+        .attr('x2', _halfHandler)
+        .attr('y1', 0)
+        .attr('y2', accessors.h)
+        .style('stroke', accessors.color);
+
+      el.selectAll('.handle.right')
+        .attr('x1', 0)
+        .attr('x2', 0)
+        .attr('y1', 0)
+        .attr('y2', accessors.h)
+        .attr('transform', function(d)  {
+          return 'translate(' + accessors.rhx(d) + ', 0)';
+        })
+        .style('stroke', accessors.color);
+    }
+  };
+
+  proto$0.xZoom = function(val) {
     // console.log(this.xBaseDomain);
     // console.log('zooom');
     var that = this;
@@ -181,9 +180,9 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
       var end = start + duration;
       // if((start + dv.duration(d)) <= max && start >= min) nuData.push(d);
       if (
-        (start > min && end < max) || 
-        (start < min && end < max && end > min) || 
-        (start > min && start < max && end > max) || 
+        (start > min && end < max) ||
+        (start < min && end < max && end > min) ||
+        (start > min && start < max && end > max) ||
         (end > max && start < min)
       ) {
         newData.push(d);
@@ -197,10 +196,10 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
     // xAxis.scale(xScale);
 
     // this.g.call(xAxis);
-  }
+  };
 
   // logic performed to select an item from the brush
-  SegmentVis.prototype.handleBrush = function(extent, e) {
+  proto$0.handleBrush = function(extent, e) {
   // brushItem(extent, mode) {
     /*
     mode = mode || 'xy'; // default tries to match both
@@ -248,9 +247,9 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
       return matchX && matchY;
     });
     */
-  }
+  };
 
-  SegmentVis.prototype.handleDrag = function(item, e) {
+  proto$0.handleDrag = function(item, e) {
     if (item === null) { return; }
 
     var classList = e.target.classList;
@@ -260,9 +259,9 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
     if (classList.contains('right')) { mode = 'resizeRight'; }
 
     this[mode](item, e.originalEvent.dx, e.originalEvent.dy);
-  }
+  };
 
-  SegmentVis.prototype.move = function(item, dx, dy) {
+  proto$0.move = function(item, dx, dy) {
     item = this.d3.select(item);
     var datum = item.datum();
     // define constrains
@@ -316,15 +315,15 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
     this.y()(datum, yValue);
 
     this.draw(item);
-  }
+  };
 
-  SegmentVis.prototype.resizeLeft = function(item, dx, dy) {
+  proto$0.resizeLeft = function(item, dx, dy) {
     item = this.d3.select(item);
     var datum = item.datum();
 
     var constrains = this.param('edits');
     var canW = !!~constrains.indexOf('width');
-    // early return if cannot edit    
+    // early return if cannot edit
     if (!canW) { return; }
 
     var accessors = this.getAccessors();
@@ -348,9 +347,9 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
     this.duration()(datum, wValue);
 
     this.draw(item);
-  }
+  };
 
-  SegmentVis.prototype.resizeRight = function(item, dx, dy) {
+  proto$0.resizeRight = function(item, dx, dy) {
     item = this.d3.select(item);
     var datum = item.datum();
 
@@ -375,9 +374,9 @@ var SegmentVis = (function(super$0){var DP$0 = Object.defineProperty;var MIXIN$0
     this.duration()(datum, wValue);
 
     this.draw(item);
-  }
+  };
 
-;return SegmentVis;})(Layer);
+MIXIN$0(SegmentVis.prototype,proto$0);proto$0=void 0;return SegmentVis;})(Layer);
 
 // add and initialize our accessors
 accessors.getFunction(SegmentVis.prototype, [

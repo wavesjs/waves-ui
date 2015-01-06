@@ -10,13 +10,16 @@ class SegmentVis extends Layer {
 
     super();
     // set layer defaults
-    this.params({ 
-      type: 'segment', 
-      opacity: 1 
+    this.params({
+      type: 'segment',
+      opacity: 1,
+      edits: ['x', 'y', 'width', 'height'],
+      handlerWidth: 2,
+      handlerOpacity: 0
     });
 
     this.__minWidth = 1;
-    
+
     // initialize data accessors
     this.y(function(d, v = null) {
       if (v === null) return +d.y || 0;
@@ -49,80 +52,6 @@ class SegmentVis extends Layer {
     });
   }
 
-
-  update(data) {
-    super.update(data);
-
-    var sel = this.g.selectAll('.' + this.param('unitClass'))
-      .data(this.data(), this.sortIndex());
-
-    this.items = sel.enter()
-      .append('g')
-      .classed('item', true)
-      .classed(this.param('unitClass'), true);
-
-    this.items.append('rect');
-
-    if (this.params('interaction').editable) {
-      this.items.append('line')
-        .attr('class', 'handle left')
-        .attr('stroke-width', this.param('handlerWidth'))
-        .attr('stroke-opacity', this.param('handlerOpacity'));
-
-      this.items.append('line')
-        .attr('class', 'handle right')
-        .attr('stroke-width', this.param('handlerWidth'))
-        .attr('stroke-opacity', this.param('handlerOpacity'));
-    }
-    
-    sel.exit().remove();
-  }
-
-  draw(el = null) {
-    el = el || this.items; 
-
-    var accessors = this.getAccessors();
-
-
-    el.attr('transform', (d) => {
-      return 'translate(' + accessors.x(d) + ', ' + accessors.y(d) + ')';
-    });
-
-    el.selectAll('rect')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('width', accessors.w)
-      .attr('height', accessors.h)
-      .attr('fill', accessors.color)
-      .attr('fill-opacity', accessors.opacity);
-
-    if (!!this.each()) { el.each(this.each()); }
-
-    if (this.params('interaction').editable) {
-
-      var _handlerWidth = parseInt(this.param('handlerWidth'), 10);
-      var _halfHandler = _handlerWidth * 0.5;
-
-      el.selectAll('.handle.left')
-        .attr('x1', _halfHandler)
-        .attr('x2', _halfHandler)
-        .attr('y1', 0)
-        .attr('y2', accessors.h)
-        .style('stroke', accessors.color);
-
-      el.selectAll('.handle.right')
-        .attr('x1', 0)
-        .attr('x2', 0)
-        .attr('y1', 0)
-        .attr('y2', accessors.h)
-        .attr('transform', (d) => { 
-          return 'translate(' + accessors.rhx(d) + ', 0)'; 
-        })
-        .style('stroke', accessors.color);
-    }
-
-  }
-
   // @NOTE add some caching system ?
   getAccessors() {
     // reverse yScale to have logical sizes
@@ -152,17 +81,87 @@ class SegmentVis extends Layer {
     var _handlerWidth = parseInt(this.param('handlerWidth'), 10);
     var _halfHandler = _handlerWidth * 0.5;
 
-    // handler positions
-    // var hh  = (d) => { return accessors.y(d) + accessors.h(d); }
-    // var lhx = (d) => { return accessors.x(d) + _halfHandler; }
+    // handler position
     var rhx = (d) => {
-      let width = accessors.w(d);
+      let width = w(d);
 
       return (width < (_handlerWidth * 2)) ?
         _handlerWidth + this.__minWidth : width - _halfHandler;
     };
-    
+
     return { w, h, x, y, color, opacity, xScale, yScale, rhx };
+  }
+
+  update(data) {
+    super.update(data);
+
+    var sel = this.g.selectAll('.' + this.param('unitClass'))
+      .data(this.data(), this.sortIndex());
+
+    this.items = sel.enter()
+      .append('g')
+      .classed('item', true)
+      .classed(this.param('unitClass'), true);
+
+    this.items.append('rect');
+
+    if (this.param('interactions').editable) {
+      this.items.append('line')
+        .attr('class', 'handle left')
+        .attr('stroke-width', this.param('handlerWidth'))
+        .attr('stroke-opacity', this.param('handlerOpacity'));
+
+      this.items.append('line')
+        .attr('class', 'handle right')
+        .attr('stroke-width', this.param('handlerWidth'))
+        .attr('stroke-opacity', this.param('handlerOpacity'));
+    }
+
+    sel.exit().remove();
+  }
+
+  draw(el = null) {
+    el = el || this.items;
+
+    var accessors = this.getAccessors();
+
+
+    el.attr('transform', (d) => {
+      return 'translate(' + accessors.x(d) + ', ' + accessors.y(d) + ')';
+    });
+
+    el.selectAll('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', accessors.w)
+      .attr('height', accessors.h)
+      .attr('fill', accessors.color)
+      .attr('fill-opacity', accessors.opacity);
+
+    if (!!this.each()) { el.each(this.each()); }
+
+    if (this.param('interactions').editable) {
+
+      var _handlerWidth = parseInt(this.param('handlerWidth'), 10);
+      var _halfHandler = _handlerWidth * 0.5;
+
+      el.selectAll('.handle.left')
+        .attr('x1', _halfHandler)
+        .attr('x2', _halfHandler)
+        .attr('y1', 0)
+        .attr('y2', accessors.h)
+        .style('stroke', accessors.color);
+
+      el.selectAll('.handle.right')
+        .attr('x1', 0)
+        .attr('x2', 0)
+        .attr('y1', 0)
+        .attr('y2', accessors.h)
+        .attr('transform', (d) => {
+          return 'translate(' + accessors.rhx(d) + ', 0)';
+        })
+        .style('stroke', accessors.color);
+    }
   }
 
   xZoom(val) {
@@ -181,9 +180,9 @@ class SegmentVis extends Layer {
       var end = start + duration;
       // if((start + dv.duration(d)) <= max && start >= min) nuData.push(d);
       if (
-        (start > min && end < max) || 
-        (start < min && end < max && end > min) || 
-        (start > min && start < max && end > max) || 
+        (start > min && end < max) ||
+        (start < min && end < max && end > min) ||
+        (start > min && start < max && end > max) ||
         (end > max && start < min)
       ) {
         newData.push(d);
@@ -324,7 +323,7 @@ class SegmentVis extends Layer {
 
     var constrains = this.param('edits');
     var canW = !!~constrains.indexOf('width');
-    // early return if cannot edit    
+    // early return if cannot edit
     if (!canW) { return; }
 
     var accessors = this.getAccessors();
