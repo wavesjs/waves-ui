@@ -1,12 +1,9 @@
-var slugify    = require('underscore.string').slugify;
-var accessors  = require('utils').accessors;
-var uniqueId   = require('utils').uniqueId;
-var addCssRule = require('utils').addCssRule;
-var toFront    = require('utils').toFront;
-
 'use strict';
 
-var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var proto$0={};var SLICE$0 = Array.prototype.slice;
+var slugify = (require('underscore.string')).slugify;
+var accessors = (toFront = require('utils')).accessors, uniqueId = toFront.uniqueId, addCssRule = toFront.addCssRule, toFront = toFront.toFront;
+
+var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.prototype.slice;
 
   function Layer() {
     this.unitClass = null;
@@ -34,17 +31,17 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
       // define possible interactions: selectable, editable
       interactions: {}
     });
-  }DP$0(Layer,"prototype",{"configurable":false,"enumerable":false,"writable":false});
+  }DP$0(Layer, "prototype", {"configurable": false, "enumerable": false, "writable": false});
 
   // this.__params getter/setter for a single param
-  proto$0.param = function() {var name = arguments[0];if(name === void 0)name = null;var value = arguments[1];if(value === void 0)value = null;
+  Layer.prototype.param = function() {var name = arguments[0];if(name === void 0)name = null;var value = arguments[1];if(value === void 0)value = null;
     if (value === null) return this.__params[name];
     this.__params[name] = value;
     return this;
-  };
+  }
 
   // this.__params getter/setter
-  proto$0.params = function() {var _params = arguments[0];if(_params === void 0)_params = null;
+  Layer.prototype.params = function() {var _params = arguments[0];if(_params === void 0)_params = null;
     if (_params === null) return this.__params;
 
     for (var key in _params) {
@@ -52,23 +49,23 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     }
 
     return this;
-  };
+  }
 
   // @NOTE - used ?
-  proto$0.name = function() {var value = arguments[0];if(value === void 0)value = null;
+  Layer.prototype.name = function() {var value = arguments[0];if(value === void 0)value = null;
     if (value === null) return this.__params.name;
     this.__params.name = value;
     return this;
-  };
+  }
 
   // this.__data getter/setter
-  proto$0.data = function() {var _data = arguments[0];if(_data === void 0)_data = null;
+  Layer.prototype.data = function() {var _data = arguments[0];if(_data === void 0)_data = null;
     if (!_data) return this.__data;
     this.__data = _data;
     return this;
-  };
+  }
 
-  proto$0.load = function(base, d3) {var this$0 = this;
+  Layer.prototype.load = function(base, d3) {var this$0 = this;
     // configure layer
     var name  = this.param('name') || this.param('type');
     var cname = uniqueId(slugify(name));
@@ -95,17 +92,17 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
 
     this.update = function()  {
       base.uiLoop.register(update, arguments, this$0);
-    }
+    };
 
     this.draw = function()  {
       base.uiLoop.register(draw, arguments, this$0);
-    }
+    };
 
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onDrag = this.onDrag.bind(this);
-  };
+  }
 
-  proto$0.setScales = function() {
+  Layer.prototype.setScales = function() {
     var base = this.base;
 
     // @NOTE: is the really needed ?
@@ -131,9 +128,9 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
 
     var yRange = [this.param('height'), 0];
     this.yScale.range(yRange);
-  };
+  }
 
-  proto$0.createGroup = function(boundingBox) {
+  Layer.prototype.createGroup = function(boundingBox) {
     if (this.g) { return; }
     // create layer group
     this.g = boundingBox.append('g')
@@ -145,12 +142,12 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     if (this.param('nameAsIdAttribute')) {
       this.g.attr('id', this.param('name'));
     }
-  };
+  }
 
   // entry point to add specific logic to a layer
-  proto$0.init = function() {};
+  Layer.prototype.init = function() {}
 
-  proto$0.delegateEvents = function() {
+  Layer.prototype.delegateEvents = function() {
     var interactions = this.param('interactions');
 
     if (interactions.editable) {
@@ -162,14 +159,14 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     if (interactions.selectable) {
       this.base.on('mousedown', this.onMouseDown);
     }
-  };
+  }
 
-  proto$0.undelegateEvents = function() {
+  Layer.prototype.undelegateEvents = function() {
     this.base.removeListener('mousedown', this.onMouseDown);
     this.base.removeListener('drag', this.onDrag);
-  };
+  }
 
-  proto$0.onMouseDown = function(e) {
+  Layer.prototype.onMouseDown = function(e) {
     if (e.button !== 0) { return; }
     // check if the clicked item belongs to the layer
     // should find something more reliable - closest `.item` group ?
@@ -180,9 +177,9 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     }
 
     this.handleSelection(item, e);
-  };
+  }
 
-  proto$0.onDrag = function(e) {
+  Layer.prototype.onDrag = function(e) {
     // if (this.base.brushing()) { return; }
     var item = e.currentTarget;
 
@@ -191,14 +188,14 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     }
 
     this.handleDrag(item, e);
-  };
+  }
 
   // @TODO: `handleSelection` and `handleDrag` could be getters/setters
   // to allow easy override
 
   // default selection handling - can be shared by all layers ?
   // can be overriden to change behavior - shiftKey, etc.
-  proto$0.handleSelection = function(item, e) {
+  Layer.prototype.handleSelection = function(item, e) {
     this.unselect();
 
     if (item === null) { return; }
@@ -208,13 +205,13 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     } else if (!item.classList.contains(this.param('selectedClass'))) {
       this.select(item);
     }
-  };
+  }
 
-  proto$0.handleDrag = function(item, e) {
+  Layer.prototype.handleDrag = function(item, e) {
     throw new Error('must be implemented');
-  };
+  }
 
-  proto$0.select = function() {var els = SLICE$0.call(arguments, 0);
+  Layer.prototype.select = function() {var els = SLICE$0.call(arguments, 0);
     els = (els.length === 0) ?
       this.items :
       this.d3.selectAll(els);
@@ -223,18 +220,18 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
 
     els.each(function() {
       toFront(this);
-    })
-  };
+    });
+  }
 
-  proto$0.unselect = function() {var els = SLICE$0.call(arguments, 0);
+  Layer.prototype.unselect = function() {var els = SLICE$0.call(arguments, 0);
     els = (els.length === 0) ?
       this.items :
       this.d3.selectAll(els);
 
     els.classed(this.param('selectedClass'), false);
-  };
+  }
 
-  proto$0.style = function(selector, rules) {
+  Layer.prototype.style = function(selector, rules) {
     // @TODO recheck the DOM
     var selectors = [];
     selectors.push('svg[data-cname=' + this.base.cname() + ']');
@@ -242,9 +239,9 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
     selectors.push(selector);
 
     addCssRule(selectors.join(' '), rules);
-  };
+  }
 
-  proto$0.update = function(data) {
+  Layer.prototype.update = function(data) {
     this.data(data || this.data() || this.base.data());
     // this.untouchedXscale = this.base.xScale.copy();
     // this.untouchedYscale = this.base.yScale.copy();
@@ -252,15 +249,15 @@ var Layer = (function(){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={
 
     // implement the update enter delete logic here
     // call draw
-  };
+  }
 
   // interface - implement in childs
   // @TODO check Proxies to share common behavior like
   // if (!!this.each()) { el.each(this.each()); } // in `draw`
-  proto$0.draw = function() {};
+  Layer.prototype.draw = function() {}
 
-  proto$0.xZoom = function() {};
-MIXIN$0(Layer.prototype,proto$0);proto$0=void 0;return Layer;})();
+  Layer.prototype.xZoom = function() {}
+;return Layer;})();
 
 accessors.identity(Layer.prototype, 'each');
 
