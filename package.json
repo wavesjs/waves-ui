@@ -1,0 +1,17 @@
+{
+  "name": "segment-vis",
+  "version": "0.2.1",
+  "description": "Segment component",
+  "main": "segment.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victor Saiz",
+  "contributors": ["Benjamin Matuszewski"],
+  "license": "BSD-3",
+  "dependencies": {
+    "layer": "git://github.com/ircam-rnd/layer",
+    "utils": "git://github.com/ircam-rnd/utils"
+  },
+  "devDependencies": {}
+}
