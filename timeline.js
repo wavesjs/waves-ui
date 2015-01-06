@@ -166,23 +166,23 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
 
     this.svg.call(dragBehavior);
 
-    var brush = d3.svg.brush()
-      .x(this.xScale)
-      .y(this.yScale);
+    // var brush = d3.svg.brush()
+    //   .x(this.xScale)
+    //   .y(this.yScale);
 
-    brush.on('brushstart', function() {
-      console.log('brushstart', d3.event);
-    });
+    // brush.on('brushstart', function() {
+    //   console.log('brushstart', d3.event);
+    // });
 
-    brush.on('brush', function() {
-      console.log('brush', d3.event);
-    });
+    // brush.on('brush', function() {
+    //   console.log('brush', d3.event);
+    // });
 
-    brush.on('brushend', function() {
-      console.log('brushend', d3.event);
-    });
+    // brush.on('brushend', function() {
+    //   console.log('brushend', d3.event);
+    // });
 
-    this.boundingBox.call(brush);
+    // this.boundingBox.call(brush);
   };
 
   // should clean event delegation, in conjonction with a `remove` method
@@ -311,7 +311,7 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
 
     // 4. create layers groups
     for (var key in this.layers) {
-      this.enterLayer(this.layers[key], this.boundingBox);
+      this.layers[key].createGroup(this.boundingBox);
     }
 
     // 5. update view
