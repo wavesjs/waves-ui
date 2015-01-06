@@ -62,8 +62,8 @@ d3.select('#timeline').call(timeline.draw)
 
 ##### `update(...layers)`
 
->  @params `...layers` {list} _optionnal_
->  any number of layer to update, references to the layers to update, 
+>  @params `...layers` {list} _optionnal_  
+>  any number of layer to update, references to the layers to update,  
 >  if no arguments given, update all registered layers
 
 

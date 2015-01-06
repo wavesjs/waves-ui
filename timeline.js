@@ -4,6 +4,7 @@ var shortId   = require('shortid');
 var accessors = require('utils').accessors;
 var uniqueId  = require('utils').uniqueId;
 var UILoop    = require('utils').UILoop;
+var throttle  = require('utils').throttle;
 
 'use strict';
 
@@ -11,7 +12,7 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   function Timeline() {var options = arguments[0];if(options === void 0)options = {};
     if (!(this instanceof Timeline)) { return new Timeline(options); }
 
-    super$0.call(this); 
+    super$0.call(this);
     this.name(options.name || shortId.generate());
     this.cname(uniqueId(this.name()));
     // defaults
@@ -28,6 +29,7 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     this.__scalesInitialized = false;
     // @TODO define if it should be a getter
     this.fps = 60;
+    this.throttleRate = 1000 / 50;
     this.uiLoop = new UILoop(this.fps);
     // bind draw method for call from d3
     this.draw = this.draw.bind(this);
@@ -59,29 +61,25 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   // layers initialization related methods
   // --------------------------------------------------
 
-  // register a layer
-  proto$0.layer = function(layer) {
-    if (this.__scalesInitialized === false) { 
-      this.initScales(); 
+  // alias for layer - symetry with remove
+  proto$0.add = function(layer) {
+    if (this.__scalesInitialized === false) {
+      this.initScales();
     }
 
-    this.initLayer(layer); // compute `cname`, ...
-    this.delegateScales(layer);
-    // add the layer to the stack
-    this.layers[layer.param('cname')] = layer;
+    layer.load(this, d3);
+    layer.setScales();
+    layer.delegateEvents();
+    layer.init();
 
     // allow to dynamically add a layer after after the timeline has been drawn
     if (!!this.boundingBox) {
-      this.enterLayer(layer, this.boundingBox);
+      layer.createGroup(this.boundingBox);
     }
 
-    return this;
-  };
+    // add the layer to the stack
+    this.layers[layer.param('cname')] = layer;
 
-  // alias for layer - symetry with remove
-  proto$0.add = function(layer) {
-    this.layer(layer);
-    
     return this;
   };
 
@@ -95,57 +93,6 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     delete this.layers[layer.param('cname')];
 
     return this;
-  };
-
-  // initialize the layer - @NOTE remove ?
-  proto$0.initLayer = function(layer) {
-    layer.load(this, d3);
-    // check presence of the method for object do not extend LayerVis yet
-    if ('onload' in  layer) { layer.onload(); }
-  };
-
-  // initialize layer scales
-  proto$0.delegateScales = function(layer) {
-    // @NOTE: is the really needed ?
-    // if (layer.hasOwnProperty('xScale')) {
-    //   var baseXscale = this.xScale.copy();
-    //   // if (!!layer.param('xDomain')) { baseXscale.domain(layer.param('xDomain')); }
-    //   if(!!layer.xDomain && !!layer.xDomain()) baseXscale.domain(layer.xDomain());
-    //   // if (!!layer.param('xRange')) { baseXscale.domain(layer.param('xRange')); }
-    //   if(!!layer.xRange && !!layer.xRange()) baseXscale.range(layer.xRange());
-    //   layer.xScale = baseXscale;
-    //   layer.originalXscale = baseXscale.copy();
-    // }
-
-    // define layer yScale
-    layer.yScale = this.yScale.copy();
-
-    if (!!layer.param('yDomain')) {
-      layer.yScale.domain(layer.param('yDomain'));
-    }
-
-    if (layer.param('height') === null) {
-      layer.param('height', this.height());
-    }
-
-    var yRange = [layer.param('height'), 0];
-    layer.yScale.range(yRange);
-  };
-
-  // create a group for the given layer
-  proto$0.enterLayer = function(layer, boundingBox) {
-    // if layer already entered, do nothing
-    if (layer.g) { return; }
-    // create layer group
-    layer.g = boundingBox.append('g')
-      .classed('layer', true)
-      .classed(layer.param('type'), true)
-      .attr('data-cname', layer.param('cname'))
-      .attr('transform', 'translate(0, ' + (layer.param('top') || 0) + ')');
-
-    if (layer.param('nameAsIdAttribute')) {
-      layer.g.attr('id', layer.param('name'));
-    }
   };
 
   // --------------------------------------------------
@@ -166,11 +113,17 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
       this$0.trigger('mouseup', d3.event);
     });
 
-    this.svg.on('mousemove', function()  {
+    this.svg.on('mousemove', throttle(function()  {
       this$0.trigger('mousemove', d3.event);
-    });
+    }, this.throttleRate, { leading: false }));
+
+    // this.svg.on('mousemove', () => {
+    //   console.log('mousemove');
+    //   this.trigger('mousemove', d3.event);
+    // });
 
     // choose which one we really want
+    // or use two different names
     this.svg.on('mouseleave', function()  {
       // this.xZoomSet(); // was in makeEditable - check if really needed
       this$0.trigger('mouseleave', d3.event);
@@ -188,8 +141,12 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     //   console.log(d3.event);
     // });
 
+    // @NOTE throttle doesn't work here
+    // for unknown reason d3.event is null most of the time
     dragBehavior.on('drag', function()  {
+    // dragBehavior.on('drag', throttle(() => {
       // we drag only selected items
+      var originalEvent = d3.event;
       // @NOTE shouldn't rely on `selected` class here
       this$0.selection.selectAll('.selected').each(function(datum) {
         var e = {
@@ -199,47 +156,48 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
           // ex. line or rect in a segment)
           target: target,
           d: datum,
-          originalEvent: d3.event
+          originalEvent: originalEvent
         }
 
         that.trigger('drag', e);
       });
     });
+    // }, this.throttleRate));
 
     this.svg.call(dragBehavior);
 
-    // var brush = d3.svg.brush()
-    //   .x(this.xScale)
-    //   .y(this.yScale);
-    
-    // brush.on('brushstart', function() {
-    //   console.log('brushstart', d3.event);
-    // });
+    var brush = d3.svg.brush()
+      .x(this.xScale)
+      .y(this.yScale);
 
-    // brush.on('brush', function() {
-    //   console.log('brush', d3.event);
-    // });
+    brush.on('brushstart', function() {
+      console.log('brushstart', d3.event);
+    });
 
-    // brush.on('brushend', function() {
-    //   console.log('brushend', d3.event);
-    // });
+    brush.on('brush', function() {
+      console.log('brush', d3.event);
+    });
 
-    // this.boundingBox.call(brush);
+    brush.on('brushend', function() {
+      console.log('brushend', d3.event);
+    });
+
+    this.boundingBox.call(brush);
   };
 
   // should clean event delegation, in conjonction with a `remove` method
   proto$0.undelegateEvents = function() {
-    // 
+    //
   };
 
   // sets the brushing state for interaction and a css class for styles
   // @TODO define how the brush should work
-  proto$0.brushing = function() {var state = arguments[0];if(state === void 0)state = null;
-    if (state === null) { return this._brushing; }
+  // brushing(state = null) {
+  //   if (state === null) { return this._brushing; }
 
-    this._brushing = state;
-    d3.select(document.body).classed('brushing', state);
-  };
+  //   this._brushing = state;
+  //   d3.select(document.body).classed('brushing', state);
+  // }
 
   proto$0.xZoom = function(zoom) {
     // in px to domain
@@ -293,6 +251,7 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     for (var key in this.layers) {
       var layer = this.layers[key];
       if ('xScale' in layer) { layer.originalXscale = layer.xScale.copy(); }
+      if ('zoomEnd' in layer) { layer.zoomEnd(); }
     }
   };
 
@@ -310,7 +269,7 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     // normalize dimensions based on the margins
     this.width(this.width() - this.margin().left - this.margin().right);
     this.height(this.height() - this.margin().top - this.margin().bottom);
-      
+
     // 1. create svg element
     // @NOTE viewbox: do we really want this behavior ?
     //       doesn't work well with foreignobject canvas
