@@ -1,3 +1,3 @@
-# LayerVis
+# Layer
 
 Base class for all timeline layers
