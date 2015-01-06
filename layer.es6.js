@@ -1,17 +1,14 @@
-var pck        = require('./package.json');
 var slugify    = require('underscore.string').slugify;
 var accessors  = require('utils').accessors;
 var uniqueId   = require('utils').uniqueId;
 var addCssRule = require('utils').addCssRule;
+var toFront    = require('utils').toFront;
 
 'use strict';
 
 class Layer {
 
   constructor() {
-
-    super();
-
     this.unitClass = null;
     // this.dname = null;
     this.xBaseDomain = null;
@@ -153,7 +150,7 @@ class Layer {
   // entry point to add specific logic to a layer
   init() {}
 
-  delegateEvents: function() {
+  delegateEvents() {
     var interactions = this.param('interactions');
 
     if (interactions.editable) {
@@ -167,12 +164,12 @@ class Layer {
     }
   }
 
-  undelegateEvents: function() {
+  undelegateEvents() {
     this.base.removeListener('mousedown', this.onMouseDown);
     this.base.removeListener('drag', this.onDrag);
   }
 
-  onMouseDown: function(e) {
+  onMouseDown(e) {
     if (e.button !== 0) { return; }
     // check if the clicked item belongs to the layer
     // should find something more reliable - closest `.item` group ?
@@ -185,7 +182,7 @@ class Layer {
     this.handleSelection(item, e);
   }
 
-  onDrag: function(e) {
+  onDrag(e) {
     // if (this.base.brushing()) { return; }
     var item = e.currentTarget;
 
@@ -201,7 +198,7 @@ class Layer {
 
   // default selection handling - can be shared by all layers ?
   // can be overriden to change behavior - shiftKey, etc.
-  handleSelection: function(item, e) {
+  handleSelection(item, e) {
     this.unselect();
 
     if (item === null) { return; }
@@ -213,11 +210,11 @@ class Layer {
     }
   }
 
-  handleDrag: function(item, e) {
+  handleDrag(item, e) {
     throw new Error('must be implemented');
   }
 
-  select: function(...els) {
+  select(...els) {
     els = (els.length === 0) ?
       this.items :
       this.d3.selectAll(els);
@@ -229,7 +226,7 @@ class Layer {
     })
   }
 
-  unselect: function(...els) {
+  unselect(...els) {
     els = (els.length === 0) ?
       this.items :
       this.d3.selectAll(els);
