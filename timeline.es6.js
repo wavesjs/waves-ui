@@ -8,11 +8,11 @@ var throttle  = require('utils').throttle;
 
 'use strict';
 
-var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(Timeline, super$0);var proto$0={};
-  function Timeline() {var options = arguments[0];if(options === void 0)options = {};
+class Timeline extends EventEmitter {
+  constructor(options = {}) {
     if (!(this instanceof Timeline)) { return new Timeline(options); }
 
-    super$0.call(this);
+    super();
     this.name(options.name || shortId.generate());
     this.cname(uniqueId(this.name()));
     // defaults
@@ -33,11 +33,11 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     this.uiLoop = new UILoop(this.fps);
     // bind draw method for call from d3
     this.draw = this.draw.bind(this);
-  }if(super$0!==null)SP$0(Timeline,super$0);Timeline.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":Timeline,"configurable":true,"writable":true}});DP$0(Timeline,"prototype",{"configurable":false,"enumerable":false,"writable":false});
+  }
 
   // initialize the scales of the timeline
   // is called the first time a layer is added
-  proto$0.initScales = function() {
+  initScales() {
     var xRange = [0, this.width()];
     if (this.swapX) { xRange.reverse(); }
 
@@ -55,14 +55,14 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     // keep a reference unmodified scale range for use in the layers when zooming
     this.originalXscale = this.xScale.copy();
     this.__scalesInitialized = true;
-  };
+  }
 
   // --------------------------------------------------
   // layers initialization related methods
   // --------------------------------------------------
 
   // alias for layer - symetry with remove
-  proto$0.add = function(layer) {
+  add(layer) {
     if (this.__scalesInitialized === false) {
       this.initScales();
     }
@@ -81,10 +81,10 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     this.layers[layer.param('cname')] = layer;
 
     return this;
-  };
+  }
 
   // remove a layer
-  proto$0.remove = function(layer) {
+  remove(layer) {
     if (layer.param('isEditable') && layer.undelegateEvents) {
       layer.undelegateEvents();
     }
@@ -93,28 +93,28 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     delete this.layers[layer.param('cname')];
 
     return this;
-  };
+  }
 
   // --------------------------------------------------
   // events
   // --------------------------------------------------
 
-  proto$0.delegateEvents = function() {var this$0 = this;
+  delegateEvents() {
     // !!! remember to unbind when deleting element !!!
     var body = document.body;
     var target;
     // is actually not listened in make editable
-    this.svg.on('mousedown', function()  {
+    this.svg.on('mousedown', () => {
       target = d3.event.target;
-      this$0.trigger('mousedown', d3.event);
+      this.trigger('mousedown', d3.event);
     });
 
-    this.svg.on('mouseup', function()  {
-      this$0.trigger('mouseup', d3.event);
+    this.svg.on('mouseup', () => {
+      this.trigger('mouseup', d3.event);
     });
 
-    this.svg.on('mousemove', throttle(function()  {
-      this$0.trigger('mousemove', d3.event);
+    this.svg.on('mousemove', throttle(() => {
+      this.trigger('mousemove', d3.event);
     }, this.throttleRate, { leading: false }));
 
     // this.svg.on('mousemove', () => {
@@ -124,14 +124,14 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
 
     // choose which one we really want
     // or use two different names
-    this.svg.on('mouseleave', function()  {
+    this.svg.on('mouseleave', () => {
       // this.xZoomSet(); // was in makeEditable - check if really needed
-      this$0.trigger('mouseleave', d3.event);
+      this.trigger('mouseleave', d3.event);
     });
 
-    body.addEventListener('mouseleave', function(e)  {
+    body.addEventListener('mouseleave', (e) => {
       if (e.fromElement !== body) { return; }
-      this$0.trigger('mouseleave', e);
+      this.trigger('mouseleave', e);
     });
 
     var that = this;
@@ -143,12 +143,12 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
 
     // @NOTE throttle doesn't work here
     // for unknown reason d3.event is null most of the time
-    dragBehavior.on('drag', function()  {
+    dragBehavior.on('drag', () => {
     // dragBehavior.on('drag', throttle(() => {
       // we drag only selected items
       var originalEvent = d3.event;
       // @NOTE shouldn't rely on `selected` class here
-      this$0.selection.selectAll('.selected').each(function(datum) {
+      this.selection.selectAll('.selected').each(function(datum) {
         var e = {
           // group - allow to redraw only the current dragged item
           currentTarget: this,
@@ -183,12 +183,12 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     // });
 
     // this.boundingBox.call(brush);
-  };
+  }
 
   // should clean event delegation, in conjonction with a `remove` method
-  proto$0.undelegateEvents = function() {
+  undelegateEvents() {
     //
-  };
+  }
 
   // sets the brushing state for interaction and a css class for styles
   // @TODO define how the brush should work
@@ -199,7 +199,7 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   //   d3.select(document.body).classed('brushing', state);
   // }
 
-  proto$0.xZoom = function(zoom) {
+  xZoom(zoom) {
     // in px to domain
     zoom.anchor = this.originalXscale.invert(zoom.anchor);
     // this.zoomFactor = zoom.factor;
@@ -210,9 +210,9 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
       if ('xScale' in layer) { this.xZoomCompute(zoom, layer); }
       if ('xZoom' in layer) { layer.xZoom(zoom); }
     }
-  };
+  }
 
-  proto$0.xZoomCompute = function(zoom, layer) {
+  xZoomCompute(zoom, layer) {
     var deltaY = zoom.delta.y;
     var deltaX = zoom.delta.x;
     var anchor = zoom.anchor;
@@ -241,10 +241,10 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     }
     // updating the scale
     layer.xScale.domain([targetStart, targetStart + targetLength]);
-  };
+  }
 
   // @NOTE - used ? - is called from make editable
-  proto$0.xZoomSet = function() {
+  xZoomSet() {
     // saves new scale reference
     this.originalXscale = this.xScale.copy();
 
@@ -253,19 +253,19 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
       if ('xScale' in layer) { layer.originalXscale = layer.xScale.copy(); }
       if ('zoomEnd' in layer) { layer.zoomEnd(); }
     }
-  };
+  }
 
   // --------------------------------------------------
   // main interface methods
   // --------------------------------------------------
 
-  proto$0.draw = function(sel) {
+  draw(sel) {
     // draw should be called only once
     if (this.svg) { return this.update(); }
 
     // assume a timeline is unique and can be bound only to one element
     this.selection = sel || this.selection;
-    var el = d3.select(this.selection[0][0]);
+    let el = d3.select(this.selection[0][0]);
     // normalize dimensions based on the margins
     this.width(this.width() - this.margin().left - this.margin().right);
     this.height(this.height() - this.margin().top - this.margin().bottom);
@@ -318,36 +318,36 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     this.update();
 
     return this;
-  };
+  }
 
   // update layers
   // @param layerIds <string|object|array> optionnal
   //      layers to update or instance(s)
-  proto$0.update = function() {var SLICE$0 = Array.prototype.slice;var layers = SLICE$0.call(arguments, 0);
+  update(...layers) {
     var toUpdate = {};
 
     if (layers.length === 0) {
       toUpdate = this.layers;
     } else {
-      layers.forEach(function(layer)  {
+      layers.forEach((layer) => {
         toUpdate[layer.param('cname')] = layer;
       });
     }
 
     // update selected layers
-    for (var key in toUpdate) { toUpdate[key].update(); }
-    for (var key$0 in toUpdate) { toUpdate[key$0].draw(); }
+    for (let key in toUpdate) { toUpdate[key].update(); }
+    for (let key in toUpdate) { toUpdate[key].draw(); }
     // start rAF
     this.uiLoop.start();
-  };
+  }
 
   // destroy the timeline
-  proto$0.destroy = function() {
+  destroy() {
     // this.layers.forEach((layer) => this.remove(layer));
     // this.undelegateEvents();
     // this.svg.remove();
-  };
-MIXIN$0(Timeline.prototype,proto$0);proto$0=void 0;return Timeline;})(EventEmitter);
+  }
+}
 
 // generic getters(setters) accessors and defaults
 // accessors.getFunction(Timeline.prototype, [ ]);
