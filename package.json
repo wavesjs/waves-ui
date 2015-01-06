@@ -1,6 +1,6 @@
 {
   "name": "layer-vis",
-  "version": "0.2.1",
+  "version": "0.2.0",
   "description": "Base layer object with common logic",
   "main": "layer.js",
   "scripts": {
