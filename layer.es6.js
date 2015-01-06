@@ -1,10 +1,7 @@
-var slugify    = require('underscore.string').slugify;
-var accessors  = require('utils').accessors;
-var uniqueId   = require('utils').uniqueId;
-var addCssRule = require('utils').addCssRule;
-var toFront    = require('utils').toFront;
-
 'use strict';
+
+var {slugify} = require('underscore.string');
+var {accessors, uniqueId, addCssRule, toFront}  = require('utils');
 
 class Layer {
 
@@ -95,11 +92,11 @@ class Layer {
 
     this.update = () => {
       base.uiLoop.register(update, arguments, this);
-    }
+    };
 
     this.draw = () => {
       base.uiLoop.register(draw, arguments, this);
-    }
+    };
 
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onDrag = this.onDrag.bind(this);
@@ -223,7 +220,7 @@ class Layer {
 
     els.each(function() {
       toFront(this);
-    })
+    });
   }
 
   unselect(...els) {
