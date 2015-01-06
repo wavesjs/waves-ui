@@ -19,7 +19,7 @@ var BreakpointEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){
   // logic performed to select an item from the brush
   proto$0.brushItem = function(extent, mode) {
     mode = mode || 'xy'; // default tries to match both
-    
+
     var modeX = mode.indexOf('x') >= 0;
     var modeY = mode.indexOf('y') >= 0;
     var matchX = false;
@@ -45,7 +45,7 @@ var BreakpointEdit = (function(super$0){"use strict";var PRS$0 = (function(o,t){
         matchX = true;
       }
 
-      // Y match 
+      // Y match
       if (modeY) {
         var y1 = cy(d) - halfR;
         var y2 = cy(d) + halfR;
