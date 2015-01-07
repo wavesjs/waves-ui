@@ -3,7 +3,7 @@
 Use this module to visualise waveform data over a shared timeline.  
 The module relies on the [timeline](https://github.com/Ircam-RnD/timeLine) object.
 
-_A working demo for this module can be found [here](#)_
+<!-- _A working demo for this module can be found [here](#)_ -->
 
 ## Example usage
 
@@ -21,7 +21,7 @@ var graph = timeline()
   
 // create the waveform layer
 var waveformLayer = waveform()
-  .params({ name: 'my-waveform' })
+  .params({ name: 'my-waveform', renderingStrategy: 'svg' })
   // pass the raw ArrayBuffer from our audio buffer
   .data(buffer.getChannelData(0).buffer)
   .sampleRate(buffer.sampleRate)
@@ -38,10 +38,21 @@ d3.select('#timeline').call(graph.draw);
 
 ## Public API
 
-### params
-`.params({ yDomain, renderingStrategy, triggerUpdateZoomDelta,  triggerUpdateDragDelta, [name] })`   
+### #params( _[params]_ )
 
-> Sets the state on the layer level.
+<!-- ```javascript
+// Usage
+.params({
+  yDomain: [0, 100],
+  renderingStrategy: 'svg',
+  // ...
+})
+``` -->
+
+> @param _`params`_, @value `Object`
+
+If _`params`_ is present sets the layer's parameters via the passed in _`params`_`Object`, otherwise returns the layer's internal parameters.  
+
 
 > * @key `yDomain`, @value `[int, int]`  
 > Sets the layer's scale's domain to the specified array of numbers. The array must contain two or more numbers.
@@ -56,37 +67,40 @@ d3.select('#timeline').call(graph.draw);
 > Sets the minimum dragged delta (in pixels) dragged that will trigger an update call.
 
 
-### data 
-`.data(data)`
+### #data( _[data]_ )
 
-> Sets the data to be rendered
-> * @param `data`, @value `array|ArrayBuffer`, @defaults `0.02`  
+> @param _`data`_, @value `Array|ArrayBuffer`, @optional  
 
-##### `duration(duration)`
+If _`data`_ is present sets the data to be rendered via the passed in _`data`_`Array{Buffer}`, otherwise returns the _`data`_`Array{Buffer}`.
 
-> @param `duration` {int}  
-> duration of the ArrayBuffer to display (in second)  
+### #duration( _[duration]_ )
 
-##### `sampleRate(sampleRate)`
+> @param _`duration`_, @value `Number`, @optional  
 
-> @param `sampleRate` {int}    
-> the sample rate of the ArrayBuffer to display (default 441000)
-
-##### `color(color)`
-
-> @param `color` {string}  
-> color of the waveform
+If _`duration`_ is present sets the duration of the data to be rendered via the passed in _`duration`_`Number`, otherwise returns the _`duration`_`Number`. Must be specified in the same unit as the `timeline`'s xDomain.
 
 
+### #sampleRate( _[sampleRate]_ )
 
-### Status
+> @param _`sampleRate`_, @value `Number`, @optional    
 
+If _`sampleRate`_ is present sets the sampleRate of the _`data`_ array via the passed in _`sampleRate`_`Number`, otherwise returns the _`sampleRate`_`Number`.
+
+### #color( _[color]_ )
+
+> @param _`color`_, @value `String`, @optional  
+
+If _`color`_ is present sets the color to be use for the rendering via the passed in _`color`_`(hex)String`, otherwise returns the _`color`_`(hex)String`.
+
+## Status
 This library is under heavy development and subject to change.  
 Evert new API breaking change we will be adding snapshots to the repository so you can always fetch a working copy.
 
 For an in depth  explanation on the philosophy and usage of this library please refer to [this blog post](http://wave.ircam.fr/publications/visual-tools/).
+
 ## License
 This module is released under the [BSD-3-Clause license](http://opensource.org/licenses/BSD-3-Clause).
+
 ## Acknowledgments
 This code is part of the [WAVE project](http://wave.ircam.fr),  
 funded by ANR (The French National Research Agency),  
