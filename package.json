@@ -4,7 +4,7 @@
   "description": "Zooming behaviour",
   "main": "zoomer.js",
   "dependencies": {
-    "layer-vis": "git://github.com/ircam-rnd/layer-vis",
+    "layer": "git://github.com/ircam-rnd/layer",
     "utils": "git://github.com/ircam-rnd/utils",
     "events": "~1.0.0"
   },
