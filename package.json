@@ -1,29 +1,28 @@
 {
-  "name": "waveform-vis",
-  "exports": "waveform-vis",
+  "name": "waveform",
   "version": "0.2.0",
   "description": "Waveform drawing utility",
-  "main": "waveform-vis.js",
+  "main": "waveform.js",
+  "author": "Victor Saiz <vectorsize@gmail.com>",
+  "contributors": [
+    "Benjamin Matuszewski"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Ircam-RnD/waveform-vis"
+    "url": "https://github.com/Ircam-RnD/waveform"
   },
   "browserify": {
     "transform": ["brfs"]
   },
   "dependencies": {
-    "layer-vis": "git://github.com/ircam-rnd/layer-vis",
+    "layer": "git://github.com/ircam-rnd/layer",
     "utils": "git://github.com/ircam-rnd/utils"
   },
   "devDependencies": {
     "brfs": "^1.2.0"
   },
-  "author": "Victor Saiz <vectorsize@gmail.com>",
-  "collaborators": [
-    "Benjamin Matuszewski"
-  ],
   "license": "BSD-3"
 }

@@ -1,62 +1,37 @@
-var accessors = require('utils').accessors;
-var uniqueId  = require('utils').uniqueId;
-var LayerVis  = require('layer-vis');
-var pck       = require('./package.json');
-var fs        = require('fs');
-var renderingStrategies = require('./lib/rendering-strategies');
-
-var minMax         = require('./lib/resampler').minMax;
-var createSnapshot = require('./lib/resampler').createSnapshot;
-
-// for test purpose - must be removed
-var _ = require('underscore');
-
 'use strict';
 
-// @NOTES / TODOS:
-// - from: http://www.bbc.co.uk/rd/blog/2013/10/audio-waveforms
-//   audacity creates a cached down sampled version of min / max values
-//   with a window size of 256 samples
-// > if samplesPerPIxels > 256 parse data from downsampled extract
-// > else parse raw data
-//   should improve perf when zoomed out
-// DONE !!!!
-//
+var Layer  = require('layer');
+var accessors = (uniqueId = require('utils')).accessors, uniqueId = uniqueId.uniqueId;
+var minMax = (createSnapshot = require('./lib/resampler')).minMax, createSnapshot = createSnapshot.createSnapshot;
+var renderingStrategies = require('./lib/rendering-strategies');
+// var fs        = require('fs'); // for workers
+
+//   @NOTES/TODOS
 //   use cached data in zoom in / define what to do on zoom out
 //
 // - webworker create a creepy flicking issue due to asynchrony
 //   and is actually not usable - we must find a workaround for that problem
-// > maybe define an incremental index for each call and ignore any
-//   response that would have a smaller index
-//
-// - throttle
-//    -> define where it must be implemented
-//
-// - how to integrate "native" d3 component with the rAF loop - DONE !
-//
-// - comment all worker stuff - unusable for now cause of async problem
+//   option removed for now
 
-var workerBlob = new Blob(
-  [fs.readFileSync(__dirname + '/lib/resampler-worker.js', 'utf-8')],
-  { type: 'text/javascript' }
-);
+// var workerBlob = new Blob(
+//   [fs.readFileSync(__dirname + '/lib/resampler-worker.js', 'utf-8')],
+//   { type: 'text/javascript' }
+// );
 
-var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(WaveformVis, super$0);var proto$0={};
-  function WaveformVis() {
-    if (!(this instanceof WaveformVis)) { return new WaveformVis; }
+var Waveform = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(Waveform, super$0);var proto$0={};
+  function Waveform() {
+    if (!(this instanceof Waveform)) { return new Waveform; }
 
     super$0.call(this);
 
-    var name = pck.name.replace('-vis', '');
-
     var defaults = {
-      type: name,
+      type: 'waveform',
       id: uniqueId(name),
       renderingStrategy: 'svg',
       yDomain: [-1, 1], // default yDomain for audioBuffer
       triggerUpdateZoomDelta: 0.01,
       triggerUpdateDragDelta: 2,
-      useWorker: false
+      // useWorker: false
     };
 
     this.params(defaults);
@@ -65,11 +40,7 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     // init zoom factor to 1
     this.currentZoomFactor = 1;
     this.currentDragDeltaX = 0;
-
-    // debounce xZoom call
-    // this.xZoom = _.throttle(this.xZoom, 50);
-    // console.log(this.xZoom);
-  }if(super$0!==null)SP$0(WaveformVis,super$0);WaveformVis.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":WaveformVis,"configurable":true,"writable":true}});DP$0(WaveformVis,"prototype",{"configurable":false,"enumerable":false,"writable":false});
+  }if(super$0!==null)SP$0(Waveform,super$0);Waveform.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":Waveform,"configurable":true,"writable":true}});DP$0(Waveform,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
   // get number of sample per timeline pixels - aka. windowSize
   // should not be dependant of timeline with,
@@ -83,7 +54,9 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     return (timelineDuration * sampleRate()) / timelineWidth;
   };
 
-  proto$0.onload = function() {
+  proto$0.load = function(base, d3) {
+    super$0.prototype.load.call(this, base, d3);
+
     var duration = this.duration();
     // bind rendering strategy
     var strategy = renderingStrategies[this.param('renderingStrategy')];
@@ -159,7 +132,7 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     // } else {
       // var data = this.data();
       // var buffer = data instanceof ArrayBuffer ? new Float32Array(data) : data;
-    if (windowSize > (snapshotWindowSize * 4)) {
+    if (windowSize > (snapshotWindowSize * 2)) {
       // use snapshot
       buffer = this.__snapshot256;
       downSampledAt = snapshotWindowSize;
@@ -183,18 +156,18 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
 
   // is called by the resampler worker when done
   // @NOTE is this method really needed
-  proto$0.resamplerResponse = function(message) {
-    var data = message.data;
+  // resamplerResponse(message) {
+  //   var data = message.data;
 
-    switch (data.cmd) {
-      case 'downSample':
-        this.setDownSample(data.downSampledView);
-        break;
-      default:
-        throw new Error('Resampler unkown command: ' + data.msg);
-        break;
-    }
-  };
+  //   switch (data.cmd) {
+  //     case 'downSample':
+  //       this.setDownSample(data.downSampledView);
+  //       break;
+  //     default:
+  //       throw new Error('Resampler unkown command: ' + data.msg);
+  //       break;
+  //   }
+  // }
 
   // cache the down sampling result and create some scale
   proto$0.setDownSample = function(data) {
@@ -207,18 +180,15 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     this.draw(data);
   };
 
-  // zoom - needs to be tested again
   proto$0.xZoom = function(e) {
-    // @TODO caching system must be improved:
+    // @TODO
     // - different trigger updates according to zoom in or out
-    // - force update when only sliding without zooming
     var triggerUpdateZoomDelta = this.param('triggerUpdateZoomDelta');
     var triggerUpdateDragDelta = this.param('triggerUpdateDragDelta');
     var deltaZoom = Math.abs(this.currentZoomFactor - e.factor);
     var deltaDrag = Math.abs(this.currentDragDeltaX - e.delta.x);
 
-    // if not small zoom delta or small drag delta
-    // => render cached data
+    // if small zoom or drag delta, render cached data
     if (
       (deltaZoom < triggerUpdateZoomDelta) &&
       (deltaDrag < triggerUpdateDragDelta)
@@ -246,12 +216,12 @@ var WaveformVis = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["
     this._draw(data);
   };
 
-MIXIN$0(WaveformVis.prototype,proto$0);proto$0=void 0;return WaveformVis;})(LayerVis);
+MIXIN$0(Waveform.prototype,proto$0);proto$0=void 0;return Waveform;})(Layer);
 
 // data accessors
-// @NOTE if start / end, cound be dragged and so on
-accessors.getFunction(WaveformVis.prototype, [
-  'color', 'sampleRate', 'duration', 'cache', // 'start', 'end'
+// @NOTE `start` and `end` could allow drag
+accessors.getFunction(Waveform.prototype, [
+  'color', 'sampleRate', 'duration', 'cache'
 ]);
 
-module.exports = WaveformVis;
+module.exports = Waveform;

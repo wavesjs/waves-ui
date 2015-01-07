@@ -19,7 +19,7 @@ A working demo for this module can be found [here](https://github.com/Ircam-RnD/
 _example:_ 
 
 ```javascript
-var waveform = waveformVis()
+var waveform = waveform()
   .params({
     // set a unique id, optionnal, 
     // if not defined a default unique id is generated
@@ -30,9 +30,6 @@ var waveform = waveformVis()
     // rendering strategy `canvas` or `svg`, 
     // defaults to svg
     renderingStrategy: 'svg',
-    // use a web worker to parse data for visualization, 
-    // may be usefull with many waveforms
-    useWorker: false,
     // zoom delta before updating underlaying data
     triggerUpdateZoomDelta: 0.01
   });
@@ -64,7 +61,7 @@ var waveform = waveformVis()
 ```javascript
 var d3 = require('d3');
 var timeline = require('timeline');
-var waveformVis = require('waveform-vis');
+var waveform = require('waveform');
 var buffer = someAudioBuffer;
 
 // create the graph
@@ -74,8 +71,8 @@ var graph = timeline()
   .height(150)
   
 // create the waveform layer
-var waveform = waveformVis()
-  .params({ id: 'my-waveform' })
+var waveformLayer = waveform()
+  .params({ name: 'my-waveform' })
   // pass the raw ArrayBuffer from audio buffer
   .data(buffer.getChannelData(0).buffer)
   .sampleRate(buffer.sampleRate)
@@ -83,7 +80,7 @@ var waveform = waveformVis()
   .color('steelblue');
 
 // add the waveform layer to the timeline
-graph.layer(waveform);
+graph.layer(waveformLayer);
 
 // draw the timeline
 d3.select('#timeline').call(graph.draw);
