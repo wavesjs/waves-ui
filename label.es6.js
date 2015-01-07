@@ -1,24 +1,17 @@
-var LayerVis  = require('layer-vis');
-var pck       = require('./package.json');
-var accessors = require('utils').accessors;
-var uniqueId  = require('utils').uniqueId;
-
 'use strict';
 
-class LabelVis extends LayerVis {
+var Layer  = require('layer');
+var { accessors, uniqueId } = require('utils');
+
+class Label extends Layer {
 
   constructor() {
-    if (!(this instanceof LabelVis)) { return new LabelVis; }
+    if (!(this instanceof Label)) { return new Label; }
 
     super();
 
-    var name = pck.name.replace('-vis', '');
-
-    // this.xScale().clamp(true);
-    // this.yScale().clamp(true);
-
     var defaults = {
-      type: name,
+      type: 'label',
       id: uniqueId(name),
       // expose to allow tweaking vertical alignment for design adjustments
       verticalAlignment: { top: '1em', middle: '0.5em', bottom: '0' }
@@ -27,51 +20,51 @@ class LabelVis extends LayerVis {
     this.params(defaults);
 
     // data accessors
-    this.y((d, v = null) => {
+    this.y(function(d, v = null) {
       if (v === null) { return +d.y || 0 }
       d.y = (+v);
     });
 
-    this.x((d, v = null) => {
+    this.x(function(d, v = null) {
       if (v === null) { return +d.x || 0 }
       d.x = (+v);
     });
 
-    this.text((d, v = null) => {
+    this.text(function(d, v = null) {
       if (v === null) { return (d.text + '') }
       d.text = (v + '');
     });
 
-    this.bgColor((d, v) => {
+    this.bgColor(function(d, v = null) {    i
       if (v === null) { return d.bgColor + ''; }
       d.bgColor = (v + '');
     });
 
     // the following can also be setted as global params
     // which are acting as default values
-    this.width((d, v = null) => {
+    this.width(function(d, v = null) {
       if (v === null) { return +d.width }
       d.width = (+v);
     });
 
-    this.height((d, v = null) => {
+    this.height(function(d, v = null) {
       if (v === null) { return +d.height }
       d.height = (+v);
     });
 
-    this.color((d, v = null) => {
+    this.color(function(d, v = null) {
       if (v === null) { return d.color || '#000000' }
       d.color = (v + '');
     });
 
     // 'left', 'center', 'top'
-    this.align((d, v = null) => {
+    this.align(function(d, v = null) {
       if (v === null) { return d.align || 'left' }
       d.align = (v + '');
     });
 
     // 'top', 'middle', 'bottom'
-    this.valign((d, v = null) => {
+    this.valign(function(d, v = null) {
       if (v === null) { return d.valign || 'top' }
       d.valign = (v + '');
     });
@@ -199,10 +192,10 @@ class LabelVis extends LayerVis {
   }
 }
 
-accessors.getFunction(LabelVis.prototype,[
-  'x', 'y', 'width', 'height', 'text', 
-  'color', 'align', 'valign', 'margin', 
+accessors.getFunction(Label.prototype,[
+  'x', 'y', 'width', 'height', 'text',
+  'color', 'align', 'valign', 'margin',
   'sortIndex', 'bgColor'
 ]);
 
-module.exports = LabelVis;
+module.exports = Label;
