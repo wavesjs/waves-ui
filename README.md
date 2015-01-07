@@ -1,41 +1,66 @@
-## Waveform visualiser
-
-> Waveform drawing utility
+# Waveform visualiser
 
 Use this module to visualise waveform data over a shared timeline.  
 The module relies on the [timeline](https://github.com/Ircam-RnD/timeLine) object.
 
-### Demo
+_A working demo for this module can be found [here](#)_
 
-A working demo for this module can be found [here](https://github.com/Ircam-RnD/waveform-vis)
-
-### Public API
-
-##### `params(parameters)`
-
-> @param `parameters` {object}  
-> inherited from LayerVis, allow to customize the waveform from a layer perspective. 
-
-_example:_ 
+## Example usage
 
 ```javascript
-var waveform = waveform()
-  .params({
-    // the y domain of the data - default to [-1, 1] 
-    // according to the domain of an audio buffer 
-    yDomain: [-1, 1],
-    // rendering strategy `canvas` or `svg`, 
-    // defaults to svg
-    renderingStrategy: 'svg',
-    // zoom delta before updating underlaying data
-    triggerUpdateZoomDelta: 0.01
-  });
+var d3 = require('d3');
+var timeline = require('timeline');
+var waveform = require('waveform');
+var buffer = someAudioBuffer;
+
+// create the graph
+var graph = timeline()
+  .xDomain([0, buffer.duration])
+  .width(1000)
+  .height(150)
+  
+// create the waveform layer
+var waveformLayer = waveform()
+  .params({ name: 'my-waveform' })
+  // pass the raw ArrayBuffer from our audio buffer
+  .data(buffer.getChannelData(0).buffer)
+  .sampleRate(buffer.sampleRate)
+  .duration(buffer.duration)
+  .color('steelblue');
+
+// add the waveform layer to the timeline
+graph.layer(waveformLayer);
+
+// draw the timeline
+d3.select('#timeline').call(graph.draw);
 ```
 
-##### `data(data)`
 
-> @param `data` {ArrayBuffer|Array}  
-> an ArrayBuffer to display
+## Public API
+
+### params
+`.params({ yDomain, renderingStrategy, triggerUpdateZoomDelta triggerUpdateDragDelta, [name] })`   
+
+> Sets the state on the layer level.
+
+> * @key `yDomain`, @value `[int, int]`  
+> Sets the layer's scale's domain to the specified array of numbers. The array must contain two or more numbers.
+
+> * @key `renderingStrategy`, @value `'svg|canvas'`, @defaults `'svg'`  
+> Sets the layer's rendering strategy.
+
+> * @key `triggerUpdateZoomDelta`, @value `float`, @defaults `0.02`  
+> Sets the minimum zoom delta level that will trigger an update call.
+
+> * @key `triggerUpdateDragDelta`, @value `float`, @defaults `0.02`  
+> Sets the minimum dragged delta (in pixels) dragged that will trigger an update call.
+
+
+### data 
+`.data(data)`
+
+> Sets the data to be rendered
+> * @param `data`, @value `array|ArrayBuffer`, @defaults `0.02`  
 
 ##### `duration(duration)`
 
@@ -53,35 +78,6 @@ var waveform = waveform()
 > color of the waveform
 
 
-#### Example use
-
-```javascript
-var d3 = require('d3');
-var timeline = require('timeline');
-var waveform = require('waveform');
-var buffer = someAudioBuffer;
-
-// create the graph
-var graph = timeline()
-  .xDomain([0, buffer.duration])
-  .width(1000)
-  .height(150)
-  
-// create the waveform layer
-var waveformLayer = waveform()
-  .params({ name: 'my-waveform' })
-  // pass the raw ArrayBuffer from audio buffer
-  .data(buffer.getChannelData(0).buffer)
-  .sampleRate(buffer.sampleRate)
-  .duration(buffer.duration)
-  .color('steelblue');
-
-// add the waveform layer to the timeline
-graph.layer(waveformLayer);
-
-// draw the timeline
-d3.select('#timeline').call(graph.draw);
-```
 
 ### Status
 
