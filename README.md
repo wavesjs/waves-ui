@@ -21,9 +21,6 @@ _example:_
 ```javascript
 var waveform = waveform()
   .params({
-    // set a unique id, optionnal, 
-    // if not defined a default unique id is generated
-    id: 'my-timeline',
     // the y domain of the data - default to [-1, 1] 
     // according to the domain of an audio buffer 
     yDomain: [-1, 1],
