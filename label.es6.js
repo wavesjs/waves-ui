@@ -35,7 +35,7 @@ class Label extends Layer {
       d.text = (v + '');
     });
 
-    this.bgColor(function(d, v = null) {    i
+    this.bgColor(function(d, v = null) {
       if (v === null) { return d.bgColor + ''; }
       d.bgColor = (v + '');
     });
