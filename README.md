@@ -1,59 +1,50 @@
-## Zoomer module
-
-> Zooming behaviour
+# Zoomer module
 
 This module is a simple zoom implementation that interacts with the internal zXoom behaviour of the `timeline`.  
-The zoom values can be passed from any external source such as a slider or user interaction, this is just an implementation bases on vertical and horizontal dragging in a div.
-###Demo
+The zoom values can be passed from any external source such as a slider or user interaction, this is just an implementation bases on vertical and horizontal dragging in a div.  
+  
+_To see the zoomer in action you can visit this [demo](#) and click+scroll for zooming and panning on the waveform._
 
-To see the zoomer in action you can visit this demo [here](https://ircam-rnd.github.io/waveform-vis) and click+scroll for zooming and panning on the waveform.
-### Usage
+## Example usage
 
-#### Creating a brush layer
-```js
-var brush = brushVis().name('bruce');
+```javascript
+
+// assume yuo created a timeline with some layers
+var graph = timeline();
+// draw the graph
+d3.select('#timeline').call(graph.draw)
+
+// create the zoomer and link it to the timeline
+var zoom = zoomer()
+  // select the element on which to apply the behavior
+  .select('#zoomer')
+  .on('mousemove', function(e) {
+    // update graph xZoom
+    graph.xZoom(e);
+  })
+  .on('mouseup', function(e) {
+    // set the final xZoom value of the graph
+    graph.xZoomSet();
+  });
+
 ```
 
-#### Handling the brush events
-```js
-// Brush interaction
-brush.on('brush', function(extent) {
-  // we loop trhough layers
-  for (var ly in graph.layers) {
-    var layer = graph.layers[ly];
-    // call the layer's brushItem implementation and pass it in the extent
-    if(layer.brushItem) layer.brushItem(extent);
-  }
-})
-.on('brushend', function(){
-  // on release we clear the brush region
-  this.clear();
-});
-```
+## Public API
 
-#### Creating the timeLine layout
-```js
-var graph = timeLine()
-  .width(750)
-  .height(150);
-```
 
-#### Adding the layer and drawing the graph
-```js
-// add the layer
-graph.layer(brush);
-// Draw the layer
-d3.select('.timeline').call(graph.draw);
-```
-### Status
+## Status
 
 This library is under heavy development and subject to change.  
 Evert new API breaking change we will be adding snapshots to the repository so you can always fetch a working copy.
 
 For an in depth  explanation on the philosophy and usage of this library please refer to [this blog post](http://wave.ircam.fr/publications/visual-tools/).
+
 ## License
+
 This module is released under the [BSD-3-Clause license](http://opensource.org/licenses/BSD-3-Clause).
+
 ## Acknowledgments
+
 This code is part of the [WAVE project](http://wave.ircam.fr),  
 funded by ANR (The French National Research Agency),  
 _ContInt_ program,  
