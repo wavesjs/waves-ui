@@ -1,14 +1,12 @@
 # Zoomer module
 
-This module is a simple zoom implementation that interacts with the internal zXoom behaviour of the `timeline`.  
-The zoom values can be passed from any external source such as a slider or user interaction, this is just an implementation bases on vertical and horizontal dragging in a div.  
+This module is a simple zoom implementation that interacts with the internal zXoom behaviour of the `timeline`. The zoom values can be passed from any external source such as a slider or user interaction, this is just an implementation based on vertical and horizontal dragging on a DOM element.
   
-_To see the zoomer in action you can visit this [demo](#) and click+scroll for zooming and panning on the waveform._
+_A working demo for this module can be found [here](#)_
 
 ## Example usage
 
 ```javascript
-
 // assume yuo created a timeline with some layers
 var graph = timeline();
 // draw the graph
@@ -26,7 +24,6 @@ var zoom = zoomer()
     // set the final xZoom value of the graph
     graph.xZoomSet();
   });
-
 ```
 
 ## Public API
