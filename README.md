@@ -39,7 +39,7 @@ d3.select('#timeline').call(graph.draw);
 ## Public API
 
 ### params
-`.params({ yDomain, renderingStrategy, triggerUpdateZoomDelta triggerUpdateDragDelta, [name] })`   
+`.params({ yDomain, renderingStrategy, triggerUpdateZoomDelta,  triggerUpdateDragDelta, [name] })`   
 
 > Sets the state on the layer level.
 
