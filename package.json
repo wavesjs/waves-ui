@@ -7,6 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Benjamin Matuszewski",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ircam-RnD/label"
+  },
   "license": "BSD-3",
   "dependencies": {
     "layer": "git://github.com/ircam-rnd/layer",
