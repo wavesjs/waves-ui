@@ -39,10 +39,10 @@ class Timeline extends EventEmitter {
   // is called the first time a layer is added
   initScales() {
     var xRange = [0, this.width()];
-    if (this.swapX) { xRange.reverse(); }
+    if (this.swapX) { xRange.reverse(); } // used ?
 
     var yRange = [this.height(), 0];
-    if (this.swapY) { yRange.reverse(); }
+    if (this.swapY) { yRange.reverse(); } // used ?
 
     this.xScale
       .domain(this.xDomain())
@@ -285,7 +285,8 @@ class Timeline extends EventEmitter {
       // .attr('width', '100%')
       // .attr('height', '100%')
       // .attr('viewBox', viewBox)
-      .attr('data-cname', this.cname());
+      .attr('data-cname', this.cname())
+      .attr('data-name', this.name());
 
     // 2. create layout group and clip path
     var clipPathId = 'bouding-box-clip-' + this.cname();
@@ -352,7 +353,7 @@ class Timeline extends EventEmitter {
 // generic getters(setters) accessors and defaults
 // accessors.getFunction(Timeline.prototype, [ ]);
 accessors.getValue(Timeline.prototype, [
-  'name', 'cname', 'xDomain', 'yDomain', 'height', 'width', 'margin', 'data'
+  'name', 'cname', 'xDomain', 'yDomain', 'height', 'width', 'margin'
 ]);
 
 

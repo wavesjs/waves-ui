@@ -39,10 +39,10 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   // is called the first time a layer is added
   proto$0.initScales = function() {
     var xRange = [0, this.width()];
-    if (this.swapX) { xRange.reverse(); }
+    if (this.swapX) { xRange.reverse(); } // used ?
 
     var yRange = [this.height(), 0];
-    if (this.swapY) { yRange.reverse(); }
+    if (this.swapY) { yRange.reverse(); } // used ?
 
     this.xScale
       .domain(this.xDomain())
@@ -285,7 +285,8 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
       // .attr('width', '100%')
       // .attr('height', '100%')
       // .attr('viewBox', viewBox)
-      .attr('data-cname', this.cname());
+      .attr('data-cname', this.cname())
+      .attr('data-name', this.name());
 
     // 2. create layout group and clip path
     var clipPathId = 'bouding-box-clip-' + this.cname();
@@ -352,7 +353,7 @@ MIXIN$0(Timeline.prototype,proto$0);proto$0=void 0;return Timeline;})(EventEmitt
 // generic getters(setters) accessors and defaults
 // accessors.getFunction(Timeline.prototype, [ ]);
 accessors.getValue(Timeline.prototype, [
-  'name', 'cname', 'xDomain', 'yDomain', 'height', 'width', 'margin', 'data'
+  'name', 'cname', 'xDomain', 'yDomain', 'height', 'width', 'margin'
 ]);
 
 
