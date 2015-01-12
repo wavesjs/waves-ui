@@ -286,7 +286,8 @@ class Timeline extends EventEmitter {
       // .attr('height', '100%')
       // .attr('viewBox', viewBox)
       .attr('data-cname', this.cname())
-      .attr('data-name', this.name());
+      .attr('data-name', this.name())
+      .style('display', 'block');
 
     // 2. create layout group and clip path
     var clipPathId = 'bouding-box-clip-' + this.cname();

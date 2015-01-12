@@ -286,7 +286,8 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
       // .attr('height', '100%')
       // .attr('viewBox', viewBox)
       .attr('data-cname', this.cname())
-      .attr('data-name', this.name());
+      .attr('data-name', this.name())
+      .style('display', 'block');
 
     // 2. create layout group and clip path
     var clipPathId = 'bouding-box-clip-' + this.cname();
