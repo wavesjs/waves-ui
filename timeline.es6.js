@@ -351,6 +351,7 @@ class Timeline extends EventEmitter {
   }
 }
 
+Timeline.d3 = d3;
 // generic getters(setters) accessors and defaults
 // accessors.getFunction(Timeline.prototype, [ ]);
 accessors.getValue(Timeline.prototype, [

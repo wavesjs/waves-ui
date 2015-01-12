@@ -351,6 +351,7 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   };
 MIXIN$0(Timeline.prototype,proto$0);proto$0=void 0;return Timeline;})(EventEmitter);
 
+Timeline.d3 = d3;
 // generic getters(setters) accessors and defaults
 // accessors.getFunction(Timeline.prototype, [ ]);
 accessors.getValue(Timeline.prototype, [
