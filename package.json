@@ -1,0 +1,15 @@
+{
+  "name": "marker",
+  "version": "0.1.0",
+  "description": "Marker visualisation",
+  "main": "marker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Benjamin Matuszewski",
+  "license": "BSD-3",
+  "dependencies": {
+    "layer": "git://github.com/ircam-rnd/layer",
+    "utils": "git://github.com/ircam-rnd/utils"
+  }
+}
