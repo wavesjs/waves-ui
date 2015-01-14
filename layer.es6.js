@@ -12,9 +12,9 @@ class Layer {
     this.yScale = null;
     this.base = null;
     this.g = null;
-    this.on = null;
-    this.trigger = null;
-    this.selectable = false;
+    // this.on = null;
+    // this.trigger = null;
+    // this.selectable = false;
 
     this.__params = {};
 
@@ -48,13 +48,6 @@ class Layer {
       this.__params[key] = _params[key];
     }
 
-    return this;
-  }
-
-  // @NOTE - used ?
-  name(value = null) {
-    if (value === null) return this.__params.name;
-    this.__params.name = value;
     return this;
   }
 
@@ -196,13 +189,14 @@ class Layer {
   // default selection handling - can be shared by all layers ?
   // can be overriden to change behavior - shiftKey, etc.
   handleSelection(item, e) {
+    if (item === null) {
+      return this.unselect();
+    }
+
+    var selected = item.classList.contains(this.param('selectedClass'));
     this.unselect();
 
-    if (item === null) { return; }
-
-    if (item.classList.contains(this.param('selectedClass'))) {
-      this.unselect(item); // @TODO doesn't work
-    } else if (!item.classList.contains(this.param('selectedClass'))) {
+    if (!selected) {
       this.select(item);
     }
   }

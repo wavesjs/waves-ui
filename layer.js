@@ -3,7 +3,7 @@
 var slugify = (require('underscore.string')).slugify;
 var accessors = (toFront = require('utils')).accessors, uniqueId = toFront.uniqueId, addCssRule = toFront.addCssRule, toFront = toFront.toFront;
 
-var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.prototype.slice;
+var Layer = (function(){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var proto$0={};var SLICE$0 = Array.prototype.slice;
 
   function Layer() {
     this.unitClass = null;
@@ -12,9 +12,9 @@ var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.pro
     this.yScale = null;
     this.base = null;
     this.g = null;
-    this.on = null;
-    this.trigger = null;
-    this.selectable = false;
+    // this.on = null;
+    // this.trigger = null;
+    // this.selectable = false;
 
     this.__params = {};
 
@@ -31,17 +31,17 @@ var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.pro
       // define possible interactions: selectable, editable
       interactions: {}
     });
-  }DP$0(Layer, "prototype", {"configurable": false, "enumerable": false, "writable": false});
+  }DP$0(Layer,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
   // this.__params getter/setter for a single param
-  Layer.prototype.param = function() {var name = arguments[0];if(name === void 0)name = null;var value = arguments[1];if(value === void 0)value = null;
+  proto$0.param = function() {var name = arguments[0];if(name === void 0)name = null;var value = arguments[1];if(value === void 0)value = null;
     if (value === null) return this.__params[name];
     this.__params[name] = value;
     return this;
-  }
+  };
 
   // this.__params getter/setter
-  Layer.prototype.params = function() {var _params = arguments[0];if(_params === void 0)_params = null;
+  proto$0.params = function() {var _params = arguments[0];if(_params === void 0)_params = null;
     if (_params === null) return this.__params;
 
     for (var key in _params) {
@@ -49,23 +49,16 @@ var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.pro
     }
 
     return this;
-  }
-
-  // @NOTE - used ?
-  Layer.prototype.name = function() {var value = arguments[0];if(value === void 0)value = null;
-    if (value === null) return this.__params.name;
-    this.__params.name = value;
-    return this;
-  }
+  };
 
   // this.__data getter/setter
-  Layer.prototype.data = function() {var _data = arguments[0];if(_data === void 0)_data = null;
+  proto$0.data = function() {var _data = arguments[0];if(_data === void 0)_data = null;
     if (!_data) return this.__data;
     this.__data = _data;
     return this;
-  }
+  };
 
-  Layer.prototype.load = function(base, d3) {var this$0 = this;
+  proto$0.load = function(base, d3) {var this$0 = this;
     // configure layer
     var name  = this.param('name') || this.param('type');
     var cname = uniqueId(slugify(name));
@@ -100,9 +93,9 @@ var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.pro
 
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onDrag = this.onDrag.bind(this);
-  }
+  };
 
-  Layer.prototype.setScales = function() {
+  proto$0.setScales = function() {
     var base = this.base;
 
     // @NOTE: is the really needed ?
@@ -128,9 +121,9 @@ var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.pro
 
     var yRange = [this.param('height'), 0];
     this.yScale.range(yRange);
-  }
+  };
 
-  Layer.prototype.createGroup = function(boundingBox) {
+  proto$0.createGroup = function(boundingBox) {
     if (this.g) { return; }
     // create layer group
     this.g = boundingBox.append('g')
@@ -142,12 +135,12 @@ var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.pro
     if (this.param('nameAsIdAttribute')) {
       this.g.attr('id', this.param('name'));
     }
-  }
+  };
 
   // entry point to add specific logic to a layer
-  Layer.prototype.init = function() {}
+  proto$0.init = function() {};
 
-  Layer.prototype.delegateEvents = function() {
+  proto$0.delegateEvents = function() {
     var interactions = this.param('interactions');
 
     if (interactions.editable) {
@@ -159,14 +152,14 @@ var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.pro
     if (interactions.selectable) {
       this.base.on('mousedown', this.onMouseDown);
     }
-  }
+  };
 
-  Layer.prototype.undelegateEvents = function() {
+  proto$0.undelegateEvents = function() {
     this.base.removeListener('mousedown', this.onMouseDown);
     this.base.removeListener('drag', this.onDrag);
-  }
+  };
 
-  Layer.prototype.onMouseDown = function(e) {
+  proto$0.onMouseDown = function(e) {
     if (e.button !== 0) { return; }
     // check if the clicked item belongs to the layer
     // should find something more reliable - closest `.item` group ?
@@ -177,9 +170,9 @@ var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.pro
     }
 
     this.handleSelection(item, e);
-  }
+  };
 
-  Layer.prototype.onDrag = function(e) {
+  proto$0.onDrag = function(e) {
     // if (this.base.brushing()) { return; }
     var item = e.currentTarget;
 
@@ -188,30 +181,31 @@ var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.pro
     }
 
     this.handleDrag(item, e);
-  }
+  };
 
   // @TODO: `handleSelection` and `handleDrag` could be getters/setters
   // to allow easy override
 
   // default selection handling - can be shared by all layers ?
   // can be overriden to change behavior - shiftKey, etc.
-  Layer.prototype.handleSelection = function(item, e) {
+  proto$0.handleSelection = function(item, e) {
+    if (item === null) {
+      return this.unselect();
+    }
+
+    var selected = item.classList.contains(this.param('selectedClass'));
     this.unselect();
 
-    if (item === null) { return; }
-
-    if (item.classList.contains(this.param('selectedClass'))) {
-      this.unselect(item); // @TODO doesn't work
-    } else if (!item.classList.contains(this.param('selectedClass'))) {
+    if (!selected) {
       this.select(item);
     }
-  }
+  };
 
-  Layer.prototype.handleDrag = function(item, e) {
+  proto$0.handleDrag = function(item, e) {
     throw new Error('must be implemented');
-  }
+  };
 
-  Layer.prototype.select = function() {var els = SLICE$0.call(arguments, 0);
+  proto$0.select = function() {var els = SLICE$0.call(arguments, 0);
     els = (els.length === 0) ?
       this.items :
       this.d3.selectAll(els);
@@ -221,17 +215,17 @@ var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.pro
     els.each(function() {
       toFront(this);
     });
-  }
+  };
 
-  Layer.prototype.unselect = function() {var els = SLICE$0.call(arguments, 0);
+  proto$0.unselect = function() {var els = SLICE$0.call(arguments, 0);
     els = (els.length === 0) ?
       this.items :
       this.d3.selectAll(els);
 
     els.classed(this.param('selectedClass'), false);
-  }
+  };
 
-  Layer.prototype.style = function(selector, rules) {
+  proto$0.style = function(selector, rules) {
     // @TODO recheck the DOM
     var selectors = [];
     selectors.push('svg[data-cname=' + this.base.cname() + ']');
@@ -239,9 +233,9 @@ var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.pro
     selectors.push(selector);
 
     addCssRule(selectors.join(' '), rules);
-  }
+  };
 
-  Layer.prototype.update = function(data) {
+  proto$0.update = function(data) {
     this.data(data || this.data() || this.base.data());
     // this.untouchedXscale = this.base.xScale.copy();
     // this.untouchedYscale = this.base.yScale.copy();
@@ -249,15 +243,15 @@ var Layer = (function(){var DP$0 = Object.defineProperty;var SLICE$0 = Array.pro
 
     // implement the update enter delete logic here
     // call draw
-  }
+  };
 
   // interface - implement in childs
   // @TODO check Proxies to share common behavior like
   // if (!!this.each()) { el.each(this.each()); } // in `draw`
-  Layer.prototype.draw = function() {}
+  proto$0.draw = function() {};
 
-  Layer.prototype.xZoom = function() {}
-;return Layer;})();
+  proto$0.xZoom = function() {};
+MIXIN$0(Layer.prototype,proto$0);proto$0=void 0;return Layer;})();
 
 accessors.identity(Layer.prototype, 'each');
 
