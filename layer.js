@@ -12,10 +12,6 @@ var Layer = (function(){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return
     this.yScale = null;
     this.base = null;
     this.g = null;
-    // this.on = null;
-    // this.trigger = null;
-    // this.selectable = false;
-
     this.__params = {};
 
     // general defaults
