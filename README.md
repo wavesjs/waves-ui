@@ -1,8 +1,19 @@
-# Segment component
+# WAVE.JS - Segment Component
 
-Use this module to visualise and edit data segments over a shared timeline.  
-The module relies on a [timeline](https://github.com/ircam-rnd/timeline) instance.
+_Use this module to visualise and edit data segments over a shared timeline._
 
+This component is part of the `waves.js` library ([https://github.com/Ircam-RnD/waves](https://github.com/Ircam-RnD/waves)) and relies on a [timeline](https://github.com/ircam-rnd/timeline) instance
+
+Documentation for this component can be found at [http://ircam-rnd.github.io/waves/#ui-segment](http://ircam-rnd.github.io/waves/#ui-segment)
+
+## License
+
+This module is released under the [BSD-3-Clause license](http://opensource.org/licenses/BSD-3-Clause).
+
+## Acknowledgments
+
+This code is part of the [WAVE project](http://wave.ircam.fr), funded by ANR (The French National Research Agency),  
+_ContInt_ program, 2012-2015.
 <!--
 
 ## Segment editor

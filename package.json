@@ -1,5 +1,5 @@
 {
-  "name": "segment-vis",
+  "name": "segment",
   "version": "0.3.0",
   "description": "Segment component",
   "main": "segment.js",
