@@ -20,7 +20,12 @@ var Marker = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t
     this.width(1);
     this.color('#000000');
     this.opacity('0.7');
-    this.data([0]);
+    this.data([{ x: 0 }]);
+
+    this.x(function(d) {var v = arguments[1];if(v === void 0)v = null;
+      if (v !== null) { return d.x = parseFloat(v, 10); }
+      return d.x
+    })
   }if(super$0!==null)SP$0(Marker,super$0);Marker.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":Marker,"configurable":true,"writable":true}});DP$0(Marker,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
   proto$0.xZoom = function() {
@@ -28,8 +33,16 @@ var Marker = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t
   };
 
   proto$0.setCurrentTime = function(currentTime) {
-    if (!Array.isArray(currentTime))
-    this.data()[0] = currentTime;
+    var x = this.x();
+
+    if (!Array.isArray(currentTime)) {
+      x(this.data()[0], currentTime);
+    } else {
+      this.data(currentTime);
+    }
+
+    // this.update();
+    // this.draw();
     return this;
   };
 
@@ -60,14 +73,15 @@ var Marker = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t
     if (data !== null && !Array.isArray(data)) { data = [data]; }
     super$0.prototype.update.call(this, data);
 
-    var sel = this.g.selectAll('.' + this.param('unitClass'))
+    this.items = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data());
 
-    this.items = sel.enter()
+    this.items.enter()
       .append('g')
       .classed('item', true)
       .classed(this.param('unitClass'), true);
 
+    // console.log(this.items.data());
     var markHeight = 8;
     var height, y;
 
@@ -86,7 +100,7 @@ var Marker = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t
       .attr('x1', 0)
       .attr('x2', 0)
       .attr('y1', y)
-      .attr('y2', height);
+      .attr('y2', height)
 
     if (this.param('displayMark')) {
       var area = this.d3.svg.area()
@@ -100,14 +114,15 @@ var Marker = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t
         .style('fill', this.color());
     }
 
-    sel.exit().remove();
+    this.items.exit().remove();
   };
 
   proto$0.draw = function() {var el = arguments[0];if(el === void 0)el = null;
     el = el || this.items;
 
     var xScale = this.base.xScale;
-    var x = function(d)  { return xScale(d); };
+    var xAccessor = this.x();
+    var x = function(d)  { return xScale(xAccessor(d)); };
 
     el.attr('transform', function(d)  {
       return 'translate(' + x(d) + ', 0)';
@@ -116,7 +131,7 @@ var Marker = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t
 MIXIN$0(Marker.prototype,proto$0);proto$0=void 0;return Marker;})(Layer);
 
 accessors.getFunction(Marker.prototype,
-  ['color', 'opacity', 'width', 'currentTime']
+  ['color', 'opacity', 'width', 'x']
 );
 
 module.exports = Marker;

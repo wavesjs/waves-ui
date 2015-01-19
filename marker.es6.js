@@ -20,7 +20,12 @@ class Marker extends Layer {
     this.width(1);
     this.color('#000000');
     this.opacity('0.7');
-    this.data([0]);
+    this.data([{ x: 0 }]);
+
+    this.x(function(d, v = null) {
+      if (v !== null) { return d.x = parseFloat(v, 10); }
+      return d.x
+    })
   }
 
   xZoom() {
@@ -28,8 +33,16 @@ class Marker extends Layer {
   }
 
   setCurrentTime(currentTime) {
-    if (!Array.isArray(currentTime))
-    this.data()[0] = currentTime;
+    var x = this.x();
+
+    if (!Array.isArray(currentTime)) {
+      x(this.data()[0], currentTime);
+    } else {
+      this.data(currentTime);
+    }
+
+    // this.update();
+    // this.draw();
     return this;
   }
 
@@ -60,14 +73,15 @@ class Marker extends Layer {
     if (data !== null && !Array.isArray(data)) { data = [data]; }
     super.update(data);
 
-    var sel = this.g.selectAll('.' + this.param('unitClass'))
+    this.items = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data());
 
-    this.items = sel.enter()
+    this.items.enter()
       .append('g')
       .classed('item', true)
       .classed(this.param('unitClass'), true);
 
+    // console.log(this.items.data());
     var markHeight = 8;
     var height, y;
 
@@ -86,7 +100,7 @@ class Marker extends Layer {
       .attr('x1', 0)
       .attr('x2', 0)
       .attr('y1', y)
-      .attr('y2', height);
+      .attr('y2', height)
 
     if (this.param('displayMark')) {
       var area = this.d3.svg.area()
@@ -100,14 +114,15 @@ class Marker extends Layer {
         .style('fill', this.color());
     }
 
-    sel.exit().remove();
+    this.items.exit().remove();
   }
 
   draw(el = null) {
     el = el || this.items;
 
     var xScale = this.base.xScale;
-    var x = (d) => { return xScale(d); };
+    var xAccessor = this.x();
+    var x = (d) => { return xScale(xAccessor(d)); };
 
     el.attr('transform', (d) => {
       return 'translate(' + x(d) + ', 0)';
@@ -116,7 +131,7 @@ class Marker extends Layer {
 }
 
 accessors.getFunction(Marker.prototype,
-  ['color', 'opacity', 'width', 'currentTime']
+  ['color', 'opacity', 'width', 'x']
 );
 
 module.exports = Marker;

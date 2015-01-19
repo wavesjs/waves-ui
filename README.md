@@ -1,6 +1,7 @@
 # Marker component
 
-Use this module to visualise and edit markers over a shared timeline. This component can also be used to display cursors.
+Use this module to visualise and edit markers over a shared timeline. This component can also be used to display cursors.  
+
 The module relies on a [timeline](https://github.com/ircam-rnd/timeline) instance.
 
 
