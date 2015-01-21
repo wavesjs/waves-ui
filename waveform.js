@@ -203,7 +203,7 @@ var Waveform = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a"
   };
 
   proto$0.xZoomSet = function(e) {
-    console.log('waveform xZoomSet');
+    // console.log('waveform xZoomSet');
   };
 
   // display methods

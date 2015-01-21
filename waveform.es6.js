@@ -203,7 +203,7 @@ class Waveform extends Layer {
   }
 
   xZoomSet(e) {
-    console.log('waveform xZoomSet');
+    // console.log('waveform xZoomSet');
   }
 
   // display methods
