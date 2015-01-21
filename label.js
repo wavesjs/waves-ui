@@ -173,7 +173,6 @@ var Label = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t}
       }
     };
 
-
     // based on small manual testing - can probably be improved
     var dy = function(d)  {
       switch (_valign(d)) {

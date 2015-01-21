@@ -173,7 +173,6 @@ class Label extends Layer {
       }
     };
 
-
     // based on small manual testing - can probably be improved
     var dy = (d) => {
       switch (_valign(d)) {
