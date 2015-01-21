@@ -24,7 +24,7 @@ class Marker extends Layer {
 
     this.x(function(d, v = null) {
       if (v !== null) { return d.x = parseFloat(v, 10); }
-      return d.x
+      return d.x;
     })
   }
 
@@ -41,8 +41,6 @@ class Marker extends Layer {
       this.data(currentTime);
     }
 
-    // this.update();
-    // this.draw();
     return this;
   }
 
@@ -56,15 +54,15 @@ class Marker extends Layer {
 
     var xScale = this.base.xScale;
     var xRange = xScale.range();
-    var x = xScale(datum);
+    var xAccessor = this.x();
+    var x = xScale(xAccessor(datum));
     var targetX = x + dx;
 
     if (targetX >= xRange[0] && targetX <= xRange[1]) {
       x = targetX;
     }
 
-    datum = xScale.invert(x);
-    item.datum(datum);
+    xAccessor(datum, xScale.invert(x));
     // redraw element
     this.draw(item);
   }
@@ -81,7 +79,6 @@ class Marker extends Layer {
       .classed('item', true)
       .classed(this.param('unitClass'), true);
 
-    // console.log(this.items.data());
     var markHeight = 8;
     var height, y;
 
@@ -109,7 +106,7 @@ class Marker extends Layer {
         .y1(markHeight);
 
       this.items.append('path')
-        .attr('d', area([-3, 4]))
+        .attr('d', area([-4, 4]))
         .style('opacity', this.opacity())
         .style('fill', this.color());
     }
