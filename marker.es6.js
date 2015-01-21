@@ -11,9 +11,9 @@ class Marker extends Layer {
     super();
 
     var defaults = {
-      type: 'cursor',
+      type: 'marker',
       id: uniqueId(name),
-      displayMark: true
+      displayHandle: true
     };
 
     this.params(defaults);
@@ -74,38 +74,30 @@ class Marker extends Layer {
     this.items = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data());
 
-    this.items.enter()
+    var sel = this.items.enter()
       .append('g')
       .classed('item', true)
       .classed(this.param('unitClass'), true);
 
-    var markHeight = 8;
-    var height, y;
+    var handleHeight = 8;
+    var y = this.param('displayHandle') ? handleHeight : 0;
 
-    if (this.param('displayMark')) {
-      height = this.param('height') - markHeight;
-      y = markHeight;
-    } else {
-      height = this.param('height');
-      y = 0;
-    }
-
-    this.items.append('line')
+    sel.append('line')
       .style('stroke-width', this.width())
       .style('stroke', this.color())
       .style('opacity', this.opacity())
       .attr('x1', 0)
       .attr('x2', 0)
       .attr('y1', y)
-      .attr('y2', height)
+      .attr('y2', this.param('height'))
 
-    if (this.param('displayMark')) {
+    if (this.param('displayHandle')) {
       var area = this.d3.svg.area()
         .x(function(d) { return d; })
         .y0(0)
-        .y1(markHeight);
+        .y1(handleHeight);
 
-      this.items.append('path')
+      sel.append('path')
         .attr('d', area([-4, 4]))
         .style('opacity', this.opacity())
         .style('fill', this.color());
