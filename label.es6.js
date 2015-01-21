@@ -12,7 +12,6 @@ class Label extends Layer {
 
     var defaults = {
       type: 'label',
-      id: uniqueId(name),
       // expose to allow tweaking vertical alignment for design adjustments
       verticalAlignment: { top: '1em', middle: '0.5em', bottom: '0' }
     };
@@ -72,6 +71,10 @@ class Label extends Layer {
     this.margin({ top: 0, right: 0, bottom: 0, left: 0 });
   }
 
+  xZoom(factor) {
+    this.draw();
+  }
+
   update(data) {
     super.update(data);
 
@@ -107,9 +110,13 @@ class Label extends Layer {
     var _valign = this.valign();
     var _margin = this.margin();
     var _verticalAlignment = this.params().verticalAlignment;
+    var minDomain = _xScale.domain()[0];
 
     // scales for bounding box position
-    var w = (d) => { return _xScale(_w(d)); }
+    var w = (d) => {
+      var width = _xScale(minDomain + _w(d));
+      return width < 0 ? 0 : width;
+    }
     var x = (d) => { return _xScale(_x(d)); }
     var h = (d) => { return this.param('height') - _yScale(_h(d)); }
     var y = (d) => { return _yScale(_y(d)) - h(d); }

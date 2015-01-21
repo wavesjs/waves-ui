@@ -12,7 +12,6 @@ var Label = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t}
 
     var defaults = {
       type: 'label',
-      id: uniqueId(name),
       // expose to allow tweaking vertical alignment for design adjustments
       verticalAlignment: { top: '1em', middle: '0.5em', bottom: '0' }
     };
@@ -72,6 +71,10 @@ var Label = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t}
     this.margin({ top: 0, right: 0, bottom: 0, left: 0 });
   }if(super$0!==null)SP$0(Label,super$0);Label.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":Label,"configurable":true,"writable":true}});DP$0(Label,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
+  proto$0.xZoom = function(factor) {
+    this.draw();
+  };
+
   proto$0.update = function(data) {
     super$0.prototype.update.call(this, data);
 
@@ -107,9 +110,13 @@ var Label = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t}
     var _valign = this.valign();
     var _margin = this.margin();
     var _verticalAlignment = this.params().verticalAlignment;
+    var minDomain = _xScale.domain()[0];
 
     // scales for bounding box position
-    var w = function(d)  { return _xScale(_w(d)); }
+    var w = function(d)  {
+      var width = _xScale(minDomain + _w(d));
+      return width < 0 ? 0 : width;
+    }
     var x = function(d)  { return _xScale(_x(d)); }
     var h = function(d)  { return this$0.param('height') - _yScale(_h(d)); }
     var y = function(d)  { return _yScale(_y(d)) - h(d); }
