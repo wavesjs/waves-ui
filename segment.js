@@ -60,6 +60,7 @@ var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
     var yScale = this.yScale.copy();
     yScale.range(yScale.range().slice(0).reverse());
     var height = yScale.range()[1];
+    var minDomain = xScale.domain()[0];
 
     var _x = this.start();
     var _y = this.y();
@@ -71,7 +72,10 @@ var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
 
     // define accesors
     var x = function(d)  { return xScale(_x(d)); };
-    var w = function(d)  { return xScale(_w(d)); };
+    var w = function(d)  {
+      var width = xScale(minDomain + _w(d));
+      return width < 0 ? 0 : width;
+    };
     var h = function(d)  { return yScale(_h(d)); };
     var y = function(d)  { return height - h(d) - yScale(_y(d)); };
 
@@ -125,7 +129,6 @@ var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
 
     var accessors = this.getAccessors();
 
-
     el.attr('transform', function(d)  {
       return 'translate(' + accessors.x(d) + ', ' + accessors.y(d) + ')';
     });
@@ -165,6 +168,8 @@ var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
   };
 
   proto$0.xZoom = function(val) {
+    this.draw();
+    return;
     // console.log(this.xBaseDomain);
     // console.log('zooom');
     var that = this;
@@ -191,7 +196,7 @@ var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
     });
 
     // this.update(nuData);
-    this.update();
+    this.update(newData);
     // var xAxis = this.graph[this.iName];
     // xAxis.scale(xScale);
 
@@ -341,7 +346,8 @@ var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
     }
 
     var xValue = accessors.xScale.invert(x);
-    var wValue = accessors.xScale.invert(w);
+    var minDomain = accessors.xScale.domain()[0];
+    var wValue = accessors.xScale.invert(w) - minDomain;
 
     this.start()(datum, xValue);
     this.duration()(datum, wValue);
@@ -370,7 +376,8 @@ var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
       w = targetW;
     }
 
-    var wValue = accessors.xScale.invert(w);
+    var minDomain = accessors.xScale.domain()[0];
+    var wValue = accessors.xScale.invert(w) - minDomain;
     this.duration()(datum, wValue);
 
     this.draw(item);
