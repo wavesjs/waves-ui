@@ -99,29 +99,29 @@ var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
   proto$0.update = function(data) {
     super$0.prototype.update.call(this, data);
 
-    var sel = this.g.selectAll('.' + this.param('unitClass'))
+    this.items = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data(), this.sortIndex());
 
-    this.items = sel.enter()
+    var sel = this.items.enter()
       .append('g')
       .classed('item', true)
       .classed(this.param('unitClass'), true);
 
-    this.items.append('rect');
+    sel.append('rect');
 
     if (this.param('interactions').editable) {
-      this.items.append('line')
+      sel.append('line')
         .attr('class', 'handle left')
         .attr('stroke-width', this.param('handlerWidth'))
         .attr('stroke-opacity', this.param('handlerOpacity'));
 
-      this.items.append('line')
+      sel.append('line')
         .attr('class', 'handle right')
         .attr('stroke-width', this.param('handlerWidth'))
         .attr('stroke-opacity', this.param('handlerOpacity'));
     }
 
-    sel.exit().remove();
+    this.items.exit().remove();
   };
 
   proto$0.draw = function() {var el = arguments[0];if(el === void 0)el = null;
