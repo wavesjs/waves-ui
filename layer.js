@@ -2,10 +2,13 @@
 
 var slugify = (require('underscore.string')).slugify;
 var accessors = (toFront = require('utils')).accessors, uniqueId = toFront.uniqueId, addCssRule = toFront.addCssRule, toFront = toFront.toFront;
+var EventEmitter = require('events').EventEmitter;
 
-var Layer = (function(){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var proto$0={};var SLICE$0 = Array.prototype.slice;
+var Layer = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(Layer, super$0);var proto$0={};var SLICE$0 = Array.prototype.slice;
 
   function Layer() {
+    super$0.call(this);
+
     this.unitClass = null;
     // this.dname = null;
     this.xBaseDomain = null;
@@ -27,7 +30,7 @@ var Layer = (function(){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return
       // define possible interactions: selectable, editable
       interactions: {}
     });
-  }DP$0(Layer,"prototype",{"configurable":false,"enumerable":false,"writable":false});
+  }if(super$0!==null)SP$0(Layer,super$0);Layer.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":Layer,"configurable":true,"writable":true}});DP$0(Layer,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
   // this.__params getter/setter for a single param
   proto$0.param = function() {var name = arguments[0];if(name === void 0)name = null;var value = arguments[1];if(value === void 0)value = null;
@@ -166,6 +169,8 @@ var Layer = (function(){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return
     }
 
     this.handleSelection(item, e);
+    // var datum = this.d3.select(item).datum();
+    this.emit('mousedown', item, e);
   };
 
   proto$0.onDrag = function(e) {
@@ -177,6 +182,8 @@ var Layer = (function(){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return
     }
 
     this.handleDrag(item, e);
+    // var datum = this.d3.select(item).datum();
+    this.emit('drag', item, e);
   };
 
   // @TODO: `handleSelection` and `handleDrag` could be getters/setters
@@ -247,7 +254,7 @@ var Layer = (function(){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return
   proto$0.draw = function() {};
 
   proto$0.xZoom = function() {};
-MIXIN$0(Layer.prototype,proto$0);proto$0=void 0;return Layer;})();
+MIXIN$0(Layer.prototype,proto$0);proto$0=void 0;return Layer;})(EventEmitter);
 
 accessors.identity(Layer.prototype, 'each');
 

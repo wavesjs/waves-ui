@@ -2,10 +2,13 @@
 
 var {slugify} = require('underscore.string');
 var {accessors, uniqueId, addCssRule, toFront}  = require('utils');
+var EventEmitter = require('events').EventEmitter;
 
-class Layer {
+class Layer extends EventEmitter {
 
   constructor() {
+    super();
+
     this.unitClass = null;
     // this.dname = null;
     this.xBaseDomain = null;
@@ -166,6 +169,8 @@ class Layer {
     }
 
     this.handleSelection(item, e);
+    // var datum = this.d3.select(item).datum();
+    this.emit('mousedown', item, e);
   }
 
   onDrag(e) {
@@ -177,6 +182,8 @@ class Layer {
     }
 
     this.handleDrag(item, e);
+    // var datum = this.d3.select(item).datum();
+    this.emit('drag', item, e);
   }
 
   // @TODO: `handleSelection` and `handleDrag` could be getters/setters
