@@ -78,26 +78,26 @@ class Label extends Layer {
   update(data) {
     super.update(data);
 
-    var sel = this.g.selectAll('.' + this.param('unitClass'))
+    this.items = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data(), this.sortIndex());
 
-    var g = sel.enter()
+    var sel = this.items.enter()
       .append('g')
       .classed('item', true)
       .classed(this.param('unitClass'), true);
 
-    g.append('rect')
+    sel.append('rect')
       .attr('class', 'bounding-box')
       .attr('fill', 'transparent')
 
-    g.append('text')
+    sel.append('text')
      .attr('class', 'text');
 
-    sel.exit().remove();
+    this.items.exit().remove();
   }
 
   draw(el = null) {
-    if (el === null) { el = this.g.selectAll('.' + this.param('unitClass')); }
+    el = el || this.items;
 
     var _xScale = this.base.xScale;
     var _yScale = this.yScale;
@@ -117,9 +117,18 @@ class Label extends Layer {
       var width = _xScale(minDomain + _w(d));
       return width < 0 ? 0 : width;
     }
-    var x = (d) => { return _xScale(_x(d)); }
-    var h = (d) => { return this.param('height') - _yScale(_h(d)); }
-    var y = (d) => { return _yScale(_y(d)) - h(d); }
+
+    var x = (d) => {
+      return _xScale(_x(d));
+    }
+
+    var h = (d) => {
+      return (this.param('height') - _yScale(_h(d))) || this.param('height');
+    }
+
+    var y = (d) => {
+      return (_yScale(_y(d)) - h(d)) || 0;
+    }
 
     // scales for text-position
     var tx = (d) => {

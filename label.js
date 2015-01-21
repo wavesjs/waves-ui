@@ -78,26 +78,26 @@ var Label = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t}
   proto$0.update = function(data) {
     super$0.prototype.update.call(this, data);
 
-    var sel = this.g.selectAll('.' + this.param('unitClass'))
+    this.items = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data(), this.sortIndex());
 
-    var g = sel.enter()
+    var sel = this.items.enter()
       .append('g')
       .classed('item', true)
       .classed(this.param('unitClass'), true);
 
-    g.append('rect')
+    sel.append('rect')
       .attr('class', 'bounding-box')
       .attr('fill', 'transparent')
 
-    g.append('text')
+    sel.append('text')
      .attr('class', 'text');
 
-    sel.exit().remove();
+    this.items.exit().remove();
   };
 
   proto$0.draw = function() {var el = arguments[0];if(el === void 0)el = null;var this$0 = this;
-    if (el === null) { el = this.g.selectAll('.' + this.param('unitClass')); }
+    el = el || this.items;
 
     var _xScale = this.base.xScale;
     var _yScale = this.yScale;
@@ -117,9 +117,18 @@ var Label = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t}
       var width = _xScale(minDomain + _w(d));
       return width < 0 ? 0 : width;
     }
-    var x = function(d)  { return _xScale(_x(d)); }
-    var h = function(d)  { return this$0.param('height') - _yScale(_h(d)); }
-    var y = function(d)  { return _yScale(_y(d)) - h(d); }
+
+    var x = function(d)  {
+      return _xScale(_x(d));
+    }
+
+    var h = function(d)  {
+      return (this$0.param('height') - _yScale(_h(d))) || this$0.param('height');
+    }
+
+    var y = function(d)  {
+      return (_yScale(_y(d)) - h(d)) || 0;
+    }
 
     // scales for text-position
     var tx = function(d)  {
