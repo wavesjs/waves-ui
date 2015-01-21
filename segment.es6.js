@@ -169,38 +169,6 @@ class SegmentVis extends Layer {
 
   xZoom(val) {
     this.draw();
-    return;
-    // console.log(this.xBaseDomain);
-    // console.log('zooom');
-    var that = this;
-    var xScale = this.base.xScale;
-    var min = xScale.domain()[0],
-        max = xScale.domain()[1];
-
-    var newData = [];
-
-    this.data().forEach(function(d, i) {
-      var start = that.start()(d);
-      var duration = that.duration()(d);
-      var end = start + duration;
-      // if((start + dv.duration(d)) <= max && start >= min) nuData.push(d);
-      if (
-        (start > min && end < max) ||
-        (start < min && end < max && end > min) ||
-        (start > min && start < max && end > max) ||
-        (end > max && start < min)
-      ) {
-        newData.push(d);
-      }
-      // if((end < min && start < min) || (end > max && start > max)) nuData.push(d);
-    });
-
-    // this.update(nuData);
-    this.update(newData);
-    // var xAxis = this.graph[this.iName];
-    // xAxis.scale(xScale);
-
-    // this.g.call(xAxis);
   }
 
   // logic performed to select an item from the brush
