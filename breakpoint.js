@@ -210,6 +210,7 @@ var Breakpoint = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
 
     var xScale = this.base.xScale;
     var yScale = this.yScale;
+    var yRange = yScale.range();
 
     var cx = this.cx();
     var cy = this.cy();
@@ -217,7 +218,13 @@ var Breakpoint = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
     var y = yScale(cy(datum));
     // update range
     x += dx;
-    y += dy;
+
+    // clamp y
+    var targetY = y + dy;
+    if (targetY <= yRange[0] && targetY >= yRange[1]) {
+      y = targetY;
+    }
+
     // range to domain
     var xValue = xScale.invert(x);
     var yValue = yScale.invert(y);
