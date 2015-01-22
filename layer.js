@@ -258,4 +258,6 @@ MIXIN$0(Layer.prototype,proto$0);proto$0=void 0;return Layer;})(EventEmitter);
 
 accessors.identity(Layer.prototype, 'each');
 
+accessors.getFunction(Layer.prototype, ['dataKey']);
+
 module.exports = Layer;

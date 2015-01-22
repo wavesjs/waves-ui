@@ -258,4 +258,6 @@ class Layer extends EventEmitter {
 
 accessors.identity(Layer.prototype, 'each');
 
+accessors.getFunction(Layer.prototype, ['dataKey']);
+
 module.exports = Layer;
