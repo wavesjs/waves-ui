@@ -3,10 +3,10 @@
 var Layer = require('layer');
 var accessors = (uniqueId = require('utils')).accessors, uniqueId = uniqueId.uniqueId;
 
-var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(SegmentVis, super$0);var proto$0={};
+var Segment = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(Segment, super$0);var proto$0={};
 
-  function SegmentVis() {
-    if (!(this instanceof SegmentVis)) return new SegmentVis();
+  function Segment() {
+    if (!(this instanceof Segment)) return new Segment();
 
     super$0.call(this);
     // set layer defaults
@@ -50,7 +50,7 @@ var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
       if (v === null) return d.opacity;
       d.opacity = v + '';
     });
-  }if(super$0!==null)SP$0(SegmentVis,super$0);SegmentVis.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":SegmentVis,"configurable":true,"writable":true}});DP$0(SegmentVis,"prototype",{"configurable":false,"enumerable":false,"writable":false});
+  }if(super$0!==null)SP$0(Segment,super$0);Segment.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":Segment,"configurable":true,"writable":true}});DP$0(Segment,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
   // @NOTE add some caching system ?
   proto$0.getAccessors = function() {var this$0 = this;
@@ -100,7 +100,7 @@ var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
     super$0.prototype.update.call(this, data);
 
     this.items = this.g.selectAll('.' + this.param('unitClass'))
-      .data(this.data(), this.sortIndex());
+      .data(this.data(), this.dataKey());
 
     var sel = this.items.enter()
       .append('g')
@@ -351,11 +351,11 @@ var SegmentVis = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
     this.draw(item);
   };
 
-MIXIN$0(SegmentVis.prototype,proto$0);proto$0=void 0;return SegmentVis;})(Layer);
+MIXIN$0(Segment.prototype,proto$0);proto$0=void 0;return Segment;})(Layer);
 
 // add and initialize our accessors
-accessors.getFunction(SegmentVis.prototype, [
+accessors.getFunction(Segment.prototype, [
   'y', 'width', 'color', 'height', 'duration', 'start', 'sortIndex', 'opacity'
 ]);
 
-module.exports = SegmentVis;
+module.exports = Segment;

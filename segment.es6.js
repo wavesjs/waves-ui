@@ -3,10 +3,10 @@
 let Layer = require('layer');
 let {accessors, uniqueId} = require('utils');
 
-class SegmentVis extends Layer {
+class Segment extends Layer {
 
   constructor() {
-    if (!(this instanceof SegmentVis)) return new SegmentVis();
+    if (!(this instanceof Segment)) return new Segment();
 
     super();
     // set layer defaults
@@ -100,7 +100,7 @@ class SegmentVis extends Layer {
     super.update(data);
 
     this.items = this.g.selectAll('.' + this.param('unitClass'))
-      .data(this.data(), this.sortIndex());
+      .data(this.data(), this.dataKey());
 
     var sel = this.items.enter()
       .append('g')
@@ -354,8 +354,8 @@ class SegmentVis extends Layer {
 }
 
 // add and initialize our accessors
-accessors.getFunction(SegmentVis.prototype, [
+accessors.getFunction(Segment.prototype, [
   'y', 'width', 'color', 'height', 'duration', 'start', 'sortIndex', 'opacity'
 ]);
 
-module.exports = SegmentVis;
+module.exports = Segment;
