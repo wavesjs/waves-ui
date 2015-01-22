@@ -21,8 +21,8 @@ class Timeline extends EventEmitter {
     this.yDomain([0, 1]);
     // initialize
     this.layers = {};
-    this.xScale = d3.scale.linear().clamp(true);
-    this.yScale = d3.scale.linear().clamp(true);
+    this.xScale = d3.scale.linear();
+    this.yScale = d3.scale.linear();
     // alias `EventEmitter.emit`
     this.trigger = this.emit;
     // keep track of scales initialization
