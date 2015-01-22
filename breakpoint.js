@@ -81,7 +81,7 @@ var Breakpoint = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"
     this.sortData();
 
     this.items = this.g.selectAll('.' + this.param('unitClass'))
-      .data(this.data());
+      .data(this.data(), this.dataKey());
 
     // create line
     if (this.param('displayLine')) {

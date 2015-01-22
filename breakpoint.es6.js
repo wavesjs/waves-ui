@@ -81,7 +81,7 @@ class Breakpoint extends Layer {
     this.sortData();
 
     this.items = this.g.selectAll('.' + this.param('unitClass'))
-      .data(this.data());
+      .data(this.data(), this.dataKey());
 
     // create line
     if (this.param('displayLine')) {
