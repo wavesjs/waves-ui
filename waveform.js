@@ -18,6 +18,8 @@ var renderingStrategies = require('./lib/rendering-strategies');
 //   { type: 'text/javascript' }
 // );
 
+// valeur increment in `minMax`
+
 var Waveform = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t};return o["a"]===t})({},{});var DP$0 = Object.defineProperty;var GOPD$0 = Object.getOwnPropertyDescriptor;var MIXIN$0 = function(t,s){for(var p in s){if(s.hasOwnProperty(p)){DP$0(t,p,GOPD$0(s,p));}}return t};var SP$0 = Object.setPrototypeOf||function(o,p){if(PRS$0){o["__proto__"]=p;}else {DP$0(o,"__proto__",{"value":p,"configurable":true,"enumerable":false,"writable":true});}return o};var OC$0 = Object.create;if(!PRS$0)MIXIN$0(Waveform, super$0);var proto$0={};
   function Waveform() {
     if (!(this instanceof Waveform)) { return new Waveform; }
@@ -57,7 +59,10 @@ var Waveform = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a"
   proto$0.load = function(base, d3) {
     super$0.prototype.load.call(this, base, d3);
 
-    var duration = this.duration();
+    var sampleRate = this.sampleRate()();
+    var data = this.data();
+    data = data instanceof ArrayBuffer ? new Float32Array(data) : data;
+    var duration = data.length / sampleRate;
     // bind rendering strategy
     var strategy = renderingStrategies[this.param('renderingStrategy')];
     this._update = strategy.update.bind(this);
@@ -65,7 +70,7 @@ var Waveform = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a"
 
     // create partial xxScale
     this.xxScale = this.d3.scale.linear()
-      .range([0, duration()]);
+      .range([0, duration]);
 
     // init worker
     // if (this.param('useWorker')) { this.initWorker(); }
@@ -221,7 +226,7 @@ MIXIN$0(Waveform.prototype,proto$0);proto$0=void 0;return Waveform;})(Layer);
 // data accessors
 // @NOTE `start` and `end` could allow drag
 accessors.getFunction(Waveform.prototype, [
-  'color', 'sampleRate', 'duration', 'cache'
+  'color', 'sampleRate', 'cache'
 ]);
 
 module.exports = Waveform;

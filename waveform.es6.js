@@ -18,6 +18,8 @@ var renderingStrategies = require('./lib/rendering-strategies');
 //   { type: 'text/javascript' }
 // );
 
+// valeur increment in `minMax`
+
 class Waveform extends Layer {
   constructor() {
     if (!(this instanceof Waveform)) { return new Waveform; }
@@ -57,7 +59,10 @@ class Waveform extends Layer {
   load(base, d3) {
     super.load(base, d3);
 
-    var duration = this.duration();
+    var sampleRate = this.sampleRate()();
+    var data = this.data();
+    data = data instanceof ArrayBuffer ? new Float32Array(data) : data;
+    var duration = data.length / sampleRate;
     // bind rendering strategy
     var strategy = renderingStrategies[this.param('renderingStrategy')];
     this._update = strategy.update.bind(this);
@@ -65,7 +70,7 @@ class Waveform extends Layer {
 
     // create partial xxScale
     this.xxScale = this.d3.scale.linear()
-      .range([0, duration()]);
+      .range([0, duration]);
 
     // init worker
     // if (this.param('useWorker')) { this.initWorker(); }
@@ -221,7 +226,7 @@ class Waveform extends Layer {
 // data accessors
 // @NOTE `start` and `end` could allow drag
 accessors.getFunction(Waveform.prototype, [
-  'color', 'sampleRate', 'duration', 'cache'
+  'color', 'sampleRate', 'cache'
 ]);
 
 module.exports = Waveform;
