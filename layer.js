@@ -199,7 +199,7 @@ var Layer = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t}
     var selected = item.classList.contains(this.param('selectedClass'));
     this.unselect();
 
-    if (!selected) {
+    if (!selected || this.param('interactions').editable) {
       this.select(item);
     }
   };

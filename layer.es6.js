@@ -199,7 +199,7 @@ class Layer extends EventEmitter {
     var selected = item.classList.contains(this.param('selectedClass'));
     this.unselect();
 
-    if (!selected) {
+    if (!selected || this.param('interactions').editable) {
       this.select(item);
     }
   }
