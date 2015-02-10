@@ -13,12 +13,12 @@ var Zoomer = (function(super$0){var PRS$0 = (function(o,t){o["__proto__"]={"a":t
     this.trigger = this.emit;
   }if(super$0!==null)SP$0(Zoomer,super$0);Zoomer.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":Zoomer,"configurable":true,"writable":true}});DP$0(Zoomer,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
-  proto$0.select = function(selector) {var this$0 = this;
-    var elms = document.querySelectorAll(selector);
+  proto$0.select = function(selector, ctx) {var this$0 = this;
+    ctx = ctx || document;
+    var elms = ctx .querySelectorAll(selector);
     elms = [].map.call(elms, function(elm) { return elm; });
 
     elms.forEach(function(elm)  { this$0.delegateEvents(elm); });
-
     // allow chainning
     return this;
   };

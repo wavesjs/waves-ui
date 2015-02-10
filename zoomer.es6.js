@@ -13,12 +13,12 @@ class Zoomer extends EventEmitter {
     this.trigger = this.emit;
   }
 
-  select(selector) {
-    var elms = document.querySelectorAll(selector);
+  select(selector, ctx) {
+    ctx = ctx || document;
+    var elms = ctx .querySelectorAll(selector);
     elms = [].map.call(elms, function(elm) { return elm; });
 
     elms.forEach((elm) => { this.delegateEvents(elm); });
-
     // allow chainning
     return this;
   }
