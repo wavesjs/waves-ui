@@ -36,7 +36,7 @@ var explode = function(items, cb) {
 //   if (!props) throw new Error('Property name is mandatory.');
 
 //   var add = (p = null) => {
-//     var _prop = '_' + p;
+//     var _prop = `_${p}`;
 //     if (!obj.hasOwnProperty(_prop)) obj[_prop] = null;
 
 //     obj[p] = function(value = null) {
@@ -62,7 +62,7 @@ utils.accessors = {
     if (!props) throw new Error('Property name is mandatory.');
 
     var add = (p = null) => {
-      var _prop = '_' + p;
+      var _prop = `_${p}`;
       if (!obj.hasOwnProperty(_prop)) obj[_prop] = null;
 
       obj[p] = function(value = null) {
@@ -79,7 +79,7 @@ utils.accessors = {
     if (!props) throw new Error('Property name is mandatory.');
 
     var add = (p = null) => {
-      var _prop = '_' + p;
+      var _prop = `_${p}`;
       if (!obj.hasOwnProperty(_prop)) obj[_prop] = null;
 
       obj[p] = function(value = null) {
@@ -102,7 +102,7 @@ utils.accessors = {
     if (!props) throw new Error('Property name is mandatory.');
 
     var add = (p = null) => {
-      var _prop = '_' + p;
+      var _prop = `_${p}`;
       if (!obj.hasOwnProperty(_prop)) obj[_prop] = null;
 
       obj[p] = function(value = null) {
