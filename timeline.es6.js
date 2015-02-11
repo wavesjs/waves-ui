@@ -33,6 +33,8 @@ class Timeline extends EventEmitter {
     this.uiLoop = new UILoop(this.fps);
     // bind draw method for call from d3
     this.draw = this.draw.bind(this);
+
+    this.DOMReady = false;
   }
 
   // initialize the scales of the timeline
@@ -339,8 +341,18 @@ class Timeline extends EventEmitter {
     // update selected layers
     for (let key in toUpdate) { toUpdate[key].update(); }
     for (let key in toUpdate) { toUpdate[key].draw(); }
+
+    var hasQueue = this.uiLoop.hasRegisteredCallbacks();
     // start rAF
     this.uiLoop.start();
+
+    requestAnimationFrame(() => {
+      if (hasQueue && !this.uiLoop.hasRegisteredCallbacks()) {
+        var eventName = this.DOMReady ? 'DOMUpdate' : 'DOMReady';
+        this.emit(eventName);
+        this.DOMReady = true;
+      }
+    });
   }
 
   // destroy the timeline

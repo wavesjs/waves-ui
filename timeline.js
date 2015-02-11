@@ -33,6 +33,8 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     this.uiLoop = new UILoop(this.fps);
     // bind draw method for call from d3
     this.draw = this.draw.bind(this);
+
+    this.DOMReady = false;
   }if(super$0!==null)SP$0(Timeline,super$0);Timeline.prototype = OC$0(super$0!==null?super$0.prototype:null,{"constructor":{"value":Timeline,"configurable":true,"writable":true}});DP$0(Timeline,"prototype",{"configurable":false,"enumerable":false,"writable":false});
 
   // initialize the scales of the timeline
@@ -325,7 +327,7 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
   // update layers
   // @param layerIds <string|object|array> optionnal
   //      layers to update or instance(s)
-  proto$0.update = function() {var SLICE$0 = Array.prototype.slice;var layers = SLICE$0.call(arguments, 0);
+  proto$0.update = function() {var SLICE$0 = Array.prototype.slice;var layers = SLICE$0.call(arguments, 0);var this$0 = this;
     var toUpdate = {};
 
     if (layers.length === 0) {
@@ -339,8 +341,18 @@ var Timeline = (function(super$0){"use strict";var PRS$0 = (function(o,t){o["__p
     // update selected layers
     for (var key in toUpdate) { toUpdate[key].update(); }
     for (var key$0 in toUpdate) { toUpdate[key$0].draw(); }
+
+    var hasQueue = this.uiLoop.hasRegisteredCallbacks();
     // start rAF
     this.uiLoop.start();
+
+    requestAnimationFrame(function()  {
+      if (hasQueue && !this$0.uiLoop.hasRegisteredCallbacks()) {
+        var eventName = this$0.DOMReady ? 'DOMUpdate' : 'DOMReady';
+        this$0.emit(eventName);
+        this$0.DOMReady = true;
+      }
+    });
   };
 
   // destroy the timeline
