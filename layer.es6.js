@@ -1,7 +1,7 @@
 'use strict';
 
-var {slugify} = require('underscore.string');
-var {accessors, uniqueId, addCssRule, toFront}  = require('utils');
+var { slugify } = require('underscore.string');
+var { accessors, uniqueId, addCssRule, toFront }  = require('utils');
 var EventEmitter = require('events').EventEmitter;
 
 class Layer extends EventEmitter {
@@ -81,12 +81,13 @@ class Layer extends EventEmitter {
     // pass all update/draw methods inside UILoop
     var update = this.update;
     var draw = this.draw;
+    var that = this;
 
-    this.update = () => {
+    this.update = function() {
       base.uiLoop.register(update, arguments, this);
     };
 
-    this.draw = () => {
+    this.draw = function() {
       base.uiLoop.register(draw, arguments, this);
     };
 
@@ -260,4 +261,8 @@ accessors.identity(Layer.prototype, 'each');
 
 accessors.getFunction(Layer.prototype, ['dataKey']);
 
-module.exports = Layer;
+// factory
+function factory() { return new Layer(); }
+factory.Layer = Layer;
+
+module.exports = factory;
