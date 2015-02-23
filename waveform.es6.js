@@ -18,12 +18,8 @@ var renderingStrategies = require('./lib/rendering-strategies');
 //   { type: 'text/javascript' }
 // );
 
-// valeur increment in `minMax`
-
 class Waveform extends Layer {
   constructor() {
-    if (!(this instanceof Waveform)) { return new Waveform; }
-
     super();
 
     var defaults = {
@@ -207,10 +203,6 @@ class Waveform extends Layer {
     this.downSample();
   }
 
-  xZoomSet(e) {
-    // console.log('waveform xZoomSet');
-  }
-
   // display methods
   update() {
     this._update();
@@ -229,4 +221,6 @@ accessors.getFunction(Waveform.prototype, [
   'color', 'sampleRate', 'cache'
 ]);
 
-module.exports = Waveform;
+module.exports = function() {
+  return new Waveform();
+};
