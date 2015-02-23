@@ -4,7 +4,7 @@ _Use this module to visualise and edit data segments over a shared timeline._
 
 This component is part of the `waves.js` library ([https://github.com/Ircam-RnD/waves](https://github.com/Ircam-RnD/waves)) and relies on a [timeline](https://github.com/ircam-rnd/timeline) instance
 
-Documentation for this component can be found at [http://ircam-rnd.github.io/waves/#ui-segment](http://ircam-rnd.github.io/waves/#ui-segment)
+Documentation for this component can be found at [http://ircam-rnd.github.io/waves/ui/#ui-segment](http://ircam-rnd.github.io/waves/ui/#ui-segment)
 
 ## License
 
