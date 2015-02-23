@@ -1,7 +1,7 @@
 'use strict';
 
-var Layer  = require('layer');
-var {accessors, uniqueId } = require('utils');
+var { Layer } = require('layer');
+var { accessors, uniqueId } = require('utils');
 var { minMax, createSnapshot } = require('./lib/resampler');
 var renderingStrategies = require('./lib/rendering-strategies');
 // var fs        = require('fs'); // for workers
@@ -63,7 +63,6 @@ class Waveform extends Layer {
     var strategy = renderingStrategies[this.param('renderingStrategy')];
     this._update = strategy.update.bind(this);
     this._draw   = strategy.draw.bind(this);
-
     // create partial xxScale
     this.xxScale = this.d3.scale.linear()
       .range([0, duration]);
@@ -221,6 +220,8 @@ accessors.getFunction(Waveform.prototype, [
   'color', 'sampleRate', 'cache'
 ]);
 
-module.exports = function() {
-  return new Waveform();
-};
+// factory
+function factory() { return new Waveform(); }
+factory.Waveform = Waveform;
+
+module.exports = factory;
