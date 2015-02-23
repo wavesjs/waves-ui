@@ -370,7 +370,7 @@ accessors.getValue(Timeline.prototype, [
   'name', 'cname', 'xDomain', 'yDomain', 'height', 'width', 'margin'
 ]);
 
-function factory(options) { return new Timeline(options); };
+function factory(options) { return new Timeline(options); }
 factory.d3 = d3; // make d3 available though the factory
 
 module.exports = factory;
