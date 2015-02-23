@@ -6,8 +6,6 @@ var { EventEmitter } = require('events');
 class Zoomer extends EventEmitter {
 
   constructor() {
-    if (!(this instanceof Zoomer)) { return new Zoomer; }
-
     super();
     // alias `emit` method
     this.trigger = this.emit;
@@ -47,10 +45,10 @@ class Zoomer extends EventEmitter {
         factor: zFactor,
         delta: { x: deltaX, y: deltaY },
         originalEvent: evt // keep track of the original event
-      }
+      };
 
       this.trigger('mousemove', e);
-    }
+    };
 
     // mouseUp
     var onMouseUp = (evt) => {
@@ -59,7 +57,7 @@ class Zoomer extends EventEmitter {
       // document.body.classList.remove('zooming');
       // event should be the same as in mouse move
       this.trigger('mouseup', evt);
-    }
+    };
 
     // mouseDown
     elm.addEventListener('mousedown', (evt) => {
@@ -75,7 +73,10 @@ class Zoomer extends EventEmitter {
       document.body.addEventListener('mouseleave', onMouseUp);
     });
   }
-};
+}
 
-module.exports = Zoomer;
+function factory() { return new Zoomer(); }
+factory.Zoomer = Zoomer;
+
+module.exports = factory;
 
