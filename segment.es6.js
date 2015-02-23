@@ -1,13 +1,11 @@
 'use strict';
 
-let Layer = require('layer');
-let {accessors, uniqueId} = require('utils');
+let { Layer } = require('layer');
+let { accessors, uniqueId } = require('utils');
 
 class Segment extends Layer {
 
   constructor() {
-    if (!(this instanceof Segment)) return new Segment();
-
     super();
     // set layer defaults
     this.params({
@@ -358,4 +356,7 @@ accessors.getFunction(Segment.prototype, [
   'y', 'width', 'color', 'height', 'duration', 'start', 'sortIndex', 'opacity'
 ]);
 
-module.exports = Segment;
+function factory() { return new Segment(); }
+factory.Segment = Segment;
+
+module.exports = factory;
