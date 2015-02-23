@@ -148,7 +148,7 @@ var createStyleSheet = function() {
   el.appendChild(document.createTextNode(''));
   document.body.appendChild(el);
   _sheet = el.sheet;
-}
+};
 
 utils.addCssRule = function(selector, rules, position = 0) {
   if (!_sheet) { createStyleSheet(); }
@@ -159,7 +159,7 @@ utils.addCssRule = function(selector, rules, position = 0) {
 
   rule = selector + '{' + rule + '}';
   _sheet.insertRule(rule, position);
-}
+};
 
 // from underscore 1.7.0
 utils.throttle = function(func, wait, options) {

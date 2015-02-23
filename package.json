@@ -3,9 +3,32 @@
   "version": "0.1.0",
   "description": "mini Utility package",
   "main": "utils.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "author": "Victor Saiz <vectorsize@gmail.com>",
+  "contributors": [
+    {
+      "name": "Benjamin Matuszewski",
+      "email": "benjamin.matuszewski@gmail.com"
+    }
+  ],
+  "license": "BSD-3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ircam-RnD/utils"
   },
-  "author": "Victor Saiz, Benjamin Matuszewski",
-  "license": "BSD-3"
+  "scripts": {
+    "transform": "find . -type f | grep -v \"node_modules\" | grep .es6.js$ | while read -r line; do babel --modules common --optional selfContained $line --out-file ${line/.es6/\"\"} --source-maps-inline; done;",
+    "watch:transform": "nodemon -e es6.js --ignore node_modules/ -x npm run transform",
+
+    "hint": "find . -type f | grep -v \"node_modules\" | grep .es6.js$ | while read -r line; do jshint $line; done;",
+    "test": "npm run hint; tac6"
+  },
+  "jshintConfig": {
+    "esnext": true,
+    "browser": true,
+    "node": true,
+    "devel": true
+  },
+  "devDependencies": {
+    "babel-runtime": "^4.1.1"
+  }
 }
