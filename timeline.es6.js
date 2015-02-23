@@ -1,3 +1,5 @@
+'use strict';
+
 var d3        = window.d3 || require('d3');
 var EventEmitter = require('events').EventEmitter;
 var shortId   = require('shortid');
@@ -6,12 +8,8 @@ var uniqueId  = require('utils').uniqueId;
 var UILoop    = require('utils').UILoop;
 var throttle  = require('utils').throttle;
 
-'use strict';
-
 class Timeline extends EventEmitter {
   constructor(options = {}) {
-    if (!(this instanceof Timeline)) { return new Timeline(options); }
-
     super();
     this.name(options.name || shortId.generate());
     this.cname(uniqueId(this.name()));
@@ -35,6 +33,9 @@ class Timeline extends EventEmitter {
     this.draw = this.draw.bind(this);
 
     this.DOMReady = false;
+
+    // add d3 as an instance member
+    // this.d3 = d3;
   }
 
   // initialize the scales of the timeline
@@ -159,7 +160,7 @@ class Timeline extends EventEmitter {
           target: target,
           d: datum,
           originalEvent: originalEvent
-        }
+        };
 
         that.trigger('drag', e);
       });
@@ -363,12 +364,13 @@ class Timeline extends EventEmitter {
   }
 }
 
-Timeline.d3 = d3;
 // generic getters(setters) accessors and defaults
 // accessors.getFunction(Timeline.prototype, [ ]);
 accessors.getValue(Timeline.prototype, [
   'name', 'cname', 'xDomain', 'yDomain', 'height', 'width', 'margin'
 ]);
 
+function factory(options) { return new Timeline(options); };
+factory.d3 = d3; // make d3 available though the factory
 
-module.exports = Timeline;
+module.exports = factory;
