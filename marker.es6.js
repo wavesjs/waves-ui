@@ -1,13 +1,11 @@
 'use strict';
 
-var Layer = require('layer');
+var { Layer } = require('layer');
 var { accessors, uniqueId } = require('utils');
 
 class Marker extends Layer {
 
   constructor() {
-    if (!(this instanceof Marker)) return new Marker();
-
     super();
 
     var defaults = {
@@ -23,9 +21,9 @@ class Marker extends Layer {
     this.data([{ x: 0 }]);
 
     this.x(function(d, v = null) {
-      if (v !== null) { return d.x = parseFloat(v, 10); }
-      return d.x;
-    })
+      if (v === null) { return d.x; }
+      d.x = parseFloat(v, 10);
+    });
   }
 
   xZoom() {
@@ -89,7 +87,7 @@ class Marker extends Layer {
       .attr('x1', 0)
       .attr('x2', 0)
       .attr('y1', y)
-      .attr('y2', this.param('height'))
+      .attr('y2', this.param('height'));
 
     if (this.param('displayHandle')) {
       var area = this.d3.svg.area()
@@ -123,4 +121,7 @@ accessors.getFunction(Marker.prototype,
   ['color', 'opacity', 'width', 'x']
 );
 
-module.exports = Marker;
+function factory() { return new Marker(); }
+factory.Marker = Marker;
+
+module.exports = factory;
