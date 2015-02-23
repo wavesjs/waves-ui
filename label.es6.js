@@ -1,13 +1,11 @@
 'use strict';
 
-var Layer  = require('layer');
+var { Layer } = require('layer');
 var { accessors, uniqueId } = require('utils');
 
 class Label extends Layer {
 
   constructor() {
-    if (!(this instanceof Label)) { return new Label; }
-
     super();
 
     var defaults = {
@@ -20,17 +18,17 @@ class Label extends Layer {
 
     // data accessors
     this.y(function(d, v = null) {
-      if (v === null) { return +d.y || 0 }
+      if (v === null) { return +d.y || 0; }
       d.y = (+v);
     });
 
     this.x(function(d, v = null) {
-      if (v === null) { return +d.x || 0 }
+      if (v === null) { return +d.x || 0; }
       d.x = (+v);
     });
 
     this.text(function(d, v = null) {
-      if (v === null) { return (d.text + '') }
+      if (v === null) { return (d.text + ''); }
       d.text = (v + '');
     });
 
@@ -42,29 +40,29 @@ class Label extends Layer {
     // the following can also be setted as global params
     // which are acting as default values
     this.width(function(d, v = null) {
-      if (v === null) { return +d.width }
+      if (v === null) { return +d.width; }
       d.width = (+v);
     });
 
     this.height(function(d, v = null) {
-      if (v === null) { return +d.height }
+      if (v === null) { return +d.height; }
       d.height = (+v);
     });
 
     this.color(function(d, v = null) {
-      if (v === null) { return d.color || '#000000' }
+      if (v === null) { return d.color || '#000000'; }
       d.color = (v + '');
     });
 
     // 'left', 'center', 'top'
     this.align(function(d, v = null) {
-      if (v === null) { return d.align || 'left' }
+      if (v === null) { return d.align || 'left'; }
       d.align = (v + '');
     });
 
     // 'top', 'middle', 'bottom'
     this.valign(function(d, v = null) {
-      if (v === null) { return d.valign || 'top' }
+      if (v === null) { return d.valign || 'top'; }
       d.valign = (v + '');
     });
 
@@ -88,7 +86,7 @@ class Label extends Layer {
 
     sel.append('rect')
       .attr('class', 'bounding-box')
-      .attr('fill', 'transparent')
+      .attr('fill', 'transparent');
 
     sel.append('text')
      .attr('class', 'text');
@@ -116,77 +114,89 @@ class Label extends Layer {
     var w = (d) => {
       var width = _xScale(minDomain + _w(d));
       return width < 0 ? 0 : width;
-    }
+    };
 
     var x = (d) => {
       return _xScale(_x(d));
-    }
+    };
 
     var h = (d) => {
       return (this.param('height') - _yScale(_h(d))) || this.param('height');
-    }
+    };
 
     var y = (d) => {
       return (_yScale(_y(d)) - h(d)) || 0;
-    }
+    };
 
     // scales for text-position
     var tx = (d) => {
+      var ret;
       switch (_align(d)) {
         case 'left':
-          return x(d) + parseInt(_margin().left, 10);
+          ret = x(d) + parseInt(_margin().left, 10);
           break;
         case 'center':
-          return x(d) + (w(d) / 2);
+          ret = x(d) + (w(d) / 2);
           break;
         case 'right':
-          return x(d) + w(d) - parseInt(_margin().right, 10);
+          ret = x(d) + w(d) - parseInt(_margin().right, 10);
           break;
       }
+
+      return ret;
     };
 
     var anchor = (d) => {
+      var ret;
       switch (_align(d)) {
         case 'left':
-          return 'start';
+          ret = 'start';
           break;
         case 'center':
-          return 'middle';
+          ret = 'middle';
           break;
         case 'right':
-          return 'end';
+          ret = 'end';
           break;
       }
+
+      return ret;
     };
 
     var ty = (d) => {
+      var ret;
       switch (_valign(d)) {
         case 'top':
-          return y(d) + parseInt(_margin().top, 10);
+          ret = y(d) + parseInt(_margin().top, 10);
           break;
         case 'middle':
-          return y(d) + (h(d) / 2);
+          ret = y(d) + (h(d) / 2);
           break;
         case 'bottom':
-          return y(d) + h(d) - parseInt(_margin().bottom, 10);
+          ret = y(d) + h(d) - parseInt(_margin().bottom, 10);
           break;
       }
+
+      return ret;
     };
 
     // based on small manual testing - can probably be improved
     var dy = (d) => {
+      var ret;
       switch (_valign(d)) {
         case 'top':
-          return _verticalAlignment.top;
+          ret = _verticalAlignment.top;
           break;
         case 'middle':
-          return _verticalAlignment.middle;
+          ret = _verticalAlignment.middle;
           break;
         case 'bottom':
-          return _verticalAlignment.bottom;
+          ret = _verticalAlignment.bottom;
           break;
       }
-    }
+
+      return ret;
+    };
 
     el.selectAll('.bounding-box')
       .attr('x', x)
@@ -201,7 +211,7 @@ class Label extends Layer {
       .attr('x', tx)
       .attr('y', ty)
       .attr('dy', dy)
-      .attr('text-anchor', anchor)
+      .attr('text-anchor', anchor);
 
     if (!!this.each()) { el.each(this.each()); }
   }
@@ -213,4 +223,7 @@ accessors.getFunction(Label.prototype,[
   'sortIndex', 'bgColor'
 ]);
 
-module.exports = Label;
+function factory() { return new Label(); }
+factory.Label = Label;
+
+module.exports = factory;
