@@ -1,13 +1,11 @@
 'use strict';
 
 var { uniqueId, accessors } = require('utils');
-var Layer = require('layer');
+var { Layer } = require('layer');
 
 class Breakpoint extends Layer {
 
   constructor() {
-    if (!(this instanceof Breakpoint)) { return new Breakpoint; }
-
     super();
 
     var defaults = {
@@ -89,7 +87,7 @@ class Breakpoint extends Layer {
 
       var path = this.g.select('path');
       // create path if not exists
-      if (!path[0][0]) { path = this.g.append('path') };
+      if (!path[0][0]) { path = this.g.append('path'); }
       // remove line if no data
       if (this.data().length === 0) { path.remove(); }
     }
@@ -98,7 +96,7 @@ class Breakpoint extends Layer {
     var sel = this.items.enter()
       .append('g')
       .classed('item', true)
-      .classed(this.param('unitClass'), true)
+      .classed(this.param('unitClass'), true);
 
     sel.append('circle');
 
@@ -121,8 +119,8 @@ class Breakpoint extends Layer {
     var cx = (d) => { return _xScale(_cx(d)); };
     var cy = (d) => { return _yScale(_cy(d)); };
     var r  = (d) => { return _r(d) || this.param('radius'); };
-    var color   = (d) => { return _color(d) || this.param('color'); }
-    var opacity = (d) => { return _opacity(d) || this.param('opacity'); }
+    var color   = (d) => { return _color(d) || this.param('color'); };
+    var opacity = (d) => { return _opacity(d) || this.param('opacity'); };
 
     // draw line
     if (this.param('displayLine')) {
@@ -242,4 +240,7 @@ accessors.getFunction(Breakpoint.prototype, [
   'cx', 'cy', 'r', 'opacity', 'color'
 ]);
 
-module.exports = Breakpoint;
+function factory() { return new Breakpoint(); }
+factory.Breakpoint = Breakpoint;
+
+module.exports = factory;
