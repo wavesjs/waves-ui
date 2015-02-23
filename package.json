@@ -4,11 +4,15 @@
   "version": "0.3.0",
   "description": "Time based visualization layout manager",
   "main": "timeline.js",
-   "author": "Victor Saiz",
-  "license": "BSD-3",
+  "author": "Victor Saiz",
   "contributors": [
     { "name": "Benjamin Matuszewski" }
   ],
+  "license": "BSD-3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ircam-RnD/waveform"
+  },
   "scripts": {
     "transform": "find . -type f | grep -v \"node_modules\" | grep .es6.js$ | while read -r line; do babel --modules common --optional selfContained $line --out-file ${line/.es6/\"\"} --source-maps-inline; done;",
     "watch:transform": "nodemon -e es6.js --ignore node_modules/ -x npm run transform",
