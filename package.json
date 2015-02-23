@@ -1,0 +1,40 @@
+{
+  "name": "UI",
+  "version": "0.1.0",
+  "description": "'UI section of the wavesjs library'",
+  "main": "waves-ui.js",
+  "scripts": {
+    "bundle": "npm install && npm run browserify && npm run uglify",
+    "uglify": "uglifyjs ${npm_package_main/\".js\"/\".umd.js\"} -o ${npm_package_main/\".js\"/\".min.js\"} --screw-ie8",
+    "browserify": "browserify $npm_package_main -t babelify --outfile ${npm_package_main/\".js\"/\".umd.js\"} -s wavesUI -d",
+    "test": "npm run hint; tac6",
+    "hint": "find . -type f | grep -v \"node_modules\" | grep .es6.js$ | while read -r line; do jshint $line; done;"
+  },
+  "author": "",
+  "license": "BSD-3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wavesjs/UI"
+  },
+  "jshintConfig": {
+    "esnext": true,
+    "browser": true,
+    "node": true,
+    "devel": true
+  },
+  "dependencies": {
+    "babel-runtime": "^4.1.1",
+    "breakpoint": "git://github.com/wavesjs/breakpoint",
+    "label": "git://github.com/wavesjs/label",
+    "layer": "git://github.com/wavesjs/layer",
+    "marker": "git://github.com/wavesjs/marker",
+    "segment": "git://github.com/wavesjs/segment",
+    "timeline": "git://github.com/wavesjs/timeline",
+    "utils": "git://github.com/wavesjs/utils",
+    "waveform": "git://github.com/wavesjs/waveform",
+    "zoomer": "git://github.com/wavesjs/zoomer"
+  },
+  "devDependencies": {
+    "babelify": "^5.0.3"
+  }
+}
