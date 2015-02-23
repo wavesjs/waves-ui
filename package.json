@@ -1,6 +1,5 @@
 {
   "name": "timeline",
-  "exports": "timeline",
   "version": "0.3.0",
   "description": "Time based visualization layout manager",
   "main": "timeline.js",

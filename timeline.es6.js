@@ -372,5 +372,6 @@ accessors.getValue(Timeline.prototype, [
 
 function factory(options) { return new Timeline(options); }
 factory.d3 = d3; // make d3 available though the factory
+factory.Timeline = Timeline;
 
 module.exports = factory;
