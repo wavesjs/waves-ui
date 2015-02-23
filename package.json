@@ -14,7 +14,7 @@
   "license": "BSD-3",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Ircam-RnD/waveform"
+    "url": "https://github.com/Ircam-RnD/timeline"
   },
   "scripts": {
     "transform": "find . -type f | grep -v \"node_modules\" | grep .es6.js$ | while read -r line; do babel --modules common --optional selfContained $line --out-file ${line/.es6/\"\"} --source-maps-inline; done;",
