@@ -4,9 +4,12 @@
   "version": "0.3.0",
   "description": "Time based visualization layout manager",
   "main": "timeline.js",
-  "author": "Victor Saiz",
+  "author": "Victor Saiz <vectorsize@gmail.com>",
   "contributors": [
-    { "name": "Benjamin Matuszewski" }
+    {
+      "name": "Benjamin Matuszewski",
+      "email": "benjamin.matuszewski@gmail.com"
+    }
   ],
   "license": "BSD-3",
   "repository": {
