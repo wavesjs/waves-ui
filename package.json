@@ -1,5 +1,5 @@
 {
-  "name": "UI",
+  "name": "waves-ui",
   "version": "0.1.0",
   "description": "'UI section of the wavesjs library'",
   "main": "waves-ui.js",
@@ -10,7 +10,7 @@
     "test": "npm run hint; tac6",
     "hint": "find . -type f | grep -v \"node_modules\" | grep .es6.js$ | while read -r line; do jshint $line; done;"
   },
-  "author": "",
+  "author": "Benjamin Matuszewski",
   "license": "BSD-3",
   "repository": {
     "type": "git",
