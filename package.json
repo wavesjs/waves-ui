@@ -3,18 +3,21 @@
   "version": "0.1.0",
   "description": "'UI section of the wavesjs library'",
   "main": "waves-ui.js",
+  "standalone": "wavesUI",
   "scripts": {
-    "bundle": "npm install && npm run browserify && npm run uglify",
-    "uglify": "uglifyjs ${npm_package_main/\".js\"/\".umd.js\"} -o ${npm_package_main/\".js\"/\".min.js\"} --screw-ie8",
-    "browserify": "browserify $npm_package_main -t babelify --outfile ${npm_package_main/\".js\"/\".umd.js\"} -s wavesUI -d",
+    "transpile": "node ./bin/scripts.js --transpile",
+    "prebundle": "npm run hint && npm run transpile",
+    "bundle": "node ./bin/scripts.js --bundle",
+    "postbundle": "npm run uglify",
+    "uglify": "node ./bin/scripts.js --uglify",
+    "watch": "node ./bin/scripts.js --watch",
     "test": "npm run hint; tac6",
-    "hint": "find . -type f | grep -v \"node_modules\" | grep .es6.js$ | while read -r line; do jshint $line; done;"
+    "hint": "find src -type f | while read -r line; do jshint $line; done;"
   },
-  "author": "Benjamin Matuszewski",
   "license": "BSD-3",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wavesjs/UI"
+    "url": "https://github.com/wavesjs/ui"
   },
   "jshintConfig": {
     "esnext": true,
@@ -23,18 +26,17 @@
     "devel": true
   },
   "dependencies": {
-    "babel-runtime": "^4.1.1",
-    "breakpoint": "git://github.com/wavesjs/breakpoint",
-    "label": "git://github.com/wavesjs/label",
-    "layer": "git://github.com/wavesjs/layer",
-    "marker": "git://github.com/wavesjs/marker",
-    "segment": "git://github.com/wavesjs/segment",
-    "timeline": "git://github.com/wavesjs/timeline",
-    "utils": "git://github.com/wavesjs/utils",
-    "waveform": "git://github.com/wavesjs/waveform",
-    "zoomer": "git://github.com/wavesjs/zoomer"
+    "babel-runtime": "^4.4.5",
+    "d3": "^3.5.5",
+    "shortid": "^2.1.3",
+    "underscore.string": "^3.0.3"
   },
   "devDependencies": {
-    "babelify": "^5.0.3"
+    "babel": "^4.5.0",
+    "browserify": "^9.0.3",
+    "fs-extra": "^0.16.3",
+    "jshint": "^2.6.0",
+    "node-watch": "^0.3.4",
+    "uglify-js": "^2.4.16"
   }
 }

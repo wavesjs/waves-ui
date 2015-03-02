@@ -60,17 +60,13 @@ the library is exposed in `window.waves`
 ## Custom build
 
 to create your own custom build, you need to
+remove/comment all the component you don't need in `waves-ui.js`, then run
 
 ```bash
-npm install -g browserify
-npm install -g uglify-js
+npm run bundle
 ```
 
-remove/comment all the component you don't need in `waves.js`, then run
-
-```bash
-npm run build
-```
+_`core/timeline`, `core/layer`, and `helpers/utils` are mandatory_
 
 ## List of components
 
