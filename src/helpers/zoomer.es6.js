@@ -1,6 +1,6 @@
 'use strict';
 
-var { uniqueId } = require('utils');
+var { uniqueId } = require('./utils');
 var { EventEmitter } = require('events');
 
 class Zoomer extends EventEmitter {

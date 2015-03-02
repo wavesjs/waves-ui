@@ -1,17 +1,20 @@
 'use strict';
 
 var UI = {
-  timeline: require('timeline'),
-  layer: require('layer'),
-
-  breakpoint: require('breakpoint'),
-  label: require('label'),
-  marker: require('marker'),
-  segment: require('segment'),
-  waveform: require('waveform'),
-
-  zoomer: require('zoomer'),
-  utils: require('utils')
+  // core
+  timeline: require('./dist/core/timeline'),
+  layer: require('./dist/core/layer'),
+  // components
+  breakpoint: require('./dist/components/breakpoint'),
+  label: require('./dist/components/label'),
+  marker: require('./dist/components/marker'),
+  segment: require('./dist/components/segment'),
+  waveform: require('./dist/components/waveform'),
+  // utils
+  zoomer: require('./dist/helpers/zoomer'),
+  utils: require('./dist/helpers/utils'),
+  // expose d3
+  d3: require('d3')
 }
 
 module.exports = UI;

@@ -1,11 +1,12 @@
 /*
-  @NOTE: this options is obsolete for now - creates too much problems
+  @OBSOLETE
 */
+'use strict';
+
 var buffer = [];
 var minMaxProxy;
 
-'use strict';
-
+/*
 self.addEventListener('message', function(message) {
 
   var data = message.data;
@@ -32,4 +33,5 @@ self.addEventListener('message', function(message) {
       break;
   }
 }, false);
+*/
 

@@ -1,7 +1,7 @@
 'use strict';
 
-let { Layer } = require('layer');
-let { accessors, uniqueId } = require('utils');
+var { uniqueId, accessors } = require('../helpers/utils');
+var { Layer } = require('../core/layer');
 
 class Segment extends Layer {
 

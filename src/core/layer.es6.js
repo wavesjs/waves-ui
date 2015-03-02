@@ -1,7 +1,7 @@
 'use strict';
 
 var { slugify } = require('underscore.string');
-var { accessors, uniqueId, addCssRule, toFront }  = require('utils');
+var { accessors, uniqueId, addCssRule, toFront } = require('../helpers/utils');
 var EventEmitter = require('events').EventEmitter;
 
 class Layer extends EventEmitter {

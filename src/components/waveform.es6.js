@@ -1,7 +1,7 @@
 'use strict';
 
-var { Layer } = require('layer');
-var { accessors, uniqueId } = require('utils');
+var { uniqueId, accessors } = require('../helpers/utils');
+var { Layer } = require('../core/layer');
 var { minMax, createSnapshot } = require('./lib/resampler');
 var renderingStrategies = require('./lib/rendering-strategies');
 // var fs        = require('fs'); // for workers

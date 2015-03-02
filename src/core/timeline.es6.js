@@ -1,12 +1,9 @@
 'use strict';
 
-var d3        = window.d3 || require('d3');
-var EventEmitter = require('events').EventEmitter;
-var shortId   = require('shortid');
-var accessors = require('utils').accessors;
-var uniqueId  = require('utils').uniqueId;
-var UILoop    = require('utils').UILoop;
-var throttle  = require('utils').throttle;
+var d3            = require('d3');
+var EventEmitter  = require('events').EventEmitter;
+var shortId       = require('shortid');
+var { accessors, uniqueId, UILoop, throttle } = require('../helpers/utils');
 
 class Timeline extends EventEmitter {
   constructor(options = {}) {

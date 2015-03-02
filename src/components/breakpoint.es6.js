@@ -1,7 +1,7 @@
 'use strict';
 
-var { uniqueId, accessors } = require('utils');
-var { Layer } = require('layer');
+var { uniqueId, accessors } = require('../helpers/utils');
+var { Layer } = require('../core/layer');
 
 class Breakpoint extends Layer {
 
