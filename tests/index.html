@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>timeLine Tests</title>
+  <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+  <script src="../node_modules/sinon/pkg/sinon.js"></script>
+  <script src="../node_modules/simulate/simulate.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.6/d3.min.js"></script>
+</head>
+<body>
+  <div id="mocha"></div>
+  <script src="../node_modules/blanket/test/vendor/mocha.js"></script>
+  <script src="../node_modules/chai/chai.js"></script>
+
+  <!-- Code coverage -->
+  <script type="text/javascript"  data-cover-adapter="../node_modules/blanket/src/adapters/mocha-blanket.js"  src="../node_modules/blanket/dist/qunit/blanket.js"> </script>
+
+  <script>
+    mocha.setup({ui: 'bdd', ignoreLeaks: true})
+  </script>
+
+  <div class="timeline">
+  </div>
+  <div class="timeline">
+  </div>
+
+  <!-- Lib -->
+  <script src="../timeLine.js" data-cover></script>
+  <!-- Tests -->
+  <script src="./tests.js"></script>
+
+
+</body>
+</html>
