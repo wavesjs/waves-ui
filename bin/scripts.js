@@ -10,7 +10,7 @@ var uglifyJS = require('uglify-js');
 
 // CONFIG
 // -----------------------------------------------
-var srcDir = 'src';
+var srcDir = 'es6';
 var distDir = 'dist';
 
 // options for babel

@@ -11,8 +11,9 @@
     "postbundle": "npm run uglify",
     "uglify": "node ./bin/scripts.js --uglify",
     "watch": "node ./bin/scripts.js --watch",
-    "test": "npm run hint; tac6",
-    "hint": "find src -type f | while read -r line; do jshint $line; done;"
+    "test": "tac6",
+    "pretest": "npm run hint",
+    "hint": "find es6 -type f | while read -r line; do jshint $line; done;"
   },
   "license": "BSD-3",
   "repository": {
@@ -26,7 +27,7 @@
     "devel": true
   },
   "dependencies": {
-    "babel-runtime": "^4.4.5",
+    "babel-runtime": "^4.6.5",
     "d3": "^3.5.5",
     "shortid": "^2.1.3",
     "underscore.string": "^3.0.3"

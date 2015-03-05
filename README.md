@@ -1,6 +1,6 @@
 # WAVES - UI
 
-_visualisation part of the [`wavesjs`] library._
+_visualisation part of the `wavesjs` library._
 
 wavesUI is a set of low level audio visualisation components build on top of [d3](http://d3js.org/) 
 
@@ -41,7 +41,6 @@ consume in your modules
 ```javascript
 define(['waves-ui'], function(wavesUI) {
   var timeline = wavesUI.timeline();
-
   // ...
 });
 ```
@@ -54,7 +53,7 @@ add the script tag in your at the bottom of the `<body>`
 <script scr="/path/to/waves-ui.umd.js"></script>
 ```
 
-the library is exposed in `window.waves`
+the library is exposed in the `window.wavesUI` namespace.
 
 
 ## Custom build
@@ -86,4 +85,4 @@ This module is released under the BSD-3-Clause license.
 
 Acknowledgments
 
-This code is part of the WAVE project, funded by ANR (The French National Research Agency),
+This code is part of the WAVE project, funded by ANR (The French National Research Agency).
