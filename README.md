@@ -6,7 +6,7 @@ wavesUI is a set of low level audio visualisation components build on top of [d3
 
 ## Documentation
 
-[https://wavesjs.github.io/ui/](https://wavesjs.github.io/ui/)
+[http://wavesjs.github.io/ui/](http://wavesjs.github.io/ui/)
 
 ## Use
 
