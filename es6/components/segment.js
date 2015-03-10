@@ -98,7 +98,7 @@ class Segment extends Layer {
     super.update(data);
 
     this.items = this.g.selectAll('.' + this.param('unitClass'))
-      .data(this.data(), this.dataKey());
+      .data(this.data());
 
     var sel = this.items.enter()
       .append('g')

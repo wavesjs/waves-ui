@@ -79,7 +79,7 @@ class Breakpoint extends Layer {
     this.sortData();
 
     this.items = this.g.selectAll('.' + this.param('unitClass'))
-      .data(this.data(), this.dataKey());
+      .data(this.data());
 
     // create line
     if (this.param('displayLine')) {
@@ -100,7 +100,8 @@ class Breakpoint extends Layer {
 
     sel.append('circle');
 
-    this.items.exit().remove();
+    var exit = this.items.exit();
+    exit.remove();
   }
 
   draw(el) {

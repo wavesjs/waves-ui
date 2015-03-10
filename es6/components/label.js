@@ -77,7 +77,7 @@ class Label extends Layer {
     super.update(data);
 
     this.items = this.g.selectAll('.' + this.param('unitClass'))
-      .data(this.data(), this.sortIndex());
+      .data(this.data());
 
     var sel = this.items.enter()
       .append('g')
