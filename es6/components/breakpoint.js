@@ -47,10 +47,11 @@ class Breakpoint extends Layer {
     });
   }
 
-  // keep breakpoints coherent in time axis
+  // creates a copy of the data ordered in time axis to draw the line
   sortData() {
     var cx = this.cx();
-    this.data().sort((a, b) => { return cx(a) - cx(b); });
+    var data = this.data().slice(0).sort((a, b) => { return cx(a) - cx(b); });
+    return data;
   }
 
   xZoom() {
@@ -76,7 +77,7 @@ class Breakpoint extends Layer {
   update(data) {
     super.update(data);
 
-    this.sortData();
+    // this.sortData();
 
     this.items = this.g.selectAll('.' + this.param('unitClass'))
       .data(this.data());
@@ -107,7 +108,7 @@ class Breakpoint extends Layer {
   draw(el) {
     el = el || this.items;
 
-    this.sortData();
+    // this.sortData();
 
     var _xScale = this.base.xScale;
     var _yScale = this.yScale;
@@ -128,7 +129,7 @@ class Breakpoint extends Layer {
       this.line.x(cx).y(cy);
 
       this.g.select('path')
-        .attr('d', this.line(this.data()))
+        .attr('d', this.line(this.sortData()))
         .attr('stroke', this.param('lineColor'))
         .attr('stroke-width', 1)
         .attr('stroke-opacity', this.param('opacity'))
