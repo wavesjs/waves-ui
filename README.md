@@ -6,7 +6,7 @@ wavesUI is a set of low level audio visualisation components build on top of [d3
 
 ## Documentation
 
-[https://ircam-rnd.github.io/waves/ui](https://ircam-rnd.github.io/waves/ui)
+[https://wavesjs.github.io/ui/](https://wavesjs.github.io/ui/)
 
 ## Use
 
