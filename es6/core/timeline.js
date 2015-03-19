@@ -10,6 +10,9 @@ class Timeline extends EventEmitter {
     super();
     this.name(options.name || shortId.generate());
     this.cname(uniqueId(this.name()));
+    // options
+    this.lockZoomOutOnInitialDomain = options.lockZoomOut || false;
+
     // defaults
     this.margin({ top: 0, right: 0, bottom: 0, left: 0 });
     this.xDomain([0, 0]);
@@ -204,11 +207,30 @@ class Timeline extends EventEmitter {
     zoom.anchor = this.originalXscale.invert(zoom.anchor);
     // this.zoomFactor = zoom.factor;
     this.xZoomCompute(zoom, this);
+
+    if (this.lockZoomOutOnInitialDomain) {
+      this.lockZoomOut();
+    }
+
     // redraw layers
     for (var key in this.layers) {
       var layer = this.layers[key];
       if ('xScale' in layer) { this.xZoomCompute(zoom, layer); }
       if ('xZoom' in layer) { layer.xZoom(zoom); }
+    }
+  }
+
+  // don't allow to zoom out of the initial domain
+  // see: https://github.com/wavesjs/ui/issues/1
+  lockZoomOut() {
+    var xScaleDomain = this.xScale.domain();
+    var xDomain = this.xDomain();
+
+    if (xScaleDomain[0] < xDomain[0] || xScaleDomain[1] > xDomain[1]) {
+      var min = Math.max(xDomain[0], xScaleDomain[0]);
+      var max = Math.min(xDomain[1], xScaleDomain[1]);
+
+      this.xScale.domain([min, max]);
     }
   }
 
