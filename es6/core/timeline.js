@@ -11,7 +11,7 @@ class Timeline extends EventEmitter {
     this.name(options.name || shortId.generate());
     this.cname(uniqueId(this.name()));
     // options
-    this.lockZoomOutOnInitialDomain = options.lockZoomOut || false;
+    this.lockZoomOutOnInitialDomain = options.lockZoomOutOnInitialDomain || false;
 
     // defaults
     this.margin({ top: 0, right: 0, bottom: 0, left: 0 });
