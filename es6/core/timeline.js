@@ -11,6 +11,7 @@ class Timeline extends EventEmitter {
     this.name(options.name || shortId.generate());
     this.cname(uniqueId(this.name()));
     // options
+    // from: https://github.com/wavesjs/ui/issues/1
     this.lockZoomOutOnInitialDomain = options.lockZoomOutOnInitialDomain || false;
 
     // defaults
