@@ -13,7 +13,7 @@
     "watch": "node ./bin/scripts.js --watch",
     "test": "tac6",
     "pretest": "npm run hint",
-    "hint": "find es6 -type f | while read -r line; do jshint $line; done;"
+    "hint": "jshint ./es6; true"
   },
   "license": "BSD-3",
   "repository": {
