@@ -1,268 +1,401 @@
-'use strict';
+const Context = require('./context');
+const ns = require('./namespace');
 
-var { slugify } = require('underscore.string');
-var { accessors, uniqueId, addCssRule, toFront } = require('../helpers/utils');
-var EventEmitter = require('events').EventEmitter;
+let _counter = 0;
+const _datumIdMap = new Map();
 
-class Layer extends EventEmitter {
+class Layer {
+  constructor(dataType = 'collection', data = [], options = {}) {
+    this.dataType = dataType; // 'entity' || 'collection';
+    this.data = data;
 
-  constructor() {
-    super();
-
-    this.unitClass = null;
-    // this.dname = null;
-    this.xBaseDomain = null;
-    this.yScale = null;
-    this.base = null;
-    this.g = null;
-    this.__params = {};
-
-    // general defaults
-    this.params({
-      type: 'layer',
-      nameAsIdAttribute: false,
-      opacity: 1,
-      height: 0,
+    const defaults = {
+      height: 100, // should inherit from parent
       top: 0,
-      yDomain: null,
-      yRange: null,
-      selectedClass: 'selected',
-      // define possible interactions: selectable, editable
-      interactions: {}
+      debugContext: false, // pass the context in debug mode
+    }
+
+    this.params = Object.assign({}, defaults, options);
+
+    // this.container = null; // offset group of the parent context
+    this.group = null; // group created by the layer inside the context
+    this.items = null; // d3 collection of the layer items
+
+    this.innerLayers = []; // not used yet
+
+    this.commonShapes = new Map; // { ctor: [instance], ... }
+
+    this._shapes = new Map();
+    this._itemShapesMap = new Map();
+
+    // @TODO
+    this.shapeAccessorsMap = new Map();
+
+    // maintain a list of the layers selected items
+    // @TODO change for a raw array - easier to consume outside
+    // this.selectedItems = new Set();
+  }
+
+  get data() { return this._data; }
+
+  set data(data) {
+    if (this.dataType === 'entity') { data = [data]; }
+    this._data = data;
+  }
+
+  initialize(parentContext) {
+    this.context = new Context(parentContext, {
+      height: this.params.height,
+      top: this.params.top,
+      debug: this.params.debugContext
+    });
+
+    this.context.addClass('layer');
+  }
+
+  // @NOTE remove in favor of layer's Group ?
+  addLayer(layer) {
+    // @TODO insert a layer inside an already existing layers
+    layer.initialize(this.context);
+    this.innerLayers.push(layer);
+  }
+
+  // register the shape(s) and its accessors to use in order to render the entity or collection
+  useShape(ctor, accessors = {}) {
+    this._shapes = this._shapes.set(ctor, accessors);
+  }
+
+  // register the shape(s) to use that is common to the entire collection
+  // example: the line in a beakpoint function
+  useCommonShape(...shapes /*, accessors */) {
+    shapes.forEach((ctor) => {
+      // initialize the value to null, is used to test
+      // if the common shape must be rendered (if null) or not
+      this.commonShapes.set(ctor, null);
     });
   }
 
-  // this.__params getter/setter for a single param
-  param(name = null, value = null) {
-    if (value === null) return this.__params[name];
-    this.__params[name] = value;
-    return this;
+  configureBehavior(behavior) {
+    behavior.initialize(this);
+    this.behavior = behavior;
   }
 
-  // this.__params getter/setter
-  params(_params = null) {
-    if (_params === null) return this.__params;
+  // @TODO rename ?
+  // configureShape(ctor, accessors) {}
+  // configureCommonShape(ctor, accessors) {}
 
-    for (var key in _params) {
-      this.__params[key] = _params[key];
-    }
+  // @TODO setParam
 
-    return this;
+  // context accessors - these are only commands
+  get start() { return this.context.start; }
+  set start(value) { this.context.start = value; }
+
+  get duration() { return this.context.duration; }
+  set duration(value) { this.context.duration = value; }
+
+  get offset() { return this.context.offset; }
+  set offset(value) { this.context.offset = value; }
+
+  get stretchRatio() { return this.context.stretchRatio; }
+  set stretchRatio(value) { this.context.stretchRatio = value; }
+
+  get yDomain() { return this.context.yDomain; }
+  set yDomain(value) { this.context.yDomain = value; }
+
+  get opacity() { return this.context.opacity; }
+  set opacity(value) { this.context.opacity = value; }
+
+  // @WARNING: be careful with method profusion
+
+  // @NOTE : move this in higher abstraction level ? => probably yes
+  // apply the stretch ration on the data, reset stretch to 1
+  // applyStretch() {}
+
+  // store key/function pairs to set accessors for one shape
+  // setShapeAccessors(ctor, accessors = {}) {}
+
+  // helper to add some class or stuff on items
+  each(callback = null) {}
+
+  /**
+   * returns the closest `item` form a given DOM element
+   */
+  _getItemFromDOMElement(el) {
+    do {
+      if (el.nodeName === 'g' && el.classList.contains('item')) {
+        return el;
+      }
+    } while (el = el.parentNode);
   }
 
-  // this.__data getter/setter
-  data(_data = null) {
-    if (!_data) return this.__data;
-    this.__data = _data;
-    return this;
+  /**
+   *  @param <DOMElement> the element we want to find the closest `.item` group
+   *  @return
+   *    <DOMElement> item group containing the el if belongs to this layer
+   *    null otherwise
+   */
+  hasItem(el) {
+    const item = this._getItemFromDOMElement(el);
+    return (this.items[0].indexOf(item) !== -1) ? item : null;
   }
 
-  load(base, d3) {
-    // configure layer
-    var name  = this.param('name') || this.param('type');
-    var cname = uniqueId(slugify(name));
-    var unitClass = [this.param('type'), 'item'].join('-');
+  /**
+   *  @param area <Object> area in which to find the elements
+   *  @return <Array> list of the DOM elements in the given area
+   */
+  getItemsInArea(area) {
+    // work in pixel domain
+    const start    = this.context.xScale(this.context.start);
+    const duration = this.context.xScale(this.context.duration);
+    const offset   = this.context.xScale(this.context.offset);
+    const top      = this.params.top;
+    // must be aware of the layer's context modifications
+    // constrain in working view
+    let x1 = Math.max(area.left, start);
+    let x2 = Math.min(area.left + area.width, start + duration);
+    // apply start and offset
+    x1 -= (start + offset);
+    x2 -= (start + offset);
+    // @FIXME stretchRatio breaks selection
+    // x2 *= this.context.stretchRatio;
+    // be consistent with context y coordinates system
+    let y1 = this.params.height - (area.top + area.height);
+    let y2 = this.params.height - area.top;
 
-    this.base = base;
-    this.params({ name, cname, unitClass });
+    y1 += this.params.top;
+    y2 += this.params.top;
 
-    if (!this.param('width')) {
-      this.param('width', this.base.width());
-    }
+    const itemShapesMap = this._itemShapesMap;
+    const context = this.context;
 
-    if (!this.param('height')) {
-      this.param('height', this.base.height());
-    }
+    const items = this.items.filter(function(datum, index) {
+      const group = this;
+      const shapes = itemShapesMap.get(group);
 
-    // add d3 on the layer prototype
-    var proto = Object.getPrototypeOf(this);
-    if (!proto.d3) { proto.d3 = d3; }
+      const inArea = shapes.map(function(shape) {
+        return shape.inArea(context, datum, x1, x2, y1, y2);
+      });
 
-    // pass all update/draw methods inside UILoop
-    var update = this.update;
-    var draw = this.draw;
-    var that = this;
+      return inArea.indexOf(true) !== -1;
+    });
 
-    this.update = function() {
-      base.uiLoop.register(update, arguments, this);
-    };
-
-    this.draw = function() {
-      base.uiLoop.register(draw, arguments, this);
-    };
-
-    this.onMouseDown = this.onMouseDown.bind(this);
-    this.onDrag = this.onDrag.bind(this);
+    return items[0].slice(0);
   }
 
-  setScales() {
-    var base = this.base;
+  // execute(command /*, params, event ? */) {
+  //   switch(command) {
 
-    // @NOTE: is the really needed ?
-    // if (layer.hasOwnProperty('xScale')) {
-    //   var baseXscale = this.xScale.copy();
-    //   // if (!!layer.param('xDomain')) { baseXscale.domain(layer.param('xDomain')); }
-    //   if(!!layer.xDomain && !!layer.xDomain()) baseXscale.domain(layer.xDomain());
-    //   // if (!!layer.param('xRange')) { baseXscale.domain(layer.param('xRange')); }
-    //   if(!!layer.xRange && !!layer.xRange()) baseXscale.range(layer.xRange());
-    //   layer.xScale = baseXscale;
-    //   layer.originalXscale = baseXscale.copy();
-    // }
+  //   }
 
-    this.yScale = base.yScale.copy();
+  //   this.innerLayers.forEach((layer) => {
+  //     layer.execute(command);
+  //   });
+  // }
 
-    if (!!this.param('yDomain')) {
-      this.yScale.domain(this.param('yDomain'));
-    }
+  // @TODO move in BaseBehavior
 
-    if (this.param('height') === null) {
-      this.param('height', base.height());
-    }
-
-    var yRange = [this.param('height'), 0];
-    this.yScale.range(yRange);
-  }
-
-  createGroup(boundingBox) {
-    if (this.g) { return; }
-    // create layer group
-    this.g = boundingBox.append('g')
-      .classed('layer', true)
-      .classed(this.param('type'), true)
-      .attr('data-cname', this.param('cname'))
-      .attr('transform', 'translate(0, ' + (this.param('top') || 0) + ')');
-
-    if (this.param('nameAsIdAttribute')) {
-      this.g.attr('id', this.param('name'));
-    }
-  }
-
-  // entry point to add specific logic to a layer
-  init() {}
-
-  delegateEvents() {
-    var interactions = this.param('interactions');
-
-    if (interactions.editable) {
-      this.base.on('drag', this.onDrag);
-      // being editable implies being selectable
-      interactions.selectable = true;
-    }
-
-    if (interactions.selectable) {
-      this.base.on('mousedown', this.onMouseDown);
-    }
-  }
-
-  undelegateEvents() {
-    this.base.removeListener('mousedown', this.onMouseDown);
-    this.base.removeListener('drag', this.onDrag);
-  }
-
-  onMouseDown(e) {
-    if (e.button !== 0) { return; }
-    // check if the clicked item belongs to the layer
-    // should find something more reliable - closest `.item` group ?
-    var item = e.target.parentNode;
-    // clicked item doesn't belong to this layer
-    if (this.items[0].indexOf(item) === -1) {
-      item = null;
-    }
-
-    this.handleSelection(item, e);
-    // var datum = this.d3.select(item).datum();
-    this.emit('mousedown', item, e);
-  }
-
-  onDrag(e) {
-    // if (this.base.brushing()) { return; }
-    var item = e.currentTarget;
-
-    if (this.items[0].indexOf(item) === -1) {
-      item = null;
-    }
-
-    this.handleDrag(item, e);
-    // var datum = this.d3.select(item).datum();
-    this.emit('drag', item, e);
-  }
-
-  // @TODO: `handleSelection` and `handleDrag` could be getters/setters
-  // to allow easy override
-
-  // default selection handling - can be shared by all layers ?
-  // can be overriden to change behavior - shiftKey, etc.
-  handleSelection(item, e) {
-    if (item === null) {
-      return this.unselect();
-    }
-
-    var selected = item.classList.contains(this.param('selectedClass'));
-    this.unselect();
-
-    if (!selected || this.param('interactions').editable) {
-      this.select(item);
-    }
-  }
-
-  handleDrag(item, e) {
-    throw new Error('must be implemented');
-  }
-
-  select(...els) {
-    els = (els.length === 0) ?
-      this.items :
-      this.d3.selectAll(els);
-
-    els.classed(this.param('selectedClass'), true);
-
-    els.each(function() {
-      toFront(this);
+  // handleSelectionShape =
+  /**
+   *  Behavior entry points
+   *  @NOTE API -> change for an Array as first argument
+   */
+  select(...items) {
+    items.forEach((item) => {
+      const datum = d3.select(item).datum();
+      this.behavior.select(item, datum);
     });
   }
 
-  unselect(...els) {
-    els = (els.length === 0) ?
-      this.items :
-      this.d3.selectAll(els);
-
-    els.classed(this.param('selectedClass'), false);
+  unselect(...items) {
+    items.forEach((item) => {
+      const datum = d3.select(item).datum();
+      this.behavior.unselect(item, datum);
+    });
+  }
+  // @TODO test
+  selectAll() {
+    this.items.forEach((item) => this.select(item));
   }
 
-  style(selector, rules) {
-    // @TODO recheck the DOM
-    var selectors = [];
-    selectors.push('svg[data-cname=' + this.base.cname() + ']');
-    selectors.push('g[data-cname=' + this.param('cname') + ']');
-    selectors.push(selector);
-
-    addCssRule(selectors.join(' '), rules);
+  unselectAll() {
+    this.selectedItems.forEach((item) => this.unselect(item));
   }
 
-  update(data) {
-    this.data(data || this.data() || this.base.data());
-    // this.untouchedXscale = this.base.xScale.copy();
-    // this.untouchedYscale = this.base.yScale.copy();
-    // this.zoomFactor = this.base.zoomFactor;
-
-    // implement the update enter delete logic here
-    // call draw
+  toggleSelection(...items) {
+    items.forEach((item) => {
+      const datum = d3.select(item).datum();
+      this.behavior.toggleSelection(item, datum);
+    });
   }
 
-  // interface - implement in childs
-  // @TODO check Proxies to share common behavior like
-  // if (!!this.each()) { el.each(this.each()); } // in `draw`
-  draw() {}
+  get selectedItems() { return this.behavior.selectedItems; }
 
-  xZoom() {}
+  // - shape edition
+  // ------------------------------------------------
+  // move(item, dx, dy, target) {}
+  // resize(item, dx, dy, target) {}
+  edit(item, dx, dy, target) {
+    const datum = d3.select(item).datum();
+    this.behavior.edit(item, datum, dx, dy, target);
+  }
+
+  // move(item, dx, dy, target) {}
+  // resize(item, dx, dy, target) {}
+
+  // END REWRITE
+
+
+  /**
+   *  creates the layer group with a transformation matrix
+   *  to flip the coordinate system.
+   *  @NOTE: put the context inside the layer group ?
+   *         reverse the DOM order
+   */
+  render() {
+    const height = this.params.height;
+    const top    = this.params.top;
+    // matrix to invert the coordinate system
+    const invertMatrix = `matrix(1, 0, 0, -1, 0, ${height})`;
+    // create the DOM of the context
+    const el = this.context.render();
+    // create a group to flip the context of the layer
+    this.group = document.createElementNS(ns, 'g');
+    this.group.classList.add('items');
+    this.group.setAttributeNS(null, 'transform', invertMatrix);
+    // append the group to the context
+    this.context.offsetGroup.appendChild(this.group);
+    const innerGroup = this.context.offsetGroup;
+
+    this.innerLayers.forEach((layer) => {
+      innerGroup.appendChild(layer.render())
+    });
+
+    return el;
+  }
+
+  /**
+   * create the DOM according to given data and shapes
+   */
+  draw() {
+    // @NOTE: create a unique id to force d3 to keep data in sync with the DOM
+    // @TODO: read again http://bost.ocks.org/mike/selection/
+    this.data.forEach(function(datum) {
+      if (_datumIdMap.has(datum)) { return; }
+      _datumIdMap.set(datum, _counter++);
+    });
+
+    // select items
+    this.items = d3.select(this.group)
+      .selectAll('.item')
+      .filter(function() {
+        return !this.classList.contains('common')
+      })
+      .data(this.data, function(datum) {
+        return _datumIdMap.get(datum);
+      });
+
+    // handle commonShapes
+    this.commonShapes.forEach((shape, ctor) => {
+      if (shape !== null) { return; }
+
+      const group = document.createElementNS(ns, 'g');
+      const shape = new ctor(group);
+
+      group.appendChild(shape.render());
+      group.classList.add('item', 'common', shape.getClassName());
+      // store instance inside the commonShapes Map
+      this.commonShapes.set(ctor, { group, shape });
+      this.group.appendChild(group);
+    });
+
+    // enter
+    this.items.enter()
+      .append((datum, index) => {
+        // @NOTE: d3 binds `this` to the container group
+        // create a group for the item
+        const group = document.createElementNS(ns, 'g');
+        group.classList.add('item');
+
+        // create all the shapes related to the current item
+        let shapes = [];
+
+        this._shapes.forEach((accessors, ctor, map) => {
+          const shape = new ctor();
+          // install accessors on the newly created shape
+          shape.install(accessors);
+
+          group.appendChild(shape.render());
+          group.classList.add(shape.getClassName());
+          shapes.push(shape);
+        });
+
+        this._itemShapesMap.set(group, shapes);
+
+        return group;
+      });
+
+    // exit
+    const that = this;
+
+    this.items.exit()
+      .each(function(datum, index) {
+        const group = this;
+        const shapes = that._itemShapesMap.get(group);
+        // clean shapes
+        shapes.forEach((shape) => shape.destroy());
+        // delete reference in `id` map
+        _datumIdMap.delete(datum);
+        // destroy references in item shapes map
+        that._itemShapesMap.delete(group)
+      })
+      .remove();
+
+    // render innerLayers
+    this.innerLayers.forEach((layer) => layer.draw());
+  }
+
+  /**
+   *  updates DOM context and shapes
+   */
+  update() {
+    this.updateContext();
+    this.updateShapes();
+  }
+
+  /**
+   *  updates DOM context only
+   */
+  updateContext() {
+    // update context
+    this.context.update();
+    // update innerLayers
+    this.innerLayers.forEach((layer) => layer.updateContext());
+  }
+
+  /**
+   *  updates DOM context and Shapes
+   */
+  updateShapes(item = null) {
+    const that = this;
+    const context = this.context;
+    const items = item !== null ? d3.selectAll(item) : this.items;
+
+    // update common shapes
+    this.commonShapes.forEach((details, ctor) => {
+      details.shape.update(context, details.group, this.data);
+    });
+
+    // update entity or collection shapes
+    this.items.each(function(datum, index) {
+      // update all shapes related to the current item
+      const group = this; // current `g.item`
+      const shapes = that._itemShapesMap.get(group);
+      shapes.forEach((shape) => shape.update(context, group, datum, index));
+    });
+
+    // update innerLayers
+    this.innerLayers.forEach((layer) => layer.updateShapes());
+  }
 }
 
-accessors.identity(Layer.prototype, 'each');
-
-accessors.getFunction(Layer.prototype, ['dataKey']);
-
-// factory
-function factory() { return new Layer(); }
-factory.Layer = Layer;
-
-module.exports = factory;
+module.exports = Layer;
