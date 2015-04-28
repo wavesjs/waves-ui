@@ -1,5 +1,8 @@
 # WAVES - UI
 
+## Develop branch - this codes introduce many breaking changes from the master branch
+## DO NOT USE
+
 _visualisation part of the `wavesjs` library._
 
 wavesUI is a set of low level audio visualisation components build on top of [d3](http://d3js.org/) 
