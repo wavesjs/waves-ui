@@ -36,13 +36,6 @@ class Layer {
     // this.selectedItems = new Set();
   }
 
-  get data() { return this._data; }
-
-  set data(data) {
-    if (this.dataType === 'entity') { data = [data]; }
-    this._data = data;
-  }
-
   initialize(parentContext) {
     this.context = new Context(parentContext, {
       height: this.params.height,
@@ -51,6 +44,13 @@ class Layer {
     });
 
     this.context.addClass('layer');
+  }
+
+  get data() { return this._data; }
+
+  set data(data) {
+    if (this.dataType === 'entity') { data = [data]; }
+    this._data = data;
   }
 
   // @NOTE remove in favor of layer's Group ?
