@@ -63,10 +63,10 @@ class Rect extends BaseShape {
     this.rightHandler.setAttributeNS(null, 'transform', rightHandlerTranslate);
   }
 
-  inArea(context, datum, x1, x2, y1, y2) {
+  inArea(context, datum, x1, y1, x2, y2) {
     const shapeX1 = context.xScale(this.x(datum));
-    const shapeX2 = context.xScale(this.x(datum) + this.width(datum));
     const shapeY1 = context.yScale(this.y(datum));
+    const shapeX2 = context.xScale(this.x(datum) + this.width(datum));
     const shapeY2 = context.yScale(this.y(datum) + this.height(datum));
 
     // http://jsfiddle.net/uthyZ/ - check overlaping area

@@ -22,7 +22,7 @@ class Dot extends BaseShape {
   }
 
   // x1, x2, y1, y2 => in pixel domain
-  inArea(context, datum, x1, x2, y1, y2) {
+  inArea(context, datum, x1, y1, x2, y2) {
     const cx = context.xScale(this.cx(datum));
     const cy = context.yScale(this.cy(datum));
 

@@ -3,10 +3,10 @@ const d3 = require('d3');
 
 class BreakpointBehavior extends BaseBehavior {
 
-  edit(item, datum, dx, dy, target) {
+  edit(shape, datum, dx, dy, target) {
     const data  = this._layer.data;
     const ctx   = this._layer.context;
-    const shape = this._layer._itemShapesMap.get(item)[0]; // get the first registered shape
+    // const shape = this._layer._itemShapesMap.get(item)[0]; // get the first registered shape
     const layerHeight = ctx.params.height;
     // current position
     const x = ctx.xScale(shape.cx(datum));

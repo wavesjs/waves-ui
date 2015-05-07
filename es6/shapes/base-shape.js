@@ -124,9 +124,8 @@ class BaseShape {
    *  define if the shape is considered to be the given area
    *  arguments are passed in domain unit (time, whatever)
    *  @return <Boolean>
-   *  @FIXME shape shouldn't work in time domain, it should work in pixels domain
    */
-  inArea(context, datum, x1, x2, y1, y2) {}
+  inArea(context, datum, x1, y1, x2, y2) {}
 }
 
 module.exports = BaseShape;

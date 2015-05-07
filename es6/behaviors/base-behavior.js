@@ -47,8 +47,8 @@ class BaseBehavior {
   /**
    *  Edition behavior
    */
-  // edit(ctx, item, shape, datum, dx, dy, target)
-  edit(item, datum, dx, dy, target) {
+  // change to (shape, datum, dx, dy, target)
+  edit(shape, datum, dx, dy, target) {
     // must be implemented in children
   }
 

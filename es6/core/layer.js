@@ -21,19 +21,16 @@ class Layer {
     this.group = null; // group created by the layer inside the context
     this.items = null; // d3 collection of the layer items
 
-    this.innerLayers = []; // not used yet
+    // @NOTE remove in favor of LayerGroup ?
+    // @private ?
+    this.innerLayers = [];
 
-    this.commonShapes = new Map; // { ctor: [instance], ... }
-
-    this._shapes = new Map();
-    this._itemShapesMap = new Map();
-
-    // @TODO
-    this.shapeAccessorsMap = new Map();
-
-    // maintain a list of the layers selected items
-    // @TODO change for a raw array - easier to consume outside
-    // this.selectedItems = new Set();
+    // ctor => accessors
+    this._shapeConfiguration = null; // { ctor, accessors }
+    this._commonShapeConfiguration = null;
+    // d3 DOM group => shape
+    this._itemShapeMap = new Map();
+    this._itemCommonShapeMap = new Map();
   }
 
   initialize(parentContext) {
@@ -60,22 +57,33 @@ class Layer {
     this.innerLayers.push(layer);
   }
 
-  // register the shape(s) and its accessors to use in order to render the entity or collection
-  useShape(ctor, accessors = {}) {
-    this._shapes = this._shapes.set(ctor, accessors);
+
+  // --------------------------------------
+  // Configure Component
+  // --------------------------------------
+
+  /**
+   *  Register the shape and its accessors to use in order to render
+   *  the entity or collection
+   *  @param ctor <Function:BaseShape> the constructor of the shape to be used
+   *  @param accessors <Object> accessors to use in order to map the data structure
+   */
+  setShape(ctor, accessors = {}) {
+    this._shapeConfiguration = { ctor, accessors };
   }
 
-  // register the shape(s) to use that is common to the entire collection
-  // example: the line in a beakpoint function
-  useCommonShape(...shapes /*, accessors */) {
-    shapes.forEach((ctor) => {
-      // initialize the value to null, is used to test
-      // if the common shape must be rendered (if null) or not
-      this.commonShapes.set(ctor, null);
-    });
+  /**
+   *  Register the shape to use with the entire collection
+   *  example: the line in a beakpoint function
+   *  @param ctor <BaseShape> the constructor of the shape to use to render data
+   *  @param accessors <Object> accessors to use in order to map the data structure
+   */
+  setCommonShape(ctor, accessors = {}) {
+    this._commonShapeConfiguration = { ctor, accessors };
   }
 
-  configureBehavior(behavior) {
+  // @RENAME to setBehavior(behavior)
+  setBehavior(behavior) {
     behavior.initialize(this);
     this.behavior = behavior;
   }
@@ -87,6 +95,9 @@ class Layer {
   // @TODO setParam
 
   // context accessors - these are only commands
+  get contextConfiguration() {}
+
+  // these parameters should be in an object to work with references
   get start() { return this.context.start; }
   set start(value) { this.context.start = value; }
 
@@ -105,20 +116,15 @@ class Layer {
   get opacity() { return this.context.opacity; }
   set opacity(value) { this.context.opacity = value; }
 
-  // @WARNING: be careful with method profusion
-
   // @NOTE : move this in higher abstraction level ? => probably yes
   // apply the stretch ration on the data, reset stretch to 1
   // applyStretch() {}
-
-  // store key/function pairs to set accessors for one shape
-  // setShapeAccessors(ctor, accessors = {}) {}
 
   // helper to add some class or stuff on items
   each(callback = null) {}
 
   /**
-   * returns the closest `item` form a given DOM element
+   * @return <DOMElement> the closest parent `item` group for a given DOM element
    */
   _getItemFromDOMElement(el) {
     do {
@@ -130,7 +136,7 @@ class Layer {
 
   /**
    *  @param <DOMElement> the element we want to find the closest `.item` group
-   *  @return
+   *  @return <mixed>
    *    <DOMElement> item group containing the el if belongs to this layer
    *    null otherwise
    */
@@ -165,18 +171,13 @@ class Layer {
     y1 += this.params.top;
     y2 += this.params.top;
 
-    const itemShapesMap = this._itemShapesMap;
+    const itemShapeMap = this._itemShapeMap;
     const context = this.context;
 
     const items = this.items.filter(function(datum, index) {
       const group = this;
-      const shapes = itemShapesMap.get(group);
-
-      const inArea = shapes.map(function(shape) {
-        return shape.inArea(context, datum, x1, x2, y1, y2);
-      });
-
-      return inArea.indexOf(true) !== -1;
+      const shape = itemShapeMap.get(group);
+      return shape.inArea(context, datum, x1, y1, x2, y2);
     });
 
     return items[0].slice(0);
@@ -236,7 +237,8 @@ class Layer {
   // resize(item, dx, dy, target) {}
   edit(item, dx, dy, target) {
     const datum = d3.select(item).datum();
-    this.behavior.edit(item, datum, dx, dy, target);
+    const shape = this._itemShapeMap.get(item);
+    this.behavior.edit(shape, datum, dx, dy, target);
   }
 
   // move(item, dx, dy, target) {}
@@ -295,18 +297,21 @@ class Layer {
       });
 
     // handle commonShapes
-    this.commonShapes.forEach((shape, ctor) => {
-      if (shape !== null) { return; }
-
+    if (this._commonShapeConfiguration) {
+    // this.commonShapes.forEach((shape, ctor) => {
+      // if (shape !== null) { return; }
+      const { ctor, accessors } = this._commonShapeConfiguration;
       const group = document.createElementNS(ns, 'g');
       const shape = new ctor(group);
 
+      shape.install(accessors);
       group.appendChild(shape.render());
       group.classList.add('item', 'common', shape.getClassName());
-      // store instance inside the commonShapes Map
-      this.commonShapes.set(ctor, { group, shape });
+
+      this._itemCommonShapeMap.set(group, shape);
       this.group.appendChild(group);
-    });
+    // });
+    }
 
     // enter
     this.items.enter()
@@ -314,22 +319,15 @@ class Layer {
         // @NOTE: d3 binds `this` to the container group
         // create a group for the item
         const group = document.createElementNS(ns, 'g');
-        group.classList.add('item');
+        const { ctor, accessors } = this._shapeConfiguration;
+        const shape = new ctor();
+        // install accessors on the newly created shape
+        shape.install(accessors);
 
-        // create all the shapes related to the current item
-        let shapes = [];
+        group.appendChild(shape.render());
+        group.classList.add('item', shape.getClassName());
 
-        this._shapes.forEach((accessors, ctor, map) => {
-          const shape = new ctor();
-          // install accessors on the newly created shape
-          shape.install(accessors);
-
-          group.appendChild(shape.render());
-          group.classList.add(shape.getClassName());
-          shapes.push(shape);
-        });
-
-        this._itemShapesMap.set(group, shapes);
+        this._itemShapeMap.set(group, shape);
 
         return group;
       });
@@ -340,13 +338,11 @@ class Layer {
     this.items.exit()
       .each(function(datum, index) {
         const group = this;
-        const shapes = that._itemShapesMap.get(group);
-        // clean shapes
-        shapes.forEach((shape) => shape.destroy());
-        // delete reference in `id` map
-        _datumIdMap.delete(datum);
-        // destroy references in item shapes map
-        that._itemShapesMap.delete(group)
+        const shape = that._itemShapesMap.get(group);
+
+        shape.destroy(); // clean shape
+        _datumIdMap.delete(datum); // clean reference in `id` map
+        that._itemShapeMap.delete(group); // destroy reference in item shape map
       })
       .remove();
 
@@ -381,16 +377,16 @@ class Layer {
     const items = item !== null ? d3.selectAll(item) : this.items;
 
     // update common shapes
-    this.commonShapes.forEach((details, ctor) => {
-      details.shape.update(context, details.group, this.data);
+    this._itemCommonShapeMap.forEach((shape, item) => {
+      shape.update(context, item, this.data);
     });
 
     // update entity or collection shapes
-    this.items.each(function(datum, index) {
+    items.each(function(datum, index) {
       // update all shapes related to the current item
       const group = this; // current `g.item`
-      const shapes = that._itemShapesMap.get(group);
-      shapes.forEach((shape) => shape.update(context, group, datum, index));
+      const shape = that._itemShapeMap.get(group);
+      shape.update(context, group, datum, index);
     });
 
     // update innerLayers

@@ -3,7 +3,7 @@ const BaseBehavior = require('./base-behavior');
 class SegmentBehavior extends BaseBehavior {
   // constructor() {}
 
-  edit(item, datum, dx, dy, target) {
+  edit(shape, datum, dx, dy, target) {
     let action = 'move';
     const classList = target.classList;
 
@@ -13,12 +13,10 @@ class SegmentBehavior extends BaseBehavior {
       action = 'resizeRight';
     }
 
-    this[`_${action}`](item, datum, dx, dy, target);
+    this[`_${action}`](shape, datum, dx, dy, target);
   }
 
-  _move(item, datum, dx, dy, target) {
-    console.log('move');
-    const shape = this._layer._itemShapesMap.get(item)[0];
+  _move(shape, datum, dx, dy, target) {
     const ctx = this._layer.context;
     const layerHeight = ctx.params.height;
     // current values
@@ -41,9 +39,7 @@ class SegmentBehavior extends BaseBehavior {
     shape.y(datum, ctx.yScale.invert(targetY));
   }
 
-  _resizeLeft(item, datum, dx, dy, target) {
-    console.log('resizeLeft');
-    const shape = this._layer._itemShapesMap.get(item)[0];
+  _resizeLeft(shape, datum, dx, dy, target) {
     const ctx = this._layer.context;
     // current values
     const x     = ctx.xScale(shape.x(datum));
@@ -59,8 +55,7 @@ class SegmentBehavior extends BaseBehavior {
     shape.width(datum, ctx.xScale.invert(targetWidth));
   }
 
-  _resizeRight(item, datum, dx, dy, target) {
-    const shape = this._layer._itemShapesMap.get(item)[0];
+  _resizeRight(shape, datum, dx, dy, target) {
     const ctx = this._layer.context;
     // current values
     const width = ctx.xScale(shape.width(datum));

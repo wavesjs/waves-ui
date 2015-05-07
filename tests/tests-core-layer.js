@@ -22,18 +22,10 @@ describe('Layer', function() {
     it('should register an `innreLayer` and initialize it', function(done) {});
   });
 
-  // SHAPE REGISTRATION
-  describe('#useShape - bad design API', function() {
-
-  });
-
-  describe('#useCommonShape - bad design API', function() {
-
-  });
-
-  describe('#configureBehavior - bad design API', function() {
-
-  });
+  // COMPONENT CREATION
+  describe('#setShape', function() {});
+  describe('#setCommonShape', function() {});
+  describe('#setBehavior', function() {});
 
   // CONTEXT COMMANDS
   describe('#start', function() {
