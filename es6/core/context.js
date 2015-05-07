@@ -46,12 +46,12 @@ class Context {
     }
 
     return xScale;
-    // @NOTE doesn't work cannot acecss invert if needed
-    // create aninveert accessor ?
     // return function(val) {
     //   let ret = xScale(val);
     //   return Math.max(ret, 0);
     // }
+    // @NOTE doesn't work cannot access invert if needed
+    // create an invert accessor ?
   }
 
   set xScale(xScale) {

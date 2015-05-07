@@ -27,13 +27,13 @@ class Rect extends BaseShape {
     this.leftHandler.setAttributeNS(null, 'width', this.params.handlerWidth);
     this.leftHandler.style.fill = '#000000';
     this.leftHandler.classList.add('left', 'handler');
-    // this.leftHandler.style.cursor = 'ew-resize';
+    this.leftHandler.style.cursor = 'ew-resize';
 
     this.rightHandler = document.createElementNS(this.ns, 'rect');
     this.rightHandler.setAttributeNS(null, 'width', this.params.handlerWidth);
     this.rightHandler.style.fill = '#000000';
     this.rightHandler.classList.add('right', 'handler');
-    // this.rightHandler.style.cursor = 'ew-resize';
+    this.rightHandler.style.cursor = 'ew-resize';
 
     this.shape.appendChild(this.rect);
     this.shape.appendChild(this.leftHandler);

@@ -1,6 +1,7 @@
 const Context = require('./context');
 const ns = require('./namespace');
 
+// create a private item -> id map to force d3 being in sync with the DOM
 let _counter = 0;
 const _datumIdMap = new Map();
 
@@ -27,10 +28,10 @@ class Layer {
 
     // ctor => accessors
     this._shapeConfiguration = null; // { ctor, accessors }
-    this._commonShapeConfiguration = null;
-    // d3 DOM group => shape
+    this._commonShapeConfiguration = null; // { ctor, accessors }
+    // item group <DOMElement> => shape
     this._itemShapeMap = new Map();
-    this._itemCommonShapeMap = new Map();
+    this._itemCommonShapeMap = new Map(); // one entry max in this map
   }
 
   initialize(parentContext) {
@@ -57,7 +58,6 @@ class Layer {
     this.innerLayers.push(layer);
   }
 
-
   // --------------------------------------
   // Configure Component
   // --------------------------------------
@@ -68,7 +68,7 @@ class Layer {
    *  @param ctor <Function:BaseShape> the constructor of the shape to be used
    *  @param accessors <Object> accessors to use in order to map the data structure
    */
-  setShape(ctor, accessors = {}) {
+  setShape(ctor, accessors = {}, options = {}) {
     this._shapeConfiguration = { ctor, accessors };
   }
 
@@ -78,21 +78,25 @@ class Layer {
    *  @param ctor <BaseShape> the constructor of the shape to use to render data
    *  @param accessors <Object> accessors to use in order to map the data structure
    */
-  setCommonShape(ctor, accessors = {}) {
+  setCommonShape(ctor, accessors = {}, options = {}) {
     this._commonShapeConfiguration = { ctor, accessors };
   }
 
-  // @RENAME to setBehavior(behavior)
+  /**
+   *  Register the behavior to use when interacting with the shape
+   *  @param behavior <BaseBehavior>
+   */
   setBehavior(behavior) {
     behavior.initialize(this);
     this.behavior = behavior;
   }
 
-  // @TODO rename ?
-  // configureShape(ctor, accessors) {}
-  // configureCommonShape(ctor, accessors) {}
+  // --------------------------------------
+  // Context Accessors
+  // --------------------------------------
 
-  // @TODO setParam
+  // @TODO setContextParameters
+  // @TODO use an object to share a reference with application code
 
   // context accessors - these are only commands
   get contextConfiguration() {}
@@ -120,8 +124,54 @@ class Layer {
   // apply the stretch ration on the data, reset stretch to 1
   // applyStretch() {}
 
-  // helper to add some class or stuff on items
-  each(callback = null) {}
+  // --------------------------------------
+  // Behavior Accessors
+  // --------------------------------------
+
+  /**
+   *  Behavior entry points
+   *  @NOTE API -> change for an Array as first argument
+   */
+  get selectedItems() { return this.behavior.selectedItems; }
+
+  select(...items) {
+    items.forEach((item) => {
+      const datum = d3.select(item).datum();
+      this.behavior.select(item, datum);
+    });
+  }
+
+  unselect(...items) {
+    items.forEach((item) => {
+      const datum = d3.select(item).datum();
+      this.behavior.unselect(item, datum);
+    });
+  }
+  // @TODO test
+  selectAll() {
+    this.items.forEach((item) => this.select(item));
+  }
+
+  unselectAll() {
+    this.selectedItems.forEach((item) => this.unselect(item));
+  }
+
+  toggleSelection(...items) {
+    items.forEach((item) => {
+      const datum = d3.select(item).datum();
+      this.behavior.toggleSelection(item, datum);
+    });
+  }
+
+  edit(item, dx, dy, target) {
+    const datum = d3.select(item).datum();
+    const shape = this._itemShapeMap.get(item);
+    this.behavior.edit(shape, datum, dx, dy, target);
+  }
+
+  // --------------------------------------
+  // Helpers
+  // --------------------------------------
 
   /**
    * @return <DOMElement> the closest parent `item` group for a given DOM element
@@ -183,75 +233,12 @@ class Layer {
     return items[0].slice(0);
   }
 
-  // execute(command /*, params, event ? */) {
-  //   switch(command) {
-
-  //   }
-
-  //   this.innerLayers.forEach((layer) => {
-  //     layer.execute(command);
-  //   });
-  // }
-
-  // @TODO move in BaseBehavior
-
-  // handleSelectionShape =
-  /**
-   *  Behavior entry points
-   *  @NOTE API -> change for an Array as first argument
-   */
-  select(...items) {
-    items.forEach((item) => {
-      const datum = d3.select(item).datum();
-      this.behavior.select(item, datum);
-    });
-  }
-
-  unselect(...items) {
-    items.forEach((item) => {
-      const datum = d3.select(item).datum();
-      this.behavior.unselect(item, datum);
-    });
-  }
-  // @TODO test
-  selectAll() {
-    this.items.forEach((item) => this.select(item));
-  }
-
-  unselectAll() {
-    this.selectedItems.forEach((item) => this.unselect(item));
-  }
-
-  toggleSelection(...items) {
-    items.forEach((item) => {
-      const datum = d3.select(item).datum();
-      this.behavior.toggleSelection(item, datum);
-    });
-  }
-
-  get selectedItems() { return this.behavior.selectedItems; }
-
-  // - shape edition
-  // ------------------------------------------------
-  // move(item, dx, dy, target) {}
-  // resize(item, dx, dy, target) {}
-  edit(item, dx, dy, target) {
-    const datum = d3.select(item).datum();
-    const shape = this._itemShapeMap.get(item);
-    this.behavior.edit(shape, datum, dx, dy, target);
-  }
-
-  // move(item, dx, dy, target) {}
-  // resize(item, dx, dy, target) {}
-
-  // END REWRITE
-
+  // helper to add some class or stuff on items
+  each(callback = null) {}
 
   /**
-   *  creates the layer group with a transformation matrix
-   *  to flip the coordinate system.
-   *  @NOTE: put the context inside the layer group ?
-   *         reverse the DOM order
+   *  creates the layer group with a transformation matrix to flip the coordinate system.
+   *  @NOTE: put the context inside the layer group ? reverse the DOM order
    */
   render() {
     const height = this.params.height;
@@ -297,9 +284,7 @@ class Layer {
       });
 
     // handle commonShapes
-    if (this._commonShapeConfiguration) {
-    // this.commonShapes.forEach((shape, ctor) => {
-      // if (shape !== null) { return; }
+    if (this._commonShapeConfiguration !== null) {
       const { ctor, accessors } = this._commonShapeConfiguration;
       const group = document.createElementNS(ns, 'g');
       const shape = new ctor(group);
@@ -310,7 +295,6 @@ class Layer {
 
       this._itemCommonShapeMap.set(group, shape);
       this.group.appendChild(group);
-    // });
     }
 
     // enter
@@ -370,6 +354,7 @@ class Layer {
 
   /**
    *  updates DOM context and Shapes
+   *  @param
    */
   updateShapes(item = null) {
     const that = this;

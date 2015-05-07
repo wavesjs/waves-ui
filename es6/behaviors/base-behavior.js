@@ -13,12 +13,12 @@ class BaseBehavior {
     this._layer = layer;
   }
 
-  getDefaults() {
-    return {};
-  }
-
   destroy() {
     // clean all items in `this._selectedItems`
+  }
+
+  getDefaults() {
+    return {};
   }
 
   set selectedClass(value) { this._selectedClass = value; }
@@ -27,20 +27,30 @@ class BaseBehavior {
   get selectedItems() { return [...this._selectedItems]; }
 
   /**
-   *  Selection behaviors
+   *  @param item <DOMElement> the item to select
+   *  @param datum <Object> the related datum (@NOTE remove it ?)
    */
   select(item, datum) {
     item.classList.add(this.selectedClass);
     this._selectedItems.add(item);
   }
 
+  /**
+   *  @param item <DOMElement> the item to select
+   *  @param datum <Object> the related datum (@NOTE remove it ?)
+   */
   unselect(item, datum) {
     item.classList.remove(this.selectedClass);
     this._selectedItems.delete(item);
   }
 
-  toggleSelection(items, datum) {
-    const method = (this._selectedItems.has(item)) ? 'unselect' : 'select';
+  /**
+   *  @NOTE is this really usefull ?
+   *  @param item <DOMElement> the item to select
+   *  @param datum <Object> the related datum (@NOTE remove it ?)
+   */
+  toggleSelection(item, datum) {
+    const method = this._selectedItems.has(item) ? 'unselect' : 'select';
     this[method](item);
   }
 
