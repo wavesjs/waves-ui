@@ -7,6 +7,7 @@ class Dot extends BaseShape {
     if (this.shape) { return this.shape; }
 
     this.shape = document.createElementNS(this.ns, 'circle');
+    // this.shape.setAttributeNS(null, 'shape-rendering', 'crispEdges');
     return this.shape;
   }
 

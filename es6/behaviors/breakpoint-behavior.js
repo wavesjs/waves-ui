@@ -1,5 +1,4 @@
 const BaseBehavior = require('./base-behavior');
-const d3 = require('d3');
 
 class BreakpointBehavior extends BaseBehavior {
 

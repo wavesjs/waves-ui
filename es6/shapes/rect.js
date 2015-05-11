@@ -22,17 +22,20 @@ class Rect extends BaseShape {
 
     this.rect = document.createElementNS(this.ns, 'rect');
     this.rect.style.opacity = this.params.opacity;
+    this.rect.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
     this.leftHandler = document.createElementNS(this.ns, 'rect');
-    this.leftHandler.setAttributeNS(null, 'width', this.params.handlerWidth);
-    this.leftHandler.style.opacity = this.params.handlerOpacity;
     this.leftHandler.classList.add('left', 'handler');
+    this.leftHandler.setAttributeNS(null, 'width', this.params.handlerWidth);
+    this.leftHandler.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+    this.leftHandler.style.opacity = this.params.handlerOpacity;
     this.leftHandler.style.cursor = 'ew-resize';
 
     this.rightHandler = document.createElementNS(this.ns, 'rect');
-    this.rightHandler.setAttributeNS(null, 'width', this.params.handlerWidth);
-    this.rightHandler.style.opacity = this.params.handlerOpacity;
     this.rightHandler.classList.add('right', 'handler');
+    this.rightHandler.setAttributeNS(null, 'width', this.params.handlerWidth);
+    this.rightHandler.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+    this.rightHandler.style.opacity = this.params.handlerOpacity;
     this.rightHandler.style.cursor = 'ew-resize';
 
     this.shape.appendChild(this.rect);
@@ -68,8 +71,8 @@ class Rect extends BaseShape {
 
   inArea(context, datum, x1, y1, x2, y2) {
     const shapeX1 = context.xScale(this.x(datum));
-    const shapeY1 = context.yScale(this.y(datum));
     const shapeX2 = context.xScale(this.x(datum) + this.width(datum));
+    const shapeY1 = context.yScale(this.y(datum));
     const shapeY2 = context.yScale(this.y(datum) + this.height(datum));
 
     // http://jsfiddle.net/uthyZ/ - check overlaping area

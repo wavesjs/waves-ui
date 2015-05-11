@@ -57,7 +57,7 @@ class BaseBehavior {
   /**
    *  Edition behavior
    */
-  // change to (shape, datum, dx, dy, target)
+  // change to (context, shape, datum, dx, dy, target)
   edit(shape, datum, dx, dy, target) {
     // must be implemented in children
   }

@@ -7,6 +7,7 @@ class Line extends BaseShape {
     if (this.shape) { return this.shape; }
 
     this.shape = document.createElementNS(this.ns, 'path');
+    // this.shape.setAttributeNS(null, 'shape-rendering', 'crispEdges');
     return this.shape;
   }
 
