@@ -82,7 +82,7 @@ class SelectionState extends BaseState {
       this.currentLayer.unselectAll();
     }
 
-    if (newLayer) {
+    if (newLayer !== this.currentLayer) {
       this.currentLayer = newLayer;
     }
 

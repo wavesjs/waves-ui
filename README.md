@@ -3,6 +3,9 @@
 ## Develop branch - this code introduce many breaking changes
 ## DO NOT USE
 
+_parts of d3 in use: selections, scales_  
+(could be replaced, the most tricky part would be the element <=> datum binding)
+
 _visualisation part of the `wavesjs` library._
 
 wavesUI is a set of low level audio visualisation components build on top of [d3](http://d3js.org/) 

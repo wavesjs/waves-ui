@@ -1,5 +1,6 @@
 const Context = require('./context');
 const ns = require('./namespace');
+const d3 = require('d3')
 
 // create a private item -> id map to force d3 being in sync with the DOM
 let _counter = 0;
