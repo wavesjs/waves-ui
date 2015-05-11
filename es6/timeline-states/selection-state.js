@@ -3,10 +3,8 @@ const ns = require('../core/namespace');
 
 class SelectionState extends BaseState {
   constructor(timeline) {
-    this.timeline = timeline;
-    this.layers = timeline.layers;
+    super(timeline);
 
-    this.interactionsGroup = timeline.interactionsGroup;
     this.currentLayer = null;
     // need a cached
     this.selectedItems = null;
@@ -82,9 +80,11 @@ class SelectionState extends BaseState {
       this.currentLayer.unselectAll();
     }
 
-    if (newLayer !== this.currentLayer) {
+    if (newLayer && newLayer !== this.currentLayer) {
       this.currentLayer = newLayer;
     }
+
+    if (!this.currentLayer) { return; }
 
     this.previousSelection = this.currentLayer.selectedItems.slice(0);
     // create brush
@@ -92,7 +92,7 @@ class SelectionState extends BaseState {
   }
 
   onMouseMove(e) {
-    if (!this.mouseDown) { return; }
+    if (!this.mouseDown || !this.currentLayer) { return; }
     // update brush
     this._updateBrush(e);
     // select all dots in area
@@ -134,6 +134,8 @@ class SelectionState extends BaseState {
 
   // @NOTE: 'mousedown' and 'mouseup' are called before 'click'
   onClick(e) {
+    if (!this.currentLayer) { return; }
+
     const item = this.currentLayer.hasItem(e.target);
     // if no item - unselect all
     if (this.previousSelection.length !== 0 && !this.shiftKey) {

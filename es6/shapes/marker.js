@@ -18,13 +18,14 @@ class Marker extends BaseShape {
     const height = context.params.height;
 
     this.shape = document.createElementNS(this.ns, 'g');
-    this.line = document.createElementNS(this.ns, 'line');
+    this.line = document.createElementNS(this.ns, 'rect');
     this.handler = document.createElementNS(this.ns, 'rect');
 
     // draw line
     this.line.setAttributeNS(null, 'x', 0);
-    this.line.setAttributeNS(null, 'y1', 0);
-    this.line.setAttributeNS(null, 'y2', height);
+    this.line.setAttributeNS(null, 'y', 0);
+    this.line.setAttributeNS(null, 'width', 1);
+    this.line.setAttributeNS(null, 'height', height);
     this.line.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
     this.handler.setAttributeNS(null, 'x', -((this.params.handlerWidth - 1) / 2));
@@ -45,7 +46,7 @@ class Marker extends BaseShape {
 
     group.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
 
-    this.line.style.stroke = color;
+    this.line.style.fill = color;
     this.handler.style.fill = color;
   }
 

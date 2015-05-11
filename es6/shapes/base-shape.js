@@ -64,14 +64,14 @@ class BaseShape {
    * generic method to create accessors
    * adds accessor to the prototype if not already present
    */
-  _createAccessors(names) {
+  _createAccessors(accessors) {
     this._accessors = {};
     // add it to the prototype
     const proto = Object.getPrototypeOf(this);
     // create a getter / setter for each accessors
     // setter : `this.x = callback`
     // getter : `this.x(datum)`
-    Object.keys(names).forEach((name) => {
+    Object.keys(accessors).forEach((name) => {
       if (proto.hasOwnProperty(name)) { return; }
 
       Object.defineProperty(proto, name, {
@@ -87,9 +87,9 @@ class BaseShape {
    * create a function to be used as a default
    * accessor for each accesors
    */
-  _setDefaultAccessors(names) {
-    Object.keys(names).forEach((name) => {
-      const defaultValue = names[name];
+  _setDefaultAccessors(accessors) {
+    Object.keys(accessors).forEach((name) => {
+      const defaultValue = accessors[name];
       let accessor = function(d, v = null) {
         if (v === null) { return d[name] || defaultValue; }
         d[name] = v;

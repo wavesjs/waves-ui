@@ -153,6 +153,7 @@ class Layer {
     items.forEach((item) => {
       const datum = d3.select(item).datum();
       this._behavior.select(item, datum);
+      this._toFront(item);
     });
   }
 
@@ -193,12 +194,16 @@ class Layer {
   /**
    * @return <DOMElement> the closest parent `item` group for a given DOM element
    */
-  getItemFromDOMElement(el) {
+  _getItemFromDOMElement(el) {
     do {
       if (el.nodeName === 'g' && el.classList.contains('item')) {
         return el;
       }
     } while (el = el.parentNode);
+  }
+
+  _toFront(item) {
+    this.group.appendChild(item);
   }
 
   /**
@@ -208,7 +213,7 @@ class Layer {
    *    null otherwise
    */
   hasItem(el) {
-    const item = this.getItemFromDOMElement(el);
+    const item = this._getItemFromDOMElement(el);
     return (this.items[0].indexOf(item) !== -1) ? item : null;
   }
 

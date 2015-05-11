@@ -2,8 +2,7 @@ const BaseState = require('./base-state');
 
 class EditionState extends BaseState {
   constructor(timeline) {
-    this.timeline = timeline;
-    this.layers = timeline.layers;
+    super(timeline);
 
     this.currentEditedLayer = null;
     this.currentTarget = null;
