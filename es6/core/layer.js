@@ -32,6 +32,8 @@ class Layer {
     // item group <DOMElement> => shape
     this._itemShapeMap = new Map();
     this._itemCommonShapeMap = new Map(); // one entry max in this map
+
+    this._behavior = null;
   }
 
   initialize(parentContext) {
@@ -99,7 +101,7 @@ class Layer {
    */
   setBehavior(behavior) {
     behavior.initialize(this);
-    this.behavior = behavior;
+    this._behavior = behavior;
   }
 
   // --------------------------------------
@@ -142,20 +144,21 @@ class Layer {
   /**
    *  Behavior entry points
    *  @NOTE API -> change for an Array as first argument
+   *  @TODO     -> handle if no behavior is registered
    */
-  get selectedItems() { return this.behavior.selectedItems; }
+  get selectedItems() { return this._behavior.selectedItems; }
 
   select(...items) {
     items.forEach((item) => {
       const datum = d3.select(item).datum();
-      this.behavior.select(item, datum);
+      this._behavior.select(item, datum);
     });
   }
 
   unselect(...items) {
     items.forEach((item) => {
       const datum = d3.select(item).datum();
-      this.behavior.unselect(item, datum);
+      this._behavior.unselect(item, datum);
     });
   }
   // @TODO test
@@ -170,14 +173,16 @@ class Layer {
   toggleSelection(...items) {
     items.forEach((item) => {
       const datum = d3.select(item).datum();
-      this.behavior.toggleSelection(item, datum);
+      this._behavior.toggleSelection(item, datum);
     });
   }
 
+  // @TODO change signature edit(items = [...], dx, dy, target);
+  // -> be consistent for all behaviors API
   edit(item, dx, dy, target) {
     const datum = d3.select(item).datum();
     const shape = this._itemShapeMap.get(item);
-    this.behavior.edit(this.context, shape, datum, dx, dy, target);
+    this._behavior.edit(this.context, shape, datum, dx, dy, target);
   }
 
   // --------------------------------------
@@ -187,7 +192,7 @@ class Layer {
   /**
    * @return <DOMElement> the closest parent `item` group for a given DOM element
    */
-  _getItemFromDOMElement(el) {
+  getItemFromDOMElement(el) {
     do {
       if (el.nodeName === 'g' && el.classList.contains('item')) {
         return el;
@@ -202,7 +207,7 @@ class Layer {
    *    null otherwise
    */
   hasItem(el) {
-    const item = this._getItemFromDOMElement(el);
+    const item = this.getItemFromDOMElement(el);
     return (this.items[0].indexOf(item) !== -1) ? item : null;
   }
 
