@@ -40,7 +40,7 @@ class Marker extends BaseShape {
   }
 
   update(context, group, datum, index) {
-    const x = Math.round(context.xScale(this.x(datum)));
+    const x = context.xScale(this.x(datum));
     const color = this.color(datum);
 
     group.setAttributeNS(null, 'transform', `translate(${x}, 0)`);

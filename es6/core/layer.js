@@ -47,8 +47,19 @@ class Layer {
   get data() { return this._data; }
 
   set data(data) {
-    if (this.dataType === 'entity') { data = [data]; }
-    this._data = data;
+    switch (this.dataType) {
+      case 'entity':
+        if (this._data) { // if data already exists, reuse the reference
+          this._data[0] = data;
+        } else {
+          this._data = [data];
+        }
+        break;
+      case 'collection':
+      default:
+        this._data = data;
+        break;
+    }
   }
 
   // @NOTE remove in favor of layer's Group ?

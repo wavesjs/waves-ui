@@ -1,5 +1,6 @@
 const BaseShape = require('./base-shape');
 
+// @TODO rename to segment
 class Rect extends BaseShape {
   getClassName() { return 'rect'; }
 
