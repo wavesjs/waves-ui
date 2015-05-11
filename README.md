@@ -1,6 +1,6 @@
 # WAVES - UI
 
-## Develop branch - this codes introduce many breaking changes from the master branch
+## Develop branch - this code introduce many breaking changes
 ## DO NOT USE
 
 _visualisation part of the `wavesjs` library._
