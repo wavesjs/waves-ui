@@ -166,8 +166,8 @@ class Context {
     const start = this.originalXScale(this.start);
     const duration = this.xScale(this.duration);
     const offset = this.xScale(this.offset);
-    // const height = this.params.height;
     const top    = this.params.top;
+    const height = this.params.height;
     // matrix to invert the coordinate system
     const translateMatrix = `matrix(1, 0, 0, 1, ${start}, ${top})`;
 
@@ -178,7 +178,7 @@ class Context {
 
     if (this.params.debug) {
       this.debugRect.setAttributeNS(null, 'width', duration);
-      this.debugRect.setAttributeNS(null, 'height', this.params.height);
+      this.debugRect.setAttributeNS(null, 'height', height);
     }
   }
 

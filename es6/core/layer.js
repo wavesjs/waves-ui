@@ -308,7 +308,7 @@ class Layer {
         // install accessors on the newly created shape
         shape.install(accessors);
 
-        group.appendChild(shape.render());
+        group.appendChild(shape.render(this.context));
         group.classList.add('item', shape.getClassName());
 
         this._itemShapeMap.set(group, shape);

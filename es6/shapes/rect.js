@@ -3,16 +3,15 @@ const BaseShape = require('./base-shape');
 class Rect extends BaseShape {
   getClassName() { return 'rect'; }
 
-
   _getAccessorList() {
-    return { x: 0, y: 0, width: 0, height: 0, color: '#000000'};
+    return { x: 0, y: 0, width: 0, height: 0, color: '#000000', opacity: 1 };
   }
 
   _getDefaults() {
     return {
       handlerWidth: 2,
-      handlerOpacity: 0.4,
-      opacity: 0.8
+      handlerOpacity: 0.8,
+      opacity: 0.6
     }
   }
 
@@ -22,16 +21,17 @@ class Rect extends BaseShape {
     this.shape = document.createElementNS(this.ns, 'g');
 
     this.rect = document.createElementNS(this.ns, 'rect');
+    this.rect.style.opacity = this.params.opacity;
 
     this.leftHandler = document.createElementNS(this.ns, 'rect');
     this.leftHandler.setAttributeNS(null, 'width', this.params.handlerWidth);
-    this.leftHandler.style.fill = '#000000';
+    this.leftHandler.style.opacity = this.params.handlerOpacity;
     this.leftHandler.classList.add('left', 'handler');
     this.leftHandler.style.cursor = 'ew-resize';
 
     this.rightHandler = document.createElementNS(this.ns, 'rect');
     this.rightHandler.setAttributeNS(null, 'width', this.params.handlerWidth);
-    this.rightHandler.style.fill = '#000000';
+    this.rightHandler.style.opacity = this.params.handlerOpacity;
     this.rightHandler.classList.add('right', 'handler');
     this.rightHandler.style.cursor = 'ew-resize';
 
@@ -58,9 +58,12 @@ class Rect extends BaseShape {
     // display handlers
     this.leftHandler.setAttributeNS(null, 'height', height);
     this.leftHandler.setAttributeNS(null, 'transform', 'translate(0, 0)');
+    this.leftHandler.style.fill = color;
+
     const rightHandlerTranslate = `translate(${width - this.params.handlerWidth}, 0)`;
     this.rightHandler.setAttributeNS(null, 'height', height);
     this.rightHandler.setAttributeNS(null, 'transform', rightHandlerTranslate);
+    this.rightHandler.style.fill = color;
   }
 
   inArea(context, datum, x1, y1, x2, y2) {

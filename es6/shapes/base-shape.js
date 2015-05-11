@@ -103,7 +103,7 @@ class BaseShape {
    * // @param  context <Context> the context the layer which owns this item
    * @return  <DOMElement> the DOM element to insert in the item's group
    */
-  render() {}
+  render(context) {}
 
   /**
    * @param  group <DOMElement> group of the item in which the shape is drawn
