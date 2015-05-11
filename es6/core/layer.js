@@ -166,7 +166,7 @@ class Layer {
   edit(item, dx, dy, target) {
     const datum = d3.select(item).datum();
     const shape = this._itemShapeMap.get(item);
-    this.behavior.edit(shape, datum, dx, dy, target);
+    this.behavior.edit(this.context, shape, datum, dx, dy, target);
   }
 
   // --------------------------------------

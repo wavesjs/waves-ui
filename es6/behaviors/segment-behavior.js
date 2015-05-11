@@ -3,7 +3,7 @@ const BaseBehavior = require('./base-behavior');
 class SegmentBehavior extends BaseBehavior {
   // constructor() {}
 
-  edit(shape, datum, dx, dy, target) {
+  edit(context, shape, datum, dx, dy, target) {
     let action = 'move';
     const classList = target.classList;
 
@@ -13,21 +13,19 @@ class SegmentBehavior extends BaseBehavior {
       action = 'resizeRight';
     }
 
-    this[`_${action}`](shape, datum, dx, dy, target);
+    this[`_${action}`](context, shape, datum, dx, dy, target);
   }
 
-  _move(shape, datum, dx, dy, target) {
-    const ctx = this._layer.context;
-    const layerHeight = ctx.params.height;
+  _move(context, shape, datum, dx, dy, target) {
+    const layerHeight = context.params.height;
     // current values
-    const x = ctx.xScale(shape.x(datum));
-    const y = ctx.yScale(shape.y(datum));
-    const height = ctx.yScale(shape.height(datum));
-    // define targets
-    let targetX = x + dx;
+    const x = context.xScale(shape.x(datum));
+    const y = context.yScale(shape.y(datum));
+    const height = context.yScale(shape.height(datum));
+    // target values
+    let targetX = Math.max(x + dx, 0);
     let targetY = y - dy;
 
-    // if something to lock, do it here
     // lock in layer's y axis
     if (targetY < 0) {
       targetY = 0;
@@ -35,37 +33,30 @@ class SegmentBehavior extends BaseBehavior {
       targetY = layerHeight - height
     }
 
-    shape.x(datum, ctx.xScale.invert(targetX));
-    shape.y(datum, ctx.yScale.invert(targetY));
+    shape.x(datum, context.xScale.invert(targetX));
+    shape.y(datum, context.yScale.invert(targetY));
   }
 
-  _resizeLeft(shape, datum, dx, dy, target) {
-    const ctx = this._layer.context;
+  _resizeLeft(context, shape, datum, dx, dy, target) {
     // current values
-    const x     = ctx.xScale(shape.x(datum));
-    const width = ctx.xScale(shape.width(datum));
-    // define targets
-    let targetX     = x + dx;
-    let targetWidth = width - dx;
+    const x     = context.xScale(shape.x(datum));
+    const width = context.xScale(shape.width(datum));
+    // target values
+    let maxTargetX  = x + width;
+    let targetX     = x + dx < maxTargetX ? Math.max(x + dx, 0) : x;
+    let targetWidth = targetX !== 0 ? Math.max(width - dx, 1) : width;
 
-    // if something to lock, do it here
-    targetWidth = Math.max(targetWidth, 1);
-
-    shape.x(datum, ctx.xScale.invert(targetX));
-    shape.width(datum, ctx.xScale.invert(targetWidth));
+    shape.x(datum, context.xScale.invert(targetX));
+    shape.width(datum, context.xScale.invert(targetWidth));
   }
 
-  _resizeRight(shape, datum, dx, dy, target) {
-    const ctx = this._layer.context;
+  _resizeRight(context, shape, datum, dx, dy, target) {
     // current values
-    const width = ctx.xScale(shape.width(datum));
-    // define targets
-    let targetWidth = width + dx;
+    const width = context.xScale(shape.width(datum));
+    // target values
+    let targetWidth = Math.max(width + dx, 1);
 
-    // if something to lock, do it here
-    targetWidth = Math.max(targetWidth, 1);
-
-    shape.width(datum, ctx.xScale.invert(targetWidth));
+    shape.width(datum, context.xScale.invert(targetWidth));
   }
 }
 
