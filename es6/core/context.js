@@ -3,7 +3,7 @@ const ns = require('./namespace');
 
 class Context {
   constructor(parent = null, options = {}) {
-    this.parent = parent;
+    this._parent = parent;
     this.params = Object.assign({}, options);
 
     this._xScale = null; // inherits from parent context
@@ -39,8 +39,8 @@ class Context {
   get xScale() {
     let xScale;
 
-    if (this.parent && !this._xScale) {
-      xScale = this.parent.xScale;
+    if (this._parent && !this._xScale) {
+      xScale = this._parent.xScale;
     } else {
       xScale = this._xScale;
     }
@@ -63,13 +63,13 @@ class Context {
     let scale;
 
     // lazy bind originalXScale on top of the tree
-    if (!this.parent && !this._originalXScale) {
+    if (!this._parent && !this._originalXScale) {
       this._originalXScale = this._xScale;
     }
 
     // returns the closest available xScale in the tree
-    if (this.parent) {
-      scale = this.parent.originalXScale;
+    if (this._parent) {
+      scale = this._parent.originalXScale;
     } else {
       scale = this._originalXScale;
     }
@@ -104,8 +104,8 @@ class Context {
   }
 
   set stretchRatio(ratio) {
-    // @NOTE: what about negative ratios
-    if (ratio === 1) {
+    // don't remove xScale on top of the graph
+    if (ratio === 1 && this._parent) {
       this._xScale = null;
     } else {
       const xScale = this.originalXScale.copy();

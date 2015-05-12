@@ -28,13 +28,12 @@ class Line extends BaseShape {
     // console.log(data);
 
     let instructions = data.map((datum, index) => {
-      const command = index === 0 ? 'M' : 'L';
       const x = context.xScale(this.cx(datum));
       const y = context.yScale(this.cy(datum));
-      return command + x + ',' + y;
+      return x + ',' + y;
     });
 
-    return instructions.join();
+    return 'M' + instructions.join('L');
   }
 
   _getAccessorList() {
