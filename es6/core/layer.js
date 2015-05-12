@@ -23,29 +23,41 @@ class Layer {
     this.group = null; // group created by the layer inside the context
     this.items = null; // d3 collection of the layer items
 
-    // @NOTE remove in favor of LayerGroup ?
-    // @private ?
-    this.innerLayers = [];
+    this._shapeConfiguration = null; // { ctor, accessors, options }
+    this._commonShapeConfiguration = null; // { ctor, accessors, options }
 
-    // ctor => accessors
-    this._shapeConfiguration = null; // { ctor, accessors }
-    this._commonShapeConfiguration = null; // { ctor, accessors }
-    // item group <DOMElement> => shape
-    this._itemShapeMap = new Map();
+    this._itemShapeMap = new Map(); // item group <DOMElement> => shape
     this._itemCommonShapeMap = new Map(); // one entry max in this map
 
+    // component configuration
     this._behavior = null;
+    this._context = null;
+    this._contextAttributes = null;
   }
 
   initialize(parentContext) {
-    this.context = new Context(parentContext, {
+    this._context = new Context(parentContext, {
       height: this.params.height,
       top: this.params.top,
       debug: this.params.debugContext
     });
 
-    this.context.addClass('layer');
+    this._context.addClass('layer');
+
+    // maintain a reference of the context state to be used in application
+    this._contextAttributes = {
+      start: this._context.start,
+      duration: this._context.duration,
+      offset: this._context.offset,
+      stretchRatio: this._context.stretchRatio,
+      yDomain: this._context.yDomain,
+      opacity: this._context.opacity
+    };
   }
+
+  // --------------------------------------
+  // Data
+  // --------------------------------------
 
   get data() { return this._data; }
 
@@ -65,16 +77,11 @@ class Layer {
     }
   }
 
-  // @NOTE remove in favor of layer's Group ?
-  addLayer(layer) {
-    // @TODO insert a layer inside an already existing layers
-    layer.initialize(this.context);
-    this.innerLayers.push(layer);
-  }
+  // --------------------------------------
+  // Component Configuration
+  // --------------------------------------
 
-  // --------------------------------------
-  // Configure Component
-  // --------------------------------------
+  // @TODO handle `options` parameter to configure the Shapes
 
   /**
    *  Register the shape and its accessors to use in order to render
@@ -83,7 +90,7 @@ class Layer {
    *  @param accessors <Object> accessors to use in order to map the data structure
    */
   setShape(ctor, accessors = {}, options = {}) {
-    this._shapeConfiguration = { ctor, accessors };
+    this._shapeConfiguration = { ctor, accessors, options };
   }
 
   /**
@@ -93,7 +100,7 @@ class Layer {
    *  @param accessors <Object> accessors to use in order to map the data structure
    */
   setCommonShape(ctor, accessors = {}, options = {}) {
-    this._commonShapeConfiguration = { ctor, accessors };
+    this._commonShapeConfiguration = { ctor, accessors, options };
   }
 
   /**
@@ -106,37 +113,25 @@ class Layer {
   }
 
   // --------------------------------------
-  // Context Accessors
+  // Context Attributes Accessors
   // --------------------------------------
 
-  // @TODO setContextParameters
-  // @TODO use an object to share a reference with application code
+  /**
+   *  Use an external obj to use as the `contextAttribute` wrapper
+   *  @param obj <Object>
+   */
+  set contextAttributes(obj) { this._contextAttributes = obj; }
+  get contextAttributes() { return this._contextAttributes; }
 
-  // context accessors - these are only commands
-  get contextConfiguration() {}
-
-  // these parameters should be in an object to work with references
-  get start() { return this.context.start; }
-  set start(value) { this.context.start = value; }
-
-  get duration() { return this.context.duration; }
-  set duration(value) { this.context.duration = value; }
-
-  get offset() { return this.context.offset; }
-  set offset(value) { this.context.offset = value; }
-
-  get stretchRatio() { return this.context.stretchRatio; }
-  set stretchRatio(value) { this.context.stretchRatio = value; }
-
-  get yDomain() { return this.context.yDomain; }
-  set yDomain(value) { this.context.yDomain = value; }
-
-  get opacity() { return this.context.opacity; }
-  set opacity(value) { this.context.opacity = value; }
-
-  // @NOTE : move this in higher abstraction level ? => probably yes
-  // apply the stretch ration on the data, reset stretch to 1
-  // applyStretch() {}
+  /**
+   *  update a given attribute of the context
+   *  @param name <String> the key of the attribute to update
+   *  @param value <mixed>
+   */
+  setContextAttribute(name, value) {
+    this._contextAttributes[name] = value;
+    this._context[name] = value;
+  }
 
   // --------------------------------------
   // Behavior Accessors
@@ -184,7 +179,7 @@ class Layer {
   edit(item, dx, dy, target) {
     const datum = d3.select(item).datum();
     const shape = this._itemShapeMap.get(item);
-    this._behavior.edit(this.context, shape, datum, dx, dy, target);
+    this._behavior.edit(this._context, shape, datum, dx, dy, target);
   }
 
   // --------------------------------------
@@ -192,7 +187,7 @@ class Layer {
   // --------------------------------------
 
   /**
-   * @return <DOMElement> the closest parent `item` group for a given DOM element
+   *  @return <DOMElement> the closest parent `item` group for a given DOM element
    */
   _getItemFromDOMElement(el) {
     do {
@@ -202,14 +197,19 @@ class Layer {
     } while (el = el.parentNode);
   }
 
+  /**
+   *  moves an `item`'s group to the end of the layer (svg z-index...)
+   *  @param `item` <DOMElement> the item to be moved
+   */
   _toFront(item) {
     this.group.appendChild(item);
   }
 
   /**
-   *  @param <DOMElement> the element we want to find the closest `.item` group
+   *  Define if an given DOM element belongs to one of the `items`
+   *  @param `el` <DOMElement> the element to be tested
    *  @return <mixed>
-   *    <DOMElement> item group containing the el if belongs to this layer
+   *    <DOMElement> item group containing the `el` if belongs to this layer
    *    null otherwise
    */
   hasItem(el) {
@@ -223,9 +223,9 @@ class Layer {
    */
   getItemsInArea(area) {
     // work in pixel domain
-    const start    = this.context.xScale(this.context.start);
-    const duration = this.context.xScale(this.context.duration);
-    const offset   = this.context.xScale(this.context.offset);
+    const start    = this._context.xScale(this._context.start);
+    const duration = this._context.xScale(this._context.duration);
+    const offset   = this._context.xScale(this._context.offset);
     const top      = this.params.top;
     // must be aware of the layer's context modifications
     // constrain in working view
@@ -235,7 +235,7 @@ class Layer {
     x1 -= (start + offset);
     x2 -= (start + offset);
     // @FIXME stretchRatio breaks selection
-    // x2 *= this.context.stretchRatio;
+    // x2 *= this._context.stretchRatio;
     // be consistent with context y coordinates system
     let y1 = this.params.height - (area.top + area.height);
     let y2 = this.params.height - area.top;
@@ -244,7 +244,7 @@ class Layer {
     y2 += this.params.top;
 
     const itemShapeMap = this._itemShapeMap;
-    const context = this.context;
+    const context = this._context;
 
     const items = this.items.filter(function(datum, index) {
       const group = this;
@@ -268,18 +268,14 @@ class Layer {
     // matrix to invert the coordinate system
     const invertMatrix = `matrix(1, 0, 0, -1, 0, ${height})`;
     // create the DOM of the context
-    const el = this.context.render();
+    const el = this._context.render();
     // create a group to flip the context of the layer
     this.group = document.createElementNS(ns, 'g');
     this.group.classList.add('items');
     this.group.setAttributeNS(null, 'transform', invertMatrix);
     // append the group to the context
-    this.context.offsetGroup.appendChild(this.group);
-    const innerGroup = this.context.offsetGroup;
-
-    this.innerLayers.forEach((layer) => {
-      innerGroup.appendChild(layer.render())
-    });
+    this._context.offsetGroup.appendChild(this.group);
+    const innerGroup = this._context.offsetGroup;
 
     return el;
   }
@@ -307,9 +303,9 @@ class Layer {
 
     // handle commonShapes
     if (this._commonShapeConfiguration !== null) {
-      const { ctor, accessors } = this._commonShapeConfiguration;
+      const { ctor, accessors, options } = this._commonShapeConfiguration;
       const group = document.createElementNS(ns, 'g');
-      const shape = new ctor(group);
+      const shape = new ctor(options);
 
       shape.install(accessors);
       group.appendChild(shape.render());
@@ -325,12 +321,12 @@ class Layer {
         // @NOTE: d3 binds `this` to the container group
         // create a group for the item
         const group = document.createElementNS(ns, 'g');
-        const { ctor, accessors } = this._shapeConfiguration;
-        const shape = new ctor();
+        const { ctor, accessors, options } = this._shapeConfiguration;
+        const shape = new ctor(options);
         // install accessors on the newly created shape
         shape.install(accessors);
 
-        group.appendChild(shape.render(this.context));
+        group.appendChild(shape.render(this._context));
         group.classList.add('item', shape.getClassName());
 
         this._itemShapeMap.set(group, shape);
@@ -351,9 +347,6 @@ class Layer {
         that._itemShapeMap.delete(group); // destroy reference in item shape map
       })
       .remove();
-
-    // render innerLayers
-    this.innerLayers.forEach((layer) => layer.draw());
   }
 
   /**
@@ -369,9 +362,7 @@ class Layer {
    */
   updateContext() {
     // update context
-    this.context.update();
-    // update innerLayers
-    this.innerLayers.forEach((layer) => layer.updateContext());
+    this._context.update();
   }
 
   /**
@@ -380,7 +371,7 @@ class Layer {
    */
   updateShapes(item = null) {
     const that = this;
-    const context = this.context;
+    const context = this._context;
     const items = item !== null ? d3.selectAll(item) : this.items;
 
     // update common shapes
@@ -395,9 +386,6 @@ class Layer {
       const shape = that._itemShapeMap.get(group);
       shape.update(context, group, datum, index);
     });
-
-    // update innerLayers
-    this.innerLayers.forEach((layer) => layer.updateShapes());
   }
 }
 

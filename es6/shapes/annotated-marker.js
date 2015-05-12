@@ -19,7 +19,6 @@ class AnnotatedMarker extends Marker {
     this.label.style.fontFamily = 'monospace';
     this.label.style.color = '#676767';
 
-
     this.shape.appendChild(this.label);
 
     return this.shape;
