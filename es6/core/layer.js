@@ -142,9 +142,13 @@ class Layer {
    *  @NOTE API -> change for an Array as first argument
    *  @TODO     -> handle if no behavior is registered
    */
-  get selectedItems() { return this._behavior.selectedItems; }
+  get selectedItems() {
+    return this._behavior ? this._behavior.selectedItems : [];
+  }
 
   select(...items) {
+    if (!this._behavior) { return; }
+
     items.forEach((item) => {
       const datum = d3.select(item).datum();
       this._behavior.select(item, datum);
@@ -153,6 +157,8 @@ class Layer {
   }
 
   unselect(...items) {
+    if (!this._behavior) { return; }
+
     items.forEach((item) => {
       const datum = d3.select(item).datum();
       this._behavior.unselect(item, datum);
@@ -168,6 +174,8 @@ class Layer {
   }
 
   toggleSelection(...items) {
+    if (!this._behavior) { return; }
+
     items.forEach((item) => {
       const datum = d3.select(item).datum();
       this._behavior.toggleSelection(item, datum);

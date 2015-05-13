@@ -1,24 +1,14 @@
 const ns = require('../core/namespace');
 
-// @NOTE what about an `EntityShape` and a `CollectionShape`
-
 class BaseShape {
-  /*
-    remove all references in constructor
-    add all necessary arguments todraw and create
-    rename:
-      _getAccessorList
-      create => render
-      draw => update
-  */
   /**
-   *
+   *  @param options <Object> override default configuration
    */
   constructor(options = {}) {
     this.shape = null;
     this.ns = ns;
     this.params = Object.assign({}, this._getDefaults(), options);
-
+    // create accessors methods and set default accessor functions
     const accessors = this._getAccessorList();
     this._createAccessors(accessors);
     this._setDefaultAccessors(accessors);
@@ -100,7 +90,7 @@ class BaseShape {
   }
 
   /**
-   * // @param  context <Context> the context the layer which owns this item
+   * @param  context <Context> the context the layer which owns this item
    * @return  <DOMElement> the DOM element to insert in the item's group
    */
   render(context) {}
@@ -117,8 +107,6 @@ class BaseShape {
    * @return  void
    */
   update(context, group, datum, index) {}
-
-  // move(dx, dy, datum, context) {}
 
   /**
    *  define if the shape is considered to be the given area

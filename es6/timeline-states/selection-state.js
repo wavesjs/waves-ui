@@ -1,6 +1,9 @@
 const BaseState = require('./base-state');
 const ns = require('../core/namespace');
 
+/**
+ *  @NOTE Buggy
+ */
 class SelectionState extends BaseState {
   constructor(timeline) {
     super(timeline);

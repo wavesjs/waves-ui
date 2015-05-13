@@ -157,7 +157,7 @@ class Context {
     this.group.appendChild(this.boundingBox);
     this.boundingBox.appendChild(this.offsetGroup);
   }
-  // should be `update
+
   render() {
     return this.group;
   }
