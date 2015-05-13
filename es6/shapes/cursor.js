@@ -21,7 +21,7 @@ class Cursor extends BaseShape {
     this.shape = document.createElementNS(ns, 'line');
     this.shape.setAttributeNS(null, 'x', 0);
     this.shape.setAttributeNS(null, 'y1', 0);
-    this.shape.setAttributeNS(null, 'y2', context.params.height);
+    this.shape.setAttributeNS(null, 'y2', context.height);
     this.shape.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
     return this.shape;

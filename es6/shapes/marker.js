@@ -15,7 +15,7 @@ class Marker extends BaseShape {
   render(context) {
     if (this.shape) { return this.shape; }
 
-    const height = context.params.height;
+    const height = context.height;
 
     this.shape = document.createElementNS(this.ns, 'g');
     this.line = document.createElementNS(this.ns, 'rect');
@@ -29,7 +29,7 @@ class Marker extends BaseShape {
     this.line.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
     this.handler.setAttributeNS(null, 'x', -((this.params.handlerWidth - 1) / 2));
-    this.handler.setAttributeNS(null, 'y', context.params.height - this.params.handlerHeight);
+    this.handler.setAttributeNS(null, 'y', context.height - this.params.handlerHeight);
     this.handler.setAttributeNS(null, 'width', this.params.handlerWidth);
     this.handler.setAttributeNS(null, 'height', this.params.handlerHeight);
     this.handler.setAttributeNS(null, 'shape-rendering', 'crispEdges');
@@ -55,8 +55,8 @@ class Marker extends BaseShape {
     const x = context.xScale(this.x(datum));
     const shapeX1 = x - (this.params.handlerWidth - 1) / 2;
     const shapeX2 = shapeX1 + this.params.handlerWidth;
-    const shapeY1 = context.params.height - this.params.handlerHeight;
-    const shapeY2 = context.params.height;
+    const shapeY1 = context.height - this.params.handlerHeight;
+    const shapeY2 = context.height;
 
     const xOverlap = Math.max(0, Math.min(x2, shapeX2) - Math.max(x1, shapeX1));
     const yOverlap = Math.max(0, Math.min(y2, shapeY2) - Math.max(y1, shapeY1));

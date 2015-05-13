@@ -14,6 +14,8 @@ class Layer {
     const defaults = {
       height: 100, // should inherit from parent
       top: 0,
+      yDomain: [0, 1],
+      opacity: 1,
       debugContext: false, // pass the context in debug mode
     }
 
@@ -33,8 +35,20 @@ class Layer {
     this._behavior = null;
     this._context = null;
     this._contextAttributes = null;
+
+    // ...
+    this._yScale = d3.scale.linear()
+      .domain(this.params.yDomain)
+      .range([0, this.params.height]);
   }
 
+  set yDomain(value) {}
+  set opacity(value) {}
+  // set height(value) {} ?
+
+  /**
+   *  @TODO : replace with `setContext(context)`
+   */
   initialize(parentContext) {
     this._context = new Context(parentContext, {
       height: this.params.height,
@@ -42,16 +56,19 @@ class Layer {
       debug: this.params.debugContext
     });
 
-    this._context.addClass('layer');
-
     // maintain a reference of the context state to be used in application
     this._contextAttributes = {
       start: this._context.start,
       duration: this._context.duration,
       offset: this._context.offset,
-      stretchRatio: this._context.stretchRatio,
-      yDomain: this._context.yDomain,
-      opacity: this._context.opacity
+      stretchRatio: this._context.stretchRatio
+    };
+
+    // create a mixin to pass to shapes
+    this._renderingContext = {
+      xScale: this._context.xScale,
+      yScale: this._yScale,
+      height: this.params.height
     };
   }
 
@@ -133,6 +150,11 @@ class Layer {
     this._context[name] = value;
   }
 
+  addSlave(layer) {
+    layer.contextAttributes = this.contextAttributes;
+    layer._context = this._context;
+  }
+
   // --------------------------------------
   // Behavior Accessors
   // --------------------------------------
@@ -146,8 +168,9 @@ class Layer {
     return this._behavior ? this._behavior.selectedItems : [];
   }
 
-  select(...items) {
-    if (!this._behavior) { return; }
+  select(items) {
+    if (!this._behavior || !items) { return; }
+    items = Array.isArray(items) ? items : [items];
 
     items.forEach((item) => {
       const datum = d3.select(item).datum();
@@ -156,15 +179,16 @@ class Layer {
     });
   }
 
-  unselect(...items) {
-    if (!this._behavior) { return; }
+  unselect(items) {
+    if (!this._behavior || !items) { return; }
+    items = Array.isArray(items) ? items : [items];
 
     items.forEach((item) => {
       const datum = d3.select(item).datum();
       this._behavior.unselect(item, datum);
     });
   }
-  // @TODO test
+
   selectAll() {
     this.items.forEach((item) => this.select(item));
   }
@@ -173,8 +197,9 @@ class Layer {
     this.selectedItems.forEach((item) => this.unselect(item));
   }
 
-  toggleSelection(...items) {
-    if (!this._behavior) { return; }
+  toggleSelection(items) {
+    if (!this._behavior || !items) { return; }
+    items = Array.isArray(items) ? items : [items];
 
     items.forEach((item) => {
       const datum = d3.select(item).datum();
@@ -264,28 +289,35 @@ class Layer {
   }
 
   // helper to add some class or stuff on items
-  each(callback = null) {}
+  // each(callback) { this._each = callback }
 
   /**
    *  creates the layer group with a transformation matrix to flip the coordinate system.
-   *  @NOTE: put the context inside the layer group ? reverse the DOM order
+   *  @return <DOMElement>
    */
   render() {
-    const height = this.params.height;
-    const top    = this.params.top;
-    // matrix to invert the coordinate system
-    const invertMatrix = `matrix(1, 0, 0, -1, 0, ${height})`;
-    // create the DOM of the context
-    const el = this._context.render();
-    // create a group to flip the context of the layer
+    // wrapper group for `start, top and context flip matrix
+    this.container = document.createElementNS(ns, 'g');
+    this.container.classList.add('layer');
+    // append a svg to clip the context
+    this.boundingBox = document.createElementNS(ns, 'svg')
+    // group to apply offset
     this.group = document.createElementNS(ns, 'g');
     this.group.classList.add('items');
-    this.group.setAttributeNS(null, 'transform', invertMatrix);
-    // append the group to the context
-    this._context.offsetGroup.appendChild(this.group);
-    const innerGroup = this._context.offsetGroup;
 
-    return el;
+    // append the group to the context
+    this.container.appendChild(this.boundingBox);
+    this.boundingBox.appendChild(this.group);
+
+    // draw a rect in context background to debug it's size
+    if (this.params.debug) {
+      this.debugRect = document.createElementNS(ns, 'rect');
+      this.boundingBox.appendChild(this.debugRect);
+      this.debugRect.style.fill = '#ababab';
+      this.debugRect.style.fillOpacity = 0.1;
+    }
+
+    return this.container;
   }
 
   /**
@@ -309,8 +341,11 @@ class Layer {
         return _datumIdMap.get(datum);
       });
 
-    // handle commonShapes
-    if (this._commonShapeConfiguration !== null) {
+    // handle commonShapes -> render only once
+    if (
+      this._commonShapeConfiguration !== null &&
+      this._itemCommonShapeMap.size === 0
+    ) {
       const { ctor, accessors, options } = this._commonShapeConfiguration;
       const group = document.createElementNS(ns, 'g');
       const shape = new ctor(options);
@@ -334,7 +369,7 @@ class Layer {
         // install accessors on the newly created shape
         shape.install(accessors);
 
-        group.appendChild(shape.render(this._context));
+        group.appendChild(shape.render(this._renderingContext));
         group.classList.add('item', shape.getClassName());
 
         this._itemShapeMap.set(group, shape);
@@ -348,7 +383,7 @@ class Layer {
     this.items.exit()
       .each(function(datum, index) {
         const group = this;
-        const shape = that._itemShapesMap.get(group);
+        const shape = that._itemShapeMap.get(group);
 
         shape.destroy(); // clean shape
         _datumIdMap.delete(datum); // clean reference in `id` map
@@ -369,8 +404,26 @@ class Layer {
    *  updates DOM context only
    */
   updateContext() {
-    // update context
-    this._context.update();
+    const x      = this._context.originalXScale(this._context.start);
+    const width  = this._context.xScale(this._context.duration);
+    const offset = this._context.xScale(this._context.offset);
+    const top    = this.params.top;
+    const height = this.params.height;
+    // matrix to invert the coordinate system
+    const translateMatrix = `matrix(1, 0, 0, -1, ${x}, ${top + height})`;
+
+    this.container.setAttributeNS(null, 'transform', translateMatrix);
+
+    this.boundingBox.setAttributeNS(null, 'width', width);
+    this.boundingBox.setAttributeNS(null, 'height', height);
+    this.boundingBox.style.opacity = this.params.opacity;
+
+    this.group.setAttributeNS(null, 'transform', `translate(${offset}, 0)`);
+
+    if (this.params.debug) {
+      this.debugRect.setAttributeNS(null, 'width', width);
+      this.debugRect.setAttributeNS(null, 'height', height);
+    }
   }
 
   /**
@@ -379,12 +432,12 @@ class Layer {
    */
   updateShapes(item = null) {
     const that = this;
-    const context = this._context;
+    const renderingContext = this._renderingContext;
     const items = item !== null ? d3.selectAll(item) : this.items;
 
     // update common shapes
     this._itemCommonShapeMap.forEach((shape, item) => {
-      shape.update(context, item, this.data);
+      shape.update(renderingContext, item, this.data);
     });
 
     // update entity or collection shapes
@@ -392,7 +445,7 @@ class Layer {
       // update all shapes related to the current item
       const group = this; // current `g.item`
       const shape = that._itemShapeMap.get(group);
-      shape.update(context, group, datum, index);
+      shape.update(renderingContext, group, datum, index);
     });
   }
 }

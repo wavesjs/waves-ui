@@ -9,7 +9,7 @@ class AnnotatedMarker extends Marker {
 
   render(context) {
     this.shape = super.render(context);
-    const height = context.params.height;
+    const height = context.height;
 
     this.label = document.createElementNS(this.ns, 'text');
     this.label.setAttributeNS(null, 'x', 10);
