@@ -1,4 +1,3 @@
-const Context = require('./context');
 const ns = require('./namespace');
 const d3 = require('d3')
 
@@ -7,7 +6,7 @@ let _counter = 0;
 const _datumIdMap = new Map();
 
 class Layer {
-  constructor(dataType = 'collection', data = [], options = {}) {
+  constructor(context, dataType = 'collection', data = [], options = {}) {
     this.dataType = dataType; // 'entity' || 'collection';
     this.data = data;
 
@@ -21,7 +20,7 @@ class Layer {
 
     this.params = Object.assign({}, defaults, options);
 
-    // this.container = null; // offset group of the parent context
+    this.container = null; // offset group of the parent context
     this.group = null; // group created by the layer inside the context
     this.items = null; // d3 collection of the layer items
 
@@ -36,10 +35,12 @@ class Layer {
     this._context = null;
     this._contextAttributes = null;
 
-    // ...
     this._yScale = d3.scale.linear()
       .domain(this.params.yDomain)
       .range([0, this.params.height]);
+
+    // initialize context
+    this.setContext(context);
   }
 
   set yDomain(domain) {
@@ -53,14 +54,11 @@ class Layer {
 
 
   /**
-   *  @TODO : replace with `setContext(context)`
+   *  define
+   *  @param context {TimeContext} the timeContext in which the layer is displayed
    */
-  initialize(parentContext) {
-    this._context = new Context(parentContext, {
-      height: this.params.height,
-      top: this.params.top,
-      debug: this.params.debugContext
-    });
+  setContext(context) {
+    this._context = context;
 
     // maintain a reference of the context state to be used in application
     this._contextAttributes = {

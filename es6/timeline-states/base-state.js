@@ -18,7 +18,7 @@ class BaseState {
 
   /**
    *  handle registered inputs from surface, keyboard, etc...
-   *  @param <Event> the event to process
+   *  @param {Event} the event to process
    */
   handleEvent(e) {}
 }

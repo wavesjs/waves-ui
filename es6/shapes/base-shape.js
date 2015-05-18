@@ -2,7 +2,7 @@ const ns = require('../core/namespace');
 
 class BaseShape {
   /**
-   *  @param options <Object> override default configuration
+   *  @param options {Object} override default configuration
    */
   constructor(options = {}) {
     this.shape = null;
@@ -19,7 +19,7 @@ class BaseShape {
   }
 
   /**
-   *  clean references, is called from the `layer
+   *  clean references, is called from the `layer`
    */
   destroy() {
     // this.group = null;
@@ -27,7 +27,7 @@ class BaseShape {
   }
 
   /**
-   * @return <String> the name of the shape, used as a class in the element group
+   * @return {String} the name of the shape, used as a class in the element group
    */
   getClassName() { return 'shape'; }
 
@@ -36,7 +36,7 @@ class BaseShape {
 
   /**
    * @TODO rename
-   * @return <Object>
+   * @return {Object}
    *    keys are the accessors methods names to create
    *    values are the default values for each given accessor
    */
@@ -90,19 +90,19 @@ class BaseShape {
   }
 
   /**
-   * @param  renderingContext <Context> the renderingContext the layer which owns this item
-   * @return  <DOMElement> the DOM element to insert in the item's group
+   * @param  renderingContext {Context} the renderingContext the layer which owns this item
+   * @return  {DOMElement} the DOM element to insert in the item's group
    */
   render(renderingContext) {}
 
   /**
-   * @param  group <DOMElement> group of the item in which the shape is drawn
-   * @param  renderingContext <Context> the renderingContext the layer which owns this item
+   * @param  group {DOMElement} group of the item in which the shape is drawn
+   * @param  renderingContext {Context} the renderingContext the layer which owns this item
    * @param
-   *    simpleShape : datum <Object> the datum related to this item's group
-   *    commonShape : datum <Array> the associated to the Layer
+   *    simpleShape : datum {Object} the datum related to this item's group
+   *    commonShape : datum {Array} the associated to the Layer
    * @param
-   *    simpleShape : index <Number> the current index of the datum
+   *    simpleShape : index {Number} the current index of the datum
    *    commonShape : undefined
    * @return  void
    */
@@ -111,7 +111,7 @@ class BaseShape {
   /**
    *  define if the shape is considered to be the given area
    *  arguments are passed in domain unit (time, whatever)
-   *  @return <Boolean>
+   *  @return {Boolean}
    */
   inArea(renderingContext, datum, x1, y1, x2, y2) {}
 }

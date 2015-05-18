@@ -27,8 +27,8 @@ class BaseBehavior {
   get selectedItems() { return [...this._selectedItems]; }
 
   /**
-   *  @param item <DOMElement> the item to select
-   *  @param datum <Object> the related datum (@NOTE remove it ?)
+   *  @param item {DOMElement} the item to select
+   *  @param datum {Object} the related datum (@NOTE remove it ?)
    */
   select(item, datum) {
     item.classList.add(this.selectedClass);
@@ -36,8 +36,8 @@ class BaseBehavior {
   }
 
   /**
-   *  @param item <DOMElement> the item to select
-   *  @param datum <Object> the related datum (@NOTE remove it ?)
+   *  @param item {DOMElement} the item to select
+   *  @param datum {Object} the related datum (@NOTE remove it ?)
    */
   unselect(item, datum) {
     item.classList.remove(this.selectedClass);
@@ -46,8 +46,8 @@ class BaseBehavior {
 
   /**
    *  @NOTE is this really usefull ?
-   *  @param item <DOMElement> the item to select
-   *  @param datum <Object> the related datum (@NOTE remove it ?)
+   *  @param item {DOMElement} the item to select
+   *  @param datum {Object} the related datum (@NOTE remove it ?)
    */
   toggleSelection(item, datum) {
     const method = this._selectedItems.has(item) ? 'unselect' : 'select';
