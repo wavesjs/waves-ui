@@ -12,10 +12,10 @@ class Marker extends BaseShape {
     }
   }
 
-  render(context) {
+  render(renderingContext) {
     if (this.shape) { return this.shape; }
 
-    const height = context.height;
+    const height = renderingContext.height;
 
     this.shape = document.createElementNS(this.ns, 'g');
     this.line = document.createElementNS(this.ns, 'rect');
@@ -29,7 +29,7 @@ class Marker extends BaseShape {
     this.line.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
     this.handler.setAttributeNS(null, 'x', -((this.params.handlerWidth - 1) / 2));
-    this.handler.setAttributeNS(null, 'y', context.height - this.params.handlerHeight);
+    this.handler.setAttributeNS(null, 'y', renderingContext.height - this.params.handlerHeight);
     this.handler.setAttributeNS(null, 'width', this.params.handlerWidth);
     this.handler.setAttributeNS(null, 'height', this.params.handlerHeight);
     this.handler.setAttributeNS(null, 'shape-rendering', 'crispEdges');
@@ -40,8 +40,8 @@ class Marker extends BaseShape {
     return this.shape;
   }
 
-  update(context, group, datum, index) {
-    const x = context.xScale(this.x(datum));
+  update(renderingContext, group, datum, index) {
+    const x = renderingContext.xScale(this.x(datum));
     const color = this.color(datum);
 
     group.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
@@ -50,13 +50,13 @@ class Marker extends BaseShape {
     this.handler.style.fill = color;
   }
 
-  inArea(context, datum, x1, y1, x2, y2) {
+  inArea(renderingContext, datum, x1, y1, x2, y2) {
     // handlers only are selectable
-    const x = context.xScale(this.x(datum));
+    const x = renderingContext.xScale(this.x(datum));
     const shapeX1 = x - (this.params.handlerWidth - 1) / 2;
     const shapeX2 = shapeX1 + this.params.handlerWidth;
-    const shapeY1 = context.height - this.params.handlerHeight;
-    const shapeY2 = context.height;
+    const shapeY1 = renderingContext.height - this.params.handlerHeight;
+    const shapeY2 = renderingContext.height;
 
     const xOverlap = Math.max(0, Math.min(x2, shapeX2) - Math.max(x1, shapeX1));
     const yOverlap = Math.max(0, Math.min(y2, shapeY2) - Math.max(y1, shapeY1));

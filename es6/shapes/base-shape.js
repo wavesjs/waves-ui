@@ -90,14 +90,14 @@ class BaseShape {
   }
 
   /**
-   * @param  context <Context> the context the layer which owns this item
+   * @param  renderingContext <Context> the renderingContext the layer which owns this item
    * @return  <DOMElement> the DOM element to insert in the item's group
    */
-  render(context) {}
+  render(renderingContext) {}
 
   /**
    * @param  group <DOMElement> group of the item in which the shape is drawn
-   * @param  context <Context> the context the layer which owns this item
+   * @param  renderingContext <Context> the renderingContext the layer which owns this item
    * @param
    *    simpleShape : datum <Object> the datum related to this item's group
    *    commonShape : datum <Array> the associated to the Layer
@@ -106,14 +106,14 @@ class BaseShape {
    *    commonShape : undefined
    * @return  void
    */
-  update(context, group, datum, index) {}
+  update(renderingContext, group, datum, index) {}
 
   /**
    *  define if the shape is considered to be the given area
    *  arguments are passed in domain unit (time, whatever)
    *  @return <Boolean>
    */
-  inArea(context, datum, x1, y1, x2, y2) {}
+  inArea(renderingContext, datum, x1, y1, x2, y2) {}
 }
 
 module.exports = BaseShape;

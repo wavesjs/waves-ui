@@ -57,18 +57,9 @@ class BaseBehavior {
   /**
    *  Edition behavior
    */
-  // change to (context, shape, datum, dx, dy, target)
-  edit(context, shape, datum, dx, dy, target) {
+  edit(renderingContext, shape, datum, dx, dy, target) {
     // must be implemented in children
   }
-
-  // _move(ctx, item, dx, dy, target) {}
-  // _resize(ctx, item, dx, dy, target) {}
-
-  // Rect behavior
-  // _resizeLeft(item, dx, dy) {}
-  // _resizeRight(item, dx, dy) {}
-
 }
 
 module.exports = BaseBehavior;

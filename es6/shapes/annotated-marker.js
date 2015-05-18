@@ -7,9 +7,9 @@ class AnnotatedMarker extends Marker {
     return list;
   }
 
-  render(context) {
-    this.shape = super.render(context);
-    const height = context.height;
+  render(renderingContext) {
+    this.shape = super.render(renderingContext);
+    const height = renderingContext.height;
 
     this.label = document.createElementNS(this.ns, 'text');
     this.label.setAttributeNS(null, 'x', 10);
@@ -27,8 +27,8 @@ class AnnotatedMarker extends Marker {
     return this.shape;
   }
 
-  update(context, group, datum, index) {
-    super.update(context, group, datum, index);
+  update(renderingContext, group, datum, index) {
+    super.update(renderingContext, group, datum, index);
 
     this.label.innerHTML = this.text(datum);
   }

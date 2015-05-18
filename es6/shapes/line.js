@@ -11,14 +11,14 @@ class Line extends BaseShape {
     return this.shape;
   }
 
-  update(context, group, data) {
-    this.shape.setAttributeNS(null, 'd', this._buildLine(context, data));
+  update(renderingContext, group, data) {
+    this.shape.setAttributeNS(null, 'd', this._buildLine(renderingContext, data));
     this.shape.style.stroke = this.color(data);
     this.shape.style.fill = 'none';
   }
 
   // builds the `path.d` attribute
-  _buildLine(context, data) {
+  _buildLine(renderingContext, data) {
     // sort data
     let data = data.slice(0);
     data.sort((a, b) => {
@@ -28,8 +28,8 @@ class Line extends BaseShape {
     // console.log(data);
 
     let instructions = data.map((datum, index) => {
-      const x = context.xScale(this.cx(datum));
-      const y = context.yScale(this.cy(datum));
+      const x = renderingContext.xScale(this.cx(datum));
+      const y = renderingContext.yScale(this.cy(datum));
       return x + ',' + y;
     });
 

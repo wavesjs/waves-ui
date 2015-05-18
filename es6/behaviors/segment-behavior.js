@@ -3,7 +3,7 @@ const BaseBehavior = require('./base-behavior');
 class SegmentBehavior extends BaseBehavior {
   // constructor() {}
 
-  edit(context, shape, datum, dx, dy, target) {
+  edit(renderingContext, shape, datum, dx, dy, target) {
     let action = 'move';
     const classList = target.classList;
 
@@ -13,15 +13,15 @@ class SegmentBehavior extends BaseBehavior {
       action = 'resizeRight';
     }
 
-    this[`_${action}`](context, shape, datum, dx, dy, target);
+    this[`_${action}`](renderingContext, shape, datum, dx, dy, target);
   }
 
-  _move(context, shape, datum, dx, dy, target) {
-    const layerHeight = context.params.height;
+  _move(renderingContext, shape, datum, dx, dy, target) {
+    const layerHeight = renderingContext.height;
     // current values
-    const x = context.xScale(shape.x(datum));
-    const y = context.yScale(shape.y(datum));
-    const height = context.yScale(shape.height(datum));
+    const x = renderingContext.xScale(shape.x(datum));
+    const y = renderingContext.yScale(shape.y(datum));
+    const height = renderingContext.yScale(shape.height(datum));
     // target values
     let targetX = Math.max(x + dx, 0);
     let targetY = y - dy;
@@ -33,30 +33,30 @@ class SegmentBehavior extends BaseBehavior {
       targetY = layerHeight - height
     }
 
-    shape.x(datum, context.xScale.invert(targetX));
-    shape.y(datum, context.yScale.invert(targetY));
+    shape.x(datum, renderingContext.xScale.invert(targetX));
+    shape.y(datum, renderingContext.yScale.invert(targetY));
   }
 
-  _resizeLeft(context, shape, datum, dx, dy, target) {
+  _resizeLeft(renderingContext, shape, datum, dx, dy, target) {
     // current values
-    const x     = context.xScale(shape.x(datum));
-    const width = context.xScale(shape.width(datum));
+    const x     = renderingContext.xScale(shape.x(datum));
+    const width = renderingContext.xScale(shape.width(datum));
     // target values
     let maxTargetX  = x + width;
     let targetX     = x + dx < maxTargetX ? Math.max(x + dx, 0) : x;
     let targetWidth = targetX !== 0 ? Math.max(width - dx, 1) : width;
 
-    shape.x(datum, context.xScale.invert(targetX));
-    shape.width(datum, context.xScale.invert(targetWidth));
+    shape.x(datum, renderingContext.xScale.invert(targetX));
+    shape.width(datum, renderingContext.xScale.invert(targetWidth));
   }
 
-  _resizeRight(context, shape, datum, dx, dy, target) {
+  _resizeRight(renderingContext, shape, datum, dx, dy, target) {
     // current values
-    const width = context.xScale(shape.width(datum));
+    const width = renderingContext.xScale(shape.width(datum));
     // target values
     let targetWidth = Math.max(width + dx, 1);
 
-    shape.width(datum, context.xScale.invert(targetWidth));
+    shape.width(datum, renderingContext.xScale.invert(targetWidth));
   }
 }
 

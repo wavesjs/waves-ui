@@ -17,18 +17,14 @@ class Context {
   }
 
   /**
-   * @return <Function> the closest available xScale in the tree
+   * @return {Function} the closest available xScale in the tree
    */
   get xScale() {
-    let xScale;
-
     if (this._parent && !this._xScale) {
-      xScale = this._parent.xScale;
+      return this._parent.xScale;
     } else {
-      xScale = this._xScale;
+      return this._xScale;
     }
-
-    return xScale;
   }
 
   set xScale(xScale) {
@@ -37,8 +33,6 @@ class Context {
 
   // read only
   get originalXScale() {
-    let scale;
-
     // lazy bind originalXScale on top of the tree
     if (!this._parent && !this._originalXScale) {
       this._originalXScale = this._xScale;
@@ -46,17 +40,15 @@ class Context {
 
     // returns the closest available xScale in the tree
     if (this._parent) {
-      scale = this._parent.originalXScale;
+      return this._parent.originalXScale;
     } else {
-      scale = this._originalXScale;
+      return this._originalXScale;
     }
-
-    return scale;
   }
 
-  get stretchRatio() {
-    return this._stretchRatio;
-  }
+  // get stretchRatio() {
+  //   return this._stretchRatio;
+  // }
 
   set stretchRatio(ratio) {
     // do not remove xScale on top of the graph

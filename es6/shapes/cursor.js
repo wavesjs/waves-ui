@@ -15,20 +15,20 @@ class Cursor extends BaseShape {
     };
   }
 
-  render(context) {
+  render(renderingContext) {
     if (this.shape) { return this.shape; }
 
     this.shape = document.createElementNS(ns, 'line');
     this.shape.setAttributeNS(null, 'x', 0);
     this.shape.setAttributeNS(null, 'y1', 0);
-    this.shape.setAttributeNS(null, 'y2', context.height);
+    this.shape.setAttributeNS(null, 'y2', renderingContext.height);
     this.shape.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
     return this.shape;
   }
 
-  update(context, group, datum, index) {
-    const x = context.xScale(this.x(datum));
+  update(renderingContext, group, datum, index) {
+    const x = renderingContext.xScale(this.x(datum));
     const color = this.params.color;
 
     group.setAttributeNS(null, 'transform', `translate(${x}, 0)`);

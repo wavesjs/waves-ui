@@ -2,19 +2,19 @@ const BaseBehavior = require('./base-behavior');
 
 class BreakpointBehavior extends BaseBehavior {
 
-  edit(context, shape, datum, dx, dy, target) {
+  edit(renderingContext, shape, datum, dx, dy, target) {
     const data  = this._layer.data;
-    const layerHeight = context.params.height;
+    const layerHeight = renderingContext.height;
     // current position
-    const x = context.xScale(shape.cx(datum));
-    const y = context.yScale(shape.cy(datum));
+    const x = renderingContext.xScale(shape.cx(datum));
+    const y = renderingContext.yScale(shape.cy(datum));
     // target position
     let targetX = x + dx;
     let targetY = y - dy;
 
     // create a map of all `x` positions
     // reuse accessor of the shape we know
-    const xMap = data.map((d, index) => context.xScale(shape.cx(d)));
+    const xMap = data.map((d, index) => renderingContext.xScale(shape.cx(d)));
     // sort the map
     xMap.sort((a, b) => { return a < b ? -1 : 1 });
 
@@ -33,8 +33,8 @@ class BreakpointBehavior extends BaseBehavior {
     }
 
     // update datum with new values
-    shape.cx(datum, context.xScale.invert(targetX));
-    shape.cy(datum, context.yScale.invert(targetY));
+    shape.cx(datum, renderingContext.xScale.invert(targetX));
+    shape.cy(datum, renderingContext.yScale.invert(targetY));
   }
 
 }

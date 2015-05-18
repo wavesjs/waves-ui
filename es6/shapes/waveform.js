@@ -11,7 +11,7 @@ class Waveform extends BaseShape {
     }
   }
 
-  render(context) {
+  render(renderingContext) {
     if (this.shape) { return this.shape; }
 
     this.shape = document.createElementNS(this.ns, 'path');
@@ -22,18 +22,18 @@ class Waveform extends BaseShape {
     return this.shape;
   }
 
-  update(context, group, datum, index) {
+  update(renderingContext, group, datum, index) {
     this.shape.setAttributeNS(null, 'd', '');
 
     // define nbr of samples per pixels
     const nbrSamples = datum.length;
     const duration = nbrSamples / this.sampleRate(datum);
-    const width = context.xScale(duration);
+    const width = renderingContext.xScale(duration);
     const samplesPerPixel = nbrSamples / width;
     let minMax = [];
     // get min/max per pixels
     for (let i = 0; i <= width; i++) {
-      const startTime = context.xScale.invert(i);
+      const startTime = renderingContext.xScale.invert(i);
       const startSample = startTime * this.sampleRate(datum);
 
       const extract = datum.slice(startSample, startSample + samplesPerPixel);
@@ -52,9 +52,9 @@ class Waveform extends BaseShape {
     const MAX = 1;
     // draw line
     let instructions = minMax.map((datum, index) => {
-      const x  = context.xScale(datum.time);
-      const y1 = context.yScale(this.y(datum.values[MIN]));
-      const y2 = context.yScale(this.y(datum.values[MAX]));
+      const x  = renderingContext.xScale(datum.time);
+      const y1 = renderingContext.yScale(this.y(datum.values[MIN]));
+      const y2 = renderingContext.yScale(this.y(datum.values[MAX]));
 
       return `${x},${y1}L${x},${y2}`;
     });

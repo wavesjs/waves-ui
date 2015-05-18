@@ -42,9 +42,15 @@ class Layer {
       .range([0, this.params.height]);
   }
 
-  set yDomain(value) {}
-  set opacity(value) {}
-  // set height(value) {} ?
+  set yDomain(domain) {
+    this.params.yDomain = domain;
+    this._yScale.domain(domain);
+  }
+
+  set opacity(value) {
+    this.params.opacity = value;
+  }
+
 
   /**
    *  @TODO : replace with `setContext(context)`
@@ -65,11 +71,8 @@ class Layer {
     };
 
     // create a mixin to pass to shapes
-    this._renderingContext = {
-      xScale: this._context.xScale,
-      yScale: this._yScale,
-      height: this.params.height
-    };
+    this._renderingContext = {};
+    this._updateRenderingContext();
   }
 
   // --------------------------------------
@@ -98,8 +101,6 @@ class Layer {
   // Component Configuration
   // --------------------------------------
 
-  // @TODO handle `options` parameter to configure the Shapes
-
   /**
    *  Register the shape and its accessors to use in order to render
    *  the entity or collection
@@ -113,8 +114,8 @@ class Layer {
   /**
    *  Register the shape to use with the entire collection
    *  example: the line in a beakpoint function
-   *  @param ctor <BaseShape> the constructor of the shape to use to render data
-   *  @param accessors <Object> accessors to use in order to map the data structure
+   *  @param ctor {BaseShape} the constructor of the shape to use to render data
+   *  @param accessors {Object} accessors to use in order to map the data structure
    */
   setCommonShape(ctor, accessors = {}, options = {}) {
     this._commonShapeConfiguration = { ctor, accessors, options };
@@ -122,7 +123,7 @@ class Layer {
 
   /**
    *  Register the behavior to use when interacting with the shape
-   *  @param behavior <BaseBehavior>
+   *  @param behavior {BaseBehavior}
    */
   setBehavior(behavior) {
     behavior.initialize(this);
@@ -135,25 +136,36 @@ class Layer {
 
   /**
    *  Use an external obj to use as the `contextAttribute` wrapper
-   *  @param obj <Object>
+   *  @param obj {Object}
    */
   set contextAttributes(obj) { this._contextAttributes = obj; }
   get contextAttributes() { return this._contextAttributes; }
 
   /**
    *  update a given attribute of the context
-   *  @param name <String> the key of the attribute to update
-   *  @param value <mixed>
+   *  @param name {String} the key of the attribute to update
+   *  @param value {mixed}
    */
   setContextAttribute(name, value) {
     this._contextAttributes[name] = value;
     this._context[name] = value;
   }
 
-  addSlave(layer) {
-    layer.contextAttributes = this.contextAttributes;
-    layer._context = this._context;
+  /**
+   *  update the values in `_renderingContext`
+   *  is particulary needed when updating `stretchRatio` as the pointer
+   *  to the `xScale` may change
+   */
+  _updateRenderingContext() {
+    this._renderingContext.xScale = this._context.xScale,
+    this._renderingContext.yScale = this._yScale,
+    this._renderingContext.height = this.params.height
   }
+
+  // addSlave(layer) {
+  //   layer.contextAttributes = this.contextAttributes;
+  //   layer._context = this._context;
+  // }
 
   // --------------------------------------
   // Behavior Accessors
@@ -212,7 +224,7 @@ class Layer {
   edit(item, dx, dy, target) {
     const datum = d3.select(item).datum();
     const shape = this._itemShapeMap.get(item);
-    this._behavior.edit(this._context, shape, datum, dx, dy, target);
+    this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);
   }
 
   // --------------------------------------
@@ -220,7 +232,7 @@ class Layer {
   // --------------------------------------
 
   /**
-   *  @return <DOMElement> the closest parent `item` group for a given DOM element
+   *  @return {DOMElement} the closest parent `item` group for a given DOM element
    */
   _getItemFromDOMElement(el) {
     do {
@@ -232,7 +244,7 @@ class Layer {
 
   /**
    *  moves an `item`'s group to the end of the layer (svg z-index...)
-   *  @param `item` <DOMElement> the item to be moved
+   *  @param `item` {DOMElement} the item to be moved
    */
   _toFront(item) {
     this.group.appendChild(item);
@@ -240,9 +252,9 @@ class Layer {
 
   /**
    *  Define if an given DOM element belongs to one of the `items`
-   *  @param `el` <DOMElement> the element to be tested
-   *  @return <mixed>
-   *    <DOMElement> item group containing the `el` if belongs to this layer
+   *  @param `el` {DOMElement} the element to be tested
+   *  @return {mixed}
+   *    {DOMElement} item group containing the `el` if belongs to this layer
    *    null otherwise
    */
   hasItem(el) {
@@ -251,8 +263,8 @@ class Layer {
   }
 
   /**
-   *  @param area <Object> area in which to find the elements
-   *  @return <Array> list of the DOM elements in the given area
+   *  @param area {Object} area in which to find the elements
+   *  @return {Array} list of the DOM elements in the given area
    */
   getItemsInArea(area) {
     // work in pixel domain
@@ -277,12 +289,12 @@ class Layer {
     y2 += this.params.top;
 
     const itemShapeMap = this._itemShapeMap;
-    const context = this._context;
+    const renderingContext = this._renderingContext;
 
     const items = this.items.filter(function(datum, index) {
       const group = this;
       const shape = itemShapeMap.get(group);
-      return shape.inArea(context, datum, x1, y1, x2, y2);
+      return shape.inArea(renderingContext, datum, x1, y1, x2, y2);
     });
 
     return items[0].slice(0);
@@ -293,7 +305,7 @@ class Layer {
 
   /**
    *  creates the layer group with a transformation matrix to flip the coordinate system.
-   *  @return <DOMElement>
+   *  @return {DOMElement}
    */
   render() {
     // wrapper group for `start, top and context flip matrix
@@ -393,15 +405,17 @@ class Layer {
   }
 
   /**
-   *  updates DOM context and shapes
+   *  updates Context and Shapes
    */
   update() {
+    this._updateRenderingContext();
+    //
     this.updateContext();
     this.updateShapes();
   }
 
   /**
-   *  updates DOM context only
+   *  updates the context of the layer
    */
   updateContext() {
     const x      = this._context.originalXScale(this._context.start);
@@ -427,8 +441,8 @@ class Layer {
   }
 
   /**
-   *  updates DOM context and Shapes
-   *  @param
+   *  updates the Shapes which belongs to the layer
+   *  @param item {DOMElement}
    */
   updateShapes(item = null) {
     const that = this;

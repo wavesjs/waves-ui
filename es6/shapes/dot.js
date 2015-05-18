@@ -11,9 +11,9 @@ class Dot extends BaseShape {
     return this.shape;
   }
 
-  update(context, group, datum, index) {
-    const cx = context.xScale(this.cx(datum));
-    const cy = context.yScale(this.cy(datum));
+  update(renderingContext, group, datum, index) {
+    const cx = renderingContext.xScale(this.cx(datum));
+    const cy = renderingContext.yScale(this.cy(datum));
     const r  = this.r(datum);
     const color = this.color(datum);
 
@@ -23,9 +23,9 @@ class Dot extends BaseShape {
   }
 
   // x1, x2, y1, y2 => in pixel domain
-  inArea(context, datum, x1, y1, x2, y2) {
-    const cx = context.xScale(this.cx(datum));
-    const cy = context.yScale(this.cy(datum));
+  inArea(renderingContext, datum, x1, y1, x2, y2) {
+    const cx = renderingContext.xScale(this.cx(datum));
+    const cy = renderingContext.yScale(this.cy(datum));
 
     if ((cx > x1 && cx < x2) && (cy > y1 && cy < y2)) {
       return true;
