@@ -257,7 +257,7 @@ class Layer {
       const offset = renderingContext.xScale(contextAttributes.offset);
       const width = renderingContext.xScale(contextAttributes.duration);
 
-      let targetX = x + (dx * 2);
+      let targetX = x + dx;
       let targetOffset = offset - dx;
       let targetWidth = width - dx;
 
@@ -275,7 +275,7 @@ class Layer {
     } else {
       // edit `context.start`
       const x = renderingContext.xScale(contextAttributes.start);
-      let targetX = Math.max(x + (dx * 2), 0);
+      let targetX = Math.max(x + dx, 0);
 
       this.setContextAttribute('start', renderingContext.xScale.invert(targetX));
     }
@@ -350,8 +350,6 @@ class Layer {
     // apply start and offset
     x1 -= (start + offset);
     x2 -= (start + offset);
-    // @FIXME stretchRatio breaks selection
-    // x2 *= this._context.stretchRatio;
     // be consistent with context y coordinates system
     let y1 = this.params.height - (area.top + area.height);
     let y2 = this.params.height - area.top;
@@ -494,8 +492,8 @@ class Layer {
         const group = this;
         const shape = that._itemShapeMap.get(group);
 
-        shape.destroy(); // clean shape
-        _datumIdMap.delete(datum); // clean reference in `id` map
+        shape.destroy();                  // clean shape
+        _datumIdMap.delete(datum);        // clean reference in `id` map
         that._itemShapeMap.delete(group); // destroy reference in item shape map
       })
       .remove();
@@ -515,7 +513,9 @@ class Layer {
    *  updates the context of the layer
    */
   updateContext() {
-    const x      = this._context.originalXScale(this._context.start);
+    // @NOTE: replaced `context.originalXScale` with `context._parent.xScale`
+    // => looks more coherent, but behavior needs to be checked, validated and tested properly
+    const x      = this._context._parent.xScale(this._context.start);
     const width  = this._context.xScale(this._context.duration);
     const offset = this._context.xScale(this._context.offset);
     const top    = this.params.top;

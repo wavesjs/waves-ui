@@ -36,6 +36,9 @@ class TimeContext {
   }
 
   // read only
+  // @NOTE not used anymore outside this object, was used to have a proper start
+  // from an inner context with it's own `stretchRatio` but creates many bad side effects
+  // => find another strategy => use _context.parent.xScale
   get originalXScale() {
     // lazy bind originalXScale on top of the tree
     if (!this._parent && !this._originalXScale) {
