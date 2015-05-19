@@ -59,6 +59,9 @@ class Layer {
     this.params.opacity = value;
   }
 
+  param(name, value) {
+    this.params[name] = value;
+  }
 
   /**
    *  define
@@ -167,11 +170,6 @@ class Layer {
     this._renderingContext.height = this.params.height
   }
 
-  // addSlave(layer) {
-  //   layer.contextAttributes = this.contextAttributes;
-  //   layer._context = this._context;
-  // }
-
   // --------------------------------------
   // Behavior Accessors
   // --------------------------------------
@@ -248,33 +246,38 @@ class Layer {
 
   // @NOTE create a proper `ContextBehavior` ?
   editContext(dx, dy, target) {
+    const contextAttributes = this._contextAttributes;
+    const renderingContext  = this._renderingContext;
+    // dx = dx * contextAttributes.stretchRatio;
+    // dy = dy * contextAttributes.stretchRatio;
+
     if (target.classList.contains('handler') && target.classList.contains('left')) {
       // edit `context.start`, `context.offset` and `context.duration`
-      const x = this._renderingContext.xScale(this._contextAttributes.start);
-      const offsetX = this._renderingContext.xScale(this._contextAttributes.offset);
-      const width = this._renderingContext.xScale(this._contextAttributes.duration);
+      const x = renderingContext.xScale(contextAttributes.start);
+      const offset = renderingContext.xScale(contextAttributes.offset);
+      const width = renderingContext.xScale(contextAttributes.duration);
 
-      let targetX = x + dx;
-      let targetOffsetX = offsetX - dx;
+      let targetX = x + (dx * 2);
+      let targetOffset = offset - dx;
       let targetWidth = width - dx;
 
-      this.setContextAttribute('start', this._renderingContext.xScale.invert(targetX));
-      this.setContextAttribute('offset', this._renderingContext.xScale.invert(targetOffsetX));
-      this.setContextAttribute('duration', this._renderingContext.xScale.invert(targetWidth));
+      this.setContextAttribute('start', renderingContext.xScale.invert(targetX));
+      this.setContextAttribute('offset', renderingContext.xScale.invert(targetOffset));
+      this.setContextAttribute('duration', renderingContext.xScale.invert(targetWidth));
 
     } else if (target.classList.contains('handler') && target.classList.contains('right')) {
       // edit `context.duration`
-      const width = this._renderingContext.xScale(this._contextAttributes.duration);
+      const width = renderingContext.xScale(contextAttributes.duration);
       let targetWidth = Math.max(width + dx, 0);
 
-      this.setContextAttribute('duration', this._renderingContext.xScale.invert(targetWidth));
+      this.setContextAttribute('duration', renderingContext.xScale.invert(targetWidth));
 
     } else {
       // edit `context.start`
-      const x = this._renderingContext.xScale(this._contextAttributes.start);
-      let targetX = Math.max(x + dx, 0);
+      const x = renderingContext.xScale(contextAttributes.start);
+      let targetX = Math.max(x + (dx * 2), 0);
 
-      this.setContextAttribute('start', this._renderingContext.xScale.invert(targetX));
+      this.setContextAttribute('start', renderingContext.xScale.invert(targetX));
     }
   }
 
@@ -285,6 +288,7 @@ class Layer {
   // --------------------------------------
 
   /**
+   *  @NOTE is only used on `hasItem` => no need to separate this method
    *  @return {DOMElement} the closest parent `item` group for a given DOM element
    */
   _getItemFromDOMElement(el) {
@@ -313,6 +317,20 @@ class Layer {
   hasItem(el) {
     const item = this._getItemFromDOMElement(el);
     return (this.items[0].indexOf(item) !== -1) ? item : null;
+  }
+
+  /**
+   *  Define if a given element belongs to the layer
+   *  is more general than `hasItem`, can be used to check interaction elements too
+   */
+  hasElement(el) {
+    do {
+      if (el === this.container) {
+        return true;
+      }
+    } while (el = el.parentNode);
+
+    return false;
   }
 
   /**

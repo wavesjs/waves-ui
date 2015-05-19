@@ -13,6 +13,7 @@ class TimeContext {
     this.duration = 1;
     this.offset = 0;
     this._stretchRatio = 1;
+    // @NOTE: need an `absoluteStretchRatio` ?
 
     if (parent) {
       parent._children.push(this);

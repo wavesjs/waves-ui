@@ -26,17 +26,19 @@ class Waveform extends BaseShape {
     this.shape.setAttributeNS(null, 'd', '');
 
     // define nbr of samples per pixels
+    const sliceMethod = datum instanceof Float32Array ? 'subarray' : 'slice';
     const nbrSamples = datum.length;
     const duration = nbrSamples / this.sampleRate(datum);
     const width = renderingContext.xScale(duration);
     const samplesPerPixel = nbrSamples / width;
     let minMax = [];
+    // console.log(datum, datum instanceof Float32Array);
     // get min/max per pixels
     for (let i = 0; i <= width; i++) {
       const startTime = renderingContext.xScale.invert(i);
       const startSample = startTime * this.sampleRate(datum);
 
-      const extract = datum.slice(startSample, startSample + samplesPerPixel);
+      const extract = datum[sliceMethod](startSample, startSample + samplesPerPixel);
       let min = Infinity;
       let max = -Infinity;
       for (let j = 0; j < extract.length; j++) {
