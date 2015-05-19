@@ -1,5 +1,7 @@
 const ns = require('./namespace');
-const d3 = require('d3')
+const d3 = require('d3');
+const Rect = require('../shapes/rect');
+const SegmentBehavior = require('../behaviors/segment-behavior');
 
 // create a private item -> id map to force d3 being in sync with the DOM
 let _counter = 0;
@@ -13,10 +15,12 @@ class Layer {
     const defaults = {
       height: 100, // should inherit from parent
       top: 0,
+      id: '',
       yDomain: [0, 1],
       opacity: 1,
       debugContext: false, // pass the context in debug mode
-    }
+      contextHandlerWidth: 2
+    };
 
     this.params = Object.assign({}, defaults, options);
 
@@ -30,6 +34,8 @@ class Layer {
     this._itemShapeMap = new Map(); // item group <DOMElement> => shape
     this._itemCommonShapeMap = new Map(); // one entry max in this map
 
+    this._isContextEditable = false;
+
     // component configuration
     this._behavior = null;
     this._context = null;
@@ -41,6 +47,7 @@ class Layer {
 
     // initialize context
     this.setContext(context);
+    this._render();
   }
 
   set yDomain(domain) {
@@ -226,6 +233,54 @@ class Layer {
   }
 
   // --------------------------------------
+  // Context Behavior
+  // --------------------------------------
+
+  /**
+   *  draw the shape to interact with the context
+   *  @params bool {Boolean} define if the layer's context is editable or not
+   */
+  set editable(bool = false) {
+    const display = bool ? 'block' : 'none';
+    this.interactionsGroup.style.display = display;
+    this._isContextEditable = bool;
+  }
+
+  // @NOTE create a proper `ContextBehavior` ?
+  editContext(dx, dy, target) {
+    if (target.classList.contains('handler') && target.classList.contains('left')) {
+      // edit `context.start`, `context.offset` and `context.duration`
+      const x = this._renderingContext.xScale(this._contextAttributes.start);
+      const offsetX = this._renderingContext.xScale(this._contextAttributes.offset);
+      const width = this._renderingContext.xScale(this._contextAttributes.duration);
+
+      let targetX = x + dx;
+      let targetOffsetX = offsetX - dx;
+      let targetWidth = width - dx;
+
+      this.setContextAttribute('start', this._renderingContext.xScale.invert(targetX));
+      this.setContextAttribute('offset', this._renderingContext.xScale.invert(targetOffsetX));
+      this.setContextAttribute('duration', this._renderingContext.xScale.invert(targetWidth));
+
+    } else if (target.classList.contains('handler') && target.classList.contains('right')) {
+      // edit `context.duration`
+      const width = this._renderingContext.xScale(this._contextAttributes.duration);
+      let targetWidth = Math.max(width + dx, 0);
+
+      this.setContextAttribute('duration', this._renderingContext.xScale.invert(targetWidth));
+
+    } else {
+      // edit `context.start`
+      const x = this._renderingContext.xScale(this._contextAttributes.start);
+      let targetX = Math.max(x + dx, 0);
+
+      this.setContextAttribute('start', this._renderingContext.xScale.invert(targetX));
+    }
+  }
+
+  stretchContext(dx, dy, target) {}
+
+  // --------------------------------------
   // Helpers
   // --------------------------------------
 
@@ -302,21 +357,41 @@ class Layer {
   // each(callback) { this._each = callback }
 
   /**
-   *  creates the layer group with a transformation matrix to flip the coordinate system.
-   *  @return {DOMElement}
+   *  render the DOM in memory on layer creation to be able to use it before
+   *  the layer is actually inserted in the DOM
    */
-  render() {
+  _render() {
     // wrapper group for `start, top and context flip matrix
     this.container = document.createElementNS(ns, 'g');
     this.container.classList.add('layer');
     // append a svg to clip the context
-    this.boundingBox = document.createElementNS(ns, 'svg')
+    // @NOTE: could use a group with a `clipPath` property
+    this.boundingBox = document.createElementNS(ns, 'svg');
+    this.boundingBox.classList.add('bounding-box');
+    // this.boundingBox.setAttributeNS(null, 'id', this.params.id);
     // group to apply offset
     this.group = document.createElementNS(ns, 'g');
-    this.group.classList.add('items');
+    this.group.classList.add('offset', 'items');
 
-    // append the group to the context
+    // context interactions
+    this.interactionsGroup = document.createElementNS(ns, 'g');
+    this.interactionsGroup.classList.add('layer-interactions');
+    this.interactionsGroup.style.display = 'none';
+    // @NOTE: works but king of ugly... must be cleaned
+    this.contextShape = new Rect();
+    this.contextShape.install({
+      opacity: () => 0.1,
+      color  : () => '#787878',
+      width  : () => this._contextAttributes.duration,
+      height : () => this._renderingContext.yScale.domain()[1],
+      y      : () => this._renderingContext.yScale.domain()[0]
+    });
+
+    this.interactionsGroup.appendChild(this.contextShape.render());
+
+    // create the DOM tree
     this.container.appendChild(this.boundingBox);
+    this.boundingBox.appendChild(this.interactionsGroup);
     this.boundingBox.appendChild(this.group);
 
     // draw a rect in context background to debug it's size
@@ -326,7 +401,13 @@ class Layer {
       this.debugRect.style.fill = '#ababab';
       this.debugRect.style.fillOpacity = 0.1;
     }
+  }
 
+  /**
+   *  creates the layer group with a transformation matrix to flip the coordinate system.
+   *  @return {DOMElement}
+   */
+  render() {
     return this.container;
   }
 
@@ -407,7 +488,7 @@ class Layer {
    */
   update() {
     this._updateRenderingContext();
-    //
+
     this.updateContext();
     this.updateShapes();
   }
@@ -426,12 +507,24 @@ class Layer {
 
     this.container.setAttributeNS(null, 'transform', translateMatrix);
 
+    // const clipPath = `polygon(0 0, ${width}px 0, ${width}px ${height}px, 0 ${height}px)`;
+    // -webkit-clip-path: polygon(0 0, 740px 0, 740px 160px, 0 160px);
+    // this.boundingBox.style.webkitClipPath = clipPath;
     this.boundingBox.setAttributeNS(null, 'width', width);
     this.boundingBox.setAttributeNS(null, 'height', height);
     this.boundingBox.style.opacity = this.params.opacity;
 
     this.group.setAttributeNS(null, 'transform', `translate(${offset}, 0)`);
 
+    // maintain context shape
+    this.contextShape.update(
+      this._renderingContext,
+      this.interactionsGroup,
+      this._contextAttributes,
+      0
+    );
+
+    // debug context
     if (this.params.debug) {
       this.debugRect.setAttributeNS(null, 'width', width);
       this.debugRect.setAttributeNS(null, 'height', height);
@@ -453,6 +546,7 @@ class Layer {
     });
 
     // update entity or collection shapes
+    if (!items) { return; } // if no shape in the layer...
     items.each(function(datum, index) {
       // update all shapes related to the current item
       const group = this; // current `g.item`

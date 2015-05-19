@@ -55,6 +55,8 @@ class Rect extends BaseShape {
 
     group.setAttributeNS(null, 'transform', `translate(${x}, ${y})`);
 
+    this.shape.style.opacity = this.opacity(datum);
+
     this.rect.setAttributeNS(null, 'width', Math.max(width, 0));
     this.rect.setAttributeNS(null, 'height', height);
     this.rect.style.fill = color;

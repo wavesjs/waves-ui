@@ -77,6 +77,8 @@ class Surface extends EventSource {
       // register mouse move on body - more user friendly
       body.addEventListener('mousemove', onMouseMove, false);
 
+      // console.log(event.target, event.originalEvent.target, event.originalEvent.currentTarget);
+
       this.emit('event', event);
     }
 
@@ -121,6 +123,12 @@ class Surface extends EventSource {
     this.el.addEventListener('mouseup', onMouseUp, false);
     this.el.addEventListener('click', onClick, false);
     this.el.addEventListener('dblclick', onDblClick, false);
+
+    // let svgs = this.el.querySelectorAll('svg');
+    // console.log(svgs);
+    // for (let i = 0, l = svgs.length; i < l; i++) {
+    //   svgs[i].addEventListener('mousedown', onMouseDown, false);
+    // }
 
     // @TODO: mouseenter, mouseleave, wheel ?
   }
