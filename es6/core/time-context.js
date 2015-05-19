@@ -1,6 +1,10 @@
 const d3 = require('d3');
 const ns = require('./namespace');
 
+// @FIXME there is a problem with the stretch:
+// how does it must be applyed ?
+// should we maintain some `absoluteStart`, `absoluteDuration`, etc... values ?
+
 class TimeContext {
   constructor(parent = null) {
     this._parent = parent;
