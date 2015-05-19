@@ -513,9 +513,10 @@ class Layer {
    *  updates the context of the layer
    */
   updateContext() {
-    // @NOTE: replaced `context.originalXScale` with `context._parent.xScale`
-    // => looks more coherent, but behavior needs to be checked, validated and tested properly
-    const x      = this._context._parent.xScale(this._context.start);
+    // @NOTE: replaced `context.originalXScale` with `context.xScale`
+    // => the behavior is not proper when the layer is stretched
+    // const x      = this._context._parent.xScale(this._context.start);
+    const x      = this._context.xScale(this._context.start);
     const width  = this._context.xScale(this._context.duration);
     const offset = this._context.xScale(this._context.offset);
     const top    = this.params.top;
