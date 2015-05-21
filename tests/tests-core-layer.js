@@ -136,3 +136,63 @@ describe('Layer', function() {
     it('should call `updateShapes` on each innerLayers', function(done) {});
   });
 });
+
+
+describe('Timeline', function(){
+    it('should create a Timeline instance with dom elements targets', function(){
+        // domElements = document.querySelectorAll('.timelineElement');
+        // timeline = new Timeline(domElements);
+        // assert whatever this instance should create: svg and public variables.
+    });
+});
+
+describe('Layer', function(){
+    it('should create a layer and attach it to a DOM element of a timeline instance', function(){
+        // Here we have to mock a timeline instance
+        // domElementOfTimelineInstance = document.querySelector('.domElementOfTimelineInstance');
+        // layer = new Layer(domElementOfTimelineInstance);
+        // assert whatever this instance should create as svg and public variables.
+    });
+    it('should modify svg when modify xDomain', function(){
+        // layer.xDomain = [3, 4]
+        // assert that svg is rigth
+        // Public variables remain unchanged right? as audio rendering should compute itself values
+    });
+    // Same for other public variables: xScale, yDomain, yRange
+});
+
+describe('Segment', function(){
+    it('should render a segment item or collection', function(){
+        // mock a layer instance (svg + variables)
+        // segment = new Segment(datas);
+        // layer.add(segment);
+        // assert that segments are rendered in the DOM and public variables for segment are fine too.
+    });
+    // And programmatically move segments: left anchor, right anchor, all shape
+    // on one or more segment (one or more may be abstracted)
+});
+
+describe('Waveform', function(){
+    // Same as Segment
+});
+
+describe('Marker', function(){
+    // Same as Segment
+});
+
+describe('Label', function(){
+    // Same as Segment
+});
+
+describe('Breakpoint', function(){
+    // Same as Segment + curve rendering?
+});
+
+describe('Cursor', function(){
+
+});
+
+describe('Zoom', function(){
+    // Programmatically set a zoom property and check svg is well rendered.
+});
+
