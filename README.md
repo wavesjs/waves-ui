@@ -1,8 +1,28 @@
 # WAVES - UI
 
+## Develop branch - this code introduce many breaking changes
+## DO NOT USE
+
+_parts of d3 in use: selections, scales_  
+(could be replaced, the most tricky part would be the element <=> datum binding)
+
 _visualisation part of the `wavesjs` library._
 
 wavesUI is a set of low level audio visualisation components build on top of [d3](http://d3js.org/) 
+
+
+## Conventions
+
+- `render()`  
+  is the method by which a object renders its own DOM - return a DOM element 
+- `draw()`  
+  is the method by which a component creates its content by calling `render` on its children and appening the returned DOM to its own DOM element. This method is symetric with `render` from the container point of view
+- `update()`  
+  is the method by which an object updates its previously created DOM according to data or configuration
+
+
+## Demonstrators ideas
+
 
 ## Documentation
 

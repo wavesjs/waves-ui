@@ -28,11 +28,10 @@
   },
   "dependencies": {
     "babel-runtime": "4.7.6",
-    "d3": "^3.5.5",
-    "shortid": "^2.1.3",
-    "underscore.string": "^3.0.3"
+    "d3": "^3.5.5"
   },
   "devDependencies": {
+    "tac6": "git://github.com/ircam-rnd/tac6",
     "babel": "^4.5.0",
     "browserify": "^9.0.3",
     "fs-extra": "^0.16.3",
