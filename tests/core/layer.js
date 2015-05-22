@@ -137,7 +137,6 @@ describe('Layer', function() {
   });
 });
 
-
 describe('Layer', function(){
     it('should create a layer and attach it to a DOM element of a timeline instance', function(){
         // Here we have to mock a timeline instance
@@ -152,5 +151,3 @@ describe('Layer', function(){
     });
     // Same for other public variables: xScale, yDomain, yRange
 });
-
-
