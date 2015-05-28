@@ -16,15 +16,15 @@ class SelectionState extends BaseState {
   }
 
   enter() {
-    this.brush = document.createElementNS(ns, 'rect');
-    this.brush.style.backgroundColor = '#898989';
-    this.brush.style.opacity = 0.08;
-    this.interactionsGroup.appendChild(this.brush);
+    // this.brush = document.createElementNS(ns, 'rect');
+    // this.brush.style.backgroundColor = '#898989';
+    // this.brush.style.opacity = 0.08;
+    // this.interactionsGroup.appendChild(this.brush);
   }
 
   exit() {
-    this._removeBrush();
-    this.interactionsGroup.removeChild(this.brush);
+    // this._removeBrush();
+    // this.interactionsGroup.removeChild(this.brush);
   }
 
   _removeBrush() {

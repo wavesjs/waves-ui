@@ -24,6 +24,11 @@ class TimeContext {
     }
   }
 
+  // attempt to get a solution to the stretch problem
+  // get normalizedStart() {
+  //   return this.start / this.stretchRatio;
+  // }
+
   /**
    * @return {Function} the closest available xScale in the tree
    */

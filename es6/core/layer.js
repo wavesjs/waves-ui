@@ -8,7 +8,7 @@ let _counter = 0;
 const _datumIdMap = new Map();
 
 class Layer {
-  constructor(context, dataType = 'collection', data = [], options = {}) {
+  constructor(dataType = 'collection', data = [], options = {}) {
     this.dataType = dataType; // 'entity' || 'collection';
     this.data = data;
 
@@ -46,7 +46,6 @@ class Layer {
       .range([0, this.params.height]);
 
     // initialize context
-    this.setContext(context);
     this._render();
   }
 
@@ -64,7 +63,7 @@ class Layer {
   }
 
   /**
-   *  define
+   *  @mandatory define the context in which the layer is drawn
    *  @param context {TimeContext} the timeContext in which the layer is displayed
    */
   setContext(context) {
@@ -120,6 +119,16 @@ class Layer {
   }
 
   /**
+   *  @NOTE should be merge in setShape for consistency but problem to define the method signature
+   *  Register the behavior to use when interacting with the shape
+   *  @param behavior {BaseBehavior}
+   */
+  setBehavior(behavior) {
+    behavior.initialize(this);
+    this._behavior = behavior;
+  }
+
+  /**
    *  Register the shape to use with the entire collection
    *  example: the line in a beakpoint function
    *  @param ctor {BaseShape} the constructor of the shape to use to render data
@@ -127,15 +136,6 @@ class Layer {
    */
   setCommonShape(ctor, accessors = {}, options = {}) {
     this._commonShapeConfiguration = { ctor, accessors, options };
-  }
-
-  /**
-   *  Register the behavior to use when interacting with the shape
-   *  @param behavior {BaseBehavior}
-   */
-  setBehavior(behavior) {
-    behavior.initialize(this);
-    this._behavior = behavior;
   }
 
   // --------------------------------------
