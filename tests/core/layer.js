@@ -1,5 +1,5 @@
 var assert = require('assert');
-var Layer = require('../es6/core/layer');
+var Layer = require('../../es6/core/layer');
 
 describe('Layer', function() {
   describe('#contructor', function() {
@@ -135,4 +135,19 @@ describe('Layer', function() {
     it('should update each `shape`', function(done) {});
     it('should call `updateShapes` on each innerLayers', function(done) {});
   });
+});
+
+describe('Layer', function(){
+    it('should create a layer and attach it to a DOM element of a timeline instance', function(){
+        // Here we have to mock a timeline instance
+        // domElementOfTimelineInstance = document.querySelector('.domElementOfTimelineInstance');
+        // layer = new Layer(domElementOfTimelineInstance);
+        // assert whatever this instance should create as svg and public variables.
+    });
+    it('should modify svg when modify xDomain', function(){
+        // layer.xDomain = [3, 4]
+        // assert that svg is rigth
+        // Public variables remain unchanged right? as audio rendering should compute itself values
+    });
+    // Same for other public variables: xScale, yDomain, yRange
 });
