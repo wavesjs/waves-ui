@@ -5,7 +5,6 @@ const Keyboard = require('../interactions/keyboard');
 
 
 class Timeline {
-
   /**
    *  Creates a new Timeline
    *  @param params {Object} an object to override defaults parameters
@@ -27,6 +26,7 @@ class Timeline {
     this._layerContainerMap = new Map();
     this._handleEvent = this._handleEvent.bind(this);
 
+    this._createTimeContext();
     this._createInteraction(Keyboard, 'body');
   }
 
