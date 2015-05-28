@@ -14,7 +14,7 @@ class TimeContext {
     this._originalXScale = null;
 
     this.start = 0;
-    this.duration = 1;
+    this.duration = (parent !== null) ? parent.duration : 1;
     this.offset = 0;
     this._stretchRatio = 1;
     // @NOTE: need an `absoluteStretchRatio` ?

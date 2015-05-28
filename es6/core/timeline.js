@@ -48,7 +48,7 @@ class Timeline {
    */
   _handleEvent(e) {
     if (!this._state) { return; }
-    console.log(e);
+     console.log(e);
     this._state.handleEvent(e);
   }
 
@@ -89,11 +89,11 @@ class Timeline {
    *  Adds a `Layer` to the Timeline
    *  @param layer {Layer} the layer to register
    *  @param containerId {String} a valid id of a previsouly registered container
+   *  @param category {String} insert the layer into some user defined category
    *  @param context {TimeContext} a `TimeContext` the layer is associated with
    *      if null given, a new `TimeContext` will be created for the layer
-   *  @param category {String} insert the layer into some user defined category
    */
-  add(layer, containerId, context = null, category = 'default') {
+  add(layer, containerId, category = 'default', context = null) {
     const layerContext = context || new TimeContext(this.context);
     layer.setContext(layerContext);
 
