@@ -5,6 +5,9 @@ const ns = require('./namespace');
 // how does it must be applyed ?
 // should we maintain some `absoluteStart`, `absoluteDuration`, etc... values ?
 
+// @NOTE: separate timeline's with from the scale,
+// => only define #pixels for one seconds (kind of real scale) ?
+
 class TimeContext {
   constructor(parent = null) {
     this._parent = parent;

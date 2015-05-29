@@ -1,9 +1,9 @@
 
 class BaseState {
-  constructor(timeline) {
+  constructor(timeline, options = {}) {
     this.timeline = timeline;
     this.layers = timeline.layers;
-    this.interactionsGroup = timeline.interactionsGroup;
+    // this.interactionsGroup = options.interactionsGroup;
   }
 
   /**

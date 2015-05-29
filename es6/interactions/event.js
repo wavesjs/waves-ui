@@ -4,6 +4,7 @@ class Event {
   constructor(type, originalEvent) {
     this.type = type;
     this.target = originalEvent.target;
+    this.currentTarget = originalEvent.currentTarget;
     this.originalEvent = originalEvent;
 
     // is setted in timeline's states

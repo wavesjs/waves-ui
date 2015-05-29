@@ -67,6 +67,7 @@ class Surface extends EventSource {
    */
   _bindEvents() {
 
+    // @NOTE add mouseup on body too
     var onMouseDown = (e) => {
       // e.stopPropagation();
       let event = this._createEvent('mousedown', e);
@@ -76,8 +77,7 @@ class Surface extends EventSource {
       this.lastEvent = event;
       // register mouse move on body - more user friendly
       body.addEventListener('mousemove', onMouseMove, false);
-
-      // console.log(event.target, event.originalEvent.target, event.originalEvent.currentTarget);
+      // console.log(event);
 
       this.emit('event', event);
     }

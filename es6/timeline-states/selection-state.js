@@ -5,8 +5,8 @@ const ns = require('../core/namespace');
  *  @NOTE Buggy
  */
 class SelectionState extends BaseState {
-  constructor(timeline) {
-    super(timeline);
+  constructor(timeline /*, options = {} */) {
+    super(timeline /*, options */);
 
     this.currentLayer = null;
     // need a cached
@@ -16,29 +16,15 @@ class SelectionState extends BaseState {
   }
 
   enter() {
-    // this.brush = document.createElementNS(ns, 'rect');
-    // this.brush.style.backgroundColor = '#898989';
-    // this.brush.style.opacity = 0.08;
-    // this.interactionsGroup.appendChild(this.brush);
+
   }
 
   exit() {
-    // this._removeBrush();
-    // this.interactionsGroup.removeChild(this.brush);
-  }
+    const containers = this.timeline.containers;
 
-  _removeBrush() {
-    // reset brush element
-    this.brush.setAttributeNS(null, 'transform', 'translate(0, 0)');
-    this.brush.setAttributeNS(null, 'width', 0);
-    this.brush.setAttributeNS(null, 'height', 0);
-  }
-
-  _updateBrush(e) {
-    const translate = `translate(${e.area.left}, ${e.area.top})`;
-    this.brush.setAttributeNS(null, 'transform', translate);
-    this.brush.setAttributeNS(null, 'width', e.area.width);
-    this.brush.setAttributeNS(null, 'height', e.area.height);
+    for (let id in containers) {
+      this._removebrush(containers[id]);
+    }
   }
 
   handleEvent(e) {
@@ -64,12 +50,53 @@ class SelectionState extends BaseState {
     }
   }
 
+  _addBrush(container) {
+    if (container.brushElement !== null) { return; }
+
+    const brush = document.createElementNS(ns, 'rect');
+    brush.style.fill = '#686868';
+    brush.style.opacity = 0.2;
+
+    container.interactionsElement.appendChild(brush);
+    container.brushElement = brush;
+  }
+
+  _removeBrush(container) {
+    if (container.brushElement === null) { return; }
+
+    this._resetBrush(container.brushElement);
+    container.interactionsElement.removeChild(container.brushElement);
+    container.brushElement = null;
+  }
+
+  _resetBrush(container) {
+    const brushElement = container.brushElement;
+    // reset brush element
+    brushElement.setAttributeNS(null, 'transform', 'translate(0, 0)');
+    brushElement.setAttributeNS(null, 'width', 0);
+    brushElement.setAttributeNS(null, 'height', 0);
+  }
+
+  _updateBrush(e, container) {
+    const brushElement = container.brushElement;
+    const translate = `translate(${e.area.left}, ${e.area.top})`;
+
+    brushElement.setAttributeNS(null, 'transform', translate);
+    brushElement.setAttributeNS(null, 'width', e.area.width);
+    brushElement.setAttributeNS(null, 'height', e.area.height);
+  }
+
   onKey(e) {
     this.shiftKey = e.shiftKey;
   }
 
   onMouseDown(e) {
     this.mouseDown = true;
+
+    const container = this.timeline.getContainerPerElement(e.currentTarget);
+    this.currentContainer = container;
+    this._addBrush(container);
+
     let newLayer;
     // find the layer
     for (let layer of this.layers) {
@@ -95,44 +122,51 @@ class SelectionState extends BaseState {
   }
 
   onMouseMove(e) {
-    if (!this.mouseDown || !this.currentLayer) { return; }
+    // console.log(e);
+    // if (!this.mouseDown || !this.currentLayer) { return; }
+    if (!this.mouseDown) { return; }
+
+    const container = this.timeline.getContainerPerElement(this.currentLayer);
     // update brush
-    this._updateBrush(e);
-    // select all dots in area
-    const items = this.currentLayer.getItemsInArea(e.area);
-    const currentSelection = this.currentLayer.selectedItems;
-    // 1. select all items
-    items.forEach((item) => this.currentLayer.select(item));
-    // handle shift key
-    if (this.shiftKey) {
-      this.previousSelection.forEach((item) => {
-        if (items.indexOf(item) !== -1) {
-          // 2.1  if the item was is not in item, unselect it
+    this._updateBrush(e, this.currentContainer);
+
+    if (this.currentLayer) {
+      // select all dots in area
+      const items = this.currentLayer.getItemsInArea(e.area);
+      const currentSelection = this.currentLayer.selectedItems;
+      // 1. select all items
+      items.forEach((item) => this.currentLayer.select(item));
+      // handle shift key
+      if (this.shiftKey) {
+        this.previousSelection.forEach((item) => {
+          if (items.indexOf(item) !== -1) {
+            // 2.1  if the item was is not in item, unselect it
+            this.currentLayer.unselect(item);
+          } else {
+            // 2.2  else select it
+            this.currentLayer.select(item);
+          }
+        });
+      }
+
+      // 3. if an item of the current selection is no more in the items
+      //    and is not in previous selection, unselect it
+      currentSelection.forEach((item) => {
+        if (
+          items.indexOf(item) === -1 &&
+          this.previousSelection.indexOf(item) === -1
+        ) {
           this.currentLayer.unselect(item);
-        } else {
-          // 2.2  else select it
-          this.currentLayer.select(item);
         }
       });
     }
-
-    // 3. if an item of the current selection is no more in the items
-    //    and is not in previous selection, unselect it
-    currentSelection.forEach((item) => {
-      if (
-        items.indexOf(item) === -1 &&
-        this.previousSelection.indexOf(item) === -1
-      ) {
-        this.currentLayer.unselect(item);
-      }
-    });
   }
 
   onMouseUp(e) {
     if (!this.mouseDown) { return; }
     this.mouseDown = false;
-    // remove brush
-    this._removeBrush();
+    // reset brushElement
+    this._resetBrush(this.currentContainer);
   }
 
   // @NOTE: 'mousedown' and 'mouseup' are called before 'click'

@@ -1,3 +1,4 @@
+const events = require('events');
 const ns = require('./namespace');
 const TimeContext = require('./time-context');
 const Surface  = require('../interactions/surface');
@@ -7,12 +8,14 @@ const Layer = require('./layer');
 /**
  *  @class Timeline
  */
-class Timeline {
+class Timeline extends events.EventEmitter {
   /**
    *  Creates a new Timeline
    *  @param params {Object} an object to override defaults parameters
    */
   constructor(params = {}) {
+    super();
+
     this._defaults = {
       width: 1000,
       duration: 60
@@ -25,7 +28,7 @@ class Timeline {
     this.context = null;
     // private attributes
     this._state = null;
-    this._containers = {};
+    this.containers = {};
     this._layerContainerMap = new Map();
     this._handleEvent = this._handleEvent.bind(this);
 
@@ -51,7 +54,6 @@ class Timeline {
    */
   _handleEvent(e) {
     if (!this._state) { return; }
-     console.log(e);
     this._state.handleEvent(e);
   }
 
@@ -62,8 +64,8 @@ class Timeline {
    *  @param ctor {EventSource} the contructor of the interaction module to instanciate
    *  @param el {DOMElement} the DOM element to bind to the EventSource module
    */
-  _createInteraction(ctor, el) {
-    const interaction = new ctor(el);
+  _createInteraction(ctor, el, options = {}) {
+    const interaction = new ctor(el, options);
     interaction.on('event', this._handleEvent);
   }
 
@@ -100,7 +102,7 @@ class Timeline {
     const layerContext = context || new TimeContext(this.context);
     layer.setContext(layerContext);
 
-    this._layerContainerMap.set(layer, containerId);
+    this._layerContainerMap.set(layer, this.containers[containerId]);
     this.layers.push(layer);
 
     if (!this.categorizedLayers[category]) {
@@ -144,30 +146,65 @@ class Timeline {
 
     const defs = document.createElementNS(ns, 'defs');
 
+    const offsetGroup = document.createElementNS(ns, 'g');
+    offsetGroup.classList.add('offset');
+
     const layoutGroup = document.createElementNS(ns, 'g');
     layoutGroup.classList.add('layout');
 
-    const interactionsGroup = document.createElementNS(null, 'g');
+    const interactionsGroup = document.createElementNS(ns, 'g');
     interactionsGroup.classList.add('interactions');
 
     svg.appendChild(defs)
-    svg.appendChild(layoutGroup)
+    offsetGroup.appendChild(layoutGroup);
+    svg.appendChild(offsetGroup)
     svg.appendChild(interactionsGroup);
 
     el.appendChild(svg);
 
-    this._containers[id] = { layoutGroup, interactionsGroup, DOMElement: el };
-    this._createInteraction(Surface, svg);
+    // create a container object
+    const container = {
+      id: id,
+      layoutElement: layoutGroup,
+      offsetElement: offsetGroup,
+      interactionsElement: interactionsGroup,
+      svgElement: svg,
+      DOMElement: el,
+      brushElement: null
+    };
+
+    this.containers[id] = container;
+    this._createInteraction(Surface, el);
   }
+
+  // container helpers
+  // @NOTE change to `getContainer(el || id || layer)` ?
+  getContainerPerElement(el) {
+    for (let id in this.containers) {
+      const container = this.containers[id];
+      if (container.DOMElement === el) { return container; }
+    }
+
+    return null;
+  }
+
+  getLayerContainer(layer) {
+    return this._layerContainerMap.get(layer);
+  }
+
+  // getContainerPerId(id) {
+  //   return this.containers[id];
+  // }
+
+
 
   /**
    *  Render all the layers in the timeline
    */
   render() {
     this.layers.forEach((layer) => {
-      const containerId = this._layerContainerMap.get(layer);
-      const layout = this._containers[containerId].layoutGroup;
-
+      const container = this._layerContainerMap.get(layer);
+      const layout = container.layoutElement;
       layout.appendChild(layer.render());
     });
   }
@@ -189,11 +226,21 @@ class Timeline {
     this.layers.forEach((layer) => layer.draw());
   }
 
+  updateContainers() {
+    for (let id in this.containers) {
+      const container = this.containers[id];
+      const offset = container.offsetElement;
+      const context = this.context;
+      const translate = `translate(${context.offset * context.stretchRatio}, 0)`;
+      offset.setAttributeNS(null, 'transform', translate);
+    }
+  }
   /**
    *  Update all the layers in the timeline
    *  @TODO accept several `layers` or `categories` as arguments ?
    */
   update(layerOrCategory = null) {
+    this.updateContainers();
     let layers = null;
 
     if (typeof layerOrCategory === 'string') {
@@ -204,6 +251,7 @@ class Timeline {
       layers = this.layers;
     }
 
+    this.emit('update', layers);
     layers.forEach((layer) => layer.update());
   }
 }
