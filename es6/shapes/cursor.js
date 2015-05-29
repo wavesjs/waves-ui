@@ -22,7 +22,7 @@ class Cursor extends BaseShape {
     this.shape.setAttributeNS(null, 'x', 0);
     this.shape.setAttributeNS(null, 'y1', 0);
     this.shape.setAttributeNS(null, 'y2', renderingContext.height);
-    // this.shape.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+    this.shape.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
     return this.shape;
   }

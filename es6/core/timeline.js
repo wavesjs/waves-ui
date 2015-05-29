@@ -2,8 +2,11 @@ const ns = require('./namespace');
 const TimeContext = require('./time-context');
 const Surface  = require('../interactions/surface');
 const Keyboard = require('../interactions/keyboard');
+const Layer = require('./layer');
 
-
+/**
+ *  @class Timeline
+ */
 class Timeline {
   /**
    *  Creates a new Timeline
@@ -172,15 +175,36 @@ class Timeline {
   /**
    *  Draw all the layers in the timeline
    */
-  draw() {
+  draw(layerOrCategory = null) {
+    let layers = null;
+
+    if (typeof layerOrCategory === 'string') {
+      layers = this.getLayers(layerOrCategory);
+    } else if (layerOrCategory instanceof Layer) {
+      layers = [layerOrCategory];
+    } else {
+      layers = this.layers;
+    }
+
     this.layers.forEach((layer) => layer.draw());
   }
 
   /**
    *  Update all the layers in the timeline
+   *  @TODO accept several `layers` or `categories` as arguments ?
    */
-  update() {
-    this.layers.forEach((layer) => layer.update());
+  update(layerOrCategory = null) {
+    let layers = null;
+
+    if (typeof layerOrCategory === 'string') {
+      layers = this.getLayers(layerOrCategory);
+    } else if (layerOrCategory instanceof Layer) {
+      layers = [layerOrCategory];
+    } else {
+      layers = this.layers;
+    }
+
+    layers.forEach((layer) => layer.update());
   }
 }
 
