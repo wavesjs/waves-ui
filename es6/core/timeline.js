@@ -231,7 +231,7 @@ class Timeline extends events.EventEmitter {
       const container = this.containers[id];
       const offset = container.offsetElement;
       const context = this.context;
-      const translate = `translate(${context.offset * context.stretchRatio}, 0)`;
+      const translate = `translate(${context.xScale(context.offset * context.stretchRatio)}, 0)`;
       offset.setAttributeNS(null, 'transform', translate);
     }
   }

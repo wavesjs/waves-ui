@@ -12,25 +12,24 @@ class Line extends BaseShape {
   }
 
   update(renderingContext, group, data) {
+    data = data.slice(0);
+    data.sort((a, b) => this.cx(a) < this.cx(b) ? -1 : 1);
+
     this.shape.setAttributeNS(null, 'd', this._buildLine(renderingContext, data));
     this.shape.style.stroke = this.color(data);
     this.shape.style.fill = 'none';
+
+    data = null;
   }
 
   // builds the `path.d` attribute
+  // @TODO create some ShapeHelper ?
   _buildLine(renderingContext, data) {
     // sort data
-    let data = data.slice(0);
-    data.sort((a, b) => {
-      return this.cx(a) < this.cx(b) ? -1 : 1;
-    });
-
-    // console.log(data);
-
     let instructions = data.map((datum, index) => {
       const x = renderingContext.xScale(this.cx(datum));
       const y = renderingContext.yScale(this.cy(datum));
-      return x + ',' + y;
+      return `${x},${y}`;
     });
 
     return 'M' + instructions.join('L');

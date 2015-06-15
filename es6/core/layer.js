@@ -165,9 +165,10 @@ class Layer {
    *  to the `xScale` may change
    */
   _updateRenderingContext() {
-    this._renderingContext.xScale = this._context.xScale,
-    this._renderingContext.yScale = this._yScale,
-    this._renderingContext.height = this.params.height
+    this._renderingContext.xScale = this._context.xScale;
+    this._renderingContext.yScale = this._yScale;
+    this._renderingContext.height = this.params.height;
+    this._renderingContext.width  = this._context.xScale(this._context.duration);
   }
 
   // --------------------------------------

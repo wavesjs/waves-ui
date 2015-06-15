@@ -1,5 +1,9 @@
 const ns = require('../core/namespace');
 
+
+// @NOTE: accessors should receive datum index as argument
+// to allow the use of sampleRate to define x position
+
 class BaseShape {
   /**
    *  @param options {Object} override default configuration
