@@ -1,6 +1,10 @@
 const BaseShape = require('./base-shape');
 
 class TraceCommon extends BaseShape {
+  _getAccessorList() {
+    return { x: 0, mean: 0, range: 0 };
+  }
+
   _getDefaults() {
     return {
       rangeColor: 'steelblue',
@@ -29,7 +33,7 @@ class TraceCommon extends BaseShape {
   update(renderingContext, group, data) {
     // order data by x position
     data = data.slice(0);
-    data.sort((a, b) => a.x < b.x ? -1 : 1);
+    data.sort((a, b) => this.x(a) < this.x(b) ? -1 : 1);
 
     if (this.params.displayMean) {
       this.meanLine.setAttributeNS(null, 'd', this._buildMeanLine(renderingContext, data));
@@ -47,8 +51,8 @@ class TraceCommon extends BaseShape {
 
   _buildMeanLine(renderingContext, data) {
     let instructions = data.map((datum, index) => {
-      const x = renderingContext.xScale(datum.x);
-      const y = renderingContext.yScale(datum.mean);
+      const x = renderingContext.xScale(this.x(datum));
+      const y = renderingContext.yScale(this.mean(datum));
       return `${x},${y}`;
     });
 
@@ -63,10 +67,12 @@ class TraceCommon extends BaseShape {
 
     for (let i = 0; i < length; i++) {
       const datum = data[i];
-      const halfRange = datum.range / 2;
-      const x = renderingContext.xScale(datum.x);
-      const y0 = renderingContext.yScale(datum.mean + halfRange);
-      const y1 = renderingContext.yScale(datum.mean - halfRange);
+      const mean = this.mean(datum);
+      const halfRange = this.range(datum) / 2;
+
+      const x = renderingContext.xScale(this.x(datum));
+      const y0 = renderingContext.yScale(mean + halfRange);
+      const y1 = renderingContext.yScale(mean - halfRange);
 
       const start = `${x},${y0}`;
       const end = `${x},${y1}`;

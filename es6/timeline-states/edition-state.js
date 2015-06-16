@@ -1,5 +1,6 @@
 const BaseState = require('./base-state');
 
+// @NOTE => overlaps SelectionBehavior in some way...
 class EditionState extends BaseState {
   constructor(timeline) {
     super(timeline);
@@ -32,9 +33,14 @@ class EditionState extends BaseState {
     this.currentTarget = e.target;
 
     this.layers.forEach((layer) => {
-      if (layer.hasItem(e.target)) {
-        this.currentEditedLayer = layer;
+      if (!layer.hasItem(e.target)) { return }
+
+      if (!e.originalEvent.shiftKey) {
+        layer.unselectAll();
       }
+
+      this.currentEditedLayer = layer;
+      layer.select(this.currentTarget);
     });
   }
 

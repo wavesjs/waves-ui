@@ -189,6 +189,7 @@ class Layer {
     items = Array.isArray(items) ? items : [items];
 
     items.forEach((item) => {
+      item = this._getItemFromDOMElement(item);
       const datum = d3.select(item).datum();
       this._behavior.select(item, datum);
       this._toFront(item);
