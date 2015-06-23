@@ -4,6 +4,7 @@ const TimeContext = require('./time-context');
 const Surface  = require('../interactions/surface');
 const Keyboard = require('../interactions/keyboard');
 const Layer = require('./layer');
+const d3Scale = require('d3-scale');
 
 /**
  *  @class Timeline
@@ -77,7 +78,7 @@ class Timeline extends events.EventEmitter {
     const duration = this.params.duration;
     const width = this.params.width;
 
-    const xScale = d3.scale.linear()
+    const xScale = d3Scale.linear()
       .domain([0, duration])
       .range([0, width]);
 
