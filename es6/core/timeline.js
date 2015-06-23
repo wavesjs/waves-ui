@@ -99,10 +99,7 @@ class Timeline extends events.EventEmitter {
    *  @param context {TimeContext} a `TimeContext` the layer is associated with
    *      if null given, a new `TimeContext` will be created for the layer
    */
-  add(layer, containerId, category = 'default', context = null) {
-    const layerContext = context || new TimeContext(this.context);
-    layer.setContext(layerContext);
-
+  add(layer, containerId, category = 'default') {
     this._layerContainerMap.set(layer, this.containers[containerId]);
     this.layers.push(layer);
 

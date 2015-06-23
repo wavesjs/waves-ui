@@ -115,8 +115,19 @@ class Layer {
    *  @param ctor <Function:BaseShape> the constructor of the shape to be used
    *  @param accessors <Object> accessors to use in order to map the data structure
    */
-  setShape(ctor, accessors = {}, options = {}) {
+  configureShape(ctor, accessors = {}, options = {}) {
     this._shapeConfiguration = { ctor, accessors, options };
+  }
+
+
+  /**
+   *  Register the shape to use with the entire collection
+   *  example: the line in a beakpoint function
+   *  @param ctor {BaseShape} the constructor of the shape to use to render data
+   *  @param accessors {Object} accessors to use in order to map the data structure
+   */
+  configureCommonShape(ctor, accessors = {}, options = {}) {
+    this._commonShapeConfiguration = { ctor, accessors, options };
   }
 
   /**
@@ -127,16 +138,6 @@ class Layer {
   setBehavior(behavior) {
     behavior.initialize(this);
     this._behavior = behavior;
-  }
-
-  /**
-   *  Register the shape to use with the entire collection
-   *  example: the line in a beakpoint function
-   *  @param ctor {BaseShape} the constructor of the shape to use to render data
-   *  @param accessors {Object} accessors to use in order to map the data structure
-   */
-  setCommonShape(ctor, accessors = {}, options = {}) {
-    this._commonShapeConfiguration = { ctor, accessors, options };
   }
 
   // --------------------------------------
