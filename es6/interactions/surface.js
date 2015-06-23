@@ -1,5 +1,5 @@
 const EventSource = require('./event-source');
-const Event  = require('./event');
+const WaveEvent  = require('./wave-event');
 const body = window.document.body;
 
 class Surface extends EventSource {
@@ -19,7 +19,7 @@ class Surface extends EventSource {
    *  factory method for `Event` class
    */
   _createEvent(type, e) {
-    const event = new Event(type, e);
+    const event = new WaveEvent(type, e);
 
     const pos = this._getRelativePosition(e);
     event.x = pos.x;
@@ -80,7 +80,7 @@ class Surface extends EventSource {
       // console.log(event);
 
       this.emit('event', event);
-    }
+    };
 
     var onMouseMove = (e) => {
       // e.stopPropagation();
@@ -90,7 +90,7 @@ class Surface extends EventSource {
       this.lastEvent = event;
 
       this.emit('event', event);
-    }
+    };
 
     var onMouseUp = (e) => {
       // e.stopPropagation();
@@ -104,19 +104,19 @@ class Surface extends EventSource {
       body.removeEventListener('mousemove', onMouseMove);
 
       this.emit('event', event);
-    }
+    };
 
     var onClick = (e) => {
       // e.stopPropagation();
       let event = this._createEvent('click', e);
       this.emit('event', event);
-    }
+    };
 
     var onDblClick = (e) => {
       // e.stopPropagation();
       let event = this._createEvent('dblclick', e);
       this.emit('event', event);
-    }
+    };
 
     // bind callbacks
     this.el.addEventListener('mousedown', onMouseDown, false);

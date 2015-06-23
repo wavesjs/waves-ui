@@ -15,7 +15,7 @@ class TraceCommon extends BaseShape {
 
   render(renderingContext) {
     if (this.shape) { return this.shape; }
-    this.shape = document.createElementNS(this.ns, 'g')
+    this.shape = document.createElementNS(this.ns, 'g');
     // range path
     this.rangeZone = document.createElementNS(this.ns, 'path');
     this.shape.appendChild(this.rangeZone);

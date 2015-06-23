@@ -13,7 +13,7 @@ class Rect extends BaseShape {
       handlerWidth: 2,
       handlerOpacity: 0.8,
       opacity: 0.6
-    }
+    };
   }
 
   render(renderingContext) {

@@ -153,9 +153,9 @@ class Timeline extends events.EventEmitter {
     const interactionsGroup = document.createElementNS(ns, 'g');
     interactionsGroup.classList.add('interactions');
 
-    svg.appendChild(defs)
+    svg.appendChild(defs);
     offsetGroup.appendChild(layoutGroup);
-    svg.appendChild(offsetGroup)
+    svg.appendChild(offsetGroup);
     svg.appendChild(interactionsGroup);
 
     el.appendChild(svg);

@@ -33,7 +33,7 @@ class EditionState extends BaseState {
     this.currentTarget = e.target;
 
     this.layers.forEach((layer) => {
-      if (!layer.hasItem(e.target)) { return }
+      if (!layer.hasItem(e.target)) { return; }
 
       if (!e.originalEvent.shiftKey) {
         layer.unselectAll();

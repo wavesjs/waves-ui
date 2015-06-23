@@ -55,8 +55,16 @@ class Layer {
     this._yScale.domain(domain);
   }
 
+  get yDomain() {
+    return this.params.yDomain;
+  }
+
   set opacity(value) {
     this.params.opacity = value;
+  }
+
+  get opacity() {
+    return this.params.opacity;
   }
 
   param(name, value) {
@@ -99,7 +107,6 @@ class Layer {
         }
         break;
       case 'collection':
-      default:
         this._data = data;
         break;
     }
@@ -248,41 +255,56 @@ class Layer {
     this._isContextEditable = bool;
   }
 
+  get editable() {
+    return this._isContextEditable;
+  }
+
   // @NOTE create a proper `ContextBehavior` ?
   editContext(dx, dy, target) {
+    if (target.classList.contains('handler') && target.classList.contains('left')) {
+      this._editContextLeft(dx);
+    } else if (target.classList.contains('handler') && target.classList.contains('right')) {
+      this._editContextRight(dx);
+    } else {
+      this._moveContext(dx);
+    }
+  }
+
+  _editContextLeft(dx) {
     const contextAttributes = this._contextAttributes;
     const renderingContext  = this._renderingContext;
-    // dx = dx * contextAttributes.stretchRatio;
-    // dy = dy * contextAttributes.stretchRatio;
+    // edit `context.start`, `context.offset` and `context.duration`
+    const x = renderingContext.xScale(contextAttributes.start);
+    const offset = renderingContext.xScale(contextAttributes.offset);
+    const width = renderingContext.xScale(contextAttributes.duration);
 
-    if (target.classList.contains('handler') && target.classList.contains('left')) {
-      // edit `context.start`, `context.offset` and `context.duration`
-      const x = renderingContext.xScale(contextAttributes.start);
-      const offset = renderingContext.xScale(contextAttributes.offset);
-      const width = renderingContext.xScale(contextAttributes.duration);
+    let targetX = x + dx;
+    let targetOffset = offset - dx;
+    let targetWidth = Math.max(width - dx, 0);
 
-      let targetX = x + dx;
-      let targetOffset = offset - dx;
-      let targetWidth = width - dx;
+    this.setContextAttribute('start', renderingContext.xScale.invert(targetX));
+    this.setContextAttribute('offset', renderingContext.xScale.invert(targetOffset));
+    this.setContextAttribute('duration', renderingContext.xScale.invert(targetWidth));
+  }
 
-      this.setContextAttribute('start', renderingContext.xScale.invert(targetX));
-      this.setContextAttribute('offset', renderingContext.xScale.invert(targetOffset));
-      this.setContextAttribute('duration', renderingContext.xScale.invert(targetWidth));
+  _editContextRight(dx) {
+    const contextAttributes = this._contextAttributes;
+    const renderingContext  = this._renderingContext;
+    // edit `context.duration`
+    const width = renderingContext.xScale(contextAttributes.duration);
+    let targetWidth = Math.max(width + dx, 0);
 
-    } else if (target.classList.contains('handler') && target.classList.contains('right')) {
-      // edit `context.duration`
-      const width = renderingContext.xScale(contextAttributes.duration);
-      let targetWidth = Math.max(width + dx, 0);
+    this.setContextAttribute('duration', renderingContext.xScale.invert(targetWidth));
+  }
 
-      this.setContextAttribute('duration', renderingContext.xScale.invert(targetWidth));
+  _moveContext(dx) {
+    const contextAttributes = this._contextAttributes;
+    const renderingContext  = this._renderingContext;
+    // edit `context.start`
+    const x = renderingContext.xScale(contextAttributes.start);
+    let targetX = Math.max(x + dx, 0);
 
-    } else {
-      // edit `context.start`
-      const x = renderingContext.xScale(contextAttributes.start);
-      let targetX = Math.max(x + dx, 0);
-
-      this.setContextAttribute('start', renderingContext.xScale.invert(targetX));
-    }
+    this.setContextAttribute('start', renderingContext.xScale.invert(targetX));
   }
 
   stretchContext(dx, dy, target) {}
@@ -300,7 +322,9 @@ class Layer {
       if (el.nodeName === 'g' && el.classList.contains('item')) {
         return el;
       }
-    } while (el = el.parentNode);
+
+      el = el.parentNode;
+    } while (el !== undefined);
   }
 
   /**
@@ -320,7 +344,7 @@ class Layer {
    */
   hasItem(el) {
     const item = this._getItemFromDOMElement(el);
-    return (this.items[0].indexOf(item) !== -1) ? item : null;
+    return (this.items.nodes().indexOf(item) !== -1) ? item : null;
   }
 
   /**
@@ -332,7 +356,9 @@ class Layer {
       if (el === this.container) {
         return true;
       }
-    } while (el = el.parentNode);
+
+      el = el.parentNode;
+    } while (el !== undefined);
 
     return false;
   }
@@ -446,7 +472,7 @@ class Layer {
     this.items = d3Selection.select(this.group)
       .selectAll('.item')
       .filter(function() {
-        return !this.classList.contains('common')
+        return !this.classList.contains('common');
       })
       .data(this.data, function(datum) {
         return _datumIdMap.get(datum);

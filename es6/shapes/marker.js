@@ -9,7 +9,7 @@ class Marker extends BaseShape {
     return {
       handlerWidth: 7,
       handlerHeight: 10
-    }
+    };
   }
 
   render(renderingContext) {

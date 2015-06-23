@@ -1,5 +1,5 @@
 const EventSource = require('./event-source');
-const Event  = require('./event');
+const WaveEvent  = require('./wave-event');
 const body = window.document.body;
 
 
@@ -12,7 +12,7 @@ class Keyboard extends EventSource {
   }
 
   _createEvent(type, e) {
-    const event = new Event(type, e);
+    const event = new WaveEvent(type, e);
 
     event.shiftKey = e.shiftKey;
     event.ctrlKey = e.ctrlKey;
@@ -27,12 +27,12 @@ class Keyboard extends EventSource {
     const onKeyDown = (e) => {
       let event = this._createEvent('keydown', e);
       this.emit('event', event);
-    }
+    };
 
     const onKeyUp = (e) => {
       let event = this._createEvent('keyup', e);
       this.emit('event', event);
-    }
+    };
 
     this.el.onkeydown = onKeyDown;
     this.el.onkeyup = onKeyUp;

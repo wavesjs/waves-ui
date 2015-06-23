@@ -2,13 +2,13 @@ var BaseShape = require('./base-shape');
 
 class Waveform extends BaseShape {
   _getAccessorList() {
-    return { y: 0, sampleRate: 1000 }
+    return { y: 0, sampleRate: 1000 };
   }
 
   _getDefaults() {
     return {
       color: '#000000'
-    }
+    };
   }
 
   render(renderingContext) {

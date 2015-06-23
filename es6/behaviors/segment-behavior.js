@@ -30,7 +30,7 @@ class SegmentBehavior extends BaseBehavior {
     if (targetY < 0) {
       targetY = 0;
     } else if (targetY + height > layerHeight) {
-      targetY = layerHeight - height
+      targetY = layerHeight - height;
     }
 
     shape.x(datum, renderingContext.xScale.invert(targetX));
