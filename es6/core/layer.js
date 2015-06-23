@@ -1,5 +1,6 @@
 const ns = require('./namespace');
-const d3 = require('d3-browserify');
+const d3Scale = require('d3-scale');
+const d3Selection = require('d3-selection');
 const Rect = require('../shapes/rect');
 const SegmentBehavior = require('../behaviors/segment-behavior');
 
@@ -41,7 +42,7 @@ class Layer {
     this._context = null;
     this._contextAttributes = null;
 
-    this._yScale = d3.scale.linear()
+    this._yScale = d3Scale.linear()
       .domain(this.params.yDomain)
       .range([0, this.params.height]);
 
@@ -114,8 +115,19 @@ class Layer {
    *  @param ctor <Function:BaseShape> the constructor of the shape to be used
    *  @param accessors <Object> accessors to use in order to map the data structure
    */
-  setShape(ctor, accessors = {}, options = {}) {
+  configureShape(ctor, accessors = {}, options = {}) {
     this._shapeConfiguration = { ctor, accessors, options };
+  }
+
+
+  /**
+   *  Register the shape to use with the entire collection
+   *  example: the line in a beakpoint function
+   *  @param ctor {BaseShape} the constructor of the shape to use to render data
+   *  @param accessors {Object} accessors to use in order to map the data structure
+   */
+  configureCommonShape(ctor, accessors = {}, options = {}) {
+    this._commonShapeConfiguration = { ctor, accessors, options };
   }
 
   /**
@@ -126,16 +138,6 @@ class Layer {
   setBehavior(behavior) {
     behavior.initialize(this);
     this._behavior = behavior;
-  }
-
-  /**
-   *  Register the shape to use with the entire collection
-   *  example: the line in a beakpoint function
-   *  @param ctor {BaseShape} the constructor of the shape to use to render data
-   *  @param accessors {Object} accessors to use in order to map the data structure
-   */
-  setCommonShape(ctor, accessors = {}, options = {}) {
-    this._commonShapeConfiguration = { ctor, accessors, options };
   }
 
   // --------------------------------------
@@ -190,7 +192,7 @@ class Layer {
 
     items.forEach((item) => {
       item = this._getItemFromDOMElement(item);
-      const datum = d3.select(item).datum();
+      const datum = d3Selection.select(item).datum();
       this._behavior.select(item, datum);
       this._toFront(item);
     });
@@ -201,7 +203,7 @@ class Layer {
     items = Array.isArray(items) ? items : [items];
 
     items.forEach((item) => {
-      const datum = d3.select(item).datum();
+      const datum = d3Selection.select(item).datum();
       this._behavior.unselect(item, datum);
     });
   }
@@ -219,7 +221,7 @@ class Layer {
     items = Array.isArray(items) ? items : [items];
 
     items.forEach((item) => {
-      const datum = d3.select(item).datum();
+      const datum = d3Selection.select(item).datum();
       this._behavior.toggleSelection(item, datum);
     });
   }
@@ -227,7 +229,7 @@ class Layer {
   // @TODO change signature edit(items = [...], dx, dy, target);
   // -> be consistent for all behaviors API
   edit(item, dx, dy, target) {
-    const datum = d3.select(item).datum();
+    const datum = d3Selection.select(item).datum();
     const shape = this._itemShapeMap.get(item);
     this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);
   }
@@ -441,7 +443,7 @@ class Layer {
     });
 
     // select items
-    this.items = d3.select(this.group)
+    this.items = d3Selection.select(this.group)
       .selectAll('.item')
       .filter(function() {
         return !this.classList.contains('common')
@@ -559,7 +561,7 @@ class Layer {
   updateShapes(item = null) {
     const that = this;
     const renderingContext = this._renderingContext;
-    const items = item !== null ? d3.selectAll(item) : this.items;
+    const items = item !== null ? d3Selection.selectAll(item) : this.items;
 
     // update common shapes
     this._itemCommonShapeMap.forEach((shape, item) => {
