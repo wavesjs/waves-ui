@@ -4,6 +4,7 @@ const TimeContext = require('./time-context');
 const Surface  = require('../interactions/surface');
 const Keyboard = require('../interactions/keyboard');
 const Layer = require('./layer');
+const d3 = require('d3-browserify');
 
 /**
  *  @class Timeline

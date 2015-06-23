@@ -1,5 +1,5 @@
 const ns = require('./namespace');
-const d3 = require('d3');
+const d3 = require('d3-browserify');
 const Rect = require('../shapes/rect');
 const SegmentBehavior = require('../behaviors/segment-behavior');
 
@@ -240,7 +240,7 @@ class Layer {
    *  draw the shape to interact with the context
    *  @params bool {Boolean} define if the layer's context is editable or not
    */
-  set editable(bool = false) {
+  set editable(bool) {
     const display = bool ? 'block' : 'none';
     this.interactionsGroup.style.display = display;
     this._isContextEditable = bool;

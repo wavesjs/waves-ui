@@ -1,4 +1,4 @@
-const d3 = require('d3');
+const d3 = require('d3-browserify');
 const ns = require('./namespace');
 
 // @FIXME there is a problem with the stretch:
