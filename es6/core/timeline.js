@@ -252,6 +252,10 @@ class Timeline extends events.EventEmitter {
     this.emit('update', layers);
     layers.forEach((layer) => layer.update());
   }
+
+  updateContexts() {
+    this.layers.forEach((layer) => layer.updateContext());
+  }
 }
 
 module.exports = Timeline;
