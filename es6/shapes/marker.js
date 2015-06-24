@@ -42,6 +42,7 @@ class Marker extends BaseShape {
 
   update(renderingContext, group, datum, index) {
     const x = renderingContext.xScale(this.x(datum));
+
     const color = this.color(datum);
 
     group.setAttributeNS(null, 'transform', `translate(${x}, 0)`);

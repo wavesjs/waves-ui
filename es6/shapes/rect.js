@@ -5,7 +5,7 @@ class Rect extends BaseShape {
   getClassName() { return 'rect'; }
 
   _getAccessorList() {
-    return { x: 0, y: 0, width: 0, height: 0, color: '#000000', opacity: 1 };
+    return { x: 0, y: 0, width: 0, height: 1, color: '#000000', opacity: 1 };
   }
 
   _getDefaults() {

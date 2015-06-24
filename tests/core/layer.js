@@ -1,14 +1,12 @@
 const assert = require('assert');
 const Layer = require('../../es6/core/layer');
 const TimeContext = require('../../es6/core/time-context');
-const Marker = require('../../es6/shapes/marker');
-const MarkerBehavior = require('../../es6/behaviors/marker-behavior');
 const Timeline = require('../../es6/core/timeline');
 
 describe('Layer', function(){
   describe('Layer instanciation', function(){
     it('should create a layer and attach it to a DOM element of a timeline instance', function(){
-        // holder element for the timeline
+        // Holder element for the timeline
         let timelineDiv = document.createElement("div");
         document.body.appendChild(timelineDiv);
 
@@ -17,14 +15,11 @@ describe('Layer', function(){
         timeline.registerContainer('foo', timelineDiv);
 
         // TimeContext
-        let timeContext  = new TimeContext(timeline.context)
+        let timeContext = new TimeContext(timeline.context)
 
-        // Layer instanciation for a marker layer
-        let markerData = [{ x: 3 }, { x: 6 }];
-        let layer = new Layer('collection', markerData);
+        // Layer instanciation
+        let layer = new Layer();
         layer.setContext(timeContext);
-        layer.configureShape(Marker);
-        layer.setBehavior(new MarkerBehavior());
         layer.setContextAttribute('duration', 12);
 
         // Attach layer to the timeline
@@ -32,6 +27,15 @@ describe('Layer', function(){
         timeline.render();
         timeline.draw();
         timeline.update();
+
+        // Check that elements are correctly positioned
+        // Timeline default duration is 60s and default width is 1000px
+        // Layer duration context attribute is set to 12s
+        // Layer default start context attribute is 0
+        // so Layer width should be 12*1000/60 = 200
+        const boundingClientRect = layer.boundingBox.getBoundingClientRect();
+        assert.equal(boundingClientRect.width, 200);
+        assert.equal(boundingClientRect.height, 100); // default value
 
         // setTimeout(function() {
         //   layer.setContextAttribute('start', 12);
