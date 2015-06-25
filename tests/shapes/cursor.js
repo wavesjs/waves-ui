@@ -1,3 +1,0 @@
-describe('Cursor', function(){
-
-});
