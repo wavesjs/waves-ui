@@ -3,13 +3,15 @@ const d3Scale = require('d3-scale');
 const d3Selection = require('d3-selection');
 const Rect = require('../shapes/rect');
 const SegmentBehavior = require('../behaviors/segment-behavior');
+const events = require('events');
 
 // create a private item -> id map to force d3 being in sync with the DOM
 let _counter = 0;
 const _datumIdMap = new Map();
 
-class Layer {
+class Layer extends events.EventEmitter {
   constructor(dataType = 'collection', data = [], options = {}) {
+    super();
     this.dataType = dataType; // 'entity' || 'collection';
     this.data = data;
 
@@ -178,6 +180,8 @@ class Layer {
     this._renderingContext.yScale = this._yScale;
     this._renderingContext.height = this.params.height;
     this._renderingContext.width  = this._context.xScale(this._context.duration);
+    // for foreign oject issue in chrome
+    this._renderingContext.offsetX = this._context.xScale(this._context.offset);
   }
 
   // --------------------------------------
@@ -239,6 +243,7 @@ class Layer {
     const datum = d3Selection.select(item).datum();
     const shape = this._itemShapeMap.get(item);
     this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);
+    this.emit('edit', shape, datum);
   }
 
   // --------------------------------------
@@ -324,7 +329,7 @@ class Layer {
       }
 
       el = el.parentNode;
-    } while (el !== undefined);
+    } while (el != undefined);
   }
 
   /**
@@ -358,7 +363,7 @@ class Layer {
       }
 
       el = el.parentNode;
-    } while (el !== undefined);
+    } while (el != undefined);
 
     return false;
   }
@@ -559,6 +564,7 @@ class Layer {
     // const clipPath = `polygon(0 0, ${width}px 0, ${width}px ${height}px, 0 ${height}px)`;
     // -webkit-clip-path: polygon(0 0, 740px 0, 740px 160px, 0 160px);
     // this.boundingBox.style.webkitClipPath = clipPath;
+
     this.boundingBox.setAttributeNS(null, 'width', width);
     this.boundingBox.setAttributeNS(null, 'height', height);
     this.boundingBox.style.opacity = this.params.opacity;

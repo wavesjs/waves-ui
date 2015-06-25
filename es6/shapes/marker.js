@@ -25,9 +25,9 @@ class Marker extends BaseShape {
     // draw line
     this.line.setAttributeNS(null, 'x', 0);
     this.line.setAttributeNS(null, 'y', 0);
-    this.line.setAttributeNS(null, 'width', 0.5);
+    this.line.setAttributeNS(null, 'width', 1);
     this.line.setAttributeNS(null, 'height', height);
-    this.line.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+    this.line.setAttributeNS(null, 'shape-rendering', 'optimizeSpeed');
 
     this.shape.appendChild(this.line);
 
@@ -49,8 +49,7 @@ class Marker extends BaseShape {
   }
 
   update(renderingContext, group, datum, index) {
-    let x = renderingContext.xScale(this.x(datum));
-    x = x-0.5
+    const x = renderingContext.xScale(this.x(datum)) - 0.5;
     const color = this.color(datum);
 
     group.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
