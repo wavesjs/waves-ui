@@ -1,6 +1,8 @@
-const Rect = require('./rect');
+const Segment = require('./segment');
 
-class AnnotatedSegment extends Rect {
+class AnnotatedSegment extends Segment {
+  getClassName() { return 'annotated-segment'; }
+
   _getAccessorList() {
     let list = super._getAccessorList();
     list.text = 'default';

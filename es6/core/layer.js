@@ -1,7 +1,7 @@
 const ns = require('./namespace');
 const d3Scale = require('d3-scale');
 const d3Selection = require('d3-selection');
-const Rect = require('../shapes/rect');
+const Segment = require('../shapes/segment');
 const SegmentBehavior = require('../behaviors/segment-behavior');
 const events = require('events');
 
@@ -429,7 +429,7 @@ class Layer extends events.EventEmitter {
     this.interactionsGroup.classList.add('layer-interactions');
     this.interactionsGroup.style.display = 'none';
     // @NOTE: works but king of ugly... must be cleaned
-    this.contextShape = new Rect();
+    this.contextShape = new Segment();
     this.contextShape.install({
       opacity: () => 0.1,
       color  : () => '#787878',
@@ -445,9 +445,9 @@ class Layer extends events.EventEmitter {
     this.boundingBox.appendChild(this.interactionsGroup);
     this.boundingBox.appendChild(this.group);
 
-    // draw a rect in context background to debug it's size
+    // draw a Segment in context background to debug it's size
     if (this.params.debug) {
-      this.debugRect = document.createElementNS(ns, 'rect');
+      this.debugRect = document.createElementNS(ns, 'Segment');
       this.boundingBox.appendChild(this.debugRect);
       this.debugRect.style.fill = '#ababab';
       this.debugRect.style.fillOpacity = 0.1;
@@ -466,8 +466,7 @@ class Layer extends events.EventEmitter {
    * create the DOM according to given data and shapes
    */
   draw() {
-    // @NOTE: create a unique id to force d3 to keep data in sync with the DOM
-    // @TODO: read again http://bost.ocks.org/mike/selection/
+    // create a unique id to force d3 to keep data in sync with the DOM
     this.data.forEach(function(datum) {
       if (_datumIdMap.has(datum)) { return; }
       _datumIdMap.set(datum, _counter++);
@@ -504,34 +503,28 @@ class Layer extends events.EventEmitter {
     this.items.enter()
       .append((datum, index) => {
         // @NOTE: d3 binds `this` to the container group
-        // create a group for the item
-        const group = document.createElementNS(ns, 'g');
         const { ctor, accessors, options } = this._shapeConfiguration;
         const shape = new ctor(options);
-        // install accessors on the newly created shape
         shape.install(accessors);
-        const item = shape.render(this._renderingContext)
-        // group.appendChild(shape.render(this._renderingContext));
-        // group.classList.add('item', shape.getClassName());
-        item.classList.add('item', shape.getClassName());
 
+        const item = shape.render(this._renderingContext)
+        item.classList.add('item', shape.getClassName());
         this._itemShapeMap.set(item, shape);
 
-        // return group;
         return item;
       });
 
     // exit
-    const that = this;
+    const _itemShapeMap = this._itemShapeMap;
 
     this.items.exit()
       .each(function(datum, index) {
         const item = this;
-        const shape = that._itemShapeMap.get(item);
-
-        shape.destroy();                  // clean shape
-        _datumIdMap.delete(datum);        // clean reference in `id` map
-        that._itemShapeMap.delete(item); // destroy reference in item shape map
+        const shape = _itemShapeMap.get(item);
+        // clean all shape/item references
+        shape.destroy();
+        _datumIdMap.delete(datum);
+        _itemShapeMap.delete(item);
       })
       .remove();
   }

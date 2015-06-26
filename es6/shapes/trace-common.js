@@ -1,6 +1,8 @@
 const BaseShape = require('./base-shape');
 
 class TraceCommon extends BaseShape {
+  getClassName() { return 'trace-common'; }
+
   _getAccessorList() {
     return { x: 0, mean: 0, range: 0 };
   }

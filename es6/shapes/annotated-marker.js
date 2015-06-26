@@ -1,6 +1,8 @@
 const Marker = require('./marker');
 
 class AnnotatedMarker extends Marker {
+  getClassName() { return 'annotated-marker'; }
+
   _getAccessorList() {
     let list = super._getAccessorList();
     list.text = 'default';

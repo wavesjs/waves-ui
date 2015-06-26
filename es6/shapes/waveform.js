@@ -2,6 +2,8 @@ const BaseShape = require('./base-shape');
 const xhtmlNS = 'http://www.w3.org/1999/xhtml'
 
 class Waveform extends BaseShape {
+  getClassName() { return 'waveform'; }
+
   _getAccessorList() {
     return { y: 0 };
   }

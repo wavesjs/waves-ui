@@ -1,8 +1,7 @@
 const BaseShape = require('./base-shape');
 
-// @TODO rename to segment
-class Rect extends BaseShape {
-  getClassName() { return 'rect'; }
+class Segment extends BaseShape {
+  getClassName() { return 'segment'; }
 
   _getAccessorList() {
     return { x: 0, y: 0, width: 0, height: 1, color: '#000000', opacity: 1 };
@@ -93,4 +92,4 @@ class Rect extends BaseShape {
   }
 }
 
-module.exports = Rect;
+module.exports = Segment;
