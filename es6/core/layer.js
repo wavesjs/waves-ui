@@ -510,13 +510,15 @@ class Layer extends events.EventEmitter {
         const shape = new ctor(options);
         // install accessors on the newly created shape
         shape.install(accessors);
+        const item = shape.render(this._renderingContext)
+        // group.appendChild(shape.render(this._renderingContext));
+        // group.classList.add('item', shape.getClassName());
+        item.classList.add('item', shape.getClassName());
 
-        group.appendChild(shape.render(this._renderingContext));
-        group.classList.add('item', shape.getClassName());
+        this._itemShapeMap.set(item, shape);
 
-        this._itemShapeMap.set(group, shape);
-
-        return group;
+        // return group;
+        return item;
       });
 
     // exit
@@ -524,12 +526,12 @@ class Layer extends events.EventEmitter {
 
     this.items.exit()
       .each(function(datum, index) {
-        const group = this;
-        const shape = that._itemShapeMap.get(group);
+        const item = this;
+        const shape = that._itemShapeMap.get(item);
 
         shape.destroy();                  // clean shape
         _datumIdMap.delete(datum);        // clean reference in `id` map
-        that._itemShapeMap.delete(group); // destroy reference in item shape map
+        that._itemShapeMap.delete(item); // destroy reference in item shape map
       })
       .remove();
   }
@@ -603,10 +605,9 @@ class Layer extends events.EventEmitter {
     // update entity or collection shapes
     if (!items) { return; } // if no shape in the layer...
     items.each(function(datum, index) {
-      // update all shapes related to the current item
-      const group = this; // current `g.item`
-      const shape = that._itemShapeMap.get(group);
-      shape.update(renderingContext, group, datum, index);
+      const item = this;
+      const shape = that._itemShapeMap.get(item);
+      shape.update(renderingContext, item, datum, index);
     });
   }
 }
