@@ -1,5 +1,3 @@
-const ns = require('./namespace');
-
 // @FIXME there is a problem with the stretch:
 // how does it must be applyed ?
 // should we maintain some `absoluteStart`, `absoluteDuration`, etc... values ?
@@ -21,8 +19,8 @@ class TimeContext {
     this._stretchRatio = 1;
     // @NOTE: need an `absoluteStretchRatio` ?
 
-    if (parent) {
-      parent._children.push(this);
+    if (this._parent) {
+      this._parent._children.push(this);
     }
   }
 

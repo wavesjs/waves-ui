@@ -5,7 +5,8 @@ const Segment = require('../shapes/segment');
 const SegmentBehavior = require('../behaviors/segment-behavior');
 const events = require('events');
 
-// create a private item -> id map to force d3 being in sync with the DOM
+// create a private item -> id map
+// in order to force d3 keeping in sync with the DOM
 let _counter = 0;
 const _datumIdMap = new Map();
 
@@ -16,7 +17,7 @@ class Layer extends events.EventEmitter {
     this.data = data;
 
     const defaults = {
-      height: 100, // should inherit from parent
+      height: 100,
       top: 0,
       id: '',
       yDomain: [0, 1],
@@ -26,6 +27,7 @@ class Layer extends events.EventEmitter {
     };
 
     this.params = Object.assign({}, defaults, options);
+    this.timeContext = null;
 
     this.container = null; // offset group of the parent context
     this.group = null; // group created by the layer inside the context
@@ -38,17 +40,13 @@ class Layer extends events.EventEmitter {
     this._itemCommonShapeMap = new Map(); // one entry max in this map
 
     this._isContextEditable = false;
-
-    // component configuration
     this._behavior = null;
-    this._context = null;
-    this._contextAttributes = null;
 
     this._yScale = d3Scale.linear()
       .domain(this.params.yDomain)
       .range([0, this.params.height]);
 
-    // initialize context
+    // initialize timeContext layout
     this._render();
   }
 
@@ -77,17 +75,8 @@ class Layer extends events.EventEmitter {
    *  @mandatory define the context in which the layer is drawn
    *  @param context {TimeContext} the timeContext in which the layer is displayed
    */
-  setContext(context) {
-    this._context = context;
-
-    // maintain a reference of the context state to be used in application
-    this._contextAttributes = {
-      start: this._context.start,
-      duration: this._context.duration,
-      offset: this._context.offset,
-      stretchRatio: this._context.stretchRatio
-    };
-
+  setTimeContext(timeContext) {
+    this.timeContext = timeContext;
     // create a mixin to pass to shapes
     this._renderingContext = {};
     this._updateRenderingContext();
@@ -140,7 +129,6 @@ class Layer extends events.EventEmitter {
   }
 
   /**
-   *  @NOTE should be merge in setShape for consistency but problem to define the method signature
    *  Register the behavior to use when interacting with the shape
    *  @param behavior {BaseBehavior}
    */
@@ -149,39 +137,18 @@ class Layer extends events.EventEmitter {
     this._behavior = behavior;
   }
 
-  // --------------------------------------
-  // Context Attributes Accessors
-  // --------------------------------------
-
-  /**
-   *  Use an external obj to use as the `contextAttribute` wrapper
-   *  @param obj {Object}
-   */
-  set contextAttributes(obj) { this._contextAttributes = obj; }
-  get contextAttributes() { return this._contextAttributes; }
-
-  /**
-   *  update a given attribute of the context
-   *  @param name {String} the key of the attribute to update
-   *  @param value {mixed}
-   */
-  setContextAttribute(name, value) {
-    this._contextAttributes[name] = value;
-    this._context[name] = value;
-  }
-
   /**
    *  update the values in `_renderingContext`
    *  is particulary needed when updating `stretchRatio` as the pointer
    *  to the `xScale` may change
    */
   _updateRenderingContext() {
-    this._renderingContext.xScale = this._context.xScale;
+    this._renderingContext.xScale = this.timeContext.xScale;
     this._renderingContext.yScale = this._yScale;
     this._renderingContext.height = this.params.height;
-    this._renderingContext.width  = this._context.xScale(this._context.duration);
+    this._renderingContext.width  = this.timeContext.xScale(this.timeContext.duration);
     // for foreign oject issue in chrome
-    this._renderingContext.offsetX = this._context.xScale(this._context.offset);
+    this._renderingContext.offsetX = this.timeContext.xScale(this.timeContext.offset);
   }
 
   // --------------------------------------
@@ -276,40 +243,40 @@ class Layer extends events.EventEmitter {
   }
 
   _editContextLeft(dx) {
-    const contextAttributes = this._contextAttributes;
+    const timeContext = this.timeContext;
     const renderingContext  = this._renderingContext;
     // edit `context.start`, `context.offset` and `context.duration`
-    const x = renderingContext.xScale(contextAttributes.start);
-    const offset = renderingContext.xScale(contextAttributes.offset);
-    const width = renderingContext.xScale(contextAttributes.duration);
+    const x = renderingContext.xScale(timeContext.start);
+    const offset = renderingContext.xScale(timeContext.offset);
+    const width = renderingContext.xScale(timeContext.duration);
 
     let targetX = x + dx;
     let targetOffset = offset - dx;
     let targetWidth = Math.max(width - dx, 0);
 
-    this.setContextAttribute('start', renderingContext.xScale.invert(targetX));
-    this.setContextAttribute('offset', renderingContext.xScale.invert(targetOffset));
-    this.setContextAttribute('duration', renderingContext.xScale.invert(targetWidth));
+    this.timeContext.start = renderingContext.xScale.invert(targetX);
+    this.timeContext.offset = renderingContext.xScale.invert(targetOffset);
+    this.timeContext.duration = renderingContext.xScale.invert(targetWidth);
   }
 
   _editContextRight(dx) {
-    const contextAttributes = this._contextAttributes;
+    const timeContext = this.timeContext;
     const renderingContext  = this._renderingContext;
     // edit `context.duration`
-    const width = renderingContext.xScale(contextAttributes.duration);
+    const width = renderingContext.xScale(timeContext.duration);
     let targetWidth = Math.max(width + dx, 0);
 
-    this.setContextAttribute('duration', renderingContext.xScale.invert(targetWidth));
+    this.timeContext.duration = renderingContext.xScale.invert(targetWidth);
   }
 
   _moveContext(dx) {
-    const contextAttributes = this._contextAttributes;
+    const timeContext = this.timeContext;
     const renderingContext  = this._renderingContext;
     // edit `context.start`
-    const x = renderingContext.xScale(contextAttributes.start);
+    const x = renderingContext.xScale(timeContext.start);
     let targetX = Math.max(x + dx, 0);
 
-    this.setContextAttribute('start', renderingContext.xScale.invert(targetX));
+    this.timeContext.start = renderingContext.xScale.invert(targetX);
   }
 
   stretchContext(dx, dy, target) {}
@@ -324,23 +291,13 @@ class Layer extends events.EventEmitter {
    */
   _getItemFromDOMElement(el) {
     do {
-      if (el.nodeName === 'g' && el.classList.contains('item')) {
-        return el;
-      }
-
+      if (el.classList && el.classList.contains('item')) { return el; }
       el = el.parentNode;
     } while (el != undefined);
   }
 
   /**
-   *  moves an `item`'s group to the end of the layer (svg z-index...)
-   *  @param `item` {DOMElement} the item to be moved
-   */
-  _toFront(item) {
-    this.group.appendChild(item);
-  }
-
-  /**
+   *  @NOTE bad method name !!!
    *  Define if an given DOM element belongs to one of the `items`
    *  @param `el` {DOMElement} the element to be tested
    *  @return {mixed}
@@ -353,15 +310,20 @@ class Layer extends events.EventEmitter {
   }
 
   /**
+   *  moves an `item`'s group to the end of the layer (svg z-index...)
+   *  @param `item` {DOMElement} the item to be moved
+   */
+  _toFront(item) {
+    this.group.appendChild(item);
+  }
+
+  /**
    *  Define if a given element belongs to the layer
    *  is more general than `hasItem`, can be used to check interaction elements too
    */
   hasElement(el) {
     do {
-      if (el === this.container) {
-        return true;
-      }
-
+      if (el === this.container) { return true; }
       el = el.parentNode;
     } while (el != undefined);
 
@@ -374,9 +336,9 @@ class Layer extends events.EventEmitter {
    */
   getItemsInArea(area) {
     // work in pixel domain
-    const start    = this._context.xScale(this._context.start);
-    const duration = this._context.xScale(this._context.duration);
-    const offset   = this._context.xScale(this._context.offset);
+    const start    = this.timeContext.xScale(this.timeContext.start);
+    const duration = this.timeContext.xScale(this.timeContext.duration);
+    const offset   = this.timeContext.xScale(this.timeContext.offset);
     const top      = this.params.top;
     // must be aware of the layer's context modifications
     // constrain in working view
@@ -404,8 +366,9 @@ class Layer extends events.EventEmitter {
     return items[0].slice(0);
   }
 
-  // helper to add some class or stuff on items
-  // each(callback) { this._each = callback }
+  // --------------------------------------
+  // Rendering / Display methods
+  // --------------------------------------
 
   /**
    *  render the DOM in memory on layer creation to be able to use it before
@@ -433,7 +396,7 @@ class Layer extends events.EventEmitter {
     this.contextShape.install({
       opacity: () => 0.1,
       color  : () => '#787878',
-      width  : () => this._contextAttributes.duration,
+      width  : () => this.timeContext.duration,
       height : () => this._renderingContext.yScale.domain()[1],
       y      : () => this._renderingContext.yScale.domain()[0]
     });
@@ -535,20 +498,20 @@ class Layer extends events.EventEmitter {
   update() {
     this._updateRenderingContext();
 
-    this.updateContext();
+    this.updateContainer();
     this.updateShapes();
   }
 
   /**
    *  updates the context of the layer
    */
-  updateContext() {
+  updateContainer() {
     // @NOTE: replaced `context.originalXScale` with `context.xScale`
     // => the behavior is not proper when the layer is stretched
-    // const x      = this._context._parent.xScale(this._context.start);
-    const x      = this._context.xScale(this._context.start);
-    const width  = this._context.xScale(this._context.duration);
-    const offset = this._context.xScale(this._context.offset);
+    // const x      = this.timeContext._parent.xScale(this.timeContext.start);
+    const x      = this.timeContext.xScale(this.timeContext.start);
+    const width  = this.timeContext.xScale(this.timeContext.duration);
+    const offset = this.timeContext.xScale(this.timeContext.offset);
     const top    = this.params.top;
     const height = this.params.height;
     // matrix to invert the coordinate system
@@ -570,7 +533,7 @@ class Layer extends events.EventEmitter {
     this.contextShape.update(
       this._renderingContext,
       this.interactionsGroup,
-      this._contextAttributes,
+      this.timeContext,
       0
     );
 
