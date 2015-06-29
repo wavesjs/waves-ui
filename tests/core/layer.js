@@ -1,6 +1,51 @@
-var assert = require('assert');
-var Layer = require('../../es6/core/layer');
+const assert = require('assert');
+const Layer = require('../../es6/core/layer');
+const TimeContext = require('../../es6/core/time-context');
+const Timeline = require('../../es6/core/timeline');
 
+describe('Layer', function(){
+  describe('Layer instanciation', function(){
+    it('should create a layer and attach it to a DOM element of a timeline instance', function(){
+        // Holder element for the timeline
+        let timelineDiv = document.createElement("div");
+        document.body.appendChild(timelineDiv);
+
+        // Create a timeline
+        let timeline = new Timeline();
+        timeline.registerContainer('foo', timelineDiv);
+
+        // TimeContext
+        let timeContext = new TimeContext(timeline.timeContext)
+
+        // Layer instanciation
+        let layer = new Layer('collection', []);
+        layer.setTimeContext(timeContext);
+        layer.timeContext.duration = 12;
+
+        // Attach layer to the timeline
+        timeline.addLayer(layer, 'foo');
+        timeline.render();
+        timeline.draw();
+        timeline.update();
+
+        // Check that elements are correctly positioned
+        // Timeline default duration is 60s and default width is 1000px
+        // Layer duration context attribute is set to 12s
+        // Layer default start context attribute is 0
+        // so Layer width should be 12*1000/60 = 200
+        const boundingClientRect = layer.boundingBox.getBoundingClientRect();
+        assert.equal(boundingClientRect.width, 200);
+        assert.equal(boundingClientRect.height, 100); // default value
+
+        // setTimeout(function() {
+        //   layer.setContextAttribute('start', 12);
+        //   timeline.update();
+        // }, 1000);
+      });
+  });
+});
+
+/*
 describe('Layer', function() {
   describe('#contructor', function() {
     it('should create an instance with default `dataType`', function(done) {});
@@ -136,18 +181,4 @@ describe('Layer', function() {
     it('should call `updateShapes` on each innerLayers', function(done) {});
   });
 });
-
-describe('Layer', function(){
-    it('should create a layer and attach it to a DOM element of a timeline instance', function(){
-        // Here we have to mock a timeline instance
-        // domElementOfTimelineInstance = document.querySelector('.domElementOfTimelineInstance');
-        // layer = new Layer(domElementOfTimelineInstance);
-        // assert whatever this instance should create as svg and public variables.
-    });
-    it('should modify svg when modify xDomain', function(){
-        // layer.xDomain = [3, 4]
-        // assert that svg is rigth
-        // Public variables remain unchanged right? as audio rendering should compute itself values
-    });
-    // Same for other public variables: xScale, yDomain, yRange
-});
+*/
