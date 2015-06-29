@@ -38,15 +38,14 @@ class TimeContext {
 
   set xScale(xScale) {
     this._xScale = xScale;
+
+    if (!this.parent && !this._originalXScale) {
+      this._originalXScale = this._xScale;
+    }
   }
 
   // returns the xScale as defined in the timeline without stretching
   get originalXScale() {
-    // lazy bind originalXScale on top of the tree
-    if (!this.parent && !this._originalXScale) {
-      this._originalXScale = this._xScale;
-    }
-
     // returns the closest available xScale in the tree (aka the timeline)
     if (this.parent) {
       return this.parent.originalXScale;
@@ -83,9 +82,8 @@ class TimeContext {
     const ratioChange = ratio / (this._stretchRatio);
 
     this._children.forEach(function(child) {
-      if (child._xScale) {
-        child.stretchRatio = child.stretchRatio * ratioChange;
-      }
+      if (!child._xScale) { return; }
+      child.stretchRatio = child.stretchRatio * ratioChange;
     });
   }
 }
