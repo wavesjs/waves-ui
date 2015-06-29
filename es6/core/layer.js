@@ -11,7 +11,7 @@ let _counter = 0;
 const _datumIdMap = new Map();
 
 class Layer extends events.EventEmitter {
-  constructor(dataType = 'collection', data = [], options = {}) {
+  constructor(dataType, data, options = {}) {
     super();
     this.dataType = dataType; // 'entity' || 'collection';
     this.data = data;
@@ -506,22 +506,16 @@ class Layer extends events.EventEmitter {
    *  updates the context of the layer
    */
   updateContainer() {
-    // @NOTE: replaced `context.originalXScale` with `context.xScale`
-    // => the behavior is not proper when the layer is stretched
-    // const x      = this.timeContext._parent.xScale(this.timeContext.start);
     const x      = this.timeContext.xScale(this.timeContext.start);
     const width  = this.timeContext.xScale(this.timeContext.duration);
-    const offset = this.timeContext.xScale(this.timeContext.offset);
+    // offset is relative to timeline's timeContext
+    const offset = this.timeContext.parent.xScale(this.timeContext.offset);
     const top    = this.params.top;
     const height = this.params.height;
     // matrix to invert the coordinate system
     const translateMatrix = `matrix(1, 0, 0, -1, ${x}, ${top + height})`;
 
     this.container.setAttributeNS(null, 'transform', translateMatrix);
-
-    // const clipPath = `polygon(0 0, ${width}px 0, ${width}px ${height}px, 0 ${height}px)`;
-    // -webkit-clip-path: polygon(0 0, 740px 0, 740px 160px, 0 160px);
-    // this.boundingBox.style.webkitClipPath = clipPath;
 
     this.boundingBox.setAttributeNS(null, 'width', width);
     this.boundingBox.setAttributeNS(null, 'height', height);
@@ -559,7 +553,6 @@ class Layer extends events.EventEmitter {
     });
 
     // update entity or collection shapes
-    if (!items) { return; } // if no shape in the layer...
     items.each(function(datum, index) {
       const item = this;
       const shape = that._itemShapeMap.get(item);
