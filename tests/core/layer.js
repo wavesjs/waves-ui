@@ -18,7 +18,7 @@ describe('Layer', function(){
         let timeContext = new TimeContext(timeline.timeContext)
 
         // Layer instanciation
-        let layer = new Layer();
+        let layer = new Layer('collection', []);
         layer.setTimeContext(timeContext);
         layer.timeContext.duration = 12;
 

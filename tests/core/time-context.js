@@ -21,7 +21,7 @@ describe('TimeContext', function(){
             let parentTimeContext = new TimeContext();
             assert.equal(parentTimeContext.stretchRatio, 1);
         })
-        it('should set correct stretchratio', function(){
+        it('should set correct stretchratio, and give back appropriate domain', function(){
             let xScale = d3Scale.linear();
             let parentTimeContext = new TimeContext();
             let childTimeContext = new TimeContext(parentTimeContext);
@@ -31,11 +31,15 @@ describe('TimeContext', function(){
             parentTimeContext.stretchRatio = 2;
             assert.equal(parentTimeContext.stretchRatio, 2);
             assert.deepEqual(parentTimeContext.xScale.domain(), [0, 0.5])
-
             assert.deepEqual(childTimeContext.xScale.domain(), [0, 0.5]);
             childTimeContext.stretchRatio = 0.5;
             assert.deepEqual(childTimeContext.xScale.domain(), [0, 1]);
+            parentTimeContext.stretchRatio = 2/3;
+            childTimeContext.stretchRatio = 1/3;
+            assert.deepEqual(childTimeContext.xScale.domain(), [0, 4.5]);
 
+            childTimeContext.stretchRatio = 1;
+            assert.equal(childTimeContext._xScale, null); // don't know why
         })
     })
 })
