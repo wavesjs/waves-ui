@@ -68,8 +68,8 @@ class TimeContext {
     return this._stretchRatio;
   }
 
-  // @FIXME: inconsistencies occur when on child context stretch
-  // when stretching parent (=> when child.stretchRatio != 1)
+  // @FIXME: inconsistencies occur
+  // when stretching parent and when child.stretchRatio != 1
   set stretchRatio(ratio) {
     // do not remove xScale on top of the graph
     if (

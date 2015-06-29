@@ -38,7 +38,7 @@ class Dot extends BaseShape {
   _getAccessorList() {
     return { cx: 0, cy: 0, r: 3, color: '#000000' };
   }
-};
+}
 
 module.exports = Dot;
 

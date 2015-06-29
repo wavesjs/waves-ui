@@ -36,8 +36,8 @@ describe('Marker', function(){
         const item0 = layer.items._root[0][0].getBoundingClientRect()
         const item1 = layer.items._root[0][1].getBoundingClientRect()
 
-        assert.equal(item0.left+item0.width/2-0.5, 50);
-        assert.equal(item1.left+item0.width/2-0.5, 100);
+        assert.equal(item0.left+item0.width/2, 50);
+        assert.equal(item1.left+item0.width/2, 100);
 
         // setTimeout(function() {
         //   layer.setContextAttribute('start', 12);

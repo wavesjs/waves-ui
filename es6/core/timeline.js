@@ -87,9 +87,9 @@ class Timeline extends events.EventEmitter {
     this.context.xScale = xScale;
   }
 
-  get xScale() {
-    return this.context.xScale;
-  }
+  // get xScale() {
+  //   return this.context.xScale;
+  // }
 
   /**
    *  Adds a `Layer` to the Timeline
@@ -142,6 +142,11 @@ class Timeline extends events.EventEmitter {
     svg.setAttributeNS(null, 'height', height);
     svg.setAttributeNS(null, 'viewbox', `0 0 ${width} ${height}`);
 
+    svg.setAttributeNS(null, 'shape-rendering', 'optimizeSpeed');
+
+    // svg.setAttributeNS(ns, 'xmlns', ns);
+    svg.setAttribute('xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
+
     const defs = document.createElementNS(ns, 'defs');
 
     const offsetGroup = document.createElementNS(ns, 'g');
@@ -153,12 +158,20 @@ class Timeline extends events.EventEmitter {
     const interactionsGroup = document.createElementNS(ns, 'g');
     interactionsGroup.classList.add('interactions');
 
-    svg.appendChild(defs)
+    svg.appendChild(defs);
     offsetGroup.appendChild(layoutGroup);
-    svg.appendChild(offsetGroup)
+    svg.appendChild(offsetGroup);
     svg.appendChild(interactionsGroup);
 
     el.appendChild(svg);
+    // remove additionnal height created who knows why...
+    el.style.fontSize = 0;
+    el.style.transform = 'translateZ(0)'; // this fixes weird canvas rendering bugs in chrome
+    // el.style.position = 'relative';
+
+    // svg.style.position = 'absolute';
+    // svg.style.top = 0;
+    // svg.style.left = 0;
 
     // create a container object
     const container = {
@@ -251,6 +264,10 @@ class Timeline extends events.EventEmitter {
 
     this.emit('update', layers);
     layers.forEach((layer) => layer.update());
+  }
+
+  updateContexts() {
+    this.layers.forEach((layer) => layer.updateContext());
   }
 }
 

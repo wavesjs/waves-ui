@@ -1,15 +1,17 @@
 const ns = require('./namespace');
 const d3Scale = require('d3-scale');
 const d3Selection = require('d3-selection');
-const Rect = require('../shapes/rect');
+const Segment = require('../shapes/segment');
 const SegmentBehavior = require('../behaviors/segment-behavior');
+const events = require('events');
 
 // create a private item -> id map to force d3 being in sync with the DOM
 let _counter = 0;
 const _datumIdMap = new Map();
 
-class Layer {
+class Layer extends events.EventEmitter {
   constructor(dataType = 'collection', data = [], options = {}) {
+    super();
     this.dataType = dataType; // 'entity' || 'collection';
     this.data = data;
 
@@ -55,8 +57,16 @@ class Layer {
     this._yScale.domain(domain);
   }
 
+  get yDomain() {
+    return this.params.yDomain;
+  }
+
   set opacity(value) {
     this.params.opacity = value;
+  }
+
+  get opacity() {
+    return this.params.opacity;
   }
 
   param(name, value) {
@@ -99,7 +109,6 @@ class Layer {
         }
         break;
       case 'collection':
-      default:
         this._data = data;
         break;
     }
@@ -171,6 +180,8 @@ class Layer {
     this._renderingContext.yScale = this._yScale;
     this._renderingContext.height = this.params.height;
     this._renderingContext.width  = this._context.xScale(this._context.duration);
+    // for foreign oject issue in chrome
+    this._renderingContext.offsetX = this._context.xScale(this._context.offset);
   }
 
   // --------------------------------------
@@ -232,6 +243,7 @@ class Layer {
     const datum = d3Selection.select(item).datum();
     const shape = this._itemShapeMap.get(item);
     this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);
+    this.emit('edit', shape, datum);
   }
 
   // --------------------------------------
@@ -248,41 +260,56 @@ class Layer {
     this._isContextEditable = bool;
   }
 
+  get editable() {
+    return this._isContextEditable;
+  }
+
   // @NOTE create a proper `ContextBehavior` ?
   editContext(dx, dy, target) {
+    if (target.classList.contains('handler') && target.classList.contains('left')) {
+      this._editContextLeft(dx);
+    } else if (target.classList.contains('handler') && target.classList.contains('right')) {
+      this._editContextRight(dx);
+    } else {
+      this._moveContext(dx);
+    }
+  }
+
+  _editContextLeft(dx) {
     const contextAttributes = this._contextAttributes;
     const renderingContext  = this._renderingContext;
-    // dx = dx * contextAttributes.stretchRatio;
-    // dy = dy * contextAttributes.stretchRatio;
+    // edit `context.start`, `context.offset` and `context.duration`
+    const x = renderingContext.xScale(contextAttributes.start);
+    const offset = renderingContext.xScale(contextAttributes.offset);
+    const width = renderingContext.xScale(contextAttributes.duration);
 
-    if (target.classList.contains('handler') && target.classList.contains('left')) {
-      // edit `context.start`, `context.offset` and `context.duration`
-      const x = renderingContext.xScale(contextAttributes.start);
-      const offset = renderingContext.xScale(contextAttributes.offset);
-      const width = renderingContext.xScale(contextAttributes.duration);
+    let targetX = x + dx;
+    let targetOffset = offset - dx;
+    let targetWidth = Math.max(width - dx, 0);
 
-      let targetX = x + dx;
-      let targetOffset = offset - dx;
-      let targetWidth = width - dx;
+    this.setContextAttribute('start', renderingContext.xScale.invert(targetX));
+    this.setContextAttribute('offset', renderingContext.xScale.invert(targetOffset));
+    this.setContextAttribute('duration', renderingContext.xScale.invert(targetWidth));
+  }
 
-      this.setContextAttribute('start', renderingContext.xScale.invert(targetX));
-      this.setContextAttribute('offset', renderingContext.xScale.invert(targetOffset));
-      this.setContextAttribute('duration', renderingContext.xScale.invert(targetWidth));
+  _editContextRight(dx) {
+    const contextAttributes = this._contextAttributes;
+    const renderingContext  = this._renderingContext;
+    // edit `context.duration`
+    const width = renderingContext.xScale(contextAttributes.duration);
+    let targetWidth = Math.max(width + dx, 0);
 
-    } else if (target.classList.contains('handler') && target.classList.contains('right')) {
-      // edit `context.duration`
-      const width = renderingContext.xScale(contextAttributes.duration);
-      let targetWidth = Math.max(width + dx, 0);
+    this.setContextAttribute('duration', renderingContext.xScale.invert(targetWidth));
+  }
 
-      this.setContextAttribute('duration', renderingContext.xScale.invert(targetWidth));
+  _moveContext(dx) {
+    const contextAttributes = this._contextAttributes;
+    const renderingContext  = this._renderingContext;
+    // edit `context.start`
+    const x = renderingContext.xScale(contextAttributes.start);
+    let targetX = Math.max(x + dx, 0);
 
-    } else {
-      // edit `context.start`
-      const x = renderingContext.xScale(contextAttributes.start);
-      let targetX = Math.max(x + dx, 0);
-
-      this.setContextAttribute('start', renderingContext.xScale.invert(targetX));
-    }
+    this.setContextAttribute('start', renderingContext.xScale.invert(targetX));
   }
 
   stretchContext(dx, dy, target) {}
@@ -300,7 +327,9 @@ class Layer {
       if (el.nodeName === 'g' && el.classList.contains('item')) {
         return el;
       }
-    } while (el = el.parentNode);
+
+      el = el.parentNode;
+    } while (el != undefined);
   }
 
   /**
@@ -320,7 +349,7 @@ class Layer {
    */
   hasItem(el) {
     const item = this._getItemFromDOMElement(el);
-    return (this.items[0].indexOf(item) !== -1) ? item : null;
+    return (this.items.nodes().indexOf(item) !== -1) ? item : null;
   }
 
   /**
@@ -332,7 +361,9 @@ class Layer {
       if (el === this.container) {
         return true;
       }
-    } while (el = el.parentNode);
+
+      el = el.parentNode;
+    } while (el != undefined);
 
     return false;
   }
@@ -398,7 +429,7 @@ class Layer {
     this.interactionsGroup.classList.add('layer-interactions');
     this.interactionsGroup.style.display = 'none';
     // @NOTE: works but king of ugly... must be cleaned
-    this.contextShape = new Rect();
+    this.contextShape = new Segment();
     this.contextShape.install({
       opacity: () => 0.1,
       color  : () => '#787878',
@@ -414,9 +445,9 @@ class Layer {
     this.boundingBox.appendChild(this.interactionsGroup);
     this.boundingBox.appendChild(this.group);
 
-    // draw a rect in context background to debug it's size
+    // draw a Segment in context background to debug it's size
     if (this.params.debug) {
-      this.debugRect = document.createElementNS(ns, 'rect');
+      this.debugRect = document.createElementNS(ns, 'Segment');
       this.boundingBox.appendChild(this.debugRect);
       this.debugRect.style.fill = '#ababab';
       this.debugRect.style.fillOpacity = 0.1;
@@ -435,8 +466,7 @@ class Layer {
    * create the DOM according to given data and shapes
    */
   draw() {
-    // @NOTE: create a unique id to force d3 to keep data in sync with the DOM
-    // @TODO: read again http://bost.ocks.org/mike/selection/
+    // create a unique id to force d3 to keep data in sync with the DOM
     this.data.forEach(function(datum) {
       if (_datumIdMap.has(datum)) { return; }
       _datumIdMap.set(datum, _counter++);
@@ -446,7 +476,7 @@ class Layer {
     this.items = d3Selection.select(this.group)
       .selectAll('.item')
       .filter(function() {
-        return !this.classList.contains('common')
+        return !this.classList.contains('common');
       })
       .data(this.data, function(datum) {
         return _datumIdMap.get(datum);
@@ -473,32 +503,28 @@ class Layer {
     this.items.enter()
       .append((datum, index) => {
         // @NOTE: d3 binds `this` to the container group
-        // create a group for the item
-        const group = document.createElementNS(ns, 'g');
         const { ctor, accessors, options } = this._shapeConfiguration;
         const shape = new ctor(options);
-        // install accessors on the newly created shape
         shape.install(accessors);
 
-        group.appendChild(shape.render(this._renderingContext));
-        group.classList.add('item', shape.getClassName());
+        const item = shape.render(this._renderingContext)
+        item.classList.add('item', shape.getClassName());
+        this._itemShapeMap.set(item, shape);
 
-        this._itemShapeMap.set(group, shape);
-
-        return group;
+        return item;
       });
 
     // exit
-    const that = this;
+    const _itemShapeMap = this._itemShapeMap;
 
     this.items.exit()
       .each(function(datum, index) {
-        const group = this;
-        const shape = that._itemShapeMap.get(group);
-
-        shape.destroy();                  // clean shape
-        _datumIdMap.delete(datum);        // clean reference in `id` map
-        that._itemShapeMap.delete(group); // destroy reference in item shape map
+        const item = this;
+        const shape = _itemShapeMap.get(item);
+        // clean all shape/item references
+        shape.destroy();
+        _datumIdMap.delete(datum);
+        _itemShapeMap.delete(item);
       })
       .remove();
   }
@@ -533,6 +559,7 @@ class Layer {
     // const clipPath = `polygon(0 0, ${width}px 0, ${width}px ${height}px, 0 ${height}px)`;
     // -webkit-clip-path: polygon(0 0, 740px 0, 740px 160px, 0 160px);
     // this.boundingBox.style.webkitClipPath = clipPath;
+
     this.boundingBox.setAttributeNS(null, 'width', width);
     this.boundingBox.setAttributeNS(null, 'height', height);
     this.boundingBox.style.opacity = this.params.opacity;
@@ -571,10 +598,9 @@ class Layer {
     // update entity or collection shapes
     if (!items) { return; } // if no shape in the layer...
     items.each(function(datum, index) {
-      // update all shapes related to the current item
-      const group = this; // current `g.item`
-      const shape = that._itemShapeMap.get(group);
-      shape.update(renderingContext, group, datum, index);
+      const item = this;
+      const shape = that._itemShapeMap.get(item);
+      shape.update(renderingContext, item, datum, index);
     });
   }
 }

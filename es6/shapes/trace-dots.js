@@ -2,6 +2,8 @@ const BaseShape = require('./base-shape');
 
 
 class TraceDots extends BaseShape {
+  getClassName() { return 'trace-dots'; }
+
   _getAccessorList() {
     return { x: 0, mean: 0, range: 0 };
   }

@@ -36,8 +36,8 @@ describe('Annotated Marker', function(){
         const item0 = layer.items._root[0][0]
         const item1 = layer.items._root[0][1]
 
-        assert.equal(item0.firstChild.childNodes[2].textContent, "foo");
-        assert.equal(item1.firstChild.childNodes[2].textContent, "bar");
+        assert.equal(item0.childNodes[1].textContent, "foo");
+        assert.equal(item1.childNodes[1].textContent, "bar");
 
       });
   });

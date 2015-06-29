@@ -1,7 +1,7 @@
-const Marker = require('./marker');
+const Segment = require('./segment');
 
-class AnnotatedMarker extends Marker {
-  getClassName() { return 'annotated-marker'; }
+class AnnotatedSegment extends Segment {
+  getClassName() { return 'annotated-segment'; }
 
   _getAccessorList() {
     let list = super._getAccessorList();
@@ -14,8 +14,8 @@ class AnnotatedMarker extends Marker {
     const height = renderingContext.height;
 
     this.label = document.createElementNS(this.ns, 'text');
-    this.label.setAttributeNS(null, 'x', 10);
-    this.label.setAttributeNS(null, 'y', 10);
+    this.label.setAttributeNS(null, 'x', 1);
+    this.label.setAttributeNS(null, 'y', 11);
     this.label.setAttributeNS(null, 'transform', `matrix(1, 0, 0, -1, 0, ${height})`);
     this.label.style.fontSize = '10px';
     this.label.style.fontFamily = 'monospace';
@@ -36,4 +36,4 @@ class AnnotatedMarker extends Marker {
   }
 }
 
-module.exports = AnnotatedMarker;
+module.exports = AnnotatedSegment;

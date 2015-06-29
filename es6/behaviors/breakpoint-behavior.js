@@ -16,7 +16,7 @@ class BreakpointBehavior extends BaseBehavior {
     // reuse accessor of the shape we know
     const xMap = data.map((d, index) => renderingContext.xScale(shape.cx(d)));
     // sort the map
-    xMap.sort((a, b) => { return a < b ? -1 : 1 });
+    xMap.sort((a, b) => a < b ? -1 : 1);
 
     // find index of our shape x position
     const index = xMap.indexOf(x);

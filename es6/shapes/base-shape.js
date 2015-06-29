@@ -87,7 +87,7 @@ class BaseShape {
       let accessor = function(d, v = null) {
         if (v === null) { return d[name] || defaultValue; }
         d[name] = v;
-      }
+      };
       // set accessor as the default one
       this[name] = accessor;
     });

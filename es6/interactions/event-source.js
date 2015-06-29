@@ -8,7 +8,7 @@ class EventSource extends events.EventEmitter {
     super();
     this.el = el;
 
-    this._bindEvents()
+    this._bindEvents();
   }
 
   _createEvent(type, e) {}
