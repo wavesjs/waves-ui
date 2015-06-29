@@ -44,9 +44,22 @@ class TimeContext {
     }
   }
 
-  // returns the xScale as defined in the timeline without stretching
+  set xScaleRange(range) {
+    if (this._xScale) {
+      this._xScale.range(range);
+    }
+
+    if (this._originalXScale) {
+      this._originalXScale.range(range);
+    }
+
+    this._children.forEach((child) => { child.xScaleRange = range });
+  }
+
+  /**
+   * @return {Function} the xScale as defined in the timeline without stretching
+   */
   get originalXScale() {
-    // returns the closest available xScale in the tree (aka the timeline)
     if (this.parent) {
       return this.parent.originalXScale;
     } else {

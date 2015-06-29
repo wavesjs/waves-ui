@@ -39,6 +39,19 @@ class Timeline extends events.EventEmitter {
     this._createInteraction(Keyboard, 'body');
   }
 
+  // parameters modifiers
+  set width(value) {
+    this.params.width = value;
+
+    if (this.timeContext) {
+      this.timeContext.xScaleRange = [0, this.params.width];
+    }
+  }
+
+  set duration(value) {
+
+  }
+
   /**
    *  Change the state of the timeline, `States` are the main entry point between
    *  application logic, interactions, ..., and the library
@@ -133,17 +146,11 @@ class Timeline extends events.EventEmitter {
    *  @param options {Object} the options to apply to the container
    */
   registerContainer(id, el, options = {}) {
-    const width = this.params.width;
     const height = options.height || 120;
 
     const svg = document.createElementNS(ns, 'svg');
-    svg.setAttributeNS(null, 'width', width);
     svg.setAttributeNS(null, 'height', height);
-    svg.setAttributeNS(null, 'viewbox', `0 0 ${width} ${height}`);
-
     svg.setAttributeNS(null, 'shape-rendering', 'optimizeSpeed');
-
-    // svg.setAttributeNS(ns, 'xmlns', ns);
     svg.setAttribute('xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
 
     const defs = document.createElementNS(ns, 'defs');
@@ -169,6 +176,7 @@ class Timeline extends events.EventEmitter {
     // store all informations about this container
     const container = {
       id: id,
+      height: height,
       layoutElement: layoutGroup,
       offsetElement: offsetGroup,
       interactionsElement: interactionsGroup,
@@ -181,8 +189,10 @@ class Timeline extends events.EventEmitter {
     this._createInteraction(Surface, el);
   }
 
-  // @NOTE remove these helpers ?
-  // container helpers
+  // -----------------------------------------------
+  // @NOTE remove those helpers ?
+  // -----------------------------------------------
+
   // @NOTE change to `getContainer(el || id || layer)` ?
   getContainerPerElement(el) {
     for (let id in this.containers) {
@@ -201,6 +211,7 @@ class Timeline extends events.EventEmitter {
   //   return this.containers[id];
   // }
 
+  // -----------------------------------------------
 
   /**
    *  @param LayerOrGroup{mixed} defaults null
@@ -226,10 +237,16 @@ class Timeline extends events.EventEmitter {
   updateContainers() {
     for (let id in this.containers) {
       const container = this.containers[id];
-      const offset = container.offsetElement;
+      const $offset   = container.offsetElement;
+      const $svg      = container.svgElement;
       const timeContext = this.timeContext;
+      const width     = this.params.width;
+      const height    = container.height;
       const translate = `translate(${timeContext.xScale(timeContext.offset)}, 0)`;
-      offset.setAttributeNS(null, 'transform', translate);
+
+      $svg.setAttributeNS(null, 'width', width);
+      $svg.setAttributeNS(null, 'viewbox', `0 0 ${width} ${height}`);
+      $offset.setAttributeNS(null, 'transform', translate);
     }
   }
 
@@ -257,9 +274,10 @@ class Timeline extends events.EventEmitter {
    */
   update(layerOrGroup = null) {
     const layers = this._getLayers(layerOrGroup);
-    this.updateContainers();
 
+    this.updateContainers();
     layers.forEach((layer) => layer.update());
+
     this.emit('update', layers);
   }
 }

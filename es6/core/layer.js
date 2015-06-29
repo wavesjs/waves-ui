@@ -250,9 +250,9 @@ class Layer extends events.EventEmitter {
     const offset = renderingContext.xScale(timeContext.offset);
     const width = renderingContext.xScale(timeContext.duration);
 
-    let targetX = x + dx;
-    let targetOffset = offset - dx;
-    let targetWidth = Math.max(width - dx, 0);
+    const targetX = x + dx;
+    const targetOffset = offset - dx;
+    const targetWidth = Math.max(width - dx, 0);
 
     this.timeContext.start = renderingContext.xScale.invert(targetX);
     this.timeContext.offset = renderingContext.xScale.invert(targetOffset);
@@ -262,9 +262,8 @@ class Layer extends events.EventEmitter {
   _editContextRight(dx) {
     const timeContext = this.timeContext;
     const renderingContext  = this._renderingContext;
-    // edit `context.duration`
     const width = renderingContext.xScale(timeContext.duration);
-    let targetWidth = Math.max(width + dx, 0);
+    const targetWidth = Math.max(width + dx, 0);
 
     this.timeContext.duration = renderingContext.xScale.invert(targetWidth);
   }
@@ -274,7 +273,7 @@ class Layer extends events.EventEmitter {
     const renderingContext  = this._renderingContext;
     // edit `context.start`
     const x = renderingContext.xScale(timeContext.start);
-    let targetX = Math.max(x + dx, 0);
+    const targetX = Math.max(x + dx, 0);
 
     this.timeContext.start = renderingContext.xScale.invert(targetX);
   }
@@ -379,7 +378,7 @@ class Layer extends events.EventEmitter {
     this.container = document.createElementNS(ns, 'g');
     this.container.classList.add('layer');
     // append a svg to clip the context
-    // @NOTE: could use a group with a `clipPath` property
+    // @NOTE: could use a group with a `clipPath` property ?
     this.boundingBox = document.createElementNS(ns, 'svg');
     this.boundingBox.classList.add('bounding-box');
     // this.boundingBox.setAttributeNS(null, 'id', this.params.id);
