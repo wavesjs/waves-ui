@@ -21,5 +21,21 @@ describe('TimeContext', function(){
             let parentTimeContext = new TimeContext();
             assert.equal(parentTimeContext.stretchRatio, 1);
         })
+        it('should set correct stretchratio', function(){
+            let xScale = d3Scale.linear();
+            let parentTimeContext = new TimeContext();
+            let childTimeContext = new TimeContext(parentTimeContext);
+            parentTimeContext.xScale = xScale;
+            assert.equal(parentTimeContext.stretchRatio, 1);
+            assert.deepEqual(parentTimeContext.xScale.domain(), [0, 1])
+            parentTimeContext.stretchRatio = 2;
+            assert.equal(parentTimeContext.stretchRatio, 2);
+            assert.deepEqual(parentTimeContext.xScale.domain(), [0, 0.5])
+
+            assert.deepEqual(childTimeContext.xScale.domain(), [0, 0.5]);
+            childTimeContext.stretchRatio = 0.5;
+            assert.deepEqual(childTimeContext.xScale.domain(), [0, 1]);
+
+        })
     })
 })
