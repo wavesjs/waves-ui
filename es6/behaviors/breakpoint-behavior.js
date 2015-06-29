@@ -12,17 +12,16 @@ class BreakpointBehavior extends BaseBehavior {
     let targetX = x + dx;
     let targetY = y - dy;
 
-    // create a map of all `x` positions
-    // reuse accessor of the shape we know
-    const xMap = data.map((d, index) => renderingContext.xScale(shape.cx(d)));
-    // sort the map
-    xMap.sort((a, b) => a < b ? -1 : 1);
-
-    // find index of our shape x position
-    const index = xMap.indexOf(x);
-    // lock to next siblings
-    if (targetX < xMap[index - 1] || targetX > xMap[index + 1]) {
-      targetX = x;
+    if (data.length > 2) {
+      // create a sorted map of all `x` positions
+      const xMap = data.map((d, index) => renderingContext.xScale(shape.cx(d)));
+      xMap.sort((a, b) => a < b ? -1 : 1);
+      // find index of our shape x position
+      const index = xMap.indexOf(x);
+      // lock to next siblings
+      if (targetX < xMap[index - 1] || targetX > xMap[index + 1]) {
+        targetX = x;
+      }
     }
 
     // lock in y axis

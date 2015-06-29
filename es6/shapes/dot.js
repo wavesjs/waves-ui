@@ -3,6 +3,11 @@ const BaseShape = require('./base-shape');
 class Dot extends BaseShape {
   getClassName() { return 'dot'; }
 
+  // @TODO rename : confusion between accessors and meta-accessors
+  _getAccessorList() {
+    return { cx: 0, cy: 0, r: 3, color: '#000000' };
+  }
+
   render() {
     if (this.shape) { return this.shape; }
 
@@ -32,11 +37,6 @@ class Dot extends BaseShape {
     }
 
     return false;
-  }
-
-  // @TODO rename : confusion between accessors and meta-accessors
-  _getAccessorList() {
-    return { cx: 0, cy: 0, r: 3, color: '#000000' };
   }
 }
 

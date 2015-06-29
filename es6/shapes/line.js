@@ -3,6 +3,10 @@ const BaseShape = require('./base-shape');
 class Line extends BaseShape {
   getClassName() { return 'line'; }
 
+  _getAccessorList() {
+    return { cx: 0, cy: 0, color: '#000000' };
+  }
+
   render() {
     if (this.shape) { return this.shape; }
 
@@ -33,10 +37,6 @@ class Line extends BaseShape {
     });
 
     return 'M' + instructions.join('L');
-  }
-
-  _getAccessorList() {
-    return { cx: 0, cy: 0, color: '#000000' };
   }
 }
 

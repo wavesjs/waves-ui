@@ -26,7 +26,8 @@ class Timeline extends events.EventEmitter {
     this.params = Object.assign({}, this._defaults, params);
     this.layers = [];
     this.categorizedLayers = {}; // group layer by categories
-    this.context = null;
+    // @TODO rename to timeContext
+    this.timeContext = null;
     // private attributes
     this._state = null;
     this.containers = {};
@@ -82,24 +83,25 @@ class Timeline extends events.EventEmitter {
       .domain([0, duration])
       .range([0, width]);
 
-    this.context = new TimeContext();
-    this.context.duration =  duration;
-    this.context.xScale = xScale;
+    this.timeContext = new TimeContext();
+    this.timeContext.duration =  duration;
+    this.timeContext.xScale = xScale;
   }
 
   // get xScale() {
-  //   return this.context.xScale;
+  //   return this.timeContext.xScale;
   // }
 
+  // @TODO rename to addLayer
   /**
    *  Adds a `Layer` to the Timeline
    *  @param layer {Layer} the layer to register
    *  @param containerId {String} a valid id of a previsouly registered container
    *  @param category {String} insert the layer into some user defined category
-   *  @param context {TimeContext} a `TimeContext` the layer is associated with
+   *  @param timeContext {TimeContext} a `TimeContext` the layer is associated with
    *      if null given, a new `TimeContext` will be created for the layer
    */
-  add(layer, containerId, category = 'default') {
+  addLayer(layer, containerId, category = 'default') {
     this._layerContainerMap.set(layer, this.containers[containerId]);
     this.layers.push(layer);
 
@@ -114,7 +116,7 @@ class Timeline extends events.EventEmitter {
    *  Remove a layer from the timeline
    *  @param layer {Layer} the layer to remove
    */
-  remove(layer) {
+  removeLayer(layer) {
 
   }
 
@@ -237,12 +239,13 @@ class Timeline extends events.EventEmitter {
     this.layers.forEach((layer) => layer.draw());
   }
 
+  // @TODO rename to updateContext
   updateContainers() {
     for (let id in this.containers) {
       const container = this.containers[id];
       const offset = container.offsetElement;
-      const context = this.context;
-      const translate = `translate(${context.xScale(context.offset * context.stretchRatio)}, 0)`;
+      const timeContext = this.timeContext;
+      const translate = `translate(${timeContext.xScale(timeContext.offset)}, 0)`;
       offset.setAttributeNS(null, 'transform', translate);
     }
   }
