@@ -7,7 +7,7 @@
 
 class TimeContext {
   constructor(parent = null) {
-    this._parent = parent;
+    this.parent = parent;
     this._children = [];
 
     this._xScale = null; // inherits from parent context
@@ -19,8 +19,8 @@ class TimeContext {
     this._stretchRatio = 1;
     // @NOTE: need an `absoluteStretchRatio` ?
 
-    if (this._parent) {
-      this._parent._children.push(this);
+    if (this.parent) {
+      this.parent._children.push(this);
     }
   }
 
@@ -33,8 +33,8 @@ class TimeContext {
    * @return {Function} the closest available xScale in the tree
    */
   get xScale() {
-    if (this._parent && !this._xScale) {
-      return this._parent.xScale;
+    if (this.parent && !this._xScale) {
+      return this.parent.xScale;
     } else {
       return this._xScale;
     }
@@ -50,13 +50,13 @@ class TimeContext {
   // => find another strategy => use _context.parent.xScale
   get originalXScale() {
     // lazy bind originalXScale on top of the tree
-    if (!this._parent && !this._originalXScale) {
+    if (!this.parent && !this._originalXScale) {
       this._originalXScale = this._xScale;
     }
 
     // returns the closest available xScale in the tree
-    if (this._parent) {
-      return this._parent.originalXScale;
+    if (this.parent) {
+      return this.parent.originalXScale;
     } else {
       return this._originalXScale;
     }
@@ -72,8 +72,8 @@ class TimeContext {
     // do not remove xScale on top of the graph
     if (
       ratio === 1 &&
-      this._parent &&
-      this._parent.stretchRatio === 1
+      this.parent &&
+      this.parent.stretchRatio === 1
     ) {
       this._xScale = null;
     } else {
