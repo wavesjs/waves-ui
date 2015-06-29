@@ -24,13 +24,14 @@ class Timeline extends events.EventEmitter {
 
     // public attributes
     this.params = Object.assign({}, this._defaults, params);
-    this.layers = [];
-    this.categorizedLayers = {}; // group layer by categories
-    // @TODO rename to timeContext
     this.timeContext = null;
+    this.layers = [];
+    this.containers = {};
+    // @NOTE realy needed ?
+    this.groupedLayers = {}; // group layer by categories
+
     // private attributes
     this._state = null;
-    this.containers = {};
     this._layerContainerMap = new Map();
     this._handleEvent = this._handleEvent.bind(this);
 
@@ -88,28 +89,23 @@ class Timeline extends events.EventEmitter {
     this.timeContext.xScale = xScale;
   }
 
-  // get xScale() {
-  //   return this.timeContext.xScale;
-  // }
-
-  // @TODO rename to addLayer
   /**
    *  Adds a `Layer` to the Timeline
    *  @param layer {Layer} the layer to register
    *  @param containerId {String} a valid id of a previsouly registered container
-   *  @param category {String} insert the layer into some user defined category
+   *  @param group {String} insert the layer into some user defined group of layers
    *  @param timeContext {TimeContext} a `TimeContext` the layer is associated with
    *      if null given, a new `TimeContext` will be created for the layer
    */
-  addLayer(layer, containerId, category = 'default') {
+  addLayer(layer, containerId, group = 'default') {
     this._layerContainerMap.set(layer, this.containers[containerId]);
     this.layers.push(layer);
 
-    if (!this.categorizedLayers[category]) {
-      this.categorizedLayers[category] = [];
+    if (!this.groupedLayers[group]) {
+      this.groupedLayers[group] = [];
     }
 
-    this.categorizedLayers[category].push(layer);
+    this.groupedLayers[group].push(layer);
   }
 
   /**
@@ -120,13 +116,14 @@ class Timeline extends events.EventEmitter {
 
   }
 
+  // @NOTE bad API => method name
   /**
-   *  Returns an array of layers given some category
-   *  @param category {String} name of the category
-   *  @return {Array} an array of layers which belongs to the category
+   *  Returns an array of layers given some group
+   *  @param group {String} name of the group
+   *  @return {Array} an array of layers which belongs to the group
    */
-  getLayers(category = 'default') {
-    return this.categorizedLayers[category] || [];
+  getGroup(group = 'default') {
+    return this.groupedLayers[group] || [];
   }
 
   /**
@@ -166,16 +163,10 @@ class Timeline extends events.EventEmitter {
     svg.appendChild(interactionsGroup);
 
     el.appendChild(svg);
-    // remove additionnal height created who knows why...
-    el.style.fontSize = 0;
-    el.style.transform = 'translateZ(0)'; // this fixes weird canvas rendering bugs in chrome
-    // el.style.position = 'relative';
+    el.style.fontSize = 0; // removes additionnal height added who knows why...
+    el.style.transform = 'translateZ(0)'; // fixes one of the weird canvas rendering bugs in chrome
 
-    // svg.style.position = 'absolute';
-    // svg.style.top = 0;
-    // svg.style.left = 0;
-
-    // create a container object
+    // store all informations about this container
     const container = {
       id: id,
       layoutElement: layoutGroup,
@@ -190,6 +181,7 @@ class Timeline extends events.EventEmitter {
     this._createInteraction(Surface, el);
   }
 
+  // @NOTE remove these helpers ?
   // container helpers
   // @NOTE change to `getContainer(el || id || layer)` ?
   getContainerPerElement(el) {
@@ -210,36 +202,27 @@ class Timeline extends events.EventEmitter {
   // }
 
 
-
   /**
-   *  Render all the layers in the timeline
+   *  @param LayerOrGroup{mixed} defaults null
+   *  @return an array of layers
    */
-  render() {
-    this.layers.forEach((layer) => {
-      const container = this._layerContainerMap.get(layer);
-      const layout = container.layoutElement;
-      layout.appendChild(layer.render());
-    });
-  }
-
-  /**
-   *  Draw all the layers in the timeline
-   */
-  draw(layerOrCategory = null) {
+  _getLayers(layerOrGroup = null) {
     let layers = null;
 
-    if (typeof layerOrCategory === 'string') {
-      layers = this.getLayers(layerOrCategory);
-    } else if (layerOrCategory instanceof Layer) {
-      layers = [layerOrCategory];
+    if (typeof layerOrGroup === 'string') {
+      layers = this.getLayers(layerOrGroup);
+    } else if (layerOrGroup instanceof Layer) {
+      layers = [layerOrGroup];
     } else {
       layers = this.layers;
     }
 
-    this.layers.forEach((layer) => layer.draw());
+    return layers;
   }
 
-  // @TODO rename to updateContext
+  /**
+   *  Update all the containers according to `this.timeContext`
+   */
   updateContainers() {
     for (let id in this.containers) {
       const container = this.containers[id];
@@ -249,28 +232,35 @@ class Timeline extends events.EventEmitter {
       offset.setAttributeNS(null, 'transform', translate);
     }
   }
+
+  /**
+   *  Render all the layers in the timeline
+   */
+  render() {
+    this.layers.forEach((layer) => {
+      const container = this._layerContainerMap.get(layer);
+      container.layoutElement.appendChild(layer.render());
+    });
+  }
+
+  /**
+   *  Draw all the layers in the timeline
+   */
+  draw(layerOrGroup = null) {
+    const layers = this._getLayers(layerOrGroup);
+    layers.forEach((layer) => layer.draw());
+  }
+
   /**
    *  Update all the layers in the timeline
    *  @TODO accept several `layers` or `categories` as arguments ?
    */
-  update(layerOrCategory = null) {
+  update(layerOrGroup = null) {
+    const layers = this._getLayers(layerOrGroup);
     this.updateContainers();
-    let layers = null;
 
-    if (typeof layerOrCategory === 'string') {
-      layers = this.getLayers(layerOrCategory);
-    } else if (layerOrCategory instanceof Layer) {
-      layers = [layerOrCategory];
-    } else {
-      layers = this.layers;
-    }
-
-    this.emit('update', layers);
     layers.forEach((layer) => layer.update());
-  }
-
-  updateContexts() {
-    this.layers.forEach((layer) => layer.updateContext());
+    this.emit('update', layers);
   }
 }
 

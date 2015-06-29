@@ -11,7 +11,7 @@ let _counter = 0;
 const _datumIdMap = new Map();
 
 class Layer extends events.EventEmitter {
-  constructor(dataType = 'collection', data = [], options = {}) {
+  constructor(dataType, data, options = {}) {
     super();
     this.dataType = dataType; // 'entity' || 'collection';
     this.data = data;
