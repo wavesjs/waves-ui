@@ -235,12 +235,13 @@ class Timeline extends events.EventEmitter {
    *  Update all the containers according to `this.timeContext`
    */
   updateContainers() {
+    const timeContext = this.timeContext;
+    const width = this.params.width;
+
     for (let id in this.containers) {
       const container = this.containers[id];
       const $offset   = container.offsetElement;
       const $svg      = container.svgElement;
-      const timeContext = this.timeContext;
-      const width     = this.params.width;
       const height    = container.height;
       const translate = `translate(${timeContext.xScale(timeContext.offset)}, 0)`;
 
