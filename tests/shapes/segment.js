@@ -17,7 +17,7 @@ describe('Segment', function(){
         timeline.registerContainer('foo', timelineDiv);
 
         // TimeContext
-        let timeContext = new TimeContext(timeline.context)
+        let timeContext = new TimeContext(timeline.timeContext)
 
         // Layer instanciation for a marker layer
         let data = [
@@ -26,13 +26,13 @@ describe('Segment', function(){
         ];
 
         let layer = new Layer('collection', data);
-        layer.setContext(timeContext);
+        layer.setTimeContext(timeContext);
         layer.configureShape(Segment);
         layer.setBehavior(new SegmentBehavior());
-        layer.setContextAttribute('duration', 12);
+        layer.timeContext.duration = 12;
 
         // Attach layer to the timeline
-        timeline.add(layer, 'foo');
+        timeline.addLayer(layer, 'foo');
         timeline.render();
         timeline.draw();
         timeline.update();
