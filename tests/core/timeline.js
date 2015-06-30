@@ -24,4 +24,16 @@ describe('Timeline', function(){
             assert.equal(timeline.params.duration, duration);
         });
     });
+    describe('Global Timeline rendering options', function(){
+        it('should set width of the timeline correctly', function(){
+            let timelineDiv = document.createElement("div");
+            document.body.appendChild(timelineDiv);
+            let timeline = new Timeline();
+            timeline.width = 800
+            timeline.update();
+            timeline.registerContainer('foo', timelineDiv);
+            const boundingClientRect = timeline.containers.foo.svgElement.getBoundingClientRect();
+            assert.equal(boundingClientRect.width, 800);
+        })
+    })
 });
