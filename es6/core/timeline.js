@@ -29,7 +29,6 @@ class Timeline extends events.EventEmitter {
     this.containers = {};
     // @NOTE realy needed ?
     this.groupedLayers = {}; // group layer by categories
-
     // private attributes
     this._state = null;
     this._layerContainerMap = new Map();
@@ -147,11 +146,14 @@ class Timeline extends events.EventEmitter {
    */
   registerContainer(id, el, options = {}) {
     const height = options.height || 120;
-
+    const width = this.params.width;
     const svg = document.createElementNS(ns, 'svg');
+
     svg.setAttributeNS(null, 'height', height);
     svg.setAttributeNS(null, 'shape-rendering', 'optimizeSpeed');
     svg.setAttribute('xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
+    svg.setAttributeNS(null, 'width', width);
+    svg.setAttributeNS(null, 'viewbox', `0 0 ${width} ${height}`);
 
     const defs = document.createElementNS(ns, 'defs');
 
