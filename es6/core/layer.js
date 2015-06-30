@@ -5,10 +5,10 @@ const Segment = require('../shapes/segment');
 const SegmentBehavior = require('../behaviors/segment-behavior');
 const events = require('events');
 
-// create a private item -> id map
-// in order to force d3 keeping in sync with the DOM
+// private item -> id map to force d3 tp keep in sync with the DOM
 let _counter = 0;
 const _datumIdMap = new Map();
+
 
 class Layer extends events.EventEmitter {
   constructor(dataType, data, options = {}) {
@@ -67,17 +67,13 @@ class Layer extends events.EventEmitter {
     return this.params.opacity;
   }
 
-  // param(name, value) {
-  //   this.params[name] = value;
-  // }
-
   /**
    *  @mandatory define the context in which the layer is drawn
    *  @param context {TimeContext} the timeContext in which the layer is displayed
    */
   setTimeContext(timeContext) {
     this.timeContext = timeContext;
-    // create a mixin to pass to shapes
+    // create a mixin to pass to the shapes
     this._renderingContext = {};
     this._updateRenderingContext();
   }
@@ -91,7 +87,7 @@ class Layer extends events.EventEmitter {
   set data(data) {
     switch (this.dataType) {
       case 'entity':
-        if (this._data) { // if data already exists, reuse the reference
+        if (this._data) {  // if data already exists, reuse the reference
           this._data[0] = data;
         } else {
           this._data = [data];
@@ -154,11 +150,6 @@ class Layer extends events.EventEmitter {
   // Behavior Accessors
   // --------------------------------------
 
-  /**
-   *  Behavior entry points
-   *  @NOTE API -> change for an Array as first argument
-   *  @TODO     -> handle if no behavior is registered
-   */
   get selectedItems() {
     return this._behavior ? this._behavior.selectedItems : [];
   }
@@ -185,14 +176,6 @@ class Layer extends events.EventEmitter {
     });
   }
 
-  selectAll() {
-    this.items.forEach((item) => this.select(item));
-  }
-
-  unselectAll() {
-    this.selectedItems.forEach((item) => this.unselect(item));
-  }
-
   toggleSelection(items) {
     if (!this._behavior || !items) { return; }
     items = Array.isArray(items) ? items : [items];
@@ -203,48 +186,21 @@ class Layer extends events.EventEmitter {
     });
   }
 
-  // @TODO change signature edit(items = [...], dx, dy, target);
-  // -> be consistent for all behaviors API
-  edit(item, dx, dy, target) {
-    const datum = d3Selection.select(item).datum();
-    const shape = this._itemShapeMap.get(item);
-    this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);
-    this.emit('edit', shape, datum);
+  edit(items, dx, dy, target) {
+    if (!this._behavior || !items) { return; }
+    items = Array.isArray(items) ? items : [items];
+
+    items.forEach((item) => {
+      const datum = d3Selection.select(item).datum();
+      const shape = this._itemShapeMap.get(item);
+      this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);
+      this.emit('edit', shape, datum);
+    });
   }
 
   // --------------------------------------
   // Helpers
   // --------------------------------------
-
-  /**
-   *  @NOTE bad method name !!!
-   *  Define if an given DOM element belongs to one of the `items`
-   *  @param `el` {DOMElement} the element to be tested
-   *  @return {mixed}
-   *    {DOMElement} item group containing the `el` if belongs to this layer
-   *    null otherwise
-   */
-  hasItem(el) {
-    do {
-      if (el.classList && el.classList.contains('item')) { return el; }
-      el = el.parentNode;
-    } while (el != undefined);
-
-    return (this.items.nodes().indexOf(el) !== -1) ? item : null;
-  }
-
-  /**
-   *  Define if a given element belongs to the layer
-   *  is more general than `hasItem`, can be used to check interaction elements too
-   */
-  hasElement(el) {
-    do {
-      if (el === this.container) { return true; }
-      el = el.parentNode;
-    } while (el != undefined);
-
-    return false;
-  }
 
   /**
    *  moves an `item`'s group to the end of the layer (svg z-index...)
@@ -254,24 +210,60 @@ class Layer extends events.EventEmitter {
     this.group.appendChild(item);
   }
 
+  // @NOTE `hasItem` and `hasElement` are kind of redondant...
+  /**
+   *  @API change to `getItemFromElement(el)` ?
+   *  Define if an given DOM element belongs to one of the `items`
+   *  @param `el` {DOMElement} the element to be tested
+   *  @return {mixed}
+   *    {DOMElement} item group containing the `el` if belongs to this layer
+   *    null otherwise
+   */
+  hasItem(el) {
+    let item;
+
+    do {
+      if (el.classList && el.classList.contains('item')) {
+        item = el;
+      }
+
+      el = el.parentNode;
+    } while (el != undefined);
+
+    return (this.items.nodes().indexOf(item) !== -1) ? item : null;
+  }
+
+  /**
+   *  Define if a given element belongs to the layer
+   *  is more general than `hasItem`, can be used to check interaction elements too
+   */
+  hasElement(el) {
+    do {
+      if (el === this.container) {
+        return true;
+      }
+
+      el = el.parentNode;
+    } while (el != undefined);
+
+    return false;
+  }
+
   /**
    *  @param area {Object} area in which to find the elements
    *  @return {Array} list of the DOM elements in the given area
    */
   getItemsInArea(area) {
-    // work in pixel domain
     const start    = this.timeContext.xScale(this.timeContext.start);
     const duration = this.timeContext.xScale(this.timeContext.duration);
     const offset   = this.timeContext.xScale(this.timeContext.offset);
     const top      = this.params.top;
-    // must be aware of the layer's context modifications
-    // constrain in working view
+    // be aware af context's translations - constrain in working view
     let x1 = Math.max(area.left, start);
     let x2 = Math.min(area.left + area.width, start + duration);
-    // apply start and offset
     x1 -= (start + offset);
     x2 -= (start + offset);
-    // be consistent with context y coordinates system
+    // keep consistent with context y coordinates system
     let y1 = this.params.height - (area.top + area.height);
     let y2 = this.params.height - area.top;
 
@@ -302,20 +294,17 @@ class Layer extends events.EventEmitter {
     // wrapper group for `start, top and context flip matrix
     this.container = document.createElementNS(ns, 'g');
     this.container.classList.add('layer');
-    // append a svg to clip the context
-    // @NOTE: could use a group with a `clipPath` property ?
+    // clip the context with a `svg` element
     this.boundingBox = document.createElementNS(ns, 'svg');
     this.boundingBox.classList.add('bounding-box');
-    // this.boundingBox.setAttributeNS(null, 'id', this.params.id);
     // group to apply offset
     this.group = document.createElementNS(ns, 'g');
     this.group.classList.add('offset', 'items');
-
     // context interactions
     this.interactionsGroup = document.createElementNS(ns, 'g');
     this.interactionsGroup.classList.add('layer-interactions');
     this.interactionsGroup.style.display = 'none';
-    // @NOTE: works but king of ugly... must be cleaned
+    // @NOTE: works but king of ugly... should be cleaned
     this.contextShape = new Segment();
     this.contextShape.install({
       opacity: () => 0.1,
@@ -326,7 +315,6 @@ class Layer extends events.EventEmitter {
     });
 
     this.interactionsGroup.appendChild(this.contextShape.render());
-
     // create the DOM tree
     this.container.appendChild(this.boundingBox);
     this.boundingBox.appendChild(this.interactionsGroup);
@@ -342,7 +330,8 @@ class Layer extends events.EventEmitter {
   }
 
   /**
-   *  creates the layer group with a transformation matrix to flip the coordinate system.
+   *  Creates the layer group with a transformation
+   *  matrix to flip the coordinate system.
    *  @return {DOMElement}
    */
   render() {
@@ -350,10 +339,10 @@ class Layer extends events.EventEmitter {
   }
 
   /**
-   * create the DOM according to given data and shapes
+   *  Creates the DOM according to given data and shapes
    */
   draw() {
-    // create a unique id to force d3 to keep data in sync with the DOM
+    // force d3 to keep data in sync with the DOM with a unique id
     this.data.forEach(function(datum) {
       if (_datumIdMap.has(datum)) { return; }
       _datumIdMap.set(datum, _counter++);
@@ -369,7 +358,7 @@ class Layer extends events.EventEmitter {
         return _datumIdMap.get(datum);
       });
 
-    // handle commonShapes -> render only once
+    // render `commonShape` only once
     if (
       this._commonShapeConfiguration !== null &&
       this._itemCommonShapeMap.size === 0
@@ -386,7 +375,7 @@ class Layer extends events.EventEmitter {
       this.group.appendChild(group);
     }
 
-    // enter
+    // ... enter
     this.items.enter()
       .append((datum, index) => {
         // @NOTE: d3 binds `this` to the container group
@@ -401,7 +390,7 @@ class Layer extends events.EventEmitter {
         return item;
       });
 
-    // exit
+    // ... exit
     const _itemShapeMap = this._itemShapeMap;
 
     this.items.exit()
