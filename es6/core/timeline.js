@@ -1,11 +1,11 @@
 const d3Scale = require('d3-scale');
 const events = require('events');
-const ns = require('./namespace');
 
 const Keyboard = require('../interactions/keyboard');
 const Layer = require('./layer');
-const TimeContextBehavior = require('../behaviors/time-context-behavior');
+const ns = require('./namespace');
 const Surface  = require('../interactions/surface');
+const TimeContextBehavior = require('../behaviors/time-context-behavior');
 const TimeContext = require('./time-context');
 
 /**
@@ -265,7 +265,7 @@ class Timeline extends events.EventEmitter {
   }
 
   /**
-   * Render all the layers in the timeline
+   *  Render all the layers in the timeline
    */
   render() {
     this.layers.forEach((layer) => {
@@ -275,7 +275,7 @@ class Timeline extends events.EventEmitter {
   }
 
   /**
-   * Draw all the layers in the timeline
+   *  Draw all the layers in the timeline
    */
   draw(layerOrGroup = null) {
     const layers = this._getLayers(layerOrGroup);
@@ -283,8 +283,8 @@ class Timeline extends events.EventEmitter {
   }
 
   /**
-   * Update all the layers in the timeline
-   * @TODO accept several `layers` or `categories` as arguments ?
+   *  Update all the layers in the timeline
+   *  @NOTE accept several `layers` or `categories` as arguments ?
    */
   update(layerOrGroup = null) {
     const layers = this._getLayers(layerOrGroup);
