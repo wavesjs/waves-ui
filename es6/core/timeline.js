@@ -1,10 +1,11 @@
+const d3Scale = require('d3-scale');
 const events = require('events');
-const ns = require('./namespace');
-const TimeContext = require('./time-context');
-const Surface  = require('../interactions/surface');
+
 const Keyboard = require('../interactions/keyboard');
 const Layer = require('./layer');
-const d3Scale = require('d3-scale');
+const ns = require('./namespace');
+const Surface  = require('../interactions/surface');
+const TimeContext = require('./time-context');
 
 /**
  *  @class Timeline
