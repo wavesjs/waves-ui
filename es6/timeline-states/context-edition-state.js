@@ -34,7 +34,15 @@ class ContextEditionState extends BaseState {
 
   onMouseMove(e) {
     if (!this.mouseDown || !this.currentLayer) { return; }
-    this.currentLayer.editContext(e.dx, e.dy, this.currentTarget);
+
+    const layer = this.currentLayer;
+    const target = this.currentTarget;
+
+    if (!e.originalEvent.shiftKey) {
+      this.timeline.timeContextBehavior.edit(layer, e.dx, e.dy, target);
+    } else {
+      this.timeline.timeContextBehavior.stretch(layer, e.dx, e.dy, target);
+    }
 
     this.timeline.update(this.currentLayer);
   }

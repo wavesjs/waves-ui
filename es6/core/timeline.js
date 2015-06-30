@@ -5,6 +5,7 @@ const Surface  = require('../interactions/surface');
 const Keyboard = require('../interactions/keyboard');
 const Layer = require('./layer');
 const d3Scale = require('d3-scale');
+const TimeContextBehavior = require('../behaviors/time-context-behavior');
 
 /**
  *  @class Timeline
@@ -29,6 +30,7 @@ class Timeline extends events.EventEmitter {
     this.containers = {};
     // @NOTE realy needed ?
     this.groupedLayers = {}; // group layer by categories
+    this.timeContextBehavior = new TimeContextBehavior();
     // private attributes
     this._state = null;
     this._layerContainerMap = new Map();

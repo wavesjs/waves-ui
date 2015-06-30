@@ -67,9 +67,9 @@ class Layer extends events.EventEmitter {
     return this.params.opacity;
   }
 
-  param(name, value) {
-    this.params[name] = value;
-  }
+  // param(name, value) {
+  //   this.params[name] = value;
+  // }
 
   /**
    *  @mandatory define the context in which the layer is drawn
@@ -116,7 +116,6 @@ class Layer extends events.EventEmitter {
   configureShape(ctor, accessors = {}, options = {}) {
     this._shapeConfiguration = { ctor, accessors, options };
   }
-
 
   /**
    *  Register the shape to use with the entire collection
@@ -214,86 +213,8 @@ class Layer extends events.EventEmitter {
   }
 
   // --------------------------------------
-  // Context Behavior
-  // --------------------------------------
-
-  /**
-   *  draw the shape to interact with the context
-   *  @params bool {Boolean} define if the layer's context is editable or not
-   */
-  set editable(bool) {
-    const display = bool ? 'block' : 'none';
-    this.interactionsGroup.style.display = display;
-    this._isContextEditable = bool;
-  }
-
-  get editable() {
-    return this._isContextEditable;
-  }
-
-  // @NOTE create a proper `ContextBehavior` ?
-  editContext(dx, dy, target) {
-    if (target.classList.contains('handler') && target.classList.contains('left')) {
-      this._editContextLeft(dx);
-    } else if (target.classList.contains('handler') && target.classList.contains('right')) {
-      this._editContextRight(dx);
-    } else {
-      this._moveContext(dx);
-    }
-  }
-
-  _editContextLeft(dx) {
-    const timeContext = this.timeContext;
-    const renderingContext  = this._renderingContext;
-    // edit `context.start`, `context.offset` and `context.duration`
-    const x = renderingContext.xScale(timeContext.start);
-    const offset = renderingContext.xScale(timeContext.offset);
-    const width = renderingContext.xScale(timeContext.duration);
-
-    const targetX = x + dx;
-    const targetOffset = offset - dx;
-    const targetWidth = Math.max(width - dx, 0);
-
-    this.timeContext.start = renderingContext.xScale.invert(targetX);
-    this.timeContext.offset = renderingContext.xScale.invert(targetOffset);
-    this.timeContext.duration = renderingContext.xScale.invert(targetWidth);
-  }
-
-  _editContextRight(dx) {
-    const timeContext = this.timeContext;
-    const renderingContext  = this._renderingContext;
-    const width = renderingContext.xScale(timeContext.duration);
-    const targetWidth = Math.max(width + dx, 0);
-
-    this.timeContext.duration = renderingContext.xScale.invert(targetWidth);
-  }
-
-  _moveContext(dx) {
-    const timeContext = this.timeContext;
-    const renderingContext  = this._renderingContext;
-    // edit `context.start`
-    const x = renderingContext.xScale(timeContext.start);
-    const targetX = Math.max(x + dx, 0);
-
-    this.timeContext.start = renderingContext.xScale.invert(targetX);
-  }
-
-  stretchContext(dx, dy, target) {}
-
-  // --------------------------------------
   // Helpers
   // --------------------------------------
-
-  /**
-   *  @NOTE is only used on `hasItem` => no need to separate this method
-   *  @return {DOMElement} the closest parent `item` group for a given DOM element
-   */
-  _getItemFromDOMElement(el) {
-    do {
-      if (el.classList && el.classList.contains('item')) { return el; }
-      el = el.parentNode;
-    } while (el != undefined);
-  }
 
   /**
    *  @NOTE bad method name !!!
@@ -304,16 +225,12 @@ class Layer extends events.EventEmitter {
    *    null otherwise
    */
   hasItem(el) {
-    const item = this._getItemFromDOMElement(el);
-    return (this.items.nodes().indexOf(item) !== -1) ? item : null;
-  }
+    do {
+      if (el.classList && el.classList.contains('item')) { return el; }
+      el = el.parentNode;
+    } while (el != undefined);
 
-  /**
-   *  moves an `item`'s group to the end of the layer (svg z-index...)
-   *  @param `item` {DOMElement} the item to be moved
-   */
-  _toFront(item) {
-    this.group.appendChild(item);
+    return (this.items.nodes().indexOf(el) !== -1) ? item : null;
   }
 
   /**
@@ -327,6 +244,14 @@ class Layer extends events.EventEmitter {
     } while (el != undefined);
 
     return false;
+  }
+
+  /**
+   *  moves an `item`'s group to the end of the layer (svg z-index...)
+   *  @param `item` {DOMElement} the item to be moved
+   */
+  _toFront(item) {
+    this.group.appendChild(item);
   }
 
   /**
@@ -505,10 +430,10 @@ class Layer extends events.EventEmitter {
    *  updates the context of the layer
    */
   updateContainer() {
-    const x      = this.timeContext.xScale(this.timeContext.start);
     const width  = this.timeContext.xScale(this.timeContext.duration);
     // offset is relative to timeline's timeContext
-    const offset = this.timeContext.parent.xScale(this.timeContext.offset);
+    const x      = this.timeContext.parent.xScale(this.timeContext.start);
+    const offset = this.timeContext.xScale(this.timeContext.offset);
     const top    = this.params.top;
     const height = this.params.height;
     // matrix to invert the coordinate system

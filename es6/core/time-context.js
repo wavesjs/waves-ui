@@ -40,7 +40,7 @@ class TimeContext {
     this._xScale = xScale;
 
     if (!this.parent && !this._originalXScale) {
-      this._originalXScale = this._xScale;
+      this._originalXScale = this._xScale.copy();
     }
   }
 
