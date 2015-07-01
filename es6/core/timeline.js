@@ -129,15 +129,15 @@ class Timeline extends events.EventEmitter {
    * Containers display the view on the timeline in theirs DOM svg element.
    * The timeline timeContext offset set all the containers to display temporal representation from that offset time.
    *
-   * "Container SVG structure"
+   * Container SVG structure
    * <svg>
-   *  <defs>
+   *  <defs> Unused for the moment, could be used to define custom shapes for use with layers
    *  </defs>
    *  <g class="offset">
-   *   <g class="layout">
+   *   <g class="layout"> The layers are inserted here
    *   </g>
    *  </g>
-   *  <g class="interactions">
+   *  <g class="interactions"> Placeholder to visualize interactions (eg. brush)
    *  </g>
    * </svg>
    * @param id {String} a user defined id for the container

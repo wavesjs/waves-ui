@@ -13,6 +13,18 @@ const _datumIdMap = new Map();
 
 
 class Layer extends events.EventEmitter {
+  /**
+   * Structure of the DOM view of a Layer
+   *
+   * <g class="layer"> Flip y axis, timeContext.start and top position from params are applied on this elmt
+   *   <svg class="bounding-box"> timeContext.duration is applied on this elmt
+   *    <g class="layer-interactions"> Contains the timeContext edition elements (a segment)
+   *    </g>
+   *    <g class="offset items"> The shapes are inserted here, and we apply timeContext.offset on this elmt
+   *    </g>
+   *   </svg>
+   * </g>
+   */
   constructor(dataType, data, options = {}) {
     super();
     this.dataType = dataType; // 'entity' || 'collection';
