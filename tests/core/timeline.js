@@ -59,7 +59,7 @@ describe('Timeline', function(){
         })
     })
     describe('Manipulate layers inside a timeline', function(){
-        it('should get the layer from getGroup', function(){
+        it('should get the layer from getLayersFromGroup', function(){
             let titleDiv = document.createElement('div');
             titleDiv.innerHTML = this.test.title;
             document.body.appendChild(titleDiv);
@@ -69,7 +69,7 @@ describe('Timeline', function(){
             timeline.registerContainer('foo', timelineDiv);
             let layer1 = {'name': 'layer1'};
             timeline.addLayer(layer1, 'foo', 'bar');
-            assert.deepEqual(timeline.getGroup('bar'), [layer1]);
+            assert.deepEqual(timeline.getLayersFromGroup('bar'), [layer1]);
         })
         it('should getContainer from layer', function(){
             let titleDiv = document.createElement('div');
