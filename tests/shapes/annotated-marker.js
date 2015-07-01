@@ -9,6 +9,9 @@ describe('Annotated Marker', function(){
   describe('Annotated Marker instanciation', function(){
     it('should contain the right text', function(){
         // Holder element for the timeline
+        let titleDiv = document.createElement('div');
+        titleDiv.innerHTML = this.test.title;
+        document.body.appendChild(titleDiv);
         let timelineDiv = document.createElement("div");
         document.body.appendChild(timelineDiv);
 

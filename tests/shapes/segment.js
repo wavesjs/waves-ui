@@ -8,6 +8,9 @@ const Timeline = require('../../es6/core/timeline');
 describe('Segment', function(){
   describe('Segment instanciation', function(){
     it('should be placed a the convenient location', function(){
+        let titleDiv = document.createElement('div');
+        titleDiv.innerHTML = this.test.title;
+        document.body.appendChild(titleDiv);
         // Holder element for the timeline
         let timelineDiv = document.createElement("div");
         document.body.appendChild(timelineDiv);
@@ -45,10 +48,6 @@ describe('Segment', function(){
         assert.equal(item1.left, 100);
         assert.equal(item1.width, 100);
 
-        // setTimeout(function() {
-        //   layer.setContextAttribute('start', 12);
-        //   timeline.update();
-        // }, 1000);
       });
   });
 });

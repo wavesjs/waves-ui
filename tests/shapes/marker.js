@@ -8,6 +8,9 @@ const Timeline = require('../../es6/core/timeline');
 describe('Marker', function(){
   describe('Marker instanciation', function(){
     it('should be placed a the convenient location', function(){
+        let titleDiv = document.createElement('div');
+        titleDiv.innerHTML = this.test.title;
+        document.body.appendChild(titleDiv);
         // Holder element for the timeline
         let timelineDiv = document.createElement("div");
         document.body.appendChild(timelineDiv);

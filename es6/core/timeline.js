@@ -11,13 +11,18 @@ const TimeContext = require('./time-context');
 /**
  * @class Timeline
  *
- * A Timeline instance is the main entry point for creating a temporal data representation.
+ * A Timeline instance is the main entry point to create a temporal data representation.
  *
  * As a temporal representation, a timeline established a relation between time and space through `width` and `duration` setter (and a `TimeContext` instance which links these width and duration, especially usefull during move and zoom of the timeline).
  *
  * A temporal representation can be created upon multiple DOM elements (eg. multiple <li> for a DAW like representation) that belong to the same timeline (and thus share time/space relation) using `registerContainer` method.
  *
  * Within a container, a `Layer` keep up-to-date and render the data. The timeline `addLayer` method is used to add a `Layer` instance to a previously created container.
+ *
+ * When one modify the timeline timeContext:
+ * - timeline.timeContext.start has no effect neither on Containers neither on Layers
+ * - timeline.timeContext.offset modify the container view x position
+ * - timeline.timeContext.stretchRatio modify the layer zoom
  */
 class Timeline extends events.EventEmitter {
   /**
@@ -108,7 +113,7 @@ class Timeline extends events.EventEmitter {
       .range([0, width]);
 
     this.timeContext = new TimeContext();
-    this.timeContext.duration =  duration;
+    this.timeContext.duration = duration;
     this.timeContext.xScale = xScale;
   }
 
@@ -151,6 +156,10 @@ class Timeline extends events.EventEmitter {
 
   /**
    * Register a container and prepare the DOM svg element for the timeline's layers
+   *
+   * Containers display the view on the timeline in theirs DOM svg element.
+   * The timeline timeContext offset set all the containers to display temporal representation from that offset time.
+   *
    * @param id {String} a user defined id for the container
    * @param el {DOMElement} the DOMElement to use as a container
    * @param options {Object} the options to apply to the container
@@ -260,6 +269,7 @@ class Timeline extends events.EventEmitter {
 
       $svg.setAttributeNS(null, 'width', width);
       $svg.setAttributeNS(null, 'viewbox', `0 0 ${width} ${height}`);
+      console.log(translate);
       $offset.setAttributeNS(null, 'transform', translate);
     }
   }
