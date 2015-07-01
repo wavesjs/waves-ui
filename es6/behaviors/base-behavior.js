@@ -1,5 +1,3 @@
-
-
 class BaseBehavior {
   constructor(options = {}) {
     this._selectedItems = new Set(); // no duplicate in Set

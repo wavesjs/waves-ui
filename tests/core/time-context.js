@@ -8,14 +8,16 @@ describe('TimeContext', function(){
             let parentTimeContext = new TimeContext();
             let childTimeContext1 = new TimeContext(parentTimeContext);
             let childTimeContext2 = new TimeContext(parentTimeContext);
-            childTimeContext2.xScale = 'foo-function';
+            let xScale1 = d3Scale.linear();
+            childTimeContext2.xScale = xScale1;
             assert.equal(parentTimeContext.xScale, null);
             assert.equal(childTimeContext1.xScale, null);
-            assert.equal(childTimeContext2.xScale, 'foo-function');
-            parentTimeContext.xScale = 'bar-function'
-            assert.equal(parentTimeContext.xScale, 'bar-function');
-            assert.equal(childTimeContext1.xScale, 'bar-function');
-            assert.equal(childTimeContext2.xScale, 'foo-function');
+            assert.equal(childTimeContext2.xScale, xScale1);
+            let xScale2 = d3Scale.linear();
+            parentTimeContext.xScale = xScale2
+            assert.equal(parentTimeContext.xScale, xScale2);
+            assert.equal(childTimeContext1.xScale, xScale2);
+            assert.equal(childTimeContext2.xScale, xScale1);
         })
         it('should get correct stretchratio', function(){
             let parentTimeContext = new TimeContext();

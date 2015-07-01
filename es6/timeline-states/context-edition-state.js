@@ -1,5 +1,6 @@
 const BaseState = require('./base-state');
 
+
 class ContextEditionState extends BaseState {
   constructor(timeline) {
     super(timeline);

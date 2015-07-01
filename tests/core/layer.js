@@ -7,6 +7,9 @@ describe('Layer', function(){
   describe('Layer instanciation', function(){
     it('should create a layer and attach it to a DOM element of a timeline instance', function(){
         // Holder element for the timeline
+        let titleDiv = document.createElement('div');
+        titleDiv.innerHTML = this.test.title;
+        document.body.appendChild(titleDiv);
         let timelineDiv = document.createElement("div");
         document.body.appendChild(timelineDiv);
 

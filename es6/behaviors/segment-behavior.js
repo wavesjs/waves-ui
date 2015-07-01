@@ -1,5 +1,6 @@
 const BaseBehavior = require('./base-behavior');
 
+
 class SegmentBehavior extends BaseBehavior {
   // constructor() {}
 

@@ -1,5 +1,6 @@
 const BaseShape = require('./base-shape');
 
+
 class Marker extends BaseShape {
   getClassName() { return 'marker'; }
 

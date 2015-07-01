@@ -1,6 +1,7 @@
 const BaseState = require('./base-state');
 const ns = require('../core/namespace');
 
+
 /**
  *  @NOTE Buggy
  */

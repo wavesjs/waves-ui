@@ -1,11 +1,11 @@
 /**
- *  @class TimeContext
+ * @class TimeContext
  *
- *  represent a time segment and its scale to the pixel domain
- *  the timeContexts are organised in a tree structure,
- *  with the timeline's TimeContext on top
+ * represent a time segment and its scale to the pixel domain
+ * the timeContexts are organised in a tree structure,
+ * with the timeline's TimeContext on top
  *
- *  @WARNING: the tree works with two level, but probably wont with more depth
+ * @WARNING: the tree works with two level, but probably wont with more depth
  */
 class TimeContext {
   constructor(parent = null) {
@@ -15,9 +15,9 @@ class TimeContext {
     this._xScale = null;
     this._originalXScale = null;
 
-    this.start = 0;
+    this.start = 0; // start x position
     this.duration = (parent !== null) ? parent.duration : 1;
-    this.offset = 0;
+    this.offset = 0; // content offset in regard to start
     this._stretchRatio = 1;
 
     if (this.parent) {

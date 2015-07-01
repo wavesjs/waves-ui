@@ -1,5 +1,6 @@
 const BaseBehavior = require('./base-behavior');
 
+
 class BreakpointBehavior extends BaseBehavior {
 
   edit(renderingContext, shape, datum, dx, dy, target) {
