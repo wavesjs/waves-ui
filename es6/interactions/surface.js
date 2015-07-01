@@ -80,6 +80,7 @@ class Surface extends EventSource {
       this.lastEvent = event;
       // register mouse move on body - more user friendly
       body.addEventListener('mousemove', onMouseMove, false);
+      body.addEventListener('mouseup', onMouseUp, false);
       // console.log(event);
 
       this.emit('event', event);
@@ -105,6 +106,7 @@ class Surface extends EventSource {
       this.lastEvent = null;
       // remove listener on
       body.removeEventListener('mousemove', onMouseMove);
+      body.removeEventListener('mouseup', onMouseUp);
 
       this.emit('event', event);
     };
@@ -123,7 +125,6 @@ class Surface extends EventSource {
 
     // bind callbacks
     this.el.addEventListener('mousedown', onMouseDown, false);
-    this.el.addEventListener('mouseup', onMouseUp, false);
     this.el.addEventListener('click', onClick, false);
     this.el.addEventListener('dblclick', onDblClick, false);
 
