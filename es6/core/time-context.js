@@ -1,10 +1,25 @@
 /**
  * @class TimeContext
  *
- * represent a time segment and its scale to the pixel domain
- * the timeContexts are organised in a tree structure,
- * with the timeline's TimeContext on top
+ * A TimeContext instance represents a time segment and its horizontal scale to the pixel domain.
+ * A timeContext is attached to a `Timeline` instance or its `Layer`.
+ * When attached to a layer, a timeContext has a parent timeContext, the one attached to the timeline it belongs to.
  *
+ * A timeContext has four importants attributes:
+ * - timeContext.start which defines the start time of the context in seconds.
+ *   - From a layer perspective, this could be the time at which temporal data must be represented in the timeline (for instance the begining of a soundfile in a DAW).
+ *   - From a timeline perspective, this will always be 0.
+ * - timeContext.offset which defines the offset time of the context in seconds.
+ *   - From a timeline perspective, it is a way to have a window view upon a large timeline for instance.
+ *   - From a layer perspective, this could be the offset time of the data in the context of a Layer (@TODO give a use case example here "crop ?", and/or explain that it's not a common use case).
+ * - timeContext.duration which defines the duration
+ *   - From a layer perspective, this is the duration of the temporal data (eg. the duration of a soundfile)
+ *   - From a timeline perspective, this is the overall duration of the timeline
+ * - stretchRatio which defines the stretch applied
+ *   - From a timeline perspective, this is zoom factor we apply to the timeline
+ *   - From a layer perspective, this is a way to stretch the datas.
+ *
+ * In actual implementation, timeContexts are organised in a tree structure, with the timeline's TimeContext on top of it.
  * @WARNING: the tree works with two level, but probably wont with more depth
  */
 class TimeContext {
@@ -15,9 +30,9 @@ class TimeContext {
     this._xScale = null;
     this._originalXScale = null;
 
-    this.start = 0; // start x position
+    this.start = 0;  // Start time, in seconds
     this.duration = (parent !== null) ? parent.duration : 1;
-    this.offset = 0; // content offset in regard to start
+    this.offset = 0;  // Content offset in regard to start, in seconds
     this._stretchRatio = 1;
 
     if (this.parent) {
@@ -72,7 +87,7 @@ class TimeContext {
   }
 
   set stretchRatio(ratio) {
-    // do not remove xScale on top of the graph
+    // Do not remove xScale on top of the graph
     if (ratio === 1 && this.parent) {
       this._xScale = null;
     } else {
@@ -91,7 +106,7 @@ class TimeContext {
 
     this._stretchRatio = ratio;
 
-    // propagate change to children who have their own stretchRatio
+    // Propagate change to children who have their own stretchRatio
     const ratioChange = ratio / (this._stretchRatio);
 
     this._children.forEach(function(child) {

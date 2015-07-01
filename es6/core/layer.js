@@ -82,8 +82,8 @@ class Layer extends events.EventEmitter {
   }
 
   /**
-   *  @mandatory define the context in which the layer is drawn
-   *  @param context {TimeContext} the timeContext in which the layer is displayed
+   * @mandatory define the context in which the layer is drawn
+   * @param context {TimeContext} the timeContext in which the layer is displayed
    */
   setTimeContext(timeContext) {
     this.timeContext = timeContext;
