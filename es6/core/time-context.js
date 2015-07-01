@@ -1,11 +1,11 @@
 /**
- *  @class TimeContext
+ * @class TimeContext
  *
- *  represent a time segment and its scale to the pixel domain
- *  the timeContexts are organised in a tree structure,
- *  with the timeline's TimeContext on top
+ * represent a time segment and its scale to the pixel domain
+ * the timeContexts are organised in a tree structure,
+ * with the timeline's TimeContext on top
  *
- *  @WARNING: the tree works with two level, but probably wont with more depth
+ * @WARNING: the tree works with two level, but probably wont with more depth
  */
 class TimeContext {
   constructor(parent = null) {

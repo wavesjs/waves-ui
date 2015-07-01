@@ -1,5 +1,6 @@
 const BaseShape = require('./base-shape');
 
+
 class Segment extends BaseShape {
   getClassName() { return 'segment'; }
 

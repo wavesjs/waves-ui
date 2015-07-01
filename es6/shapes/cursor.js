@@ -1,6 +1,7 @@
 const BaseShape = require('./base-shape');
 const ns = require('../core/namespace');
 
+
 class Cursor extends BaseShape {
   getClassName() { return 'cursor'; }
 

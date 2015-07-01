@@ -1,5 +1,7 @@
 const EventSource = require('./event-source');
 const WaveEvent  = require('./wave-event');
+
+
 const body = window.document.body;
 
 

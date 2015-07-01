@@ -1,8 +1,9 @@
-/**
- *  main interface for event source
- */
 const events = require('events');
 
+
+/**
+ * Main interface for event source
+ */
 class EventSource extends events.EventEmitter {
   constructor(el) {
     super();

@@ -1,5 +1,6 @@
 const Segment = require('./segment');
 
+
 class AnnotatedSegment extends Segment {
   getClassName() { return 'annotated-segment'; }
 

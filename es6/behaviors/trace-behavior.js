@@ -1,5 +1,6 @@
 const BaseBehavior = require('./base-behavior');
 
+
 class TraceBehavior extends BaseBehavior {
   edit (renderingContext, shape, datum, dx, dy, target) {
     if (target.classList.contains('mean')) {

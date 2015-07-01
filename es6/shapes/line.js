@@ -1,5 +1,6 @@
 const BaseShape = require('./base-shape');
 
+
 class Line extends BaseShape {
   getClassName() { return 'line'; }
 

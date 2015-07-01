@@ -1,5 +1,6 @@
 const Marker = require('./marker');
 
+
 class AnnotatedMarker extends Marker {
   getClassName() { return 'annotated-marker'; }
 

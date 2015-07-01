@@ -1,5 +1,6 @@
 const BaseState = require('./base-state');
 
+
 // @NOTE => overlaps SelectionBehavior in some way...
 class EditionState extends BaseState {
   constructor(timeline) {

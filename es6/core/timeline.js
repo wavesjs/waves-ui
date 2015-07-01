@@ -13,7 +13,7 @@ const TimeContext = require('./time-context');
  *
  * A Timeline instance is the main entry point to create a temporal data representation.
  *
- * As a temporal representation, a timeline established a relation between time and space through `width` and `duration` setter (and a `TimeContext` instance which links these width and duration, especially usefull during move and zoom of the timeline).
+ * As a temporal representation, a timeline established a relation between time and space through `width` and `duration` setter (and a `TimeContext` instance which links these width and duration, especially usefull during move and zoom inside a temporal data representation).
  *
  * A temporal representation can be created upon multiple DOM elements (eg. multiple <li> for a DAW like representation) that belong to the same timeline (and thus share time/space relation) using `registerContainer` method.
  *
