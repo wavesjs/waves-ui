@@ -210,6 +210,18 @@ class Layer extends events.EventEmitter {
     this.group.appendChild(item);
   }
 
+  _getItemFromDOMElement(el) {
+    do {
+      if (el.classList && el.classList.contains('item')) {
+        return el;
+      }
+
+      el = el.parentNode;
+    } while (el != undefined);
+
+    return null;
+  }
+
   // @NOTE `hasItem` and `hasElement` are kind of redondant...
   /**
    *  @API change to `getItemFromElement(el)` ?
@@ -220,16 +232,7 @@ class Layer extends events.EventEmitter {
    *    null otherwise
    */
   hasItem(el) {
-    let item;
-
-    do {
-      if (el.classList && el.classList.contains('item')) {
-        item = el;
-      }
-
-      el = el.parentNode;
-    } while (el != undefined);
-
+    const item = this._getItemFromDOMElement(el);
     return (this.items.nodes().indexOf(item) !== -1) ? item : null;
   }
 
