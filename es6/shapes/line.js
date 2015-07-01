@@ -4,7 +4,11 @@ class Line extends BaseShape {
   getClassName() { return 'line'; }
 
   _getAccessorList() {
-    return { cx: 0, cy: 0, color: '#000000' };
+    return { cx: 0, cy: 0 };
+  }
+
+  _getDefaults() {
+    return { color: '#000000' };
   }
 
   render() {
@@ -20,7 +24,7 @@ class Line extends BaseShape {
     data.sort((a, b) => this.cx(a) < this.cx(b) ? -1 : 1);
 
     this.shape.setAttributeNS(null, 'd', this._buildLine(renderingContext, data));
-    this.shape.style.stroke = this.color(data);
+    this.shape.style.stroke = this.params.color;
     this.shape.style.fill = 'none';
 
     data = null;
@@ -29,6 +33,7 @@ class Line extends BaseShape {
   // builds the `path.d` attribute
   // @TODO create some ShapeHelper ?
   _buildLine(renderingContext, data) {
+    if (!data.length) { return ''; }
     // sort data
     let instructions = data.map((datum, index) => {
       const x = renderingContext.xScale(this.cx(datum));

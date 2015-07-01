@@ -36,7 +36,7 @@ class EditionState extends BaseState {
       if (!layer.hasItem(e.target)) { return; }
 
       if (!e.originalEvent.shiftKey) {
-        layer.unselect(layer.items.node());
+        layer.unselect(layer.items.nodes());
       }
 
       this.currentEditedLayer = layer;

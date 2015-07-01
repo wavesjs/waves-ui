@@ -159,7 +159,7 @@ class Layer extends events.EventEmitter {
     items = Array.isArray(items) ? items : [items];
 
     items.forEach((item) => {
-      item = this._getItemFromDOMElement(item);
+      // item = this._getItemFromDOMElement(item); // should receive an item
       const datum = d3Selection.select(item).datum();
       this._behavior.select(item, datum);
       this._toFront(item);
@@ -228,12 +228,12 @@ class Layer extends events.EventEmitter {
    *  Define if an given DOM element belongs to one of the `items`
    *  @param `el` {DOMElement} the element to be tested
    *  @return {mixed}
-   *    {DOMElement} item group containing the `el` if belongs to this layer
+   *    {d3Selection} item group containing the `el` if belongs to this layer
    *    null otherwise
    */
   hasItem(el) {
     const item = this._getItemFromDOMElement(el);
-    return (this.items.nodes().indexOf(item) !== -1) ? item : null;
+    return (this.items.nodes().indexOf(item) !== -1) ? d3Selection.select(item) : null;
   }
 
   /**
