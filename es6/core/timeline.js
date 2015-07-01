@@ -129,6 +129,17 @@ class Timeline extends events.EventEmitter {
    * Containers display the view on the timeline in theirs DOM svg element.
    * The timeline timeContext offset set all the containers to display temporal representation from that offset time.
    *
+   * "Container SVG structure"
+   * <svg>
+   *  <defs>
+   *  </defs>
+   *  <g class="offset">
+   *   <g class="layout">
+   *   </g>
+   *  </g>
+   *  <g class="interactions">
+   *  </g>
+   * </svg>
    * @param id {String} a user defined id for the container
    * @param el {DOMElement} the DOMElement to use as a container
    * @param options {Object} the options to apply to the container
@@ -275,7 +286,7 @@ class Timeline extends events.EventEmitter {
 
       $svg.setAttributeNS(null, 'width', width);
       $svg.setAttributeNS(null, 'viewbox', `0 0 ${width} ${height}`);
-      console.log(translate);
+
       $offset.setAttributeNS(null, 'transform', translate);
     }
   }

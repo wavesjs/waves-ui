@@ -4,6 +4,7 @@ const Layer = require('../../es6/core/layer');
 const Timeline = require('../../es6/core/timeline');
 const TimeContext = require('../../es6/core/time-context');
 
+
 describe('Timeline', function(){
     describe('Container registration and manipulation', function(){
         it('should create a container with the rights default width and height', function(){
