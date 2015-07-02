@@ -8,20 +8,21 @@ const Surface  = require('../interactions/surface');
 const TimeContextBehavior = require('../behaviors/time-context-behavior');
 const TimeContext = require('./time-context');
 
+
 /**
  * @class Timeline
  *
  * A Timeline instance is the main entry point to create a temporal data representation.
  *
- * As a temporal representation, a timeline established a relation between time and space through `width` and `duration` setter (and a `TimeContext` instance which links these width and duration, especially usefull during move and zoom inside a temporal data representation).
+ * As a temporal representation, a timeline established a relation between time and space through `width` and `duration` setter (and a `TimeContext` instance which links these width and duration, especially usefull during move and zoom).
  *
  * A temporal representation can be created upon multiple DOM elements (eg. multiple <li> for a DAW like representation) that belong to the same timeline (and thus share time/space relation) using `registerContainer` method.
  *
  * Within a container, a `Layer` keep up-to-date and render the data. The timeline `addLayer` method is used to add a `Layer` instance to a previously created container.
  *
  * When one modify the timeline timeContext:
- * - timeline.timeContext.start has no effect neither on Containers neither on Layers
- * - timeline.timeContext.offset modify the container view x position
+ * - timeline.timeContext.start (in seconds) has no effect neither on Containers or Layers
+ * - timeline.timeContext.offset (in seconds) modify the container view x position
  * - timeline.timeContext.stretchRatio modify the layer zoom
  */
 class Timeline extends events.EventEmitter {
@@ -129,15 +130,15 @@ class Timeline extends events.EventEmitter {
    * Containers display the view on the timeline in theirs DOM svg element.
    * The timeline timeContext offset set all the containers to display temporal representation from that offset time.
    *
-   * "Container SVG structure"
+   * Container SVG structure
    * <svg>
-   *  <defs>
+   *  <defs> Unused for the moment, could be used to define custom shapes for use with layers
    *  </defs>
    *  <g class="offset">
-   *   <g class="layout">
+   *   <g class="layout"> The layers are inserted here
    *   </g>
    *  </g>
-   *  <g class="interactions">
+   *  <g class="interactions"> Placeholder to visualize interactions (eg. brush)
    *  </g>
    * </svg>
    * @param id {String} a user defined id for the container

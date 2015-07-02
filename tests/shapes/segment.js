@@ -1,11 +1,13 @@
 const assert = require('assert');
+
 const Layer = require('../../es6/core/layer');
-const TimeContext = require('../../es6/core/time-context');
 const Segment = require('../../es6/shapes/segment');
 const SegmentBehavior = require('../../es6/behaviors/segment-behavior');
+const TimeContext = require('../../es6/core/time-context');
 const Timeline = require('../../es6/core/timeline');
 
-describe.only('Segment', function(){
+
+describe('Segment', function(){
     describe('Segment instanciation', function(){
         it('should be placed a the convenient location', function(){
             let titleDiv = document.createElement('div');
@@ -51,7 +53,7 @@ describe.only('Segment', function(){
         });
     });
     describe('Segment navigation zoom and move', function(){
-        it('should be moved a zoomed accordingly', function(){
+        it.only('should be moved a zoomed accordingly', function(){
             let titleDiv = document.createElement('div');
             titleDiv.innerHTML = this.test.title;
             document.body.appendChild(titleDiv);
@@ -91,7 +93,7 @@ describe.only('Segment', function(){
 
             // Check that segments are in the right place
 
-            // Segment width
+            // Segment width after zoom
 
             const item0 = layer.items._root[0][0];
             const item1 = layer.items._root[0][1];
@@ -101,13 +103,16 @@ describe.only('Segment', function(){
             assert.equal(item0Width, 25);
             assert.equal(item1Width, 50);
 
-            const item0 = layer.items._root[0][0].getBoundingClientRect()
-            const item1 = layer.items._root[0][1].getBoundingClientRect()
+            // Segment position
 
-            console.log(layer.items._root[0][0].getBBox())
-            console.log(layer.container.getBoundingClientRect());
-            assert.equal(item0.left, 125);
-            assert.equal(item1.left, 175);
+            // We change the timeline.timeContext.offset
+            // So the timeline Container is offseted accordingly (tested in tests/core/timeline.js)
+            // The only thing to test is that the second item
+            // is correctly set to 50 px from the Layer container
+            // as it was before transformation 100 px, and zoom is 0.5
+
+            let ctm = item1.getCTM()
+            assert.equal(ctm.e, 50)
 
         })
     })
