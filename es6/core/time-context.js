@@ -23,12 +23,14 @@
  * @WARNING: the tree works with two level, but probably wont with more depth
  */
 class TimeContext {
-  constructor(parent = null) {
+  constructor(parent = null, params) {
     this.parent = parent;
     this._children = [];
 
     this._xScale = null;
     this._originalXScale = null;
+
+    this.params = params || {};
 
     this.start = 0;  // Start time, in seconds
     this.duration = (parent !== null) ? parent.duration : 1;

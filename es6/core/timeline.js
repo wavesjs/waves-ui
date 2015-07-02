@@ -83,11 +83,19 @@ class Timeline extends events.EventEmitter {
     return this.params.pixelsPerSecond;
   }
 
-  setContainersWidth(width, maintainVisibleDuration = false) {
+  get containersWidth() {
+    return this.params.containersWidth;
+  }
+
+  set containersWidth(value) {
+    this.setContainersWidth(value);
+  }
+
+  setContainersWidth(value, maintainVisibleDuration = false) {
     const lastContainersWidth = this.params.containersWidth;
     const lastPixelsPerSecond = this.params.pixelsPerSecond;
 
-    this.params.containersWidth = width;
+    this.params.containersWidth = value;
 
     if (maintainVisibleDuration) {
       const ratio = lastPixelsPerSecond / lastContainersWidth;
