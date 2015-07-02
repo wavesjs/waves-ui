@@ -53,9 +53,9 @@ class Timeline extends events.EventEmitter {
     super();
 
     this._defaults = {
-      width: 1000,
-      duration: 60
-    };
+     pixelsPerSecond: 100,
+     containersWidth: 1000,
+    }
 
     // public attributes
     this.params = Object.assign({}, this._defaults, params);
@@ -74,24 +74,26 @@ class Timeline extends events.EventEmitter {
     this._createInteraction(Keyboard, 'body');
   }
 
-  // parameters modifiers
-  set width(value) {
-    this.params.width = value;
-    this.timeContext.xScaleRange = [0, this.params.width];
+  set pixelsPerSecond(value) {
+    this.params.pixelsPerSecond = value;
+    this.timeContext.xScaleRange = [0, this.params.pixelsPerSecond];
   }
 
-  get width() {
-    return this.params.width;
+  get pixelsPerSecond() {
+    return this.params.pixelsPerSecond;
   }
 
-  set duration(value) {
-    // @TODO
-  }
+  setContainersWidth(width, maintainVisibleDuration = false) {
+    const lastContainersWidth = this.params.containersWidth;
+    const lastPixelsPerSecond = this.params.pixelsPerSecond;
 
-  get duration() {
-    return this.params.duration;
-  }
+    this.params.containersWidth = width;
 
+    if (maintainVisibleDuration) {
+      const ratio = lastPixelsPerSecond / lastContainersWidth;
+      this.pixelsPerSecond = ratio * this.params.containersWidth;
+    }
+  }
 
   /**
    * Factory method to add interaction modules the timeline should listen to
@@ -110,15 +112,16 @@ class Timeline extends events.EventEmitter {
    * will be at the top of the `TimeContext` tree
    */
   _createTimeContext() {
-    const duration = this.params.duration;
-    const width = this.params.width;
+    const pixelsPerSecond = this.params.pixelsPerSecond;
+    const containersWidth = this.params.containersWidth;
 
     const xScale = d3Scale.linear()
-      .domain([0, duration])
-      .range([0, width]);
+      .domain([0, 1])
+      .range([0, pixelsPerSecond]);
 
     this.timeContext = new TimeContext();
-    this.timeContext.duration = duration;
+    // all child context inherits the max duration allowed in container per default
+    this.timeContext.duration = containersWidth / pixelsPerSecond;
     this.timeContext.xScale = xScale;
   }
 
@@ -166,7 +169,7 @@ class Timeline extends events.EventEmitter {
    */
   registerContainer(id, el, options = {}) {
     const height = options.height || 120;
-    const width = this.params.width;
+    const width = this.params.containersWidth;
     const svg = document.createElementNS(ns, 'svg');
 
     svg.setAttributeNS(null, 'height', height);
@@ -295,7 +298,7 @@ class Timeline extends events.EventEmitter {
    */
   updateContainers() {
     const timeContext = this.timeContext;
-    const width = this.params.width;
+    const width = this.params.containersWidth;
 
     for (let id in this.containers) {
       const container = this.containers[id];
@@ -311,8 +314,12 @@ class Timeline extends events.EventEmitter {
     }
   }
 
+  updateLayerContainers() {
+    this.layers.forEach((layer) => layer.updateContainer());
+  }
+
   /**
-   *  Render all the layers in the timeline
+   * Render all the layers in the timeline
    */
   render() {
     this.layers.forEach((layer) => {

@@ -34,14 +34,16 @@ class EditionState extends BaseState {
     this.currentTarget = e.target;
 
     this.layers.forEach((layer) => {
-      if (!layer.hasItem(e.target)) { return; }
+      if (!layer.hasElement(this.currentTarget)) { return; }
 
       if (!e.originalEvent.shiftKey) {
-        layer.unselect(layer.items.nodes());
+        layer.unselect();
       }
 
+      const item = layer.getItemFromDOMElement(this.currentTarget);
+
       this.currentEditedLayer = layer;
-      layer.select(this.currentTarget);
+      layer.select(item);
     });
   }
 
