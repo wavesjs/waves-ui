@@ -71,6 +71,10 @@ class TimeContext {
     this._children.forEach((child) => { child.xScaleRange = range });
   }
 
+  get xScaleRange(range) {
+    return this.xScale
+  }
+
   /**
    * @return {Function} the xScale as defined in the timeline without stretching
    */
