@@ -246,6 +246,16 @@ class Layer extends events.EventEmitter {
     return this.hasItem(itemEl) ? itemEl : null;
   }
 
+  /**
+   *  returns the datum associated to a specific item DOMElement
+   *  use d3 internally to retrieve the datum
+   *  @param itemEl {DOMElement}
+   *  @return {Object|Array} depending on the user data structure
+   */
+  getDatumFromItem(itemEl) {
+    const d3item = this._itemElD3SelectionMap.get(itemEl);
+    return d3item ? d3item.datum() : null;
+  }
 
   /**
    *  Define if the given d3 selection is an item of the layer
