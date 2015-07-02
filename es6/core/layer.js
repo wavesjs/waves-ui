@@ -218,7 +218,7 @@ class Layer extends events.EventEmitter {
   // --------------------------------------
 
   /**
-   *  moves an `el`'s group to the end of the layer (svg z-index...)
+   *  Moves an `el`'s group to the end of the layer (svg z-index...)
    *  @param `el` {DOMElement} the DOMElement to be moved
    */
   _toFront(el) {
@@ -226,11 +226,9 @@ class Layer extends events.EventEmitter {
   }
 
   /**
-   *  return the d3Selection item to which the given DOMElement belongs
+   *  Returns the d3Selection item to which the given DOMElement belongs
    *  @param `el` {DOMElement} the element to be tested
-   *  @return {mixed}
-   *    {DOMElelement} item group containing the `el` if belongs to this layer
-   *    {null} otherwise
+   *  @return {DOMElelement|null} item group containing the `el` if belongs to this layer, null otherwise
    */
   getItemFromDOMElement(el) {
     let itemEl;
@@ -247,10 +245,10 @@ class Layer extends events.EventEmitter {
   }
 
   /**
-   *  returns the datum associated to a specific item DOMElement
+   *  Returns the datum associated to a specific item DOMElement
    *  use d3 internally to retrieve the datum
    *  @param itemEl {DOMElement}
-   *  @return {Object|Array} depending on the user data structure
+   *  @return {Object|Array|null} depending on the user data structure
    */
   getDatumFromItem(itemEl) {
     const d3item = this._itemElD3SelectionMap.get(itemEl);
@@ -258,7 +256,7 @@ class Layer extends events.EventEmitter {
   }
 
   /**
-   *  Define if the given d3 selection is an item of the layer
+   *  Defines if the given d3 selection is an item of the layer
    *  @param item {DOMElement}
    *  @return {bool}
    */
@@ -268,7 +266,7 @@ class Layer extends events.EventEmitter {
   }
 
   /**
-   *  Define if a given element belongs to the layer
+   *  Defines if a given element belongs to the layer
    *  is more general than `hasItem`, can be used to check interaction elements too
    *  @param el {DOMElement}
    *  @return {bool}
