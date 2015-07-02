@@ -36,11 +36,11 @@ describe('Marker', function(){
         timeline.draw();
         timeline.update();
 
-        const item0 = layer.items._root[0][0].getBoundingClientRect()
-        const item1 = layer.items._root[0][1].getBoundingClientRect()
+        const item0 = layer.d3items._root[0][0].getBoundingClientRect()
+        const item1 = layer.d3items._root[0][1].getBoundingClientRect()
 
-        assert.equal(item0.left+item0.width/2, 50);
-        assert.equal(item1.left+item0.width/2, 100);
+        assert.equal(item0.left+item0.width/2, 300);
+        assert.equal(item1.left+item0.width/2, 600);
 
         // setTimeout(function() {
         //   layer.setContextAttribute('start', 12);

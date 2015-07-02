@@ -38,34 +38,33 @@ describe('TimeContextBehavior', function(){
             timeline.timeContextBehavior.edit(layer, 10, 0, layer.container);
 
             // Check that the timeContext.start has changed accordingly (10px becomes 0.6 sec)
-            assert.equal(layer.timeContext.start, 0.6)
+            assert.equal(layer.timeContext.start, 0.1)
             assert.equal(layer.timeContext.duration, 12)
             assert.equal(layer.timeContext.offset, 0)
 
             timeline.timeContextBehavior.edit(layer, 10, 0, layer.contextShape.leftHandler);
 
-            assert.equal(layer.timeContext.start, 1.2)
-            assert.equal(layer.timeContext.duration, 11.4)
-            assert.equal(layer.timeContext.offset, -0.6)
+            assert.equal(layer.timeContext.start, 0.2)
+            assert.equal(layer.timeContext.duration, 11.9)
+            assert.equal(layer.timeContext.offset, -0.1)
 
             timeline.timeContextBehavior.edit(layer, 10, 0, layer.contextShape.rightHandler);
 
-            assert.equal(layer.timeContext.start, 1.2)
+            assert.equal(layer.timeContext.start, 0.2)
             assert.equal(layer.timeContext.duration, 12)
-            assert.equal(layer.timeContext.offset, -0.6)
+            assert.equal(layer.timeContext.offset, -0.1)
 
             timeline.timeContextBehavior.edit(layer, -20, 0, layer.contextShape.rect);
-            // start can't be negative: -20 should give -0.6 start if not blocked
+            // start can't be negative: -20 should give -0.1 start if not blocked, but it's blocked by the lib
             assert.equal(layer.timeContext.start, 0)
             assert.equal(layer.timeContext.duration, 12)
-            assert.equal(layer.timeContext.offset, -0.6)
-
+            assert.equal(layer.timeContext.offset, -0.1)
 
             timeline.timeContextBehavior.edit(layer, 10, 0, layer.contextShape.leftHandler);
 
-            assert.equal(layer.timeContext.start, 0.6)
-            assert.equal(layer.timeContext.duration, 11.4)
-            assert.equal(layer.timeContext.offset, -1.2)
+            assert.equal(layer.timeContext.start, 0.1)
+            assert.equal(layer.timeContext.duration, 11.9)
+            assert.equal(layer.timeContext.offset, -0.2)
         })
 
         it('should edit shape accordingly v2', function(){
@@ -95,27 +94,27 @@ describe('TimeContextBehavior', function(){
 
             timeline.timeContextBehavior.edit(layer, 10, 0, layer.contextShape.leftHandler);
 
-            assert.equal(layer.timeContext.start, 0.6)
-            assert.equal(layer.timeContext.duration, 11.4)
-            assert.equal(layer.timeContext.offset, -0.6)
+            assert.equal(layer.timeContext.start, 0.1)
+            assert.equal(layer.timeContext.duration, 11.9)
+            assert.equal(layer.timeContext.offset, -0.1)
 
             timeline.timeContextBehavior.edit(layer, 10, 0, layer.contextShape.rightHandler);
 
-            assert.equal(layer.timeContext.start, 0.6)
+            assert.equal(layer.timeContext.start, 0.1)
             assert.equal(layer.timeContext.duration, 12)
-            assert.equal(layer.timeContext.offset, -0.6)
+            assert.equal(layer.timeContext.offset, -0.1)
 
             timeline.timeContextBehavior.edit(layer, -20, 0, layer.contextShape.rect);
             // start can't be negative: -20 should give -0.6 start if not blocked
             assert.equal(layer.timeContext.start, 0)
             assert.equal(layer.timeContext.duration, 12)
-            assert.equal(layer.timeContext.offset, -0.6)
+            assert.equal(layer.timeContext.offset, -0.1)
 
             timeline.timeContextBehavior.edit(layer, 10, 0, layer.contextShape.leftHandler);
 
-            assert.equal(layer.timeContext.start, 0.6)
-            assert.equal(layer.timeContext.duration, 11.4)
-            assert.equal(layer.timeContext.offset, -1.2)
+            assert.equal(layer.timeContext.start, 0.1)
+            assert.equal(layer.timeContext.duration, 11.9)
+            assert.equal(layer.timeContext.offset, -0.2)
 
         })
     })
@@ -149,26 +148,25 @@ describe('TimeContextBehavior', function(){
             let sR = layer.timeContext.stretchRatio;
 
             // "Non-sense" it's just a move
-            assert.equal(layer.timeContext.start, 0.6)
+            assert.equal(layer.timeContext.start, 0.1)
             assert.equal(layer.timeContext.duration, 12)
             assert.equal(layer.timeContext.offset, 0)
 
             timeline.timeContextBehavior.stretch(layer, 10, 0, layer.contextShape.leftHandler);
 
-            assert.equal(layer.timeContext.start, 1.2)
+            assert.equal(layer.timeContext.start, 0.2)
             assert.equal(layer.timeContext.duration, 12)
             assert.equal(layer.timeContext.offset, 0)
-            assert.equal(layer.timeContext.stretchRatio, 11.4/12*sR)
+            assert.equal(layer.timeContext.stretchRatio, 11.9/12*sR)
 
-            sR = 11.4/12*sR;
+            sR = 11.9/12*sR;
 
             timeline.timeContextBehavior.stretch(layer, -10, 0, layer.contextShape.rightHandler);
 
-            assert.equal(layer.timeContext.start, 1.2)
+            assert.equal(layer.timeContext.start, 0.2)
             assert.equal(layer.timeContext.duration, 12)
             assert.equal(layer.timeContext.offset, 0)
-            assert.equal(layer.timeContext.stretchRatio.toFixed(6), 10.8/11.4*sR.toFixed(6))
-
+            assert.equal(layer.timeContext.stretchRatio, 11.8/11.9*sR)
 
         })
     })

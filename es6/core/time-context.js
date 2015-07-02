@@ -71,7 +71,7 @@ class TimeContext {
     this._children.forEach((child) => { child.xScaleRange = range });
   }
 
-  get xScaleRange(range) {
+  get xScaleRange() {
     return this.xScale
   }
 

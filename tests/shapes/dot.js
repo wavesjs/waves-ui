@@ -51,11 +51,11 @@ describe('Dot', function(){
         timeline.draw();
         timeline.update();
 
-        const item0 = layer.items._root[0][0].getBoundingClientRect()
-        const item1 = layer.items._root[0][6].getBoundingClientRect()
+        const item0 = layer.d3items._root[0][0].getBoundingClientRect()
+        const item1 = layer.d3items._root[0][6].getBoundingClientRect()
 
         assert.equal(item0.left+item0.width/2, 0);
-        assert.equal(item1.left+item1.width/2, 100);
+        assert.equal(item1.left+item1.width/2, 600);
 
       });
   });

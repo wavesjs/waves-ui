@@ -42,13 +42,13 @@ describe('Segment', function(){
             timeline.draw();
             timeline.update();
 
-            const item0 = layer.items._root[0][0].getBoundingClientRect()
-            const item1 = layer.items._root[0][1].getBoundingClientRect()
+            const item0 = layer.d3items._root[0][0].getBoundingClientRect()
+            const item1 = layer.d3items._root[0][1].getBoundingClientRect()
 
             assert.equal(item0.left, 0);
-            assert.equal(item0.width, 50);
-            assert.equal(item1.left, 100);
-            assert.equal(item1.width, 100);
+            assert.equal(item0.width, 300);
+            assert.equal(item1.left, 600);
+            assert.equal(item1.width, 600);
 
         });
     });
@@ -87,7 +87,7 @@ describe('Segment', function(){
             timeline.update();
 
             timeline.timeContext.stretchRatio = 0.5;
-            timeline.timeContext.offset = 15; // 250 px
+            timeline.timeContext.offset = 15; //
 
             timeline.update();
 
@@ -95,24 +95,24 @@ describe('Segment', function(){
 
             // Segment width after zoom
 
-            const item0 = layer.items._root[0][0];
-            const item1 = layer.items._root[0][1];
+            const item0 = layer.d3items._root[0][0];
+            const item1 = layer.d3items._root[0][1];
 
             const item0Width = item0.getBBox().width;
             const item1Width = item1.getBBox().width;
-            assert.equal(item0Width, 25);
-            assert.equal(item1Width, 50);
+            assert.equal(item0Width, 150);
+            assert.equal(item1Width, 300);
 
             // Segment position
 
             // We change the timeline.timeContext.offset
             // So the timeline Container is offseted accordingly (tested in tests/core/timeline.js)
             // The only thing to test is that the second item
-            // is correctly set to 50 px from the Layer container
-            // as it was before transformation 100 px, and zoom is 0.5
+            // is correctly set to 300 px from the Layer container
+            // as it was before transformation 600 px, and zoom is 0.5
 
             let ctm = item1.getCTM()
-            assert.equal(ctm.e, 50)
+            assert.equal(ctm.e, 300)
 
         })
     })
