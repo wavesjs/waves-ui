@@ -291,8 +291,12 @@ class Timeline extends events.EventEmitter {
     }
   }
 
+  updateLayerContainers() {
+    this.layers.forEach((layer) => layer.updateContainer());
+  }
+
   /**
-   *  Render all the layers in the timeline
+   * Render all the layers in the timeline
    */
   render() {
     this.layers.forEach((layer) => {
