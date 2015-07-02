@@ -1,7 +1,9 @@
 const assert = require('assert');
+
 const Layer = require('../../es6/core/layer');
 const TimeContext = require('../../es6/core/time-context');
 const Timeline = require('../../es6/core/timeline');
+
 
 describe('Layer', function(){
   describe('Layer instanciation', function(){

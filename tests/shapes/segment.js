@@ -53,7 +53,7 @@ describe('Segment', function(){
         });
     });
     describe('Segment navigation zoom and move', function(){
-        it.only('should be moved a zoomed accordingly', function(){
+        it('should be moved a zoomed accordingly', function(){
             let titleDiv = document.createElement('div');
             titleDiv.innerHTML = this.test.title;
             document.body.appendChild(titleDiv);
