@@ -18,7 +18,7 @@ describe('Timeline', function(){
             const boundingClientRect = timeline.containers.foo.svgElement.getBoundingClientRect();
             assert.equal(boundingClientRect.width, 1000);
             assert.equal(boundingClientRect.height, 120);
-            assert.equal(timeline.params.duration, 60);
+            assert.equal(timeline.params.pixelsPerSecond, 100);
         });
         it('should create a container with the rights specified width and height based on timeline instanciation params', function(){
             let titleDiv = document.createElement('div');
@@ -26,12 +26,12 @@ describe('Timeline', function(){
             document.body.appendChild(titleDiv);
             let timelineDiv = document.createElement("div");
             document.body.appendChild(timelineDiv);
-            let [width, duration] = [10, 10]
-            let timeline = new Timeline({width:width, duration:duration});
+            let [pixelsPerSecond, containersWidth] = [10, 10]
+            let timeline = new Timeline({pixelsPerSecond:pixelsPerSecond, containersWidth:containersWidth});
             timeline.registerContainer('foo', timelineDiv);
             const boundingClientRect = timeline.containers.foo.svgElement.getBoundingClientRect();
-            assert.equal(boundingClientRect.width, width);
-            assert.equal(timeline.params.duration, duration);
+            assert.equal(boundingClientRect.width, containersWidth);
+            assert.equal(timeline.params.pixelsPerSecond, pixelsPerSecond);
         });
         it('should getContainerPerElement from element', function(){
             let titleDiv = document.createElement('div');
@@ -52,7 +52,7 @@ describe('Timeline', function(){
             let timelineDiv = document.createElement("div");
             document.body.appendChild(timelineDiv);
             let timeline = new Timeline();
-            timeline.width = 800
+            timeline.setContainersWidth(800)
             timeline.update();
             timeline.registerContainer('foo', timelineDiv);
             const boundingClientRect = timeline.containers.foo.svgElement.getBoundingClientRect();
@@ -113,7 +113,7 @@ describe('Timeline', function(){
             assert.equal(translate.type, 2) // To be sure it's a translate transformation
             assert.deepEqual(matrix, translate.matrix.translate(-500, 0)) // offset was 500px : 250px (offset) * 2 (ratio)
         })
-        it('should udpate the offset and stretch fo the layers', function(){
+        it('should udpate the offset and stretch the layers', function(){
             let titleDiv = document.createElement('div');
             titleDiv.innerHTML = this.test.title;
             document.body.appendChild(titleDiv);
@@ -146,7 +146,8 @@ describe('Timeline', function(){
             // The offset don't need to affect the Layer
             // The stretchRatio should be applied to the layer
             const boundingClientRect = layer.boundingBox.getBoundingClientRect();
-            assert.equal(boundingClientRect.width, 400); // Width of the layer is 200 px because default timeline is 1000px for 60 seconds and layer.timeContext.duration is set to 12s. As timeline.timeContext.stretchRatio is 2, 200px becomes 400px
+            // 12 s is 1200 px, and stretchRation of 2 => 2*1200
+            assert.equal(boundingClientRect.width, 2400);
 
         })
     })

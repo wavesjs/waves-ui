@@ -6,3 +6,4 @@ require('./shapes/segment');
 require('./shapes/dot');
 require('./shapes/annotated-marker');
 require('./shapes/trace-dots');
+require('./behaviors/time-context-behavior');

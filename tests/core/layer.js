@@ -1,7 +1,9 @@
 const assert = require('assert');
+
 const Layer = require('../../es6/core/layer');
 const TimeContext = require('../../es6/core/time-context');
 const Timeline = require('../../es6/core/timeline');
+
 
 describe('Layer', function(){
   describe('Layer instanciation', function(){
@@ -32,12 +34,9 @@ describe('Layer', function(){
         timeline.update();
 
         // Check that elements are correctly positioned
-        // Timeline default duration is 60s and default width is 1000px
-        // Layer duration context attribute is set to 12s
-        // Layer default start context attribute is 0
-        // so Layer width should be 12*1000/60 = 200
         const boundingClientRect = layer.boundingBox.getBoundingClientRect();
-        assert.equal(boundingClientRect.width, 200);
+        // 100 pps, and 12 second default layer => 1200 px
+        assert.equal(boundingClientRect.width, 1200);
         assert.equal(boundingClientRect.height, 100); // default value
 
         // setTimeout(function() {

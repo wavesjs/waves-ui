@@ -15,7 +15,7 @@
  * - timeContext.duration which defines the duration
  *   - From a layer perspective, this is the duration of the temporal data (eg. the duration of a soundfile)
  *   - From a timeline perspective, this is the overall duration of the timeline
- * - stretchRatio which defines the stretch applied
+ * - timeContext.stretchRatio which defines the stretch applied
  *   - From a timeline perspective, this is zoom factor we apply to the timeline
  *   - From a layer perspective, this is a way to stretch the datas.
  *
@@ -73,8 +73,8 @@ class TimeContext {
     this._children.forEach((child) => { child.xScaleRange = range });
   }
 
-  get xScaleRange(range) {
-    return this.xScale.range();
+  get xScaleRange() {
+    return this.xScale
   }
 
   /**
