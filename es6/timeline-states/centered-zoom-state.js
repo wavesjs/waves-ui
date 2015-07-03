@@ -42,8 +42,8 @@ class CenteredZoomState extends BaseState {
     timeContext.offset += (delta + timeContext.xScale.invert(e.dx));
 
     // clamp other values here if needed (example: offset < 0, stretchRatio > 1, etc...)
-    // keep in view
 
+    // example keep in container when zoomed out
     if (timeContext.stretchRatio < 1) {
       const minOffset = timeContext.xScale.invert(0);
       const maxOffset = timeContext.xScale.invert(timeline.containersWidth - timeContext.xScale(timeContext.duration));
