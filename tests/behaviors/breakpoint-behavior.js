@@ -54,9 +54,11 @@ describe("BreakpointBehavior", function(){
             timeline.update();
 
             let item = layer.d3items.nodes()[0];
-            layer.edit(item, 10, 0, undefined);
+            layer.edit(item, 10, -10, undefined);
 
+            // y -10 => +0.1 due to horizontal flip
             assert.equal(layer.data[0].cx, 0.1);
+            assert.equal(layer.data[0].cy, 0.1);
 
             layer.update();
 
