@@ -12,7 +12,7 @@ describe('TimelineTimeContext and LayerTimeContext', function(){
             let childTimeContext1 = new LayerTimeContext(parentTimeContext);
             let childTimeContext2 = new LayerTimeContext(parentTimeContext);
             let xScale1 = d3Scale.linear();
-            childTimeContext2.xScale = xScale1;
+            childTimeContext2._xScale = xScale1;
             assert.equal(parentTimeContext.xScale, null);
             assert.equal(childTimeContext1.xScale, null);
             assert.equal(childTimeContext2.xScale, xScale1);
