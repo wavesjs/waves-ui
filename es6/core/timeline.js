@@ -6,7 +6,7 @@ const Layer = require('./layer');
 const ns = require('./namespace');
 const Surface  = require('../interactions/surface');
 const TimeContextBehavior = require('../behaviors/time-context-behavior');
-const TimeContext = require('./time-context');
+const TimelineTimeContext = require('./timeline-time-context');
 
 
 /**
@@ -127,7 +127,7 @@ class Timeline extends events.EventEmitter {
       .domain([0, 1])
       .range([0, pixelsPerSecond]);
 
-    this.timeContext = new TimeContext();
+    this.timeContext = new TimelineTimeContext();
     // all child context inherits the max duration allowed in container per default
     this.timeContext.duration = containersWidth / pixelsPerSecond;
     this.timeContext.xScale = xScale;
