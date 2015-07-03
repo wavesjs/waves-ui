@@ -2,7 +2,7 @@ const assert = require('assert');
 
 const Layer = require('../../es6/core/layer');
 const Timeline = require('../../es6/core/timeline');
-const TimeContext = require('../../es6/core/time-context');
+const LayerTimeContext = require('../../es6/core/layer-time-context');
 
 
 describe('Timeline', function(){
@@ -124,7 +124,7 @@ describe('Timeline', function(){
             timeline.registerContainer('foo', timelineDiv);
 
             // TimeContext
-            let timeContext = new TimeContext(timeline.timeContext)
+            let timeContext = new LayerTimeContext(timeline.timeContext)
 
             // Layer instanciation
             let layer = new Layer('collection', []);

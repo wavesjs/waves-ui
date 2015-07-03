@@ -1,9 +1,11 @@
 const assert = require('assert');
+
 const Layer = require('../../es6/core/layer');
-const TimeContext = require('../../es6/core/time-context');
+const LayerTimeContext = require('../../es6/core/layer-time-context');
 const TraceDots = require('../../es6/shapes/trace-dots');
 const TraceBehavior = require('../../es6/behaviors/trace-behavior');
 const Timeline = require('../../es6/core/timeline');
+
 
 describe('TraceDots', function(){
   describe('TraceDots instanciation', function(){
@@ -20,7 +22,7 @@ describe('TraceDots', function(){
         timeline.registerContainer('foo', timelineDiv);
 
         // TimeContext
-        let timeContext = new TimeContext(timeline.timeContext)
+        let timeContext = new LayerTimeContext(timeline.timeContext)
 
         // Layer instanciation for a marker layer
         var data = [
