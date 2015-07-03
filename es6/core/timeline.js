@@ -14,9 +14,9 @@ const TimelineTimeContext = require('./timeline-time-context');
  *
  * A Timeline instance is the main entry point to create a temporal data representation.
  *
- * As a temporal representation, a timeline establishes a relation between time and space through a `width` and a `duration`.
+ * As a temporal representation, a timeline establishes a relation between time (in seconds) and space (in pixels).
  *
- * A temporal representation can be created upon multiple DOM elements (eg multiple <li> for a DAW like representation) that belong to the same timeline (and thus share same time and space relation) using `registerContainer` method.
+ * A temporal representation can be rendered upon multiple DOM elements (eg multiple <li> for a DAW like representation) that belong to the same timeline (and thus share same time and space relation) using `registerContainer` method.
  *
  * Within a container, a `Layer` keep up-to-date and render the data. The timeline `addLayer` method is used to add a `Layer` instance to a previously created container.
  *
@@ -25,23 +25,6 @@ const TimelineTimeContext = require('./timeline-time-context');
  * - timeline.timeContext.stretchRatio modify containers zoom
  * - timeline.timeContext.start (in seconds) has no effect
  *
- * +--------------------------------------------------------+
- * |timeline                                                |
- * +-----------------+-------------------------------+------+
- * |container1       |                               |      |
- * +--------------------------------------------------------+
- * |container2       |                               |      |
- * +--------------------------------------------------------+
- * |container3       |                               |      |
- * +-----------------+-------------------------------+------+
- *
- * <-------------------------------------------------------->
- * timeline.width (and its related timeline.duration)
- *
- *                   <------------------------------->
- *                   Container view based on
- *                   timeline.timeContext.offset and
- *                   timeline.timeContext.stretchRatio
  *
  */
 class Timeline extends events.EventEmitter {
