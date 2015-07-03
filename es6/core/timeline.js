@@ -12,19 +12,50 @@ const TimelineTimeContext = require('./timeline-time-context');
 /**
  * @class Timeline
  *
- * A Timeline instance is the main entry point to create a temporal data representation.
  *
- * As a temporal representation, a timeline establishes a relation between time (in seconds) and space (in pixels).
+ * A Timeline instance is the main entry point to create a temporal data representation. As a temporal representation, a timeline establishes a relation between *time* - in seconds - and *space* - in pixels -.
  *
- * A temporal representation can be rendered upon multiple DOM elements (eg multiple <li> for a DAW like representation) that belong to the same timeline (and thus share same time and space relation) using `registerContainer` method.
  *
- * Within a container, a `Layer` keep up-to-date and render the data. The timeline `addLayer` method is used to add a `Layer` instance to a previously created container.
+ * Containers inside a timeline
+ *
+ * A temporal representation can be rendered upon multiple DOM elements, called containers (eg multiple <li> for a DAW like representation) that belong to the same timeline (and thus share same time and space relation) using `registerContainer` method. These containers are like windows on the overall and basically unending timeline. They have a defined width and they show content from the specified offset (converted to pixel).
+ *
+ * A timeline with 3 containers:
+ *
+ * +-----------------+-------------------------------+-- - -  -  -   -
+ * |container 1      |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|
+ * +-----------------+-------------------------------+-- - -  -  -   -
+ * |container 2      |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|
+ * +-----------------+-------------------------------+-- - -  -  -   -
+ * |container 3      |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|
+ * +-----------------+-------------------------------+-- - -  -  -   -
+ *
+ * +----------------->
+ * timeline.timeContext.xScale(timeline.timeContext.offset)
+ *
+ *                   <------------------------------->
+ *                   Containers view defaults to 1000px
+ *                   timeline ratio default is 100px/s.
+ *                   with a default stretchRatio = 1
+ *                   Default containers show 10 seconds of the timeline
+ *
+ *
+ * Layers inside a timeline
+ *
+ * Within a container, a `Layer` keep up-to-date and render the data. The timeline `addLayer` method add a `Layer` instance to a previously created container.
+ *
+ *
+ * timeline render/draw/update
+ *
+ * @TODO
+ *
+ *
+ * timeline timeContext
  *
  * When one modify the timeline timeContext:
  * - timeline.timeContext.offset (in seconds) modify the containers view x position
- * - timeline.timeContext.stretchRatio modify containers zoom
- * - timeline.timeContext.start (in seconds) has no effect
- *
+ * - timeline.timeContext.stretchRatio modify timeline's zoom
+ * Each time you set new value of offset or stretchRatio, you need to do timeline.update() to update the values.
  *
  */
 class Timeline extends events.EventEmitter {
@@ -234,7 +265,6 @@ class Timeline extends events.EventEmitter {
 
   }
 
-  // @NOTE bad API => method name
   /**
    * Returns an array of layers given some group
    * @param group {String} name of the group
@@ -322,7 +352,7 @@ class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  Draw all the layers in the timeline
+   * Draw all the layers in the timeline
    */
   draw(layerOrGroup = null) {
     const layers = this._getLayers(layerOrGroup);
@@ -330,8 +360,8 @@ class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  Update all the layers in the timeline
-   *  @NOTE accept several `layers` or `categories` as arguments ?
+   * Update all the layers in the timeline
+   * @NOTE accept several `layers` or `categories` as arguments ?
    */
   update(layerOrGroup = null) {
     const layers = this._getLayers(layerOrGroup);
