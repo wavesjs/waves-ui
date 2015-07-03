@@ -1,9 +1,9 @@
 const assert = require('assert');
 
 const Layer = require('../../es6/core/layer');
+const LayerTimeContext = require('../../es6/core/layer-time-context');
 const Segment = require('../../es6/shapes/segment');
 const SegmentBehavior = require('../../es6/behaviors/segment-behavior');
-const TimeContext = require('../../es6/core/time-context');
 const Timeline = require('../../es6/core/timeline');
 
 
@@ -22,7 +22,7 @@ describe('Segment', function(){
             timeline.registerContainer('foo', timelineDiv);
 
             // TimeContext
-            let timeContext = new TimeContext(timeline.timeContext)
+            let timeContext = new LayerTimeContext(timeline.timeContext)
 
             // Layer instanciation for a marker layer
             let data = [
@@ -66,7 +66,7 @@ describe('Segment', function(){
             timeline.registerContainer('foo', timelineDiv);
 
             // TimeContext
-            let timeContext = new TimeContext(timeline.timeContext)
+            let timeContext = new LayerTimeContext(timeline.timeContext)
 
             // Layer instanciation for a marker layer
             let data = [

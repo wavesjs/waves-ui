@@ -1,13 +1,14 @@
 const assert = require('assert');
-const TimeContext = require('../../es6/core/time-context');
+const LayerTimeContext = require('../../es6/core/layer-time-context');
+const TimelineTimeContext = require('../../es6/core/timeline-time-context');
 const d3Scale = require('d3-scale');
 
 describe('TimeContext', function(){
     describe('instanciation, getters and setters', function(){
         it('should get and set xScale correctly', function(){
-            let parentTimeContext = new TimeContext();
-            let childTimeContext1 = new TimeContext(parentTimeContext);
-            let childTimeContext2 = new TimeContext(parentTimeContext);
+            let parentTimeContext = new TimelineTimeContext();
+            let childTimeContext1 = new LayerTimeContext(parentTimeContext);
+            let childTimeContext2 = new LayerTimeContext(parentTimeContext);
             let xScale1 = d3Scale.linear();
             childTimeContext2.xScale = xScale1;
             assert.equal(parentTimeContext.xScale, null);
@@ -20,13 +21,13 @@ describe('TimeContext', function(){
             assert.equal(childTimeContext2.xScale, xScale1);
         })
         it('should get correct stretchratio', function(){
-            let parentTimeContext = new TimeContext();
+            let parentTimeContext = new TimelineTimeContext();
             assert.equal(parentTimeContext.stretchRatio, 1);
         })
         it('should set correct stretchratio, and give back appropriate domain', function(){
             let xScale = d3Scale.linear();
-            let parentTimeContext = new TimeContext();
-            let childTimeContext = new TimeContext(parentTimeContext);
+            let parentTimeContext = new TimelineTimeContext();
+            let childTimeContext = new LayerTimeContext(parentTimeContext);
             parentTimeContext.xScale = xScale;
             assert.equal(parentTimeContext.stretchRatio, 1);
             assert.deepEqual(parentTimeContext.xScale.domain(), [0, 1])
