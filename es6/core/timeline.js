@@ -22,26 +22,22 @@ const TimelineTimeContext = require('./timeline-time-context');
  *
  * When one modify the timeline timeContext:
  * - timeline.timeContext.offset (in seconds) modify the containers view x position
- * - timeline.timeContext.stretchRatio modify containers zoom
- * - timeline.timeContext.start (in seconds) has no effect
+ * - timeline.timeContext.stretchRatio modify timeline's zoom
  *
  * +--------------------------------------------------------+
- * |timeline                                                |
+ *  timeline         <- pixelsPerSecond ->
  * +-----------------+-------------------------------+------+
- * |container1       |                               |      |
+ * |                 |container1                     |      |
  * +--------------------------------------------------------+
- * |container2       |                               |      |
+ * |                 |container2                     |      |
  * +--------------------------------------------------------+
- * |container3       |                               |      |
+ * |                 |container3                     |      |
  * +-----------------+-------------------------------+------+
+ * <-- offset (s) --> <---- containersWidth (px) --->
  *
- * <-------------------------------------------------------->
- * timeline.width (and its related timeline.duration)
- *
- *                   <------------------------------->
- *                   Container view based on
- *                   timeline.timeContext.offset and
- *                   timeline.timeContext.stretchRatio
+ *                   Duration contained in view is based on
+ *                   timeline.params.pixelsPerSeconds and
+ *                   timeline.params.containersWidth
  *
  */
 class Timeline extends events.EventEmitter {
