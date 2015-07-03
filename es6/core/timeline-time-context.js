@@ -1,5 +1,6 @@
 const AbstractTimeContext = require('./abstract-time-context');
 
+
 class TimelineTimeContext extends AbstractTimeContext {
   constructor() {
     super({});

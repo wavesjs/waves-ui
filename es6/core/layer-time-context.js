@@ -1,5 +1,6 @@
 const AbstractTimeContext = require('./abstract-time-context');
 
+
 class LayerTimeContext extends AbstractTimeContext {
   constructor(parent) {
     super({});
