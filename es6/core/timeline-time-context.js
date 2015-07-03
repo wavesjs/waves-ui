@@ -12,7 +12,7 @@ const AbstractTimeContext = require('./abstract-time-context');
  *
  *  It owns an helper `timeContext.containersDuration` which maintain a view on how much time the views applyed to the timeline (the `containers`) are representing
  *
- *  It also maintain an array of reference to all the LayerTimeContext attached to the timeline to propagate some global change on the time to pixel representation
+ *  It also maintain an array of references to all the LayerTimeContext attached to the timeline to propagate some global change on the time to pixel representation
  */
 class TimelineTimeContext extends AbstractTimeContext {
   constructor() {

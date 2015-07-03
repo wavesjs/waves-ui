@@ -344,7 +344,6 @@ class Timeline extends events.EventEmitter {
 
   /**
    *  Update all the layers in the timeline
-   *  @NOTE accept several `layers` or `categories` as arguments ?
    */
   update(layerOrGroup = null) {
     const layers = this._getLayers(layerOrGroup);

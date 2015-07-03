@@ -95,7 +95,7 @@ class LayerTimeContext extends AbstractTimeContext {
     this._stretchRatio = value;
   }
 
-
+  // read only
   get xScale() {
     if (!this._xScale) {
       return this.parent.xScale;
@@ -104,10 +104,6 @@ class LayerTimeContext extends AbstractTimeContext {
     return this._xScale;
   }
 
-  // set xScale(scale) {
-  //   this._xScale = scale;
-  // }
-
   get xScaleRange() {
     return this.xScale.range();
   }
@@ -115,11 +111,6 @@ class LayerTimeContext extends AbstractTimeContext {
   set xScaleRange(arr) {
     if (!this._xScale) { return; }
     this._xScale.range(arr);
-  }
-
-  // read only
-  get originalXScale() {
-    return this.parent.originalXScale();
   }
 }
 
