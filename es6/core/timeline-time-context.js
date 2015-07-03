@@ -38,10 +38,10 @@ class TimelineTimeContext extends AbstractTimeContext {
   set stretchRatio(value) {
     const xScale = this.originalXScale.copy();
     const [min, max] = xScale.domain();
-
-    let diff = (max - min) / value;
+    const diff = (max - min) / value;
 
     xScale.domain([min, min + diff]);
+
     this._xScale = xScale;
     this._stretchRatio = value;
 
@@ -74,7 +74,7 @@ class TimelineTimeContext extends AbstractTimeContext {
     this._xScale.range(arr);
     this._originalXScale.range(arr);
     // propagate to children
-    this._children.forEach((child) => { child.xScaleRange = arr });
+    this._children.forEach((child) => { child.xScaleRange = arr; });
   }
 
   get originalXScale() {

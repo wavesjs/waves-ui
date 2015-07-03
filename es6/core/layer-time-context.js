@@ -48,14 +48,13 @@ class LayerTimeContext extends AbstractTimeContext {
   set stretchRatio(value) {
     // remove local xScale if ratio = 1
     if (value ===  1) {
-      return this._xScale = null;
+      this._xScale = null;
+      return;
     }
 
     const xScale = this.parent.originalXScale.copy();
     const [min, max] = xScale.domain();
-
-    let diff = (max - min) / (value * this.parent.stretchRatio);
-    // diff = diff / this.parent.stretchRatio;
+    const diff = (max - min) / (value * this.parent.stretchRatio);
 
     xScale.domain([min, min + diff]);
 

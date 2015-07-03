@@ -21,7 +21,7 @@
  */
 class AbstractTimeContext {
   constructor(params) {
-    this.params = params; // and holder to keep reference to attributes
+    this.params = params; // a holder to keep reference to attributes (must be implemented)
   }
 }
 

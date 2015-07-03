@@ -55,7 +55,7 @@ class Timeline extends events.EventEmitter {
     this._defaults = {
      pixelsPerSecond: 100,
      containersWidth: 1000,
-    }
+    };
 
     // public attributes
     this.params = Object.assign({}, this._defaults, params);

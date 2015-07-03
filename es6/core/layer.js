@@ -239,7 +239,7 @@ class Layer extends events.EventEmitter {
       }
 
       el = el.parentNode;
-    } while (el != undefined);
+    } while (el !== undefined);
 
     return this.hasItem(itemEl) ? itemEl : null;
   }
@@ -278,7 +278,7 @@ class Layer extends events.EventEmitter {
       }
 
       el = el.parentNode;
-    } while (el != undefined);
+    } while (el !== undefined);
 
     return false;
   }
@@ -417,7 +417,7 @@ class Layer extends events.EventEmitter {
         const shape = new ctor(options);
         shape.install(accessors);
 
-        const el = shape.render(this._renderingContext)
+        const el = shape.render(this._renderingContext);
         el.classList.add('item', shape.getClassName());
         this._itemElShapeMap.set(el, shape);
         this._itemElD3SelectionMap.set(el, d3Selection.select(el));
