@@ -10,17 +10,17 @@ class TimelineTimeContext extends AbstractTimeContext {
     this._originalXScale = null;
 
     // params
-    this._duration = 1; // for layers inheritance only
+    this._containersDuration = 1; // for layers inheritance only
     this._offset = 0;
     this._stretchRatio = 1;
   }
 
-  get duration() {
-    return this._duration;
+  get containersDuration() {
+    return this._containersDuration;
   }
 
-  set duration(value) {
-    this._duration = value;
+  set containersDuration(value) {
+    this._containersDuration = value;
   }
 
   get offset() {

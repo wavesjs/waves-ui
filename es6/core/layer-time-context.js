@@ -10,11 +10,21 @@ class LayerTimeContext extends AbstractTimeContext {
     this._xScale = null;
 
     this._start = 0;
-    this._duration = parent.duration;
+    this._duration = parent.containersDuration;
     this._offset = 0;
     this._stretchRatio = 1;
     // register into the timeline's TimeContext
     this.parent._children.push(this);
+  }
+
+  clone() {
+    const ctx = new this();
+    ctx.start = this.start;
+    ctx.duration = this.duration;
+    ctx.offset = this.offset;
+    ctx.stretchRatio = this.stretchRatio;
+
+    return ctx;
   }
 
   get start() {
@@ -71,9 +81,9 @@ class LayerTimeContext extends AbstractTimeContext {
     return this._xScale;
   }
 
-  set xScale(scale) {
-    this._xScale = scale;
-  }
+  // set xScale(scale) {
+  //   this._xScale = scale;
+  // }
 
   get xScaleRange() {
     return this.xScale.range();
