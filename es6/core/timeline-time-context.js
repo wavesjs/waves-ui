@@ -1,6 +1,19 @@
 const AbstractTimeContext = require('./abstract-time-context');
 
-
+/**
+ *  @class TimelineTimeContext
+ *
+ *  A TimelineTimeContext instance represents the mapping between the time and the pixel domains
+ *
+ *  The `timelineTimeContext` has 3 important attributes:
+ *  - `timeContext.xScale` which defines the time to pixel transfert function, itself defined by the `pixelsPerSecond` attribute of the timeline
+ *  - `timeContext.offset` defines a decay (in time domain) applied to all the views on the timeline. This allow to navigate inside durations longer than what can be represented in Layers (views) containers (e.g. horizontal scroll)
+ *  - `timeContext.stretchRatio` defines the zoom factor applyed to the timeline
+ *
+ *  It owns an helper `timeContext.containersDuration` which maintain a view on how much time the views applyed to the timeline (the `containers`) are representing
+ *
+ *  It also maintain an array of references to all the LayerTimeContext attached to the timeline to propagate some global change on the time to pixel representation
+ */
 class TimelineTimeContext extends AbstractTimeContext {
   constructor() {
     super({});
