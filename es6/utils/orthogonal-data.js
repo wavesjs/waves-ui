@@ -13,7 +13,7 @@ class OrthogonalData {
       const colLength = col.length;
 
       if (size !== null && size !== colLength) {
-        throw new Error(`${this.__proto__.constructor.name}: inconsistent data`);
+        throw new Error(`${this.prototype.constructor.name}: inconsistent data`);
       } else if (size === null) {
         size = colLength;
       }
