@@ -28,7 +28,8 @@ class CenteredZoomState extends BaseState {
   onMouseMove(e) {
     if (!this.mouseDown) { return; }
 
-    const timeContext = this.timeline.timeContext;
+    const timeline = this.timeline;
+    const timeContext = timeline.timeContext;
     const lastCenterTime = timeContext.xScale.invert(e.x);
 
     timeContext.stretchRatio += e.dy / 100;
@@ -41,8 +42,17 @@ class CenteredZoomState extends BaseState {
     timeContext.offset += (delta + timeContext.xScale.invert(e.dx));
 
     // clamp other values here if needed (example: offset < 0, stretchRatio > 1, etc...)
+    // keep in view
 
-    this.timeline.update();
+    if (timeContext.stretchRatio < 1) {
+      const minOffset = timeContext.xScale.invert(0);
+      const maxOffset = timeContext.xScale.invert(timeline.containersWidth - timeContext.xScale(timeContext.duration));
+
+      timeContext.offset = Math.max(timeContext.offset, minOffset);
+      timeContext.offset = Math.min(timeContext.offset, maxOffset);
+    }
+
+    timeline.update();
   }
 
   onMouseUp(e) {
