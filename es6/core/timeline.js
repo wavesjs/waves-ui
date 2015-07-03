@@ -77,6 +77,7 @@ class Timeline extends events.EventEmitter {
   set pixelsPerSecond(value) {
     this.params.pixelsPerSecond = value;
     this.timeContext.xScaleRange = [0, this.params.pixelsPerSecond];
+    this.timeContext.containersDuration = this.params.containersWidth / value;
   }
 
   get pixelsPerSecond() {
@@ -96,6 +97,7 @@ class Timeline extends events.EventEmitter {
     const lastPixelsPerSecond = this.params.pixelsPerSecond;
 
     this.params.containersWidth = value;
+    this.timeContext.containersDuration = value / this.params.pixelsPerSecond;
 
     if (maintainVisibleDuration) {
       const ratio = lastPixelsPerSecond / lastContainersWidth;
@@ -129,7 +131,7 @@ class Timeline extends events.EventEmitter {
 
     this.timeContext = new TimelineTimeContext();
     // all child context inherits the max duration allowed in container per default
-    this.timeContext.duration = containersWidth / pixelsPerSecond;
+    this.timeContext.containersDuration = containersWidth / pixelsPerSecond;
     this.timeContext.xScale = xScale;
   }
 
