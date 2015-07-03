@@ -1,9 +1,11 @@
 const assert = require('assert');
+
+const d3Scale = require('d3-scale');
 const LayerTimeContext = require('../../es6/core/layer-time-context');
 const TimelineTimeContext = require('../../es6/core/timeline-time-context');
-const d3Scale = require('d3-scale');
 
-describe('TimeContext', function(){
+
+describe('TimelineTimeContext and LayerTimeContext', function(){
     describe('instanciation, getters and setters', function(){
         it('should get and set xScale correctly', function(){
             let parentTimeContext = new TimelineTimeContext();
