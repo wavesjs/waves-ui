@@ -56,10 +56,11 @@ class Segment extends BaseShape {
     const width = renderingContext.xScale(this.width(datum));
     const height = renderingContext.yScale(this.height(datum));
     const color = this.color(datum);
+    const opacity = this.opacity(datum);
 
     group.setAttributeNS(null, 'transform', `translate(${x}, ${y})`);
 
-    this.shape.style.opacity = this.opacity(datum);
+    this.shape.style.opacity = opacity;
 
     this.rect.setAttributeNS(null, 'width', Math.max(width, 0));
     this.rect.setAttributeNS(null, 'height', height);

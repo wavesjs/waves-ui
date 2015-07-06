@@ -62,7 +62,7 @@ class Layer extends events.EventEmitter {
       .range([0, this.params.height]);
 
     // initialize timeContext layout
-    this._render();
+    this._renderContainer();
   }
 
   set yDomain(domain) {
@@ -236,10 +236,11 @@ class Layer extends events.EventEmitter {
     do {
       if (el.classList && el.classList.contains('item')) {
         itemEl = el;
+        break;
       }
 
       el = el.parentNode;
-    } while (el !== undefined);
+    } while (el !== null);
 
     return this.hasItem(itemEl) ? itemEl : null;
   }
@@ -278,7 +279,7 @@ class Layer extends events.EventEmitter {
       }
 
       el = el.parentNode;
-    } while (el !== undefined);
+    } while (el !== null);
 
     return false;
   }
@@ -324,7 +325,7 @@ class Layer extends events.EventEmitter {
    *  render the DOM in memory on layer creation to be able to use it before
    *  the layer is actually inserted in the DOM
    */
-  _render() {
+  _renderContainer() {
     // wrapper group for `start, top and context flip matrix
     this.container = document.createElementNS(ns, 'g');
     this.container.classList.add('layer');
@@ -364,18 +365,17 @@ class Layer extends events.EventEmitter {
   }
 
   /**
-   *  Creates the layer group with a transformation
-   *  matrix to flip the coordinate system.
+   *  Returns the previsouly created layer's container
    *  @return {DOMElement}
    */
-  render() {
+  renderContainer() {
     return this.container;
   }
 
   /**
    *  Creates the DOM according to given data and shapes
    */
-  draw() {
+  drawShapes() {
     // force d3 to keep data in sync with the DOM with a unique id
     this.data.forEach(function(datum) {
       if (_datumIdMap.has(datum)) { return; }
