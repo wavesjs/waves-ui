@@ -42,10 +42,12 @@ class LayerTimeContext extends AbstractTimeContext {
 
   clone() {
     const ctx = new this();
+
+    ctx.parent = this.parent;
     ctx.start = this.start;
     ctx.duration = this.duration;
     ctx.offset = this.offset;
-    ctx.stretchRatio = this.stretchRatio;
+    ctx.stretchRatio = this.stretchRatio; // creates the xScale if needed
 
     return ctx;
   }
