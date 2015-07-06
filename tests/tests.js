@@ -11,3 +11,4 @@ require('./shapes/trace-dots');
 require('./behaviors/time-context-behavior');
 require('./behaviors/marker-behavior');
 require('./behaviors/breakpoint-behavior');
+require('./behaviors/segment-behavior');
