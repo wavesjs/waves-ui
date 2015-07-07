@@ -19,7 +19,7 @@ describe('MarkerBehavior', function(){
 
             // Create a timeline
             let timeline = new Timeline();
-            timeline.registerContainer('foo', timelineDiv);
+            timeline.registerContainer(timelineDiv, {}, 'foo');
 
             // TimeContext
             let timeContext = new LayerTimeContext(timeline.timeContext)
@@ -34,8 +34,8 @@ describe('MarkerBehavior', function(){
 
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
-            timeline.render();
-            timeline.draw();
+            ;
+            timeline.drawLayerShapes();
             timeline.update();
 
             let item = layer.d3items.nodes()[0];
