@@ -168,11 +168,12 @@ class Layer extends events.EventEmitter {
   }
 
   select(...itemEls) {
+    console.log(itemEls);
     if (!this._behavior) { return; }
     if (!itemEls.length) { itemEls = this.d3items.nodes(); }
 
     itemEls.forEach((el) => {
-      // const item = this._itemElD3SelectionMap.get(el);
+      const item = this._itemElD3SelectionMap.get(el);
       this._behavior.select(el, item.datum());
       this._toFront(el);
     });
@@ -183,7 +184,7 @@ class Layer extends events.EventEmitter {
     if (!itemEls.length) { itemEls = this.d3items.nodes(); }
 
     itemEls.forEach((el) => {
-      // const item = this._itemElD3SelectionMap.get(el);
+      const item = this._itemElD3SelectionMap.get(el);
       this._behavior.unselect(el, item.datum());
     });
   }
@@ -193,7 +194,7 @@ class Layer extends events.EventEmitter {
     if (!itemEls.length) { itemEls = this.d3items.nodes(); }
 
     itemEls.forEach((el) => {
-      // const item = this._itemElD3SelectionMap.get(el);
+      const item = this._itemElD3SelectionMap.get(el);
       this._behavior.toggleSelection(el, item.datum());
     });
   }
@@ -203,7 +204,7 @@ class Layer extends events.EventEmitter {
     itemEls = !Array.isArray(itemEls) ? [itemEls] : itemEls;
 
     itemEls.forEach((el) => {
-      // const item  = this._itemElD3SelectionMap.get(el);
+      const item  = this._itemElD3SelectionMap.get(el);
       const shape = this._itemElShapeMap.get(el);
       const datum = item.datum();
       this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);
@@ -232,7 +233,9 @@ class Layer extends events.EventEmitter {
     let itemEl;
 
     do {
-      if (el.classList && el.classList.contains('item')) {
+      if (el.classList &&
+          el.classList.contains('item')
+      ) {
         itemEl = el;
         break;
       }

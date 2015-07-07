@@ -3,11 +3,11 @@ const BaseBehavior = require('./base-behavior');
 
 class TraceBehavior extends BaseBehavior {
   edit (renderingContext, shape, datum, dx, dy, target) {
-    if (target.classList.contains('mean')) {
+    if (target === shape.mean) {
       this._editMean(renderingContext, shape, datum, dx, dy);
-    } else if (target.classList.contains('min')) {
+    } else if (target === shape.min) {
       this._editRange(renderingContext, shape, datum, dx, dy, 'min');
-    } else if (target.classList.contains('max')) {
+    } else if (target === shape.max) {
       this._editRange(renderingContext, shape, datum, dx, dy, 'max');
     }
   }
@@ -15,22 +15,22 @@ class TraceBehavior extends BaseBehavior {
   _editMean(renderingContext, shape, datum, dx, dy) {
     // work in pixel domain
     const x = renderingContext.xScale(shape.x(datum));
-    const y = renderingContext.yScale(shape.mean(datum));
+    const y = renderingContext.yScale(shape.yMean(datum));
 
     let targetX = x + dx;
     let targetY = y - dy;
 
     shape.x(datum, renderingContext.xScale.invert(targetX));
-    shape.mean(datum, renderingContext.yScale.invert(targetY));
+    shape.yMean(datum, renderingContext.yScale.invert(targetY));
   }
 
   _editRange(renderingContext, shape, datum, dx, dy, rangeSide) {
-    const range = renderingContext.yScale(shape.range(datum));
+    const range = renderingContext.yScale(shape.yRange(datum));
 
     let targetRange = rangeSide === 'min' ? range + 2 * dy : range - 2 * dy;
     targetRange = Math.max(targetRange, 0);
 
-    shape.range(datum, renderingContext.yScale.invert(targetRange));
+    shape.yRange(datum, renderingContext.yScale.invert(targetRange));
   }
 }
 

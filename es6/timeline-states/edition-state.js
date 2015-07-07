@@ -41,6 +41,7 @@ class EditionState extends BaseState {
       }
 
       const item = layer.getItemFromDOMElement(this.currentTarget);
+      if (item === null) { return; }
 
       this.currentEditedLayer = layer;
       layer.select(item);

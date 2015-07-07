@@ -12,9 +12,9 @@ class TimeContextBehavior {
   edit(layer, dx, dy, target) {
     const timeContext = layer.timeContext;
 
-    if (target.classList.contains('handler') && target.classList.contains('left')) {
+    if (target === layer.contextShape.leftHandler) {
       this._editLeft(timeContext, dx);
-    } else if (target.classList.contains('handler') && target.classList.contains('right')) {
+    } else if (target === layer.contextShape.rightHandler) {
       this._editRight(timeContext, dx);
     } else {
       this._move(timeContext, dx);

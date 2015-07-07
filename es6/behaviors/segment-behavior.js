@@ -7,9 +7,9 @@ class SegmentBehavior extends BaseBehavior {
     let action = 'move';
     const classList = target.classList;
 
-    if (classList.contains('handler') && classList.contains('left')) {
+    if (target === shape.leftHandler) {
       action = 'resizeLeft';
-    } else if (classList.contains('handler') && classList.contains('right')) {
+    } else if (target === shape.rightHandler) {
       action = 'resizeRight';
     }
 
