@@ -15,7 +15,7 @@ class BreakpointBehavior extends BaseBehavior {
 
     if (data.length > 2) {
       // create a sorted map of all `x` positions
-      const xMap = data.map((d, index) => renderingContext.xScale(shape.cx(d)));
+      const xMap = data.map((d) => renderingContext.xScale(shape.cx(d)));
       xMap.sort((a, b) => a < b ? -1 : 1);
       // find index of our shape x position
       const index = xMap.indexOf(x);

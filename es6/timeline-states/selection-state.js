@@ -3,7 +3,7 @@ const ns = require('../core/namespace');
 
 
 /**
- *  @NOTE Buggy
+ *  @NOTE Broken
  */
 class SelectionState extends BaseState {
   constructor(timeline /*, options = {} */) {
@@ -24,7 +24,7 @@ class SelectionState extends BaseState {
     const containers = this.timeline.containers;
 
     for (let id in containers) {
-      this._removebrush(containers[id]);
+      this._removeBrush(containers[id]);
     }
   }
 
@@ -94,7 +94,7 @@ class SelectionState extends BaseState {
   onMouseDown(e) {
     this.mouseDown = true;
 
-    const container = this.timeline.getContainerPerElement(e.currentTarget);
+    const container = this.timeline.getContainerFromDOMElement(e.currentTarget);
     this.currentContainer = container;
     this._addBrush(container);
 
@@ -123,11 +123,9 @@ class SelectionState extends BaseState {
   }
 
   onMouseMove(e) {
-    // console.log(e);
-    // if (!this.mouseDown || !this.currentLayer) { return; }
     if (!this.mouseDown) { return; }
 
-    const container = this.timeline.getContainerPerElement(this.currentLayer);
+    const container = this.timeline.getContainerFromDOMElement(this.currentLayer);
     // update brush
     this._updateBrush(e, this.currentContainer);
 

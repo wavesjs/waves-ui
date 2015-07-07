@@ -12,16 +12,27 @@ wavesUI is a set of low level audio visualisation components build on top of [d3
 
 ## Default example
 
+```
+// creates a timeline
 const timeline = new Timeline();
-timeline.registerContainer('foo', timelineDiv);  // add a container
+// add a container
+timeline.registerContainer('foo', timelineDiv);
+
+// creates and configure a layer
 const timeContext = new LayerTimeContext(timeline.timeContext)
 const layer = new Layer('collection', []);
+layer.configureShape(Segments);
 layer.setTimeContext(timeContext);
 layer.timeContext.duration = 12;
+
+// adds the layer
+timeline.addLayer(layer, 'foo')
+
+// render the timeline and its registered layer
 timeline.render();
 timeline.draw();
 timeline.update();
-
+```
 
 ## Conventions
 
@@ -31,8 +42,6 @@ timeline.update();
   is the method by which a component creates its content by calling `render` on its children and appening the returned DOM to its own DOM element. This method is symetric with `render` from the container point of view
 - `update()`  
   is the method by which an object updates its previously created DOM according to data or configuration
-
-
 
 
 ## Demonstrators ideas
@@ -92,8 +101,8 @@ the library is exposed in the `window.wavesUI` namespace.
 
 ## Custom build
 
-to create your own custom build, you need to
-remove/comment all the component you don't need in `waves-ui.js`, then run
+In order to create your own custom build, you need to
+remove/comment all the component you don't need from `waves-ui.js`, then run
 
 ```bash
 npm run bundle

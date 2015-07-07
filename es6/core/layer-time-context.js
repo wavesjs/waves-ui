@@ -11,6 +11,7 @@ const AbstractTimeContext = require('./abstract-time-context');
  *  - `timeContext.duration` is the duration of the view on the data
  *  - `timeContext.stretchRatio` is the stretch applyed to the temporal data contained in the view (this value can be seen as a local zoom on the data, or as a stretch on the time components of the data). When applyed, the stretch ratio maintain the start position of the view in the timeline.
  *
+ *
  * + timeline -----------------------------------------------------------------
  * 0         5         10          15          20        25          30 seconds
  * +---+*****************+------------------------------------------+*******+--
