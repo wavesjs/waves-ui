@@ -268,9 +268,30 @@ class Timeline extends events.EventEmitter {
   /**
    * Remove a layer from the timeline
    * @param layer {Layer} the layer to remove
+   * @TODO test
    */
   removeLayer(layer) {
-    // @TODO
+    const container = this._layerContainerMap.get(layer);
+
+    this.layers.splice(this.layers.indexOf(layer), 1);
+    this._layerContainerMap.delete(layer);
+
+    // remove from groupedLayers
+    for (let key in this.groupedLayers) {
+      const group = this.groupedLayers[key];
+      const index = group.indexOf(layer);
+
+      if (index !== -1) {
+        group.splice(index, 1);
+      }
+      // if group is empty, delete it
+      if (group.length === 0) {
+        delete this.groupedLayers[key];
+      }
+    }
+
+    // remove layer from its container
+    container.layoutElement.removeChild(layer.container);
   }
 
   // // TimecontextBehavior

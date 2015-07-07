@@ -63,6 +63,19 @@ class Layer extends events.EventEmitter {
     this._renderContainer();
   }
 
+  // destroy() {
+  //   this.timeContext = null;
+  //   this.d3items = null;
+  //   this.data = null;
+  //   this.params = null;
+  //   this._behavior = null;
+  //
+  //   // @TODO
+  //      - clean Maps
+  //      - clean listeners
+  //   // can't do `this = null` from here...
+  // }
+
   set yDomain(domain) {
     this.params.yDomain = domain;
     this._yScale.domain(domain);
