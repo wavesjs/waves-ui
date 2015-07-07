@@ -1,5 +1,5 @@
-const EventSource = require('./event-source');
-const WaveEvent  = require('./wave-event');
+import EventSource from './event-source';
+import WaveEvent from './wave-event';
 
 
 const body = window.document.body;
@@ -8,7 +8,7 @@ const body = window.document.body;
 /**
  *  http://javascript.info/tutorial/keyboard-events
  */
-class Keyboard extends EventSource {
+export default class Keyboard extends EventSource {
   constructor(el = body) {
     super(body);
   }
@@ -40,5 +40,3 @@ class Keyboard extends EventSource {
     this.el.onkeyup = onKeyUp;
   }
 }
-
-module.exports = Keyboard;

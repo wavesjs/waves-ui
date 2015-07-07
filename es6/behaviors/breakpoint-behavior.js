@@ -1,7 +1,7 @@
-const BaseBehavior = require('./base-behavior');
+import BaseBehavior from './base-behavior';
 
 
-class BreakpointBehavior extends BaseBehavior {
+export default class BreakpointBehavior extends BaseBehavior {
 
   edit(renderingContext, shape, datum, dx, dy, target) {
     const data  = this._layer.data;

@@ -1,6 +1,7 @@
-const BaseShape = require('./base-shape');
+import BaseShape from './base-shape';
 
-class Segment extends BaseShape {
+
+export default class Segment extends BaseShape {
   getClassName() { return 'segment'; }
 
   _getAccessorList() {
@@ -92,5 +93,3 @@ class Segment extends BaseShape {
     return area > 0;
   }
 }
-
-module.exports = Segment;

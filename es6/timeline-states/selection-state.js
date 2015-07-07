@@ -1,11 +1,11 @@
-const BaseState = require('./base-state');
-const ns = require('../core/namespace');
+import BaseState from './base-state';
+import ns from '../core/namespace';
 
 
 /**
  *  @NOTE Broken
  */
-class SelectionState extends BaseState {
+export default class SelectionState extends BaseState {
   constructor(timeline /*, options = {} */) {
     super(timeline /*, options */);
 
@@ -188,5 +188,3 @@ class SelectionState extends BaseState {
     }
   }
 }
-
-module.exports = SelectionState;

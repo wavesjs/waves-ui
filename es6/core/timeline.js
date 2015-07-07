@@ -1,12 +1,12 @@
-const d3Scale = require('d3-scale');
-const events = require('events');
+import d3Scale from 'd3-scale';
+import events from 'events';
 
-const Keyboard = require('../interactions/keyboard');
-const Layer = require('./layer');
-const ns = require('./namespace');
-const Surface  = require('../interactions/surface');
-const TimeContextBehavior = require('../behaviors/time-context-behavior');
-const TimelineTimeContext = require('./timeline-time-context');
+import Keyboard from '../interactions/keyboard';
+import Layer from './layer';
+import ns from './namespace';
+import Surface from '../interactions/surface';
+import TimeContextBehavior from '../behaviors/time-context-behavior';
+import TimelineTimeContext from './timeline-time-context';
 
 
 /**
@@ -207,6 +207,8 @@ class Timeline extends events.EventEmitter {
     svg.setAttributeNS(null, 'width', width);
     svg.setAttributeNS(null, 'viewbox', `0 0 ${width} ${height}`);
 
+    console.log(ns);
+
     const defs = document.createElementNS(ns, 'defs');
 
     const offsetGroup = document.createElementNS(ns, 'g');
@@ -261,6 +263,7 @@ class Timeline extends events.EventEmitter {
     }
 
     this.groupedLayers[group].push(layer);
+    console.log(layer)
     // render the layer's container inside the container
     container.layoutElement.appendChild(layer.renderContainer());
   }

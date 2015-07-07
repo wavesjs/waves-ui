@@ -1,4 +1,4 @@
-class BaseState {
+export default class BaseState {
   constructor(timeline, options = {}) {
     this.timeline = timeline;
     this.layers = timeline.layers;
@@ -21,5 +21,3 @@ class BaseState {
    */
   handleEvent(e) {}
 }
-
-module.exports = BaseState;

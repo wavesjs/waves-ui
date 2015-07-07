@@ -1,7 +1,7 @@
-const BaseBehavior = require('./base-behavior');
+import BaseBehavior from './base-behavior'
 
 
-class TraceBehavior extends BaseBehavior {
+export default class TraceBehavior extends BaseBehavior {
   edit (renderingContext, shape, datum, dx, dy, target) {
     if (target === shape.mean) {
       this._editMean(renderingContext, shape, datum, dx, dy);
@@ -33,5 +33,3 @@ class TraceBehavior extends BaseBehavior {
     shape.yRange(datum, renderingContext.yScale.invert(targetRange));
   }
 }
-
-module.exports = TraceBehavior;

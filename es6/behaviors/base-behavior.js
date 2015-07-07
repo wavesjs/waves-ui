@@ -1,4 +1,4 @@
-class BaseBehavior {
+export default class BaseBehavior {
   constructor(options = {}) {
     this._selectedItems = new Set(); // no duplicate in Set
     this._selectedClass = 'selected';
@@ -59,5 +59,3 @@ class BaseBehavior {
     // must be implemented in children
   }
 }
-
-module.exports = BaseBehavior;

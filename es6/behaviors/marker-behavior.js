@@ -1,7 +1,7 @@
-const BaseBehavior = require('./base-behavior');
+import BaseBehavior from './base-behavior';
 
 
-class MarkerBehavior extends BaseBehavior {
+export default class MarkerBehavior extends BaseBehavior {
 
   edit(renderingContext, shape, datum, dx, dy, target) {
     const x = renderingContext.xScale(shape.x(datum));
@@ -10,5 +10,3 @@ class MarkerBehavior extends BaseBehavior {
     shape.x(datum, renderingContext.xScale.invert(targetX));
   }
 }
-
-module.exports = MarkerBehavior;

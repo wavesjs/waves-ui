@@ -1,7 +1,7 @@
-const BaseShape = require('./base-shape');
+import BaseShape from './base-shape';
 
 
-class Line extends BaseShape {
+export default class Line extends BaseShape {
   getClassName() { return 'line'; }
 
   _getAccessorList() {
@@ -45,5 +45,3 @@ class Line extends BaseShape {
     return 'M' + instructions.join('L');
   }
 }
-
-module.exports = Line;

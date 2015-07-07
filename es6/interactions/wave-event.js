@@ -1,6 +1,6 @@
 // base class for all Events
 // @NOTE: use a single Event per Surface
-class WaveEvent {
+export default class WaveEvent {
   constructor(type, originalEvent) {
     this.type = type;
     this.target = originalEvent.target;
@@ -29,5 +29,3 @@ class WaveEvent {
     this.area = { left, top, width, height };
   }
 }
-
-module.exports = WaveEvent;

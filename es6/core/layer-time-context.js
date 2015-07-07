@@ -1,4 +1,4 @@
-const AbstractTimeContext = require('./abstract-time-context');
+import AbstractTimeContext from './abstract-time-context';
 
 /**
  *  @class LayerTimeContext
@@ -24,7 +24,7 @@ const AbstractTimeContext = require('./abstract-time-context');
  *      The parts of the sound file represented with '*' are hidden from the view
  *
  */
-class LayerTimeContext extends AbstractTimeContext {
+export default class LayerTimeContext extends AbstractTimeContext {
   constructor(parent) {
     super({});
     if (!parent) { throw new Error('LayerTimeContext must have a parent'); }
@@ -116,5 +116,3 @@ class LayerTimeContext extends AbstractTimeContext {
     this._xScale.range(arr);
   }
 }
-
-module.exports = LayerTimeContext;

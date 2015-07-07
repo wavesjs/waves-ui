@@ -1,4 +1,4 @@
-const AbstractTimeContext = require('./abstract-time-context');
+import AbstractTimeContext from './abstract-time-context';
 
 /**
  *  @class TimelineTimeContext
@@ -14,7 +14,7 @@ const AbstractTimeContext = require('./abstract-time-context');
  *
  *  It also maintain an array of references to all the LayerTimeContext attached to the timeline to propagate some global change on the time to pixel representation
  */
-class TimelineTimeContext extends AbstractTimeContext {
+export default class TimelineTimeContext extends AbstractTimeContext {
   constructor() {
     super({});
 
@@ -99,5 +99,3 @@ class TimelineTimeContext extends AbstractTimeContext {
     this._originalXScale = scale;
   }
 }
-
-module.exports = TimelineTimeContext;

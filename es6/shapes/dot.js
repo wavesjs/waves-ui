@@ -1,7 +1,7 @@
-const BaseShape = require('./base-shape');
+import BaseShape from './base-shape';
 
 
-class Dot extends BaseShape {
+export default class Dot extends BaseShape {
   getClassName() { return 'dot'; }
 
   // @TODO rename : confusion between accessors and meta-accessors
@@ -40,6 +40,3 @@ class Dot extends BaseShape {
     return false;
   }
 }
-
-module.exports = Dot;
-

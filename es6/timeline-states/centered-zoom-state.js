@@ -1,6 +1,7 @@
-const BaseState = require('./base-state');
+import BaseState from './base-state';
 
-class CenteredZoomState extends BaseState {
+
+export default class CenteredZoomState extends BaseState {
   constructor(timeline) {
     super(timeline);
 
@@ -59,5 +60,3 @@ class CenteredZoomState extends BaseState {
     this.mouseDown = false;
   }
 }
-
-module.exports = CenteredZoomState;
