@@ -168,7 +168,6 @@ class Layer extends events.EventEmitter {
   }
 
   select(...itemEls) {
-    console.log(itemEls);
     if (!this._behavior) { return; }
     if (!itemEls.length) { itemEls = this.d3items.nodes(); }
 

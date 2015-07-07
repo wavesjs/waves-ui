@@ -344,7 +344,7 @@ class Timeline extends events.EventEmitter {
   /**
    * Draw all the layers in the timeline
    */
-  drawLayerShapes(layerOrGroup = null) {
+  drawLayersShapes(layerOrGroup = null) {
     const layers = this._getLayers(layerOrGroup);
     layers.forEach((layer) => layer.drawShapes());
   }
@@ -356,8 +356,8 @@ class Timeline extends events.EventEmitter {
     const layers = this._getLayers(layerOrGroup);
 
     this.updateTimelineContainers();
-    this.updateLayerContainers(layerOrGroup);
-    this.updateLayerShapes(layerOrGroup);
+    this.updateLayersContainers(layerOrGroup);
+    this.updateLayersShapes(layerOrGroup);
 
     this.emit('update', layers);
   }
@@ -380,12 +380,12 @@ class Timeline extends events.EventEmitter {
     }
   }
 
-  updateLayerContainers(layerOrGroup = null) {
+  updateLayersContainers(layerOrGroup = null) {
     const layers = this._getLayers(layerOrGroup);
     layers.forEach((layer) => layer.updateContainer());
   }
 
-  updateLayerShapes(layerOrGroup = null) {
+  updateLayersShapes(layerOrGroup = null) {
     const layers = this._getLayers(layerOrGroup);
     layers.forEach((layer) => layer.updateShapes());
   }
