@@ -17,15 +17,15 @@ class Cursor extends BaseShape {
   }
 
   render(renderingContext) {
-    if (this.shape) { return this.shape; }
+    if (this.el) { return this.el; }
 
-    this.shape = document.createElementNS(ns, 'line');
-    this.shape.setAttributeNS(null, 'x', 0);
-    this.shape.setAttributeNS(null, 'y1', 0);
-    this.shape.setAttributeNS(null, 'y2', renderingContext.height);
-    this.shape.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+    this.el = document.createElementNS(ns, 'line');
+    this.el.setAttributeNS(null, 'x', 0);
+    this.el.setAttributeNS(null, 'y1', 0);
+    this.el.setAttributeNS(null, 'y2', renderingContext.height);
+    this.el.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
-    return this.shape;
+    return this.el;
   }
 
   update(renderingContext, group, datum, index) {
@@ -33,7 +33,7 @@ class Cursor extends BaseShape {
     const color = this.params.color;
 
     group.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
-    this.shape.style.stroke = color;
+    this.el.style.stroke = color;
   }
 
   // not selectable with a drag

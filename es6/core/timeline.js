@@ -11,7 +11,7 @@ const TimelineTimeContext = require('./timeline-time-context');
 
 /**
  * @class Timeline
- *
+ * @description
  *
  * A Timeline instance is the main entry point to create a temporal data representation. As a temporal representation, a timeline establishes a relation between *time* - in seconds - and *space* - in pixels -.
  *
@@ -133,7 +133,8 @@ class Timeline extends events.EventEmitter {
   }
 
   /**
-   * Creates a new TimeContext for the visualisation, this `TimeContext`
+   * @private
+   * @description Creates a new TimeContext for the visualisation, this `TimeContext`
    * will be at the top of the `TimeContext` tree
    */
   _createTimeContext() {
@@ -153,7 +154,7 @@ class Timeline extends events.EventEmitter {
   /**
    * Change the state of the timeline, `States` are the main entry point between
    * application logic, interactions, ..., and the library
-   * @param state {BaseState} the state in which the timeline must be setted
+   * @param {BaseState} state - the state in which the timeline must be setted
    */
   setState(state) {
     if (this._state) { this._state.exit(); }
@@ -272,14 +273,21 @@ class Timeline extends events.EventEmitter {
     // @TODO
   }
 
-  /**
-   * Returns an array of layers given some group
-   * @param group {String} name of the group
-   * @return {Array} an array of layers which belongs to the group
-   */
-  getLayersFromGroup(group = 'default') {
-    return this.groupedLayers[group] || [];
-  }
+  // // TimecontextBehavior
+  // editLayer(layer, dx, dy, target) {
+  //   this.timeContextBehavior.edit(layer, dx, dy, target);
+  //   // this.emit('edit:timeContext', layer, layer.timeContext);
+  // }
+
+  // stretchLayer(layer, dx, dy, target) {
+  //   this.timeContextBehavior.stretch(layer, dx, dy, target);
+  //   // this.emit('edit:timeContext', layer, layer.timeContext);
+  // }
+
+  // setEditableLayer(layer, bool) {
+  //   this.timeContextBehavior.setEditable(layer, bool);
+  //   // this.emit('edit:timeContext', layer, layer.timeContext);
+  // }
 
   // -----------------------------------------------
   // @NOTE remove those helpers ?
@@ -293,6 +301,15 @@ class Timeline extends events.EventEmitter {
     }
 
     return null;
+  }
+
+  /**
+   * Returns an array of layers given some group
+   * @param group {String} name of the group
+   * @return {Array} an array of layers which belongs to the group
+   */
+  getLayersFromGroup(group = 'default') {
+    return this.groupedLayers[group] || [];
   }
 
   getLayerContainer(layer) {

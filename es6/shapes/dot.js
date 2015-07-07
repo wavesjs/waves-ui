@@ -10,11 +10,11 @@ class Dot extends BaseShape {
   }
 
   render() {
-    if (this.shape) { return this.shape; }
+    if (this.el) { return this.el; }
 
-    this.shape = document.createElementNS(this.ns, 'circle');
-    // this.shape.setAttributeNS(null, 'shape-rendering', 'crispEdges');
-    return this.shape;
+    this.el = document.createElementNS(this.ns, 'circle');
+
+    return this.el;
   }
 
   update(renderingContext, group, datum, index) {
@@ -24,8 +24,8 @@ class Dot extends BaseShape {
     const color = this.color(datum);
 
     group.setAttributeNS(null, 'transform', `translate(${cx}, ${cy})`);
-    this.shape.setAttributeNS(null, 'r', r);
-    this.shape.style.fill = color;
+    this.el.setAttributeNS(null, 'r', r);
+    this.el.style.fill = color;
   }
 
   // x1, x2, y1, y2 => in pixel domain

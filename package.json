@@ -29,7 +29,8 @@
   "dependencies": {
     "babel-runtime": "4.7.6",
     "d3-scale": "0.0.1",
-    "d3-selection": "^0.4.7"
+    "d3-selection": "^0.4.7",
+    "docchidown": "git://github.com/ouhouhsami/docchidown"
   },
   "devDependencies": {
     "tac6": "git://github.com/ircam-rnd/tac6",

@@ -1,6 +1,5 @@
 const BaseShape = require('./base-shape');
 
-
 class Segment extends BaseShape {
   getClassName() { return 'segment'; }
 
@@ -18,15 +17,15 @@ class Segment extends BaseShape {
   }
 
   render(renderingContext) {
-    if (this.shape) { return this.shape; }
+    if (this.el) { return this.el; }
 
-    this.shape = document.createElementNS(this.ns, 'g');
+    this.el = document.createElementNS(this.ns, 'g');
 
-    this.rect = document.createElementNS(this.ns, 'rect');
-    this.rect.style.opacity = this.params.opacity;
-    this.rect.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+    this.segment = document.createElementNS(this.ns, 'rect');
+    this.segment.style.opacity = this.params.opacity;
+    this.segment.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
-    this.shape.appendChild(this.rect);
+    this.el.appendChild(this.segment);
 
     if (this.params.displayHandlers) {
       this.leftHandler = document.createElementNS(this.ns, 'rect');
@@ -43,11 +42,11 @@ class Segment extends BaseShape {
       this.rightHandler.style.opacity = this.params.handlerOpacity;
       this.rightHandler.style.cursor = 'ew-resize';
 
-      this.shape.appendChild(this.leftHandler);
-      this.shape.appendChild(this.rightHandler);
+      this.el.appendChild(this.leftHandler);
+      this.el.appendChild(this.rightHandler);
     }
 
-    return this.shape;
+    return this.el;
   }
 
   update(renderingContext, group, datum, index) {
@@ -60,11 +59,11 @@ class Segment extends BaseShape {
 
     group.setAttributeNS(null, 'transform', `translate(${x}, ${y})`);
 
-    this.shape.style.opacity = opacity;
+    this.el.style.opacity = opacity;
 
-    this.rect.setAttributeNS(null, 'width', Math.max(width, 0));
-    this.rect.setAttributeNS(null, 'height', height);
-    this.rect.style.fill = color;
+    this.segment.setAttributeNS(null, 'width', Math.max(width, 0));
+    this.segment.setAttributeNS(null, 'height', height);
+    this.segment.style.fill = color;
 
     if (this.params.displayHandlers) {
       // display handlers

@@ -1,6 +1,7 @@
 const BaseShape = require('./base-shape');
 const xhtmlNS = 'http://www.w3.org/1999/xhtml';
 
+// @TODO creates strategies object to clean the `if...else` mess
 class Waveform extends BaseShape {
   getClassName() { return 'waveform'; }
 
@@ -18,31 +19,32 @@ class Waveform extends BaseShape {
   }
 
   render(renderingContext) {
-    if (this.shape) { return this.shape; }
+    if (this.el) { return this.el; }
 
     if (this.params.renderingStrategy === 'svg') {
-      this.shape = document.createElementNS(this.ns, 'path');
-      this.shape.setAttributeNS(null, 'fill', 'none');
-      this.shape.setAttributeNS(null, 'shape-rendering', 'crispEdges');
-      this.shape.setAttributeNS(null, 'stroke', this.params.color);
-      this.shape.style.opacity = this.params.opacity;
+
+      this.el = document.createElementNS(this.ns, 'path');
+      this.el.setAttributeNS(null, 'fill', 'none');
+      this.el.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+      this.el.setAttributeNS(null, 'stroke', this.params.color);
+      this.el.style.opacity = this.params.opacity;
+
     } else if (this.params.renderingStrategy === 'canvas') {
-      this.shape = document.createElementNS(this.ns, 'foreignObject');
-      this.shape.setAttributeNS(null, 'width', renderingContext.width);
-      this.shape.setAttributeNS(null, 'height', renderingContext.height);
+
+      this.el = document.createElementNS(this.ns, 'foreignObject');
+      this.el.setAttributeNS(null, 'width', renderingContext.width);
+      this.el.setAttributeNS(null, 'height', renderingContext.height);
 
       const canvas = document.createElementNS(xhtmlNS, 'xhtml:canvas');
 
-      this.ctx = canvas.getContext('2d');
-      this.ctx.canvas.width = renderingContext.width;
-      this.ctx.canvas.height = renderingContext.height;
+      this._ctx = canvas.getContext('2d');
+      this._ctx.canvas.width = renderingContext.width;
+      this._ctx.canvas.height = renderingContext.height;
 
-      this.shape.appendChild(canvas);
+      this.el.appendChild(canvas);
     }
 
-    // this.shape.style.opacity = this.params.opacity;
-
-    return this.shape;
+    return this.el;
   }
 
   update(renderingContext, group, datum, index) {
@@ -78,6 +80,7 @@ class Waveform extends BaseShape {
 
     // rednering strategies
     if (this.params.renderingStrategy === 'svg') {
+
       let instructions = minMax.map((datum, index) => {
         const x  = Math.floor(renderingContext.xScale(datum.time));
         let y1 = Math.round(renderingContext.yScale(this.y(datum.values[MIN])));
@@ -87,30 +90,31 @@ class Waveform extends BaseShape {
       });
 
       const d = 'M' + instructions.join('L');
+      this.el.setAttributeNS(null, 'd', d);
 
-      this.shape.setAttributeNS(null, 'd', d);
     } else if (this.params.renderingStrategy === 'canvas') {
-      this.ctx.canvas.width = width;
-      this.shape.setAttribute('width', width);
+
+      this._ctx.canvas.width = width;
+      this.el.setAttribute('width', width);
       // fix chrome bug with translate
       if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
-        this.shape.setAttribute('x', renderingContext.offsetX);
+        this.el.setAttribute('x', renderingContext.offsetX);
       }
 
-      this.ctx.strokeStyle = this.params.color;
-      this.ctx.globalAlpha = this.params.opacity;
-      this.ctx.moveTo(renderingContext.xScale(0), renderingContext.yScale(0));
+      this._ctx.strokeStyle = this.params.color;
+      this._ctx.globalAlpha = this.params.opacity;
+      this._ctx.moveTo(renderingContext.xScale(0), renderingContext.yScale(0));
 
       minMax.forEach((datum) => {
         const x  = renderingContext.xScale(datum.time);
         const y1 = renderingContext.yScale(this.y(datum.values[MIN]));
         const y2 = renderingContext.yScale(this.y(datum.values[MAX]));
 
-        this.ctx.moveTo(x, y1);
-        this.ctx.lineTo(x, y2);
+        this._ctx.moveTo(x, y1);
+        this._ctx.lineTo(x, y2);
       });
 
-      this.ctx.stroke();
+      this._ctx.stroke();
     }
   }
 }

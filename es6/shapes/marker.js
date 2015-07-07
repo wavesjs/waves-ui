@@ -18,11 +18,11 @@ class Marker extends BaseShape {
   }
 
   render(renderingContext) {
-    if (this.shape) { return this.shape; }
+    if (this.el) { return this.el; }
 
     const height = renderingContext.height;
 
-    this.shape = document.createElementNS(this.ns, 'g');
+    this.el = document.createElementNS(this.ns, 'g');
     this.line = document.createElementNS(this.ns, 'rect');
 
     // draw line
@@ -32,7 +32,7 @@ class Marker extends BaseShape {
     this.line.setAttributeNS(null, 'height', height);
     this.line.setAttributeNS(null, 'shape-rendering', 'optimizeSpeed');
 
-    this.shape.appendChild(this.line);
+    this.el.appendChild(this.line);
 
     if (this.params.displayHandlers) {
       this.handler = document.createElementNS(this.ns, 'rect');
@@ -43,12 +43,12 @@ class Marker extends BaseShape {
       this.handler.setAttributeNS(null, 'height', this.params.handlerHeight);
       this.handler.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
-      this.shape.appendChild(this.handler);
+      this.el.appendChild(this.handler);
     }
 
-    this.shape.style.opacity = this.params.opacity;
+    this.el.style.opacity = this.params.opacity;
 
-    return this.shape;
+    return this.el;
   }
 
   update(renderingContext, group, datum, index) {

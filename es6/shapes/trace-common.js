@@ -5,7 +5,7 @@ class TraceCommon extends BaseShape {
   getClassName() { return 'trace-common'; }
 
   _getAccessorList() {
-    return { x: 0, mean: 0, range: 0 };
+    return { x: 0, yMean: 0, yRange: 0 };
   }
 
   _getDefaults() {
@@ -17,19 +17,19 @@ class TraceCommon extends BaseShape {
   }
 
   render(renderingContext) {
-    if (this.shape) { return this.shape; }
-    this.shape = document.createElementNS(this.ns, 'g');
+    if (this.el) { return this.el; }
+    this.el = document.createElementNS(this.ns, 'g');
     // range path
-    this.rangeZone = document.createElementNS(this.ns, 'path');
-    this.shape.appendChild(this.rangeZone);
+    this.range = document.createElementNS(this.ns, 'path');
+    this.el.appendChild(this.range);
 
     // mean line
     if (this.params.displayMean) {
-      this.meanLine = document.createElementNS(this.ns, 'path');
-      this.shape.appendChild(this.meanLine);
+      this.mean = document.createElementNS(this.ns, 'path');
+      this.el.appendChild(this.mean);
     }
 
-    return this.shape;
+    return this.el;
   }
 
   // @TODO use accessors
@@ -39,15 +39,15 @@ class TraceCommon extends BaseShape {
     data.sort((a, b) => this.x(a) < this.x(b) ? -1 : 1);
 
     if (this.params.displayMean) {
-      this.meanLine.setAttributeNS(null, 'd', this._buildMeanLine(renderingContext, data));
-      this.meanLine.setAttributeNS(null, 'stroke', this.params.meanColor);
-      this.meanLine.setAttributeNS(null, 'fill', 'none');
+      this.mean.setAttributeNS(null, 'd', this._buildMeanLine(renderingContext, data));
+      this.mean.setAttributeNS(null, 'stroke', this.params.meanColor);
+      this.mean.setAttributeNS(null, 'fill', 'none');
     }
 
-    this.rangeZone.setAttributeNS(null, 'd', this._buildRangeZone(renderingContext, data));
-    this.rangeZone.setAttributeNS(null, 'stroke', 'none');
-    this.rangeZone.setAttributeNS(null, 'fill', this.params.rangeColor);
-    this.rangeZone.setAttributeNS(null, 'opacity', '0.4');
+    this.range.setAttributeNS(null, 'd', this._buildRangeZone(renderingContext, data));
+    this.range.setAttributeNS(null, 'stroke', 'none');
+    this.range.setAttributeNS(null, 'fill', this.params.rangeColor);
+    this.range.setAttributeNS(null, 'opacity', '0.4');
 
     data = null;
   }
@@ -55,7 +55,7 @@ class TraceCommon extends BaseShape {
   _buildMeanLine(renderingContext, data) {
     let instructions = data.map((datum, index) => {
       const x = renderingContext.xScale(this.x(datum));
-      const y = renderingContext.yScale(this.mean(datum));
+      const y = renderingContext.yScale(this.yMean(datum));
       return `${x},${y}`;
     });
 
@@ -70,8 +70,8 @@ class TraceCommon extends BaseShape {
 
     for (let i = 0; i < length; i++) {
       const datum = data[i];
-      const mean = this.mean(datum);
-      const halfRange = this.range(datum) / 2;
+      const mean = this.yMean(datum);
+      const halfRange = this.yRange(datum) / 2;
 
       const x = renderingContext.xScale(this.x(datum));
       const y0 = renderingContext.yScale(mean + halfRange);

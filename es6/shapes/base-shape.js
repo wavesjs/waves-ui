@@ -9,7 +9,7 @@ class BaseShape {
    *  @param options {Object} override default configuration
    */
   constructor(options = {}) {
-    this.shape = null;
+    this.el = null;
     this.ns = ns;
     this.params = Object.assign({}, this._getDefaults(), options);
     // create accessors methods and set default accessor functions
@@ -27,7 +27,7 @@ class BaseShape {
    */
   destroy() {
     // this.group = null;
-    this.shape = null;
+    this.el = null;
   }
 
   /**

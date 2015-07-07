@@ -5,7 +5,7 @@ class TraceDots extends BaseShape {
   getClassName() { return 'trace-dots'; }
 
   _getAccessorList() {
-    return { x: 0, mean: 0, range: 0 };
+    return { x: 0, yMean: 0, yRange: 0 };
   }
 
   _getDefaults() {
@@ -18,52 +18,52 @@ class TraceDots extends BaseShape {
   }
 
   render(renderingContext) {
-    if (this.shape) { return this.shape; }
+    if (this.el) { return this.el; }
     // container
-    this.shape = document.createElementNS(this.ns, 'g');
+    this.el = document.createElementNS(this.ns, 'g');
     // draw mean dot
-    this._mean = document.createElementNS(this.ns, 'circle');
-    this._mean.setAttributeNS(null, 'r', this.params.meanRadius);
-    this._mean.setAttributeNS(null, 'stroke', this.params.meanColor);
-    this._mean.setAttributeNS(null, 'fill', 'transparent');
-    this._mean.classList.add('mean');
+    this.mean = document.createElementNS(this.ns, 'circle');
+    this.mean.setAttributeNS(null, 'r', this.params.meanRadius);
+    this.mean.setAttributeNS(null, 'stroke', this.params.meanColor);
+    this.mean.setAttributeNS(null, 'fill', 'transparent');
+    this.mean.classList.add('mean');
     // range dots (0 => top, 1 => bottom)
-    this._max = document.createElementNS(this.ns, 'circle');
-    this._max.setAttributeNS(null, 'r', this.params.meanRadius);
-    this._max.setAttributeNS(null, 'stroke', this.params.rangeColor);
-    this._max.setAttributeNS(null, 'fill', 'transparent');
-    this._max.classList.add('max');
+    this.max = document.createElementNS(this.ns, 'circle');
+    this.max.setAttributeNS(null, 'r', this.params.meanRadius);
+    this.max.setAttributeNS(null, 'stroke', this.params.rangeColor);
+    this.max.setAttributeNS(null, 'fill', 'transparent');
+    this.max.classList.add('max');
 
-    this._min = document.createElementNS(this.ns, 'circle');
-    this._min.setAttributeNS(null, 'r', this.params.meanRadius);
-    this._min.setAttributeNS(null, 'stroke', this.params.rangeColor);
-    this._min.setAttributeNS(null, 'fill', 'transparent');
-    this._min.classList.add('min');
+    this.min = document.createElementNS(this.ns, 'circle');
+    this.min.setAttributeNS(null, 'r', this.params.meanRadius);
+    this.min.setAttributeNS(null, 'stroke', this.params.rangeColor);
+    this.min.setAttributeNS(null, 'fill', 'transparent');
+    this.min.classList.add('min');
 
-    this.shape.appendChild(this._mean);
-    this.shape.appendChild(this._max);
-    this.shape.appendChild(this._min);
+    this.el.appendChild(this.mean);
+    this.el.appendChild(this.max);
+    this.el.appendChild(this.min);
 
-    return this.shape;
+    return this.el;
   }
 
   // @TODO use accessors
   update(renderingContext, group, datum, index) {
-    const mean = this.mean(datum);
-    const range = this.range(datum);
+    const mean = this.yMean(datum);
+    const range = this.yRange(datum);
     const x = this.x(datum);
     // y positions
     const meanPos = `${renderingContext.yScale(mean)}`;
-    this._mean.setAttributeNS(null, 'transform', `translate(0, ${meanPos})`);
+    this.mean.setAttributeNS(null, 'transform', `translate(0, ${meanPos})`);
 
     const halfRange = datum.range / 2;
     const max = renderingContext.yScale(mean + halfRange);
-    this._max.setAttributeNS(null, 'transform', `translate(0, ${max})`);
+    this.max.setAttributeNS(null, 'transform', `translate(0, ${max})`);
     const min = renderingContext.yScale(mean - halfRange);
-    this._min.setAttributeNS(null, 'transform', `translate(0, ${min})`);
+    this.min.setAttributeNS(null, 'transform', `translate(0, ${min})`);
 
     const xPos = renderingContext.xScale(x);
-    this.shape.setAttributeNS(null, 'transform', `translate(${xPos}, 0)`);
+    this.el.setAttributeNS(null, 'transform', `translate(${xPos}, 0)`);
   }
 }
 

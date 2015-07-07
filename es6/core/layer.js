@@ -6,11 +6,9 @@ const ns = require('./namespace');
 const Segment = require('../shapes/segment');
 const SegmentBehavior = require('../behaviors/segment-behavior');
 
-
 // private item -> id map to force d3 tp keep in sync with the DOM
 let _counter = 0;
 const _datumIdMap = new Map();
-
 
 class Layer extends events.EventEmitter {
   /**
@@ -174,7 +172,7 @@ class Layer extends events.EventEmitter {
     if (!itemEls.length) { itemEls = this.d3items.nodes(); }
 
     itemEls.forEach((el) => {
-      const item = this._itemElD3SelectionMap.get(el);
+      // const item = this._itemElD3SelectionMap.get(el);
       this._behavior.select(el, item.datum());
       this._toFront(el);
     });
@@ -185,7 +183,7 @@ class Layer extends events.EventEmitter {
     if (!itemEls.length) { itemEls = this.d3items.nodes(); }
 
     itemEls.forEach((el) => {
-      const item = this._itemElD3SelectionMap.get(el);
+      // const item = this._itemElD3SelectionMap.get(el);
       this._behavior.unselect(el, item.datum());
     });
   }
@@ -195,7 +193,7 @@ class Layer extends events.EventEmitter {
     if (!itemEls.length) { itemEls = this.d3items.nodes(); }
 
     itemEls.forEach((el) => {
-      const item = this._itemElD3SelectionMap.get(el);
+      // const item = this._itemElD3SelectionMap.get(el);
       this._behavior.toggleSelection(el, item.datum());
     });
   }
@@ -205,7 +203,7 @@ class Layer extends events.EventEmitter {
     itemEls = !Array.isArray(itemEls) ? [itemEls] : itemEls;
 
     itemEls.forEach((el) => {
-      const item  = this._itemElD3SelectionMap.get(el);
+      // const item  = this._itemElD3SelectionMap.get(el);
       const shape = this._itemElShapeMap.get(el);
       const datum = item.datum();
       this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);

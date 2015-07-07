@@ -11,7 +11,7 @@ class AnnotatedSegment extends Segment {
   }
 
   render(renderingContext) {
-    this.shape = super.render(renderingContext);
+    this.el = super.render(renderingContext);
     const height = renderingContext.height;
 
     this.label = document.createElementNS(this.ns, 'text');
@@ -25,9 +25,9 @@ class AnnotatedSegment extends Segment {
     this.label.style.webkitUserSelect = 'none';
     this.label.style.userSelect = 'none';
 
-    this.shape.appendChild(this.label);
+    this.el.appendChild(this.label);
 
-    return this.shape;
+    return this.el;
   }
 
   update(renderingContext, group, datum, index) {
