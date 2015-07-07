@@ -56,7 +56,7 @@ class TraceDots extends BaseShape {
     const meanPos = `${renderingContext.yScale(mean)}`;
     this.mean.setAttributeNS(null, 'transform', `translate(0, ${meanPos})`);
 
-    const halfRange = datum.range / 2;
+    const halfRange = range / 2;
     const max = renderingContext.yScale(mean + halfRange);
     this.max.setAttributeNS(null, 'transform', `translate(0, ${max})`);
     const min = renderingContext.yScale(mean - halfRange);

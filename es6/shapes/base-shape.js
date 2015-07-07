@@ -85,7 +85,7 @@ class BaseShape {
     Object.keys(accessors).forEach((name) => {
       const defaultValue = accessors[name];
       let accessor = function(d, v = null) {
-        if (v === null) { return d[name] || defaultValue; }
+        if (v === null) { return d[name] || defaultValue; }
         d[name] = v;
       };
       // set accessor as the default one
