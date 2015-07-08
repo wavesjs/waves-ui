@@ -8,17 +8,19 @@ import Timeline from '../../es6/core/timeline';
 
 
 describe('SegmentBehavior', function(){
+    let titleDiv;
+    let timeline;
+    let timelineDiv;
+    beforeEach(function(){
+        titleDiv = document.createElement('div');
+        titleDiv.innerHTML = this.currentTest.title;
+        document.body.appendChild(titleDiv);
+        timelineDiv = document.createElement("div");
+        document.body.appendChild(timelineDiv);
+    })
     describe('Edit Segment Behavior', function(){
         it('should correctly edit a segment', function(){
-            let titleDiv = document.createElement('div');
-            titleDiv.innerHTML = this.test.title;
-            document.body.appendChild(titleDiv);
-            // Holder element for the timeline
-            let timelineDiv = document.createElement("div");
-            document.body.appendChild(timelineDiv);
-
-            // Create a timeline
-            let timeline = new Timeline();
+            timeline = new Timeline();
             timeline.registerContainer(timelineDiv, {}, 'foo');
 
             // TimeContext

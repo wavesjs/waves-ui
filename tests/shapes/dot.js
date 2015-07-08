@@ -7,17 +7,19 @@ import BreakpointBehavior from '../../es6/behaviors/breakpoint-behavior';
 import Timeline from '../../es6/core/timeline';
 
 describe('Dot', function(){
+  let titleDiv;
+  let timeline;
+  let timelineDiv;
+  beforeEach(function(){
+      titleDiv = document.createElement('div');
+      titleDiv.innerHTML = this.currentTest.title;
+      document.body.appendChild(titleDiv);
+      timelineDiv = document.createElement("div");
+      document.body.appendChild(timelineDiv);
+  })
   describe('Dot instanciation', function(){
     it('should be placed a the convenient location', function(){
-        let titleDiv = document.createElement('div');
-        titleDiv.innerHTML = this.test.title;
-        document.body.appendChild(titleDiv);
-        // Holder element for the timeline
-        let timelineDiv = document.createElement("div");
-        document.body.appendChild(timelineDiv);
-
-        // Create a timeline
-        let timeline = new Timeline();
+        timeline = new Timeline();
         timeline.registerContainer(timelineDiv, {}, 'foo');
 
         // TimeContext

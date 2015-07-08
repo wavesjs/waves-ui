@@ -8,17 +8,19 @@ import Timeline from '../../es6/core/timeline';
 
 
 describe('Annotated Marker', function(){
+  let titleDiv;
+  let timeline;
+  let timelineDiv;
+  beforeEach(function(){
+      titleDiv = document.createElement('div');
+      titleDiv.innerHTML = this.currentTest.title;
+      document.body.appendChild(titleDiv);
+      timelineDiv = document.createElement("div");
+      document.body.appendChild(timelineDiv);
+  })
   describe('Annotated Marker instanciation', function(){
     it('should contain the right text', function(){
-        // Holder element for the timeline
-        let titleDiv = document.createElement('div');
-        titleDiv.innerHTML = this.test.title;
-        document.body.appendChild(titleDiv);
-        let timelineDiv = document.createElement("div");
-        document.body.appendChild(timelineDiv);
-
-        // Create a timeline
-        let timeline = new Timeline();
+        timeline = new Timeline();
         timeline.registerContainer(timelineDiv, {}, 'foo');
 
         // TimeContext

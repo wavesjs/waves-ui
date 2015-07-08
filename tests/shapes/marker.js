@@ -8,17 +8,19 @@ import Timeline from '../../es6/core/timeline';
 
 
 describe('Marker', function(){
+  let titleDiv;
+  let timeline;
+  let timelineDiv;
+  beforeEach(function(){
+      titleDiv = document.createElement('div');
+      titleDiv.innerHTML = this.currentTest.title;
+      document.body.appendChild(titleDiv);
+      timelineDiv = document.createElement("div");
+      document.body.appendChild(timelineDiv);
+  })
   describe('Marker instanciation', function(){
     it('should be placed a the convenient location', function(){
-        let titleDiv = document.createElement('div');
-        titleDiv.innerHTML = this.test.title;
-        document.body.appendChild(titleDiv);
-        // Holder element for the timeline
-        let timelineDiv = document.createElement("div");
-        document.body.appendChild(timelineDiv);
-
-        // Create a timeline
-        let timeline = new Timeline();
+        timeline = new Timeline();
         timeline.registerContainer(timelineDiv, {}, 'foo');
 
         // TimeContext
@@ -42,11 +44,6 @@ describe('Marker', function(){
 
         assert.equal(item0.left+item0.width/2, 300);
         assert.equal(item1.left+item0.width/2, 600);
-
-        // setTimeout(function() {
-        //   layer.setContextAttribute('start', 12);
-        //   timeline.update();
-        // }, 1000);
       });
   });
 });

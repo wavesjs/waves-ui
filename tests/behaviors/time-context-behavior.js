@@ -7,18 +7,20 @@ import Timeline from '../../es6/core/timeline';
 
 
 describe('TimeContextBehavior', function(){
+    let titleDiv;
+    let timeline;
+    let timelineDiv;
+    beforeEach(function(){
+        titleDiv = document.createElement('div');
+        titleDiv.innerHTML = this.currentTest.title;
+        document.body.appendChild(titleDiv);
+        timelineDiv = document.createElement("div");
+        document.body.appendChild(timelineDiv);
+    })
     describe('Edit behavior of TimeContext', function(){
 
         it('should edit shape accordingly', function(){
-
-            let titleDiv = document.createElement('div');
-            titleDiv.innerHTML = this.test.title;
-            document.body.appendChild(titleDiv);
-            let timelineDiv = document.createElement("div");
-            document.body.appendChild(timelineDiv);
-
-            // Create a timeline
-            let timeline = new Timeline();
+            timeline = new Timeline();
             timeline.registerContainer(timelineDiv, {}, 'foo');
 
             // TimeContext

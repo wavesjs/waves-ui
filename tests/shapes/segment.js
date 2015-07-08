@@ -8,17 +8,19 @@ import Timeline from '../../es6/core/timeline';
 
 
 describe('Segment', function(){
+    let titleDiv;
+    let timeline;
+    let timelineDiv;
+    beforeEach(function(){
+        titleDiv = document.createElement('div');
+        titleDiv.innerHTML = this.currentTest.title;
+        document.body.appendChild(titleDiv);
+        timelineDiv = document.createElement("div");
+        document.body.appendChild(timelineDiv);
+    })
     describe('Segment instanciation', function(){
         it('should be placed a the convenient location', function(){
-            let titleDiv = document.createElement('div');
-            titleDiv.innerHTML = this.test.title;
-            document.body.appendChild(titleDiv);
-            // Holder element for the timeline
-            let timelineDiv = document.createElement("div");
-            document.body.appendChild(timelineDiv);
-
-            // Create a timeline
-            let timeline = new Timeline();
+            timeline = new Timeline();
             timeline.registerContainer(timelineDiv, {}, 'foo');
 
             // TimeContext
@@ -54,15 +56,7 @@ describe('Segment', function(){
     });
     describe('Segment navigation zoom and move', function(){
         it('should be moved a zoomed accordingly', function(){
-            let titleDiv = document.createElement('div');
-            titleDiv.innerHTML = this.test.title;
-            document.body.appendChild(titleDiv);
-            // Holder element for the timeline
-            let timelineDiv = document.createElement("div");
-            document.body.appendChild(timelineDiv);
-
-            // Create a timeline
-            let timeline = new Timeline();
+            timeline = new Timeline();
             timeline.registerContainer(timelineDiv, {}, 'foo');
 
             // TimeContext

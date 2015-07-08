@@ -6,17 +6,19 @@ import Timeline from '../../es6/core/timeline';
 
 
 describe('Layer', function(){
+  let titleDiv;
+  let timeline;
+  let timelineDiv;
+  beforeEach(function(){
+      titleDiv = document.createElement('div');
+      titleDiv.innerHTML = this.currentTest.title;
+      document.body.appendChild(titleDiv);
+      timelineDiv = document.createElement("div");
+      document.body.appendChild(timelineDiv);
+  })
   describe('Layer instanciation', function(){
     it('should create a layer and attach it to a DOM element of a timeline instance', function(){
-        // Holder element for the timeline
-        let titleDiv = document.createElement('div');
-        titleDiv.innerHTML = this.test.title;
-        document.body.appendChild(titleDiv);
-        let timelineDiv = document.createElement("div");
-        document.body.appendChild(timelineDiv);
-
-        // Create a timeline
-        let timeline = new Timeline();
+        timeline = new Timeline();
         timeline.registerContainer(timelineDiv, {}, 'foo');
 
         // TimeContext
@@ -39,10 +41,6 @@ describe('Layer', function(){
         assert.equal(boundingClientRect.width, 1200);
         assert.equal(boundingClientRect.height, 100); // default value
 
-        // setTimeout(function() {
-        //   layer.setContextAttribute('start', 12);
-        //   timeline.update();
-        // }, 1000);
       });
   });
 });
