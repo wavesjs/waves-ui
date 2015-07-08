@@ -1,10 +1,10 @@
-const ns = require('../core/namespace');
+import ns from '../core/namespace';
 
 
 // @NOTE: accessors should receive datum index as argument
 // to allow the use of sampleRate to define x position
 
-class BaseShape {
+export default class BaseShape {
   /**
    *  @param options {Object} override default configuration
    */
@@ -119,5 +119,3 @@ class BaseShape {
    */
   inArea(renderingContext, datum, x1, y1, x2, y2) {}
 }
-
-module.exports = BaseShape;

@@ -1,7 +1,8 @@
-const BaseState = require('./base-state');
-const ns = require('../core/namespace');
+export BaseState from './base-state';
+export ns from '../core/namespace';
 
-class BrushZoomState extends BaseState {
+
+export default class BrushZoomState extends BaseState {
   constructor(timeline) {
     super(timeline);
   }
@@ -87,5 +88,3 @@ class BrushZoomState extends BaseState {
     }
   }
 }
-
-module.exports = BrushZoomState;

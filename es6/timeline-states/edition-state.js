@@ -1,8 +1,8 @@
-const BaseState = require('./base-state');
+import BaseState from './base-state';
 
 
 // @NOTE => overlaps SelectionBehavior in some way...
-class EditionState extends BaseState {
+export default class EditionState extends BaseState {
   constructor(timeline) {
     super(timeline);
 
@@ -66,5 +66,3 @@ class EditionState extends BaseState {
     this.mouseDown = false;
   }
 }
-
-module.exports = EditionState;

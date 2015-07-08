@@ -18,7 +18,7 @@ describe('Annotated Marker', function(){
 
         // Create a timeline
         let timeline = new Timeline();
-        timeline.registerContainer('foo', timelineDiv);
+        timeline.registerContainer(timelineDiv, {}, 'foo');
 
         // TimeContext
         let timeContext = new LayerTimeContext(timeline.timeContext)
@@ -33,8 +33,8 @@ describe('Annotated Marker', function(){
 
         // Attach layer to the timeline
         timeline.addLayer(layer, 'foo');
-        timeline.render();
-        timeline.draw();
+        ;
+        timeline.drawLayerShapes();
         timeline.update();
 
         const item0 = layer.d3items._root[0][0]

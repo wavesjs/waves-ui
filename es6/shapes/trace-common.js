@@ -1,7 +1,7 @@
-const BaseShape = require('./base-shape');
+import BaseShape from './base-shape';
 
 
-class TraceCommon extends BaseShape {
+export default class TraceCommon extends BaseShape {
   getClassName() { return 'trace-common'; }
 
   _getAccessorList() {
@@ -88,5 +88,3 @@ class TraceCommon extends BaseShape {
     return instructions;
   }
 }
-
-module.exports = TraceCommon;

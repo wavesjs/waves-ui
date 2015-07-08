@@ -1,7 +1,7 @@
-const BaseShape = require('./base-shape');
+import BaseShape from './base-shape';
 
 
-class TraceDots extends BaseShape {
+export default class TraceDots extends BaseShape {
   getClassName() { return 'trace-dots'; }
 
   _getAccessorList() {
@@ -66,5 +66,3 @@ class TraceDots extends BaseShape {
     this.el.setAttributeNS(null, 'transform', `translate(${xPos}, 0)`);
   }
 }
-
-module.exports = TraceDots;

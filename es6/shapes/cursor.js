@@ -1,8 +1,8 @@
-const BaseShape = require('./base-shape');
-const ns = require('../core/namespace');
+import BaseShape from './base-shape';
+import ns from '../core/namespace';
 
 
-class Cursor extends BaseShape {
+export default class Cursor extends BaseShape {
   getClassName() { return 'cursor'; }
 
   _getAccessorList() {
@@ -39,6 +39,3 @@ class Cursor extends BaseShape {
   // not selectable with a drag
   inArea() { return false; }
 }
-
-module.exports = Cursor;
-

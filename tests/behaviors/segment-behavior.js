@@ -19,7 +19,7 @@ describe('SegmentBehavior', function(){
 
             // Create a timeline
             let timeline = new Timeline();
-            timeline.registerContainer('foo', timelineDiv);
+            timeline.registerContainer(timelineDiv, {}, 'foo');
 
             // TimeContext
             let timeContext = new LayerTimeContext(timeline.timeContext)
@@ -38,8 +38,8 @@ describe('SegmentBehavior', function(){
 
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
-            timeline.render();
-            timeline.draw();
+            ;
+            timeline.drawLayerShapes();
             timeline.update();
 
 

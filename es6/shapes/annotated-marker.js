@@ -1,7 +1,7 @@
-const Marker = require('./marker');
+import Marker from './marker';
 
 
-class AnnotatedMarker extends Marker {
+export default class AnnotatedMarker extends Marker {
   getClassName() { return 'annotated-marker'; }
 
   _getAccessorList() {
@@ -36,5 +36,3 @@ class AnnotatedMarker extends Marker {
     this.label.innerHTML = this.text(datum);
   }
 }
-
-module.exports = AnnotatedMarker;

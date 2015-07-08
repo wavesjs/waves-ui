@@ -1,10 +1,10 @@
-const d3Scale = require('d3-scale');
-const d3Selection = require('d3-selection');
-
+import d3Scale from 'd3-scale';
+import d3Selection from 'd3-selection';
 const events = require('events');
-const ns = require('./namespace');
-const Segment = require('../shapes/segment');
-const SegmentBehavior = require('../behaviors/segment-behavior');
+
+import ns from './namespace';
+import Segment from '../shapes/segment';
+import SegmentBehavior from '../behaviors/segment-behavior';
 
 // private item -> id map to force d3 tp keep in sync with the DOM
 let _counter = 0;

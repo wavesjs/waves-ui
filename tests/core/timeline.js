@@ -14,7 +14,7 @@ describe('Timeline', function(){
             let timelineDiv = document.createElement("div");
             document.body.appendChild(timelineDiv);
             let timeline = new Timeline();
-            timeline.registerContainer('foo', timelineDiv);
+            timeline.registerContainer(timelineDiv, {}, 'foo');
             const boundingClientRect = timeline.containers.foo.svgElement.getBoundingClientRect();
             assert.equal(boundingClientRect.width, 1000);
             assert.equal(boundingClientRect.height, 120);
@@ -28,20 +28,20 @@ describe('Timeline', function(){
             document.body.appendChild(timelineDiv);
             let [pixelsPerSecond, containersWidth] = [10, 10]
             let timeline = new Timeline({pixelsPerSecond:pixelsPerSecond, containersWidth:containersWidth});
-            timeline.registerContainer('foo', timelineDiv);
+            timeline.registerContainer(timelineDiv, {}, 'foo');
             const boundingClientRect = timeline.containers.foo.svgElement.getBoundingClientRect();
             assert.equal(boundingClientRect.width, containersWidth);
             assert.equal(timeline.params.pixelsPerSecond, pixelsPerSecond);
         });
-        it('should getContainerPerElement from element', function(){
+        it('should getContainerFromDOMElement from element', function(){
             let titleDiv = document.createElement('div');
             titleDiv.innerHTML = this.test.title;
             document.body.appendChild(titleDiv);
             let timelineDiv = document.createElement("div");
             document.body.appendChild(timelineDiv);
             let timeline = new Timeline();
-            timeline.registerContainer('foo', timelineDiv);
-            assert.equal(timeline.getContainerPerElement(timelineDiv).id, 'foo')
+            timeline.registerContainer(timelineDiv, {}, 'foo');
+            assert.equal(timeline.getContainerFromDOMElement(timelineDiv).id, 'foo')
         })
     });
     describe('Global Timeline rendering options', function(){
@@ -54,7 +54,7 @@ describe('Timeline', function(){
             let timeline = new Timeline();
             timeline.setContainersWidth(800)
             timeline.update();
-            timeline.registerContainer('foo', timelineDiv);
+            timeline.registerContainer(timelineDiv, {}, 'foo');
             const boundingClientRect = timeline.containers.foo.svgElement.getBoundingClientRect();
             assert.equal(boundingClientRect.width, 800);
         })
@@ -67,8 +67,8 @@ describe('Timeline', function(){
             let timelineDiv = document.createElement("div");
             document.body.appendChild(timelineDiv);
             let timeline = new Timeline();
-            timeline.registerContainer('foo', timelineDiv);
-            let layer1 = {'name': 'layer1'};
+            timeline.registerContainer(timelineDiv, {}, 'foo');
+            let layer1 = new Layer('collection', []);
             timeline.addLayer(layer1, 'foo', 'bar');
             assert.deepEqual(timeline.getLayersFromGroup('bar'), [layer1]);
         })
@@ -79,8 +79,8 @@ describe('Timeline', function(){
             let timelineDiv = document.createElement("div");
             document.body.appendChild(timelineDiv);
             let timeline = new Timeline();
-            timeline.registerContainer('foo', timelineDiv);
-            let layer1 = {'name': 'layer1'};
+            timeline.registerContainer(timelineDiv, {}, 'foo');
+            let layer1 = new Layer('collection', []);
             timeline.addLayer(layer1, 'foo');
             assert.equal(timeline.getLayerContainer(layer1).id, 'foo')
         })
@@ -93,7 +93,7 @@ describe('Timeline', function(){
             let timelineDiv = document.createElement("div");
             document.body.appendChild(timelineDiv);
             let timeline = new Timeline();
-            timeline.registerContainer('foo', timelineDiv);
+            timeline.registerContainer(timelineDiv, {}, 'foo');
             // Offset
             timeline.timeContext.offset = 15;
             timeline.update();
@@ -121,7 +121,7 @@ describe('Timeline', function(){
             let timelineDiv = document.createElement("div");
             document.body.appendChild(timelineDiv);
             let timeline = new Timeline();
-            timeline.registerContainer('foo', timelineDiv);
+            timeline.registerContainer(timelineDiv, {}, 'foo');
 
             // TimeContext
             let timeContext = new LayerTimeContext(timeline.timeContext)
@@ -133,8 +133,7 @@ describe('Timeline', function(){
 
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
-            timeline.render();
-            timeline.draw();
+            timeline.drawLayerShapes();
             timeline.update();
 
             // Modify timeline timeContext

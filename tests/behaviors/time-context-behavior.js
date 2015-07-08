@@ -19,7 +19,7 @@ describe('TimeContextBehavior', function(){
 
             // Create a timeline
             let timeline = new Timeline();
-            timeline.registerContainer('foo', timelineDiv);
+            timeline.registerContainer(timelineDiv, {}, 'foo');
 
             // TimeContext
             let timeContext = new LayerTimeContext(timeline.timeContext)
@@ -31,8 +31,8 @@ describe('TimeContextBehavior', function(){
 
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
-            timeline.render();
-            timeline.draw();
+            ;
+            timeline.drawLayerShapes();
             timeline.update();
 
             timeline.timeContextBehavior.edit(layer, 10, 0, layer.container);
@@ -76,7 +76,7 @@ describe('TimeContextBehavior', function(){
 
             // Create a timeline
             let timeline = new Timeline();
-            timeline.registerContainer('foo', timelineDiv);
+            timeline.registerContainer(timelineDiv, {}, 'foo');
 
             // TimeContext
             let timeContext = new LayerTimeContext(timeline.timeContext)
@@ -88,8 +88,8 @@ describe('TimeContextBehavior', function(){
 
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
-            timeline.render();
-            timeline.draw();
+            ;
+            timeline.drawLayerShapes();
             timeline.update();
 
             timeline.timeContextBehavior.edit(layer, 10, 0, layer.contextShape.leftHandler);
@@ -128,7 +128,7 @@ describe('TimeContextBehavior', function(){
 
             // Create a timeline
             let timeline = new Timeline();
-            timeline.registerContainer('foo', timelineDiv);
+            timeline.registerContainer(timelineDiv, {}, 'foo');
 
             // TimeContext
             let timeContext = new LayerTimeContext(timeline.timeContext)
@@ -140,8 +140,8 @@ describe('TimeContextBehavior', function(){
 
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
-            timeline.render();
-            timeline.draw();
+            ;
+            timeline.drawLayerShapes();
 
             timeline.timeContextBehavior.stretch(layer, 10, 0, layer.container);
 

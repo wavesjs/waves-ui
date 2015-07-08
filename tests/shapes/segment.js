@@ -19,7 +19,7 @@ describe('Segment', function(){
 
             // Create a timeline
             let timeline = new Timeline();
-            timeline.registerContainer('foo', timelineDiv);
+            timeline.registerContainer(timelineDiv, {}, 'foo');
 
             // TimeContext
             let timeContext = new LayerTimeContext(timeline.timeContext)
@@ -38,8 +38,8 @@ describe('Segment', function(){
 
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
-            timeline.render();
-            timeline.draw();
+            ;
+            timeline.drawLayerShapes();
             timeline.update();
 
             const item0 = layer.d3items._root[0][0].getBoundingClientRect()
@@ -63,7 +63,7 @@ describe('Segment', function(){
 
             // Create a timeline
             let timeline = new Timeline();
-            timeline.registerContainer('foo', timelineDiv);
+            timeline.registerContainer(timelineDiv, {}, 'foo');
 
             // TimeContext
             let timeContext = new LayerTimeContext(timeline.timeContext)
@@ -82,8 +82,8 @@ describe('Segment', function(){
 
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
-            timeline.render();
-            timeline.draw();
+            ;
+            timeline.drawLayerShapes();
             timeline.update();
 
             timeline.timeContext.stretchRatio = 0.5;

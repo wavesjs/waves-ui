@@ -17,7 +17,7 @@ describe('Layer', function(){
 
         // Create a timeline
         let timeline = new Timeline();
-        timeline.registerContainer('foo', timelineDiv);
+        timeline.registerContainer(timelineDiv, {}, 'foo');
 
         // TimeContext
         let timeContext = new LayerTimeContext(timeline.timeContext)
@@ -30,8 +30,7 @@ describe('Layer', function(){
         // Attach layer to the timeline
         timeline.addLayer(layer, 'foo');
 
-        timeline.render();
-        timeline.draw();
+        timeline.drawLayerShapes();
         timeline.update();
 
         // Check that elements are correctly positioned

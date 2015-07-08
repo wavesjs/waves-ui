@@ -1,7 +1,7 @@
-const Segment = require('./segment');
+import Segment from './segment';
 
 
-class AnnotatedSegment extends Segment {
+export default class AnnotatedSegment extends Segment {
   getClassName() { return 'annotated-segment'; }
 
   _getAccessorList() {
@@ -36,5 +36,3 @@ class AnnotatedSegment extends Segment {
     this.label.innerHTML = this.text(datum);
   }
 }
-
-module.exports = AnnotatedSegment;

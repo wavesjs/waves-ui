@@ -1,7 +1,7 @@
-const BaseShape = require('./base-shape');
+import BaseShape from './base-shape';
 
 
-class Marker extends BaseShape {
+export default class Marker extends BaseShape {
   getClassName() { return 'marker'; }
 
   _getAccessorList() {
@@ -79,5 +79,3 @@ class Marker extends BaseShape {
     return area > 0;
   }
 }
-
-module.exports = Marker;

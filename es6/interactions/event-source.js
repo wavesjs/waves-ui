@@ -1,10 +1,10 @@
-const events = require('events');
+import events from 'events';
 
 
 /**
  * Main interface for event source
  */
-class EventSource extends events.EventEmitter {
+export default class EventSource extends events.EventEmitter {
   constructor(el) {
     super();
     this.el = el;
@@ -16,5 +16,3 @@ class EventSource extends events.EventEmitter {
 
   _bindEvents() {}
 }
-
-module.exports = EventSource;

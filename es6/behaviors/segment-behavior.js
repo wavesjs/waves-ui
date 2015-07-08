@@ -1,6 +1,6 @@
-const BaseBehavior = require('./base-behavior');
+import BaseBehavior from './base-behavior';
 
-class SegmentBehavior extends BaseBehavior {
+export default class SegmentBehavior extends BaseBehavior {
   // constructor() {}
 
   edit(renderingContext, shape, datum, dx, dy, target) {
@@ -59,5 +59,3 @@ class SegmentBehavior extends BaseBehavior {
     shape.width(datum, renderingContext.xScale.invert(targetWidth));
   }
 }
-
-module.exports = SegmentBehavior;

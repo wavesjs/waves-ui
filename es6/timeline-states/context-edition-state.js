@@ -1,7 +1,7 @@
-const BaseState = require('./base-state');
+import BaseState from './base-state';
 
 
-class ContextEditionState extends BaseState {
+export default class ContextEditionState extends BaseState {
   constructor(timeline) {
     super(timeline);
   }
@@ -54,5 +54,3 @@ class ContextEditionState extends BaseState {
     this.currentLayer = null;
   }
 }
-
-module.exports = ContextEditionState;

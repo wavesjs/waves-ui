@@ -1,11 +1,11 @@
-const EventSource = require('./event-source');
-const WaveEvent  = require('./wave-event');
+import EventSource from './event-source';
+import WaveEvent from './wave-event';
 
 
 const body = window.document.body;
 
 
-class Surface extends EventSource {
+export default class Surface extends EventSource {
   /**
    * @param el <DOMElement> the DOM element to monitore
    * @param padding <Object> the padding of the current surface @TODO
@@ -137,5 +137,3 @@ class Surface extends EventSource {
     // @TODO: mouseenter, mouseleave, wheel ?
   }
 }
-
-module.exports = Surface;

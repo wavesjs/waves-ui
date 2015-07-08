@@ -1,4 +1,4 @@
-class TimeContextBehavior {
+export default class TimeContextBehavior {
   /**
    *  draw the shape to interact with the context
    *  @params bool {Boolean} define if the layer's context is editable or not
@@ -71,5 +71,3 @@ class TimeContextBehavior {
     timeContext.duration = lastDuration;
   }
 }
-
-module.exports = TimeContextBehavior;

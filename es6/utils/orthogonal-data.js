@@ -1,4 +1,4 @@
-class OrthogonalData {
+export default class OrthogonalData {
   constructor() {
     this._cols = null; // object of arrays
     this._rows = null; // array of objects
@@ -68,5 +68,3 @@ class OrthogonalData {
     return this._rows;
   }
 }
-
-module.exports = OrthogonalData;
