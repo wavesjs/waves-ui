@@ -51,7 +51,6 @@ describe("BreakpointBehavior", function(){
 
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
-            ;
             timeline.drawLayersShapes();
             timeline.update();
 
