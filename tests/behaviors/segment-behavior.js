@@ -39,7 +39,7 @@ describe('SegmentBehavior', function(){
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
             ;
-            timeline.drawLayerShapes();
+            timeline.drawLayersShapes();
             timeline.update();
 
 

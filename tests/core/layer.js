@@ -30,7 +30,7 @@ describe('Layer', function(){
         // Attach layer to the timeline
         timeline.addLayer(layer, 'foo');
 
-        timeline.drawLayerShapes();
+        timeline.drawLayersShapes();
         timeline.update();
 
         // Check that elements are correctly positioned

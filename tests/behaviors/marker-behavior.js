@@ -35,7 +35,7 @@ describe('MarkerBehavior', function(){
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
             ;
-            timeline.drawLayerShapes();
+            timeline.drawLayersShapes();
             timeline.update();
 
             let item = layer.d3items.nodes()[0];

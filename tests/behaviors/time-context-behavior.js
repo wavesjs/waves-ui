@@ -32,7 +32,7 @@ describe('TimeContextBehavior', function(){
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
             ;
-            timeline.drawLayerShapes();
+            timeline.drawLayersShapes();
             timeline.update();
 
             timeline.timeContextBehavior.edit(layer, 10, 0, layer.container);
@@ -89,7 +89,7 @@ describe('TimeContextBehavior', function(){
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
             ;
-            timeline.drawLayerShapes();
+            timeline.drawLayersShapes();
             timeline.update();
 
             timeline.timeContextBehavior.edit(layer, 10, 0, layer.contextShape.leftHandler);
@@ -141,7 +141,7 @@ describe('TimeContextBehavior', function(){
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
             ;
-            timeline.drawLayerShapes();
+            timeline.drawLayersShapes();
 
             timeline.timeContextBehavior.stretch(layer, 10, 0, layer.container);
 

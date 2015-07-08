@@ -49,7 +49,7 @@ describe('Dot', function(){
         // Attach layer to the timeline
         timeline.addLayer(layer, 'foo');
         ;
-        timeline.drawLayerShapes();
+        timeline.drawLayersShapes();
         timeline.update();
 
         const item0 = layer.d3items._root[0][0].getBoundingClientRect()

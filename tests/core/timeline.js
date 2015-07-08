@@ -133,7 +133,7 @@ describe('Timeline', function(){
 
             // Attach layer to the timeline
             timeline.addLayer(layer, 'foo');
-            timeline.drawLayerShapes();
+            timeline.drawLayersShapes();
             timeline.update();
 
             // Modify timeline timeContext
