@@ -58,7 +58,7 @@ import TimelineTimeContext from './timeline-time-context';
  * Each time you set new value of offset or stretchRatio, you need to do `timeline.update()` to update the values.
  *
  */
-class Timeline extends events.EventEmitter {
+export default class Timeline extends events.EventEmitter {
   /**
    * Creates a new Timeline instance
    * @param params {Object} an object to override defaults parameters
@@ -414,5 +414,3 @@ class Timeline extends events.EventEmitter {
     layers.forEach((layer) => layer.updateShapes());
   }
 }
-
-module.exports = Timeline;

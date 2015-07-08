@@ -1,16 +1,17 @@
 import d3Scale from 'd3-scale';
 import d3Selection from 'd3-selection';
-const events = require('events');
+import events from 'events';
 
 import ns from './namespace';
 import Segment from '../shapes/segment';
 import SegmentBehavior from '../behaviors/segment-behavior';
 
+
 // private item -> id map to force d3 tp keep in sync with the DOM
 let _counter = 0;
 const _datumIdMap = new Map();
 
-class Layer extends events.EventEmitter {
+export default class Layer extends events.EventEmitter {
   /**
    * Structure of the DOM view of a Layer
    *
@@ -525,5 +526,3 @@ class Layer extends events.EventEmitter {
     });
   }
 }
-
-module.exports = Layer;

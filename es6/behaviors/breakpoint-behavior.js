@@ -38,5 +38,3 @@ export default class BreakpointBehavior extends BaseBehavior {
   }
 
 }
-
-module.exports = BreakpointBehavior;
