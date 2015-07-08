@@ -10,9 +10,6 @@ const TimelineTimeContext = require('./timeline-time-context');
 
 
 /**
- * @class Timeline
- * @description
- *
  * A Timeline instance is the main entry point to create a temporal data representation. As a temporal representation, a timeline establishes a relation between *time* - in seconds - and *space* - in pixels -.
  *
  *
@@ -61,7 +58,7 @@ const TimelineTimeContext = require('./timeline-time-context');
 class Timeline extends events.EventEmitter {
   /**
    * Creates a new Timeline instance
-   * @param params {Object} an object to override defaults parameters
+   * @param {Object} params - an object to override defaults parameters
    */
   constructor(params = {}) {
     super();
@@ -72,6 +69,11 @@ class Timeline extends events.EventEmitter {
     };
 
     // public attributes
+    /**
+     *  testing attribute description
+     *  @name param
+     *  @visibility public
+     */
     this.params = Object.assign({}, this._defaults, params);
     this.timeContext = null;
     this.layers = [];
@@ -123,9 +125,11 @@ class Timeline extends events.EventEmitter {
    * Factory method to add interaction modules the timeline should listen to
    * by default, the timeline listen to Keyboard, and instance a Surface on each
    * container
-   * @param ctor {EventSource} the contructor of the interaction module to instanciate
-   * @param el {DOMElement} the DOM element to bind to the EventSource module
-   * @param options {Object} options to be applied to the ctor (defaults to `{}`)
+   *
+   * @private
+   * @param {EventSource} ctor - the contructor of the interaction module to instanciate
+   * @param {DOMElement} el - the DOM element to bind to the EventSource module
+   * @param {Object} options - options to be applied to the ctor (defaults to `{}`)
    */
   _createInteraction(ctor, el, options = {}) {
     const interaction = new ctor(el, options);
@@ -133,9 +137,10 @@ class Timeline extends events.EventEmitter {
   }
 
   /**
-   * @private
-   * @description Creates a new TimeContext for the visualisation, this `TimeContext`
+   * Creates a new TimeContext for the visualisation, this `TimeContext`
    * will be at the top of the `TimeContext` tree
+   *
+   * @private
    */
   _createTimeContext() {
     const pixelsPerSecond = this.params.pixelsPerSecond;
