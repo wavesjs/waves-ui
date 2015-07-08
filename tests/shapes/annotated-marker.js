@@ -1,10 +1,11 @@
-const assert = require('assert');
+import assert from 'assert';
 
-const Layer = require('../../es6/core/layer');
-const LayerTimeContext = require('../../es6/core/layer-time-context');
-const AnnotatedMarker = require('../../es6/shapes/annotated-marker');
-const MarkerBehavior = require('../../es6/behaviors/marker-behavior');
-const Timeline = require('../../es6/core/timeline');
+import Layer from '../../es6/core/layer';
+import LayerTimeContext from '../../es6/core/layer-time-context';
+import AnnotatedMarker from '../../es6/shapes/annotated-marker';
+import MarkerBehavior from '../../es6/behaviors/marker-behavior';
+import Timeline from '../../es6/core/timeline';
+
 
 describe('Annotated Marker', function(){
   describe('Annotated Marker instanciation', function(){

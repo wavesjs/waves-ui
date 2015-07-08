@@ -1,10 +1,10 @@
-const assert = require('assert');
+import assert from 'assert';
 
-const Layer = require('../../es6/core/layer');
-const LayerTimeContext = require('../../es6/core/layer-time-context');
-const TraceDots = require('../../es6/shapes/trace-dots');
-const TraceBehavior = require('../../es6/behaviors/trace-behavior');
-const Timeline = require('../../es6/core/timeline');
+import Layer from '../../es6/core/layer';
+import LayerTimeContext from '../../es6/core/layer-time-context';
+import TraceDots from '../../es6/shapes/trace-dots';
+import TraceBehavior from '../../es6/behaviors/trace-behavior';
+import Timeline from '../../es6/core/timeline';
 
 
 describe('TraceBehavior', function(){

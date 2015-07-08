@@ -1,9 +1,11 @@
-const assert = require('assert');
-const Layer = require('../../es6/core/layer');
-const LayerTimeContext = require('../../es6/core/layer-time-context');
-const Marker = require('../../es6/shapes/marker');
-const MarkerBehavior = require('../../es6/behaviors/marker-behavior');
-const Timeline = require('../../es6/core/timeline');
+import assert from 'assert';
+
+import Layer from '../../es6/core/layer';
+import LayerTimeContext from '../../es6/core/layer-time-context';
+import Marker from '../../es6/shapes/marker';
+import MarkerBehavior from '../../es6/behaviors/marker-behavior';
+import Timeline from '../../es6/core/timeline';
+
 
 describe('Marker', function(){
   describe('Marker instanciation', function(){

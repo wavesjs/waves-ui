@@ -1,9 +1,9 @@
-const assert = require('assert');
+import assert from 'assert';
 
-const Layer = require('../../es6/core/layer');
-const LayerTimeContext = require('../../es6/core/layer-time-context');
-const TimeContextBehavior = require('../../es6/behaviors/time-context-behavior');
-const Timeline = require('../../es6/core/timeline');
+import Layer from '../../es6/core/layer';
+import LayerTimeContext from '../../es6/core/layer-time-context';
+import TimeContextBehavior from '../../es6/behaviors/time-context-behavior';
+import Timeline from '../../es6/core/timeline';
 
 
 describe('TimeContextBehavior', function(){

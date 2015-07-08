@@ -1,8 +1,8 @@
-const assert = require('assert');
+import assert from 'assert';
 
-const Layer = require('../../es6/core/layer');
-const LayerTimeContext = require('../../es6/core/layer-time-context');
-const Timeline = require('../../es6/core/timeline');
+import Layer from '../../es6/core/layer';
+import LayerTimeContext from '../../es6/core/layer-time-context';
+import Timeline from '../../es6/core/timeline';
 
 
 describe('Layer', function(){

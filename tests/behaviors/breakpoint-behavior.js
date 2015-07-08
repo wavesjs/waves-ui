@@ -1,10 +1,10 @@
-const assert = require('assert');
+import assert from 'assert';
 
-const Layer = require('../../es6/core/layer');
-const Dot = require('../../es6/shapes/dot');
-const LayerTimeContext = require('../../es6/core/layer-time-context');
-const BreakpointBehavior = require('../../es6/behaviors/breakpoint-behavior');
-const Timeline = require('../../es6/core/timeline');
+import Layer from '../../es6/core/layer';
+import Dot from '../../es6/shapes/dot';
+import LayerTimeContext from '../../es6/core/layer-time-context';
+import BreakpointBehavior from '../../es6/behaviors/breakpoint-behavior';
+import Timeline from '../../es6/core/timeline';
 
 
 describe("BreakpointBehavior", function(){

@@ -1,8 +1,8 @@
-const assert = require('assert');
+import assert from 'assert';
 
-const d3Scale = require('d3-scale');
-const LayerTimeContext = require('../../es6/core/layer-time-context');
-const TimelineTimeContext = require('../../es6/core/timeline-time-context');
+import d3Scale from 'd3-scale';
+import LayerTimeContext from '../../es6/core/layer-time-context';
+import TimelineTimeContext from '../../es6/core/timeline-time-context';
 
 
 describe('TimelineTimeContext and LayerTimeContext', function(){

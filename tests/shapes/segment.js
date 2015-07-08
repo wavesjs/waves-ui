@@ -1,10 +1,10 @@
-const assert = require('assert');
+import assert from 'assert';
 
-const Layer = require('../../es6/core/layer');
-const LayerTimeContext = require('../../es6/core/layer-time-context');
-const Segment = require('../../es6/shapes/segment');
-const SegmentBehavior = require('../../es6/behaviors/segment-behavior');
-const Timeline = require('../../es6/core/timeline');
+import Layer from '../../es6/core/layer';
+import LayerTimeContext from '../../es6/core/layer-time-context';
+import Segment from '../../es6/shapes/segment';
+import SegmentBehavior from '../../es6/behaviors/segment-behavior';
+import Timeline from '../../es6/core/timeline';
 
 
 describe('Segment', function(){
