@@ -44,24 +44,26 @@ describe('SegmentBehavior', function(){
 
 
             let item = layer.d3items.nodes()[0];
-            layer.edit(item, 10, 0, layer.container);
+            const shape = layer._itemElShapeMap.get(item);
+
+            layer.edit(item, 10, 0, shape.segment);
 
             // y -10 => +0.1 due to horizontal flip
             assert.equal(layer.data[0].x, 0.1);
             assert.equal(layer.data[0].width, 3);
 
             // move shape background
-            layer.edit(item, 10, 0, layer.contextShape.rect);
+            layer.edit(item, 10, 0, shape.segment);
             assert.equal(layer.data[0].x, 0.2);
             assert.equal(layer.data[0].width, 3);
 
             // move shape leftHandler
-            layer.edit(item, 10, 0, layer.contextShape.leftHandler);
+            layer.edit(item, 10, 0, shape.leftHandler);
             assert.equal(layer.data[0].x, 0.3);
             assert.equal(layer.data[0].width, 2.9);
 
             // move shape leftHandler
-            layer.edit(item, -10, 0, layer.contextShape.rightHandler);
+            layer.edit(item, -10, 0, shape.rightHandler);
             assert.equal(layer.data[0].x, 0.3);
             assert.equal(layer.data[0].width, 2.8);
 

@@ -207,8 +207,6 @@ export default class Timeline extends events.EventEmitter {
     svg.setAttributeNS(null, 'width', width);
     svg.setAttributeNS(null, 'viewbox', `0 0 ${width} ${height}`);
 
-    console.log(ns);
-
     const defs = document.createElementNS(ns, 'defs');
 
     const offsetGroup = document.createElementNS(ns, 'g');
@@ -263,7 +261,6 @@ export default class Timeline extends events.EventEmitter {
     }
 
     this.groupedLayers[group].push(layer);
-    console.log(layer)
     // render the layer's container inside the container
     container.layoutElement.appendChild(layer.renderContainer());
   }

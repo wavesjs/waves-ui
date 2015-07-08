@@ -54,26 +54,29 @@ describe('TraceBehavior', function(){
         timeline.update();
 
         let item = layer.d3items.nodes()[0];
+        const shape = layer._itemElShapeMap.get(item);
+        console.log(shape, shape.mean, shape.min, shape.max)
 
         // For the mean
-        layer.edit(item, 10, 0, item.childNodes[0]);
+        layer.edit(item, 10, 0, shape.mean);
         assert.equal(layer.data[0].x, 0.1);
-        assert.equal(layer.data[0].mean, 0.0);
+        assert.equal(layer.data[0].yMean, 0.0);
         assert.equal(layer.data[0].range, 0.1);
 
-        layer.edit(item, 10, -10, item.childNodes[0]);
+        layer.edit(item, 10, -10, shape.mean);
+
         assert.equal(layer.data[0].x, 0.2);
-        assert.equal(layer.data[0].mean, 0.1);
+        assert.equal(layer.data[0].yMean, 0.1);
         assert.equal(layer.data[0].range, 0.1);
 
-        layer.edit(item, 10, -10, item.childNodes[1]);
+        layer.edit(item, 10, -10, shape.max);
         assert.equal(layer.data[0].x, 0.2);  // Don't move the x
-        assert.equal(layer.data[0].mean, 0.1);  // Don't change mean
+        assert.equal(layer.data[0].yMean, 0.1);  // Don't change mean
         assert.equal(layer.data[0].range, 0.3);  // But change range (2*dy)
 
-        layer.edit(item, 10, -10, item.childNodes[2]);
+        layer.edit(item, 10, -10, shape.min);
         assert.equal(layer.data[0].x, 0.2);  // Don't move the x
-        assert.equal(layer.data[0].mean, 0.1);  // Don't change mean
+        assert.equal(layer.data[0].yMean, 0.1);  // Don't change mean
         assert.equal(layer.data[0].range, 0.1);  // But change range (2*dy)
 
       });
