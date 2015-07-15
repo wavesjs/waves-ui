@@ -4,6 +4,7 @@ import events from 'events';
 import Keyboard from '../interactions/keyboard';
 import Surface from '../interactions/surface';
 import View from './view';
+import ViewCollection from './view-collection';
 
 
 /**
@@ -17,17 +18,18 @@ import View from './view';
  * - editing
  *
  * Methods `register`, `render` and `update` call the same methods on all the `View` instances, which call the same methods one on all its `Layer` instances.
- * `register`: registers a `View` instance onto the timeline (ie. the timeline can `render` and `update` its different views)
- * `render`: renders the DOM for the element (if has one) and its descendant (here renders the views, ie. render the DOM tree for a view and attach it in the DOM at the right place)
- * `update`: update the display according to data changes (ie. update the DOM element attached to the DOM tree with render method, based on new data).
+ * - `register`: registers a `View` instance onto the timeline (ie. the timeline can `render` and `update` its different views)
+ * - `render`: renders the DOM for the element (if has one) and its descendant (here renders the views, ie. render the DOM tree for a view and attach it in the DOM at the right place)
+ * - `update`: update the display according to data changes (ie. update the DOM element attached to the DOM tree with render method, based on new data).
  */
-export default class Timeline extends events.EventEmitter {
+export default class BaseTimeline extends events.EventEmitter {
   /**
    * Creates a new `Timeline` instance
    */
   constructor() {
     super();
-    this.views = new Map();
+
+    this.views = new ViewCollection(this);
 
     this._state = null;
     this._handleEvent = this._handleEvent.bind(this);
@@ -80,26 +82,11 @@ export default class Timeline extends events.EventEmitter {
    * Views display the view on the timeline in theirs DOM SVG element.
    */
   register(view) {
-    this.views.set(view, []);
-    this._createInteraction(Surface, view.el);
-  }
-
-  /**
-   * Draws all the views
-   */
-  render(){
-    for(let view of this) view.render();
-  }
-
-  /**
-   * Updates all the views
-   */
-  update() {
-    for(let view of this) view.update();
-    this.emit('update');
+    this.views.push(view);
+    this._createInteraction(Surface, view.$el);
   }
 
   *[Symbol.iterator]() {
-    yield* this.views.keys();
+    yield* this.views[Symbol.iterator]();
   }
 }

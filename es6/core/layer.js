@@ -8,18 +8,18 @@ import SegmentBehavior from '../behaviors/segment-behavior';
 
 
 // private item -> id map to force d3 tp keep in sync with the DOM
-let _counter = 0;
+let   _counter = 0;
 const _datumIdMap = new Map();
 
 export default class Layer extends events.EventEmitter {
   /**
    * Structure of the DOM view of a Layer
    *
-   * <g class="layer"> Flip y axis, timeContext.start and top position from params are applied on this elmt
-   *   <svg class="bounding-box"> timeContext.duration is applied on this elmt
+   * <g class="layer"> Flip y axis, timeContext.start and top position from params are applied on this $elmt
+   *   <svg class="bounding-box"> timeContext.duration is applied on this $elmt
    *    <g class="layer-interactions"> Contains the timeContext edition elements (a segment)
    *    </g>
-   *    <g class="offset items"> The shapes are inserted here, and we apply timeContext.offset on this elmt
+   *    <g class="offset items"> The shapes are inserted here, and we apply timeContext.offset on this $elmt
    *    </g>
    *   </svg>
    * </g>
@@ -42,16 +42,20 @@ export default class Layer extends events.EventEmitter {
     this.params = Object.assign({}, defaults, options);
     this.timeContext = null;
 
-    this.container = null; // offset group of the parent context
-    this.group = null; // group created by the layer inside the context
+    // container elements
+    this.$el = null; // offset group of the parent context
+    this.$boundingBox = null;
+    this.$offset = null;
+    this.$interactions = null;
+
     this.d3items = null; // d3 collection of the layer items
 
     this._shapeConfiguration = null; // { ctor, accessors, options }
     this._commonShapeConfiguration = null; // { ctor, accessors, options }
 
-    this._itemElShapeMap = new Map(); // item group <DOMElement> => shape
-    this._itemElD3SelectionMap = new Map(); // item group <DOMElement> => shape
-    this._itemCommonShapeMap = new Map(); // one entry max in this map
+    this._$itemShapeMap = new Map(); // item group <DOMElement> => shape
+    this._$itemD3SelectionMap = new Map(); // item group <DOMElement> => shape
+    this._$itemCommonShapeMap = new Map(); // one entry max in this map
 
     this._isContextEditable = false;
     this._behavior = null;
@@ -126,6 +130,51 @@ export default class Layer extends events.EventEmitter {
     }
   }
 
+  // Initialization
+
+  /**
+   *  render the DOM in memory on layer creation to be able to use it before
+   *  the layer is actually inserted in the DOM
+   */
+  _renderContainer() {
+    // wrapper group for `start, top and context flip matrix
+    this.$el = document.createElementNS(ns, 'g');
+    this.$el.classList.add('layer');
+    // clip the context with a `svg` element
+    this.$boundingBox = document.createElementNS(ns, 'svg');
+    this.$boundingBox.classList.add('bounding-box');
+    // group to apply offset
+    this.$offset = document.createElementNS(ns, 'g');
+    this.$offset.classList.add('offset', 'items');
+    // context interactions
+    this.$interactions = document.createElementNS(ns, 'g');
+    this.$interactions.classList.add('interactions');
+    this.$interactions.style.display = 'none';
+    // @NOTE: works but king of ugly... should be cleaned
+    this.contextShape = new Segment();
+    this.contextShape.install({
+      opacity: () => 0.1,
+      color  : () => '#787878',
+      width  : () => this.timeContext.duration,
+      height : () => this._renderingContext.yScale.domain()[1],
+      y      : () => this._renderingContext.yScale.domain()[0]
+    });
+
+    this.$interactions.appendChild(this.contextShape.render());
+    // create the DOM tree
+    this.$el.appendChild(this.$boundingBox);
+    this.$boundingBox.appendChild(this.$offset);
+    this.$boundingBox.appendChild(this.$interactions);
+
+    // draw a Segment in context background to debug it's size
+    if (this.params.debug) {
+      this.$debugRect = document.createElementNS(ns, 'Segment');
+      this.$boundingBox.appendChild(this.$debugRect);
+      this.$debugRect.style.fill = '#ababab';
+      this.$debugRect.style.fillOpacity = 0.1;
+    }
+  }
+
   // --------------------------------------
   // Component Configuration
   // --------------------------------------
@@ -181,44 +230,44 @@ export default class Layer extends events.EventEmitter {
     return this._behavior ? this._behavior.selectedItems : [];
   }
 
-  select(...itemEls) {
+  select(...$items) {
     if (!this._behavior) { return; }
-    if (!itemEls.length) { itemEls = this.d3items.nodes(); }
+    if (!$items.length) { $items = this.d3items.nodes(); }
 
-    itemEls.forEach((el) => {
-      const item = this._itemElD3SelectionMap.get(el);
-      this._behavior.select(el, item.datum());
-      this._toFront(el);
+    $items.forEach(($el) => {
+      const item = this._$itemD3SelectionMap.get($el);
+      this._behavior.select($el, item.datum());
+      this._toFront($el);
     });
   }
 
-  unselect(...itemEls) {
+  unselect(...$items) {
     if (!this._behavior) { return; }
-    if (!itemEls.length) { itemEls = this.d3items.nodes(); }
+    if (!$items.length) { $items = this.d3items.nodes(); }
 
-    itemEls.forEach((el) => {
-      const item = this._itemElD3SelectionMap.get(el);
-      this._behavior.unselect(el, item.datum());
+    $items.forEach(($el) => {
+      const item = this._$itemD3SelectionMap.get($el);
+      this._behavior.unselect($el, item.datum());
     });
   }
 
-  toggleSelection(...itemEls) {
+  toggleS$election(...$items) {
     if (!this._behavior) { return; }
-    if (!itemEls.length) { itemEls = this.d3items.nodes(); }
+    if (!$items.length) { $items = this.d3items.nodes(); }
 
-    itemEls.forEach((el) => {
-      const item = this._itemElD3SelectionMap.get(el);
-      this._behavior.toggleSelection(el, item.datum());
+    $items.forEach(($el) => {
+      const item = this._$itemD3SelectionMap.get($el);
+      this._behavior.toggleS$election($el, item.datum());
     });
   }
 
-  edit(itemEls, dx, dy, target) {
+  edit($items, dx, dy, target) {
     if (!this._behavior) { return; }
-    itemEls = !Array.isArray(itemEls) ? [itemEls] : itemEls;
+    $items = !Array.isArray($items) ? [$items] : $items;
 
-    itemEls.forEach((el) => {
-      const item  = this._itemElD3SelectionMap.get(el);
-      const shape = this._itemElShapeMap.get(el);
+    $items.forEach(($el) => {
+      const item  = this._$itemD3SelectionMap.get($el);
+      const shape = this._$itemShapeMap.get($el);
       const datum = item.datum();
       this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);
       this.emit('edit', shape, datum);
@@ -226,47 +275,45 @@ export default class Layer extends events.EventEmitter {
   }
 
   // --------------------------------------
-  // Helpers
+  // H$elpers
   // --------------------------------------
 
   /**
-   *  Moves an `el`'s group to the end of the layer (svg z-index...)
-   *  @param `el` {DOMElement} the DOMElement to be moved
+   *  Moves an `$el`'s group to the end of the layer (svg z-index...)
+   *  @param `$el` {DOMElement} the DOMElement to be moved
    */
-  _toFront(el) {
-    this.group.appendChild(el);
+  _toFront($el) {
+    this.$offset.appendChild($el);
   }
 
   /**
-   *  Returns the d3Selection item to which the given DOMElement belongs
-   *  @param `el` {DOMElement} the element to be tested
-   *  @return {DOMElelement|null} item group containing the `el` if belongs to this layer, null otherwise
+   *  Returns the d3Selection item to which the given DOMElement b$elongs
+   *  @param `$el` {DOMElement} the element to be tested
+   *  @return {DOMElement|null} item group containing the `$el` if b$elongs to this layer, null otherwise
    */
-  getItemFromDOMElement(el) {
-    let itemEl;
+  getItemFromDOMElement($el) {
+    let $item;
 
     do {
-      if (el.classList &&
-          el.classList.contains('item')
-      ) {
-        itemEl = el;
+      if ($el.classList && $el.classList.contains('item')) {
+        $item = $el;
         break;
       }
 
-      el = el.parentNode;
-    } while (el !== null);
+      $el = $el.parentNode;
+    } while ($el !== null);
 
-    return this.hasItem(itemEl) ? itemEl : null;
+    return this.hasItem($item) ? $item : null;
   }
 
   /**
    *  Returns the datum associated to a specific item DOMElement
    *  use d3 internally to retrieve the datum
-   *  @param itemEl {DOMElement}
+   *  @param $item {DOMElement}
    *  @return {Object|Array|null} depending on the user data structure
    */
-  getDatumFromItem(itemEl) {
-    const d3item = this._itemElD3SelectionMap.get(itemEl);
+  getDatumFromItem($item) {
+    const d3item = this._$itemD3SelectionMap.get($item);
     return d3item ? d3item.datum() : null;
   }
 
@@ -275,25 +322,25 @@ export default class Layer extends events.EventEmitter {
    *  @param item {DOMElement}
    *  @return {bool}
    */
-  hasItem(itemEl) {
+  hasItem($item) {
     const nodes = this.d3items.nodes();
-    return nodes.indexOf(itemEl) !== -1;
+    return nodes.indexOf($item) !== -1;
   }
 
   /**
-   *  Defines if a given element belongs to the layer
+   *  Defines if a given element b$elongs to the layer
    *  is more general than `hasItem`, can be used to check interaction elements too
-   *  @param el {DOMElement}
+   *  @param $el {DOMElement}
    *  @return {bool}
    */
-  hasElement(el) {
+  hasElement($el) {
     do {
-      if (el === this.container) {
+      if ($el === this.$el) {
         return true;
       }
 
-      el = el.parentNode;
-    } while (el !== null);
+      $el = $el.parentNode;
+    } while ($el !== null);
 
     return false;
   }
@@ -319,7 +366,7 @@ export default class Layer extends events.EventEmitter {
     y1 += this.params.top;
     y2 += this.params.top;
 
-    const itemShapeMap = this._itemElShapeMap;
+    const itemShapeMap = this._$itemShapeMap;
     const renderingContext = this._renderingContext;
 
     const items = this.d3items.filter(function(datum, index) {
@@ -335,65 +382,22 @@ export default class Layer extends events.EventEmitter {
   // Rendering / Display methods
   // --------------------------------------
 
-  /**
-   *  render the DOM in memory on layer creation to be able to use it before
-   *  the layer is actually inserted in the DOM
-   */
-  _renderContainer() {
-    // wrapper group for `start, top and context flip matrix
-    this.container = document.createElementNS(ns, 'g');
-    this.container.classList.add('layer');
-    // clip the context with a `svg` element
-    this.boundingBox = document.createElementNS(ns, 'svg');
-    this.boundingBox.classList.add('bounding-box');
-    // group to apply offset
-    this.group = document.createElementNS(ns, 'g');
-    this.group.classList.add('offset', 'items');
-    // context interactions
-    this.interactionsGroup = document.createElementNS(ns, 'g');
-    this.interactionsGroup.classList.add('layer-interactions');
-    this.interactionsGroup.style.display = 'none';
-    // @NOTE: works but king of ugly... should be cleaned
-    this.contextShape = new Segment();
-    this.contextShape.install({
-      opacity: () => 0.1,
-      color  : () => '#787878',
-      width  : () => this.timeContext.duration,
-      height : () => this._renderingContext.yScale.domain()[1],
-      y      : () => this._renderingContext.yScale.domain()[0]
-    });
+  // /**
+  //  *  Returns the previsouly created layer's container
+  //  *  @return {DOMElement}
+  //  */
+  // renderContainer() {
+  //   return this.$el;
+  // }
 
-    this.interactionsGroup.appendChild(this.contextShape.render());
-    // create the DOM tree
-    this.container.appendChild(this.boundingBox);
-    this.boundingBox.appendChild(this.interactionsGroup);
-    this.boundingBox.appendChild(this.group);
+  // /**
+  //  *  Creates the DOM according to given data and shapes
+  //  */
+  // render(){
+  //   this.drawShapes();
+  // }
 
-    // draw a Segment in context background to debug it's size
-    if (this.params.debug) {
-      this.debugRect = document.createElementNS(ns, 'Segment');
-      this.boundingBox.appendChild(this.debugRect);
-      this.debugRect.style.fill = '#ababab';
-      this.debugRect.style.fillOpacity = 0.1;
-    }
-  }
-
-  /**
-   *  Returns the previsouly created layer's container
-   *  @return {DOMElement}
-   */
-  renderContainer() {
-    return this.container;
-  }
-
-  /**
-   *  Creates the DOM according to given data and shapes
-   */
-   render(){
-    this.drawShapes();
-   }
-
-  drawShapes() {
+  render() {
     // force d3 to keep data in sync with the DOM with a unique id
     this.data.forEach(function(datum) {
       if (_datumIdMap.has(datum)) { return; }
@@ -401,7 +405,7 @@ export default class Layer extends events.EventEmitter {
     });
 
     // select items
-    this.d3items = d3Selection.select(this.group)
+    this.d3items = d3Selection.select(this.$offset)
       .selectAll('.item')
       .filter(function() {
         return !this.classList.contains('common');
@@ -413,18 +417,18 @@ export default class Layer extends events.EventEmitter {
     // render `commonShape` only once
     if (
       this._commonShapeConfiguration !== null &&
-      this._itemCommonShapeMap.size === 0
+      this._$itemCommonShapeMap.size === 0
     ) {
       const { ctor, accessors, options } = this._commonShapeConfiguration;
-      const group = document.createElementNS(ns, 'g');
+      const $group = document.createElementNS(ns, 'g');
       const shape = new ctor(options);
 
       shape.install(accessors);
-      group.appendChild(shape.render());
-      group.classList.add('item', 'common', shape.getClassName());
+      $group.appendChild(shape.render());
+      $group.classList.add('item', 'common', shape.getClassName());
 
-      this._itemCommonShapeMap.set(group, shape);
-      this.group.appendChild(group);
+      this._$itemCommonShapeMap.set($group, shape);
+      this.$offset.appendChild($group);
     }
 
     // ... enter
@@ -435,27 +439,27 @@ export default class Layer extends events.EventEmitter {
         const shape = new ctor(options);
         shape.install(accessors);
 
-        const el = shape.render(this._renderingContext);
-        el.classList.add('item', shape.getClassName());
-        this._itemElShapeMap.set(el, shape);
-        this._itemElD3SelectionMap.set(el, d3Selection.select(el));
+        const $el = shape.render(this._renderingContext);
+        $el.classList.add('item', shape.getClassName());
+        this._$itemShapeMap.set($el, shape);
+        this._$itemD3SelectionMap.set($el, d3Selection.select($el));
 
-        return el;
+        return $el;
       });
 
     // ... exit
-    const _itemElShapeMap = this._itemElShapeMap;
-    const _itemElD3SelectionMap = this._itemElD3SelectionMap;
+    const _$itemShapeMap = this._$itemShapeMap;
+    const _$itemD3SelectionMap = this._$itemD3SelectionMap;
 
     this.d3items.exit()
       .each(function(datum, index) {
-        const el = this;
-        const shape = _itemElShapeMap.get(el);
+        const $el = this;
+        const shape = _$itemShapeMap.get($el);
         // clean all shape/item references
         shape.destroy();
         _datumIdMap.delete(datum);
-        _itemElShapeMap.delete(el);
-        _itemElD3SelectionMap.delete(el);
+        _$itemShapeMap.delete($el);
+        _$itemD3SelectionMap.delete($el);
       })
       .remove();
   }
@@ -474,40 +478,42 @@ export default class Layer extends events.EventEmitter {
   updateContainer() {
     this._updateRenderingContext();
 
-    const width  = this.timeContext.xScale(this.timeContext.duration);
-    // offset is relative to timeline's timeContext
-    const x      = this.timeContext.parent.xScale(this.timeContext.start);
-    const offset = this.timeContext.xScale(this.timeContext.offset);
+    const timeContext = this.timeContext;
+
+    const width  = timeContext.xScale(timeContext.duration);
+    // offset is relative to tim$eline's timeContext
+    const x      = timeContext.parent.xScale(timeContext.start);
+    const offset = timeContext.xScale(timeContext.offset);
     const top    = this.params.top;
     const height = this.params.height;
     // matrix to invert the coordinate system
     const translateMatrix = `matrix(1, 0, 0, -1, ${x}, ${top + height})`;
 
-    this.container.setAttributeNS(null, 'transform', translateMatrix);
+    this.$el.setAttributeNS(null, 'transform', translateMatrix);
 
-    this.boundingBox.setAttributeNS(null, 'width', width);
-    this.boundingBox.setAttributeNS(null, 'height', height);
-    this.boundingBox.style.opacity = this.params.opacity;
+    this.$boundingBox.setAttributeNS(null, 'width', width);
+    this.$boundingBox.setAttributeNS(null, 'height', height);
+    this.$boundingBox.style.opacity = this.params.opacity;
 
-    this.group.setAttributeNS(null, 'transform', `translate(${offset}, 0)`);
+    this.$offset.setAttributeNS(null, 'transform', `translate(${offset}, 0)`);
 
     // maintain context shape
     this.contextShape.update(
       this._renderingContext,
-      this.interactionsGroup,
+      this.$interactions,
       this.timeContext,
       0
     );
 
     // debug context
     if (this.params.debug) {
-      this.debugRect.setAttributeNS(null, 'width', width);
-      this.debugRect.setAttributeNS(null, 'height', height);
+      this.$debugRect.setAttributeNS(null, 'width', width);
+      this.$debugRect.setAttributeNS(null, 'height', height);
     }
   }
 
   /**
-   *  updates the Shapes which belongs to the layer
+   *  updates the Shapes which b$elongs to the layer
    *  @param item {DOMElement}
    */
   updateShapes(item = null) {
@@ -516,17 +522,16 @@ export default class Layer extends events.EventEmitter {
     const that = this;
     const renderingContext = this._renderingContext;
     const items = item !== null ? d3Selection.select(item) : this.d3items;
-
     // update common shapes
-    this._itemCommonShapeMap.forEach((shape, item) => {
+    this._$itemCommonShapeMap.forEach((shape, item) => {
       shape.update(renderingContext, item, this.data);
     });
 
     // d3 update - entity or collection shapes
     items.each(function(datum, index) {
-      const el = this;
-      const shape = that._itemElShapeMap.get(el);
-      shape.update(renderingContext, el, datum, index);
+      const $el = this;
+      const shape = that._$itemShapeMap.get($el);
+      shape.update(renderingContext, $el, datum, index);
     });
   }
 }
