@@ -34,7 +34,7 @@ export default class LayerTimeContext extends AbstractTimeContext {
     this._xScale = null;
 
     this._start = 0;
-    this._duration = parent.containersDuration;
+    this._duration = parent.duration;
     this._offset = 0;
     this._stretchRatio = 1;
     // register into the timeline's TimeContext

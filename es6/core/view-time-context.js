@@ -1,20 +1,20 @@
 import AbstractTimeContext from './abstract-time-context';
 
 /**
- *  @class TimelineTimeContext
+ *  @class ViewTimeContext
  *
- *  A TimelineTimeContext instance represents the mapping between the time and the pixel domains
+ *  A ViewTimeContext instance represents the mapping between the time and the pixel domains
  *
  *  The `timelineTimeContext` has 3 important attributes:
  *  - `timeContext.xScale` which defines the time to pixel transfert function, itself defined by the `pixelsPerSecond` attribute of the timeline
  *  - `timeContext.offset` defines a decay (in time domain) applied to all the views on the timeline. This allow to navigate inside durations longer than what can be represented in Layers (views) containers (e.g. horizontal scroll)
  *  - `timeContext.stretchRatio` defines the zoom factor applyed to the timeline
  *
- *  It owns an helper `timeContext.containersDuration` which maintain a view on how much time the views applyed to the timeline (the `containers`) are representing
+ *  It owns an helper `timeContext.duration` which maintain a view on how much time the views applyed to the timeline (the `containers`) are representing
  *
  *  It also maintain an array of references to all the LayerTimeContext attached to the timeline to propagate some global change on the time to pixel representation
  */
-export default class TimelineTimeContext extends AbstractTimeContext {
+export default class ViewTimeContext extends AbstractTimeContext {
   constructor() {
     super({});
 
@@ -24,17 +24,17 @@ export default class TimelineTimeContext extends AbstractTimeContext {
     this._originalXScale = null;
 
     // params
-    this._containersDuration = 1; // for layers inheritance only
+    this._duration = 1; // for layers inheritance only
     this._offset = 0;
     this._stretchRatio = 1;
   }
 
-  get containersDuration() {
-    return this._containersDuration;
+  get duration() {
+    return this._duration;
   }
 
-  set containersDuration(value) {
-    this._containersDuration = value;
+  set duration(value) {
+    this._duration = value;
   }
 
   get offset() {
