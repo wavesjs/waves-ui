@@ -1,34 +1,33 @@
 # waves.js - ui
 
-*ui* is a library that proposes primitives to build interactive temporal visualizations of audio data and metadata for in-browser display. 
+*waves.js - ui* is a library that proposes primitives to build interactive temporal visualizations of audio data and metadata for in-browser display. 
 *ui* is part of the [waves.js](https://github.com/wavesjs/waves) library.
 
 
 Here is a synthetic view of objects that compose the library, and their interconnections:
 
+```
 `Timeline` (and its current `State`)
     1..n 
         `View` (and its related `ViewTimeContext` and `Behavior`) 
             1..n 
                 `Layer` (and its related `LayerTimeContext`,  `Behavior` and `Shape` - `Marker`, `Segment` ...)
-
-The `timeline` is the central hub for all user interactions events (keyboard, mouse) and it holds the current interaction `state` which define how the different timeline elements respond to those events.
-
-The `views` are like windows on the overall timeline. Its attributes `width` and `pixelsPerSecond` define the characteristics of each window view over the timeline. 
-
-The `layers` keep (1) the data, (2) which `shape` to use to display the data, and (3) how to modify the data (both programmatically or based on user interactions dispatched from the timeline and its current state). 
+```
 
 
-*ui* comes with the notion of *time-contexts* which transform time (seconds) to width (pixels) and vice versa and give getters and setters `offset`, `stretchRatio`, `duration`, and `start` (only for the layer) to modify a view window or a layer. 
-It applies both to views and layers but in two different ways:
-- the view-time-context defines the characteristics of the window (whitout any repercussions in the audio rendering), 
-- the layer-time-context defines the characteristics of the layer (with  repercussions on the audio rendering: the setters modify the exposed audio data and metadata). GIVE EXAMPLES HERE?
+The `timeline` is the central hub for all user interactions events (keyboard, mouse) and it holds the current interaction `state` which defines how the different timeline elements respond to those events. 
+The `timeline` also contains factories to instantiate the views and layers elements.
+
+The `views` are like windows on the overall timeline. The main attributes `width`, `pixelsPerSecond`, `offset` and `zoom` define the characteristics of each view over the timeline.
+
+The `layers` keep (1) the data, (2) which `shape` to use to display the data, and (3) how to modify the data (both programmatically or based on user interactions dispatched from the timeline and its current state). For a `layer`, a layer-time-context defines its time characteristics: `offset`, `stretchRatio`, `duration`, and `start`. These attributes have repercussions on the audio rendering contrary to the one of views, which only affect the representation.
 
 
-Specific interaction state of the timeline allow you to:
-- browse and zoom into the views (by modifying theirs ViewTimeContext)
-- modify LayerTimeContext
+Specific interaction state upon the timeline allow you to:
+- browse and zoom into the views
+- modify layers metadata
 - modify layers data through shape edition
+
 
 ## Default example
 
@@ -39,7 +38,7 @@ A timeline that displays a waveform and a segmentation upon the waveform.
 const data = [{ width: 3, x: 0 }, { width: 6, x: 6}];
 const timeline = new Timeline();
 const view = new View(viewDiv);
-const layer = new SegmentLayer('collection', data);
+const layer = new SegmentLayer(data);
 timeline.register(view);
 view.register(layer);
 timeline.render();
