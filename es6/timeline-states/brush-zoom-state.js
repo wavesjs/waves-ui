@@ -71,7 +71,7 @@ export default class BrushZoomState extends BaseState {
     const maxTime = timeContext.xScale.invert(Math.max(startX, endX));
     const deltaDuration = maxTime - minTime;
 
-    const stretchRatio = timeContext.containersDuration / deltaDuration;
+    const stretchRatio = timeContext.duration / deltaDuration;
 
     timeContext.offset = -minTime;
     timeContext.stretchRatio = stretchRatio;

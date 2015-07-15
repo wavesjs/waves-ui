@@ -1,4 +1,4 @@
-export BaseShape from './base-shape';
+import BaseShape from './base-shape';
 
 
 const xhtmlNS = 'http://www.w3.org/1999/xhtml';

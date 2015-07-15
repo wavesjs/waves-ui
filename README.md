@@ -1,6 +1,34 @@
-# WAVES - UI
+# waves.js - ui
 
-*waves.ui* is a library that proposes primitives to build interactive temporal visualisation of audio data and metadata for the browser. It is part of the `wavesjs` library.
+*ui* is a library that proposes primitives to build interactive temporal visualizations of audio data and metadata for in-browser display. 
+*ui* is part of the [waves.js](https://github.com/wavesjs/waves) library.
+
+
+Here is a synthetic view of objects that compose the library, and their interconnections:
+
+`Timeline` (and its current `State`)
+    1..n 
+        `View` (and its related `ViewTimeContext` and `Behavior`) 
+            1..n 
+                `Layer` (and its related `LayerTimeContext`,  `Behavior` and `Shape` - `Marker`, `Segment` ...)
+
+The `timeline` is the central hub for all user interactions events (keyboard, mouse) and it holds the current interaction `state` which define how the different timeline elements respond to those events.
+
+The `views` are like windows on the overall timeline. Its attributes `width` and `pixelsPerSecond` define the characteristics of each window view over the timeline. 
+
+The `layers` keep (1) the data, (2) which `shape` to use to display the data, and (3) how to modify the data (both programmatically or based on user interactions dispatched from the timeline and its current state). 
+
+
+*ui* comes with the notion of *time-contexts* which transform time (seconds) to width (pixels) and vice versa and give getters and setters `offset`, `stretchRatio`, `duration`, and `start` (only for the layer) to modify a view window or a layer. 
+It applies both to views and layers but in two different ways:
+- the view-time-context defines the characteristics of the window (whitout any repercussions in the audio rendering), 
+- the layer-time-context defines the characteristics of the layer (with  repercussions on the audio rendering: the setters modify the exposed audio data and metadata). GIVE EXAMPLES HERE?
+
+
+Specific interaction state of the timeline allow you to:
+- browse and zoom into the views (by modifying theirs ViewTimeContext)
+- modify LayerTimeContext
+- modify layers data through shape edition
 
 ## Default example
 
@@ -8,33 +36,23 @@ A timeline that displays a waveform and a segmentation upon the waveform.
 
 ```
 // Create a timeline
+const data = [{ width: 3, x: 0 }, { width: 6, x: 6}];
 const timeline = new Timeline();
-// Add a container, which is a view on the timeline
-timeline.registerContainer(timelineDiv, {}, 'foo');
-// Create and configure a layer
-const timeContext = new LayerTimeContext(timeline.timeContext)
-const layer = new Layer('collection', []);
-layer.configureShape(Segments);
-layer.setTimeContext(timeContext);
-layer.timeContext.duration = 12;
-
-// Add the layer
-timeline.addLayer(layer, 'foo')
-
-// Render the timeline and its registered layer
+const view = new View(viewDiv);
+const layer = new SegmentLayer('collection', data);
+timeline.register(view);
+view.register(layer);
 timeline.render();
-timeline.draw();
 timeline.update();
 ```
 
+List other examples
+
 ## Conventions
 
-- `render()`  
-  is the method by which a object renders its own DOM - return a DOM element 
-- `draw()`  
-  is the method by which a component creates its content by calling `render` on its children and appening the returned DOM to its own DOM element. This method is symetric with `render` from the container point of view
-- `update()`  
-  is the method by which an object updates its previously created DOM according to data or configuration
+- `register()`: attach a view to a timeline or attach a layer to a view.
+- `render()`: method for an object to renders its own DOM and its child DOM - return a DOM element
+- `update()`: method for an object to update its previously created DOM according to data or time-context
 
 
 ## Demonstrators ideas

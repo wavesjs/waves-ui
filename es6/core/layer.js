@@ -389,6 +389,10 @@ export default class Layer extends events.EventEmitter {
   /**
    *  Creates the DOM according to given data and shapes
    */
+   render(){
+    this.drawShapes();
+   }
+
   drawShapes() {
     // force d3 to keep data in sync with the DOM with a unique id
     this.data.forEach(function(datum) {
