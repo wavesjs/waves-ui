@@ -79,7 +79,7 @@ export default class BaseTimeline extends events.EventEmitter {
   /**
    * Add a view to the timeline
    *
-   * Views display the view on the timeline in theirs DOM SVG element.
+   * Views display this window on the timeline in theirs DOM SVG element.
    */
   register(view) {
     this.views.push(view);
