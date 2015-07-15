@@ -7,8 +7,6 @@ import View from './view';
 
 
 /**
- * @description
- *
  * The `Timeline` class is the main entry point to create a representation of temporal data.
  * A `Timeline` instance can have multiples `View` instances, which are basically a view window on the overall timeline.
  *
@@ -39,7 +37,7 @@ export default class Timeline extends events.EventEmitter {
   /**
    * Factory method to add interaction modules the timeline should listen to.
    * By default, the timeline listen to Keyboard, and instance a Surface on each container
-   * @param ctor {EventSource} the contructor of the interaction module to instanciate
+   * @param {EventSource} ctor - the contructor of the interaction module to instanciate
    * @param el {DOMElement} the DOM element to bind to the EventSource module
    * @param options {Object} options to be applied to the ctor (defaults to `{}`)
    */

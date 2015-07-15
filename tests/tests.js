@@ -42,7 +42,7 @@ describe("Simple test", function(){
     const data = [{ width: 3, x: 0}, { width: 6, x: 6}];
     const timeline = new Timeline();
     const view = new View(viewDiv);
-    const layer = new SegmentLayer('collection', data);
+    const layer = new SegmentLayer(data);
     timeline.register(view);
     view.register(layer);
     timeline.render();
@@ -53,7 +53,7 @@ describe("Simple test", function(){
     const data = [{ x: 1 }, { x: 6}];
     const timeline = new Timeline();
     const view = new View(viewDiv);
-    const layer = new MarkerLayer('collection', data);
+    const layer = new MarkerLayer(data);
     timeline.register(view);
     view.register(layer);
     timeline.render();
@@ -64,7 +64,7 @@ describe("Simple test", function(){
     const data = [{ x: 3, text:'foo' }, { x: 6, text:'bar' }];
     const timeline = new Timeline();
     const view = new View(viewDiv);
-    const layer = new AnnotatedMarkerLayer('collection', data);
+    const layer = new AnnotatedMarkerLayer(data);
     timeline.register(view);
     view.register(layer);
     timeline.render();
@@ -89,7 +89,7 @@ describe("Simple test", function(){
       ];
     const timeline = new Timeline();
     const view = new View(viewDiv);
-    const layer = new DotLayer('collection', data);
+    const layer = new DotLayer(data);
     timeline.register(view);
     view.register(layer);
     timeline.render();
@@ -117,8 +117,6 @@ describe("Simple test", function(){
       timeline.register(view);
       view.register(layer);
       timeline.render();
-      timeline.update();
-      layer.param('sampleRate', buffer.sampleRate);
       timeline.update();
     })
   })

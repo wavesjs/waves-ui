@@ -4,8 +4,8 @@ import SegmentBehavior from '../behaviors/segment-behavior';
 
 
 export default class SegmentLayer extends Layer {
-  constructor(dataType, data, options = {}) {
-    super(dataType, data, options)
+  constructor(data, options = {}) {
+    super('collection', data, options)
     this.configureShape(Segment);
     this.setBehavior(new SegmentBehavior());
   }
