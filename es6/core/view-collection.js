@@ -1,5 +1,5 @@
 /**
- *
+ * The `ViewCollection` class allow to update all timeline's views at once
  */
 export default class ViewCollection extends Array {
   constructor(timeline) {
@@ -26,6 +26,13 @@ export default class ViewCollection extends Array {
 
   set maintainVisibleDuration(value) {
     this.forEach((view) => view.maintainVisibleDuration = value);
+  }
+
+  // @NOTE keep this ?
+  // could prepare some vertical resizing ability
+  // this should be able to modify the layers yScale to be really usefull
+  set height(value) {
+    this.forEach((view) => view.height = value);
   }
 
   render() {
