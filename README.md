@@ -1,11 +1,30 @@
 # waves.js - ui
 
-Within the web context, lot of libraries deal with live audio vizualisations, usually on top of Web Audio API AnalyserNode, but outside of time-based representations. Other libraries try to solve specific temporal vizualisation use cases (for instance http://www.wavesurfer.fm/). On the other hand, some web applications reinvent the wheel to propose online collaborative DAW (Digital Audio Workstation) or all-in-one temporal visualization tools.
+## Default example
 
-*waves.js - ui* is a library that proposes primitives to build interactive temporal visualizations of audio and timeseries data for in-browser display. It has been designed by abstracting common features required in both music production environment and analysis authoring tools.
+A timeline that displays a waveform and a segmentation upon the waveform.
+
+```
+// Create a timeline
+const data = [{ width: 3, x: 0 }, { width: 6, x: 6}];
+const timeline = new Timeline();
+const view = new View(viewDiv);
+const layer = new SegmentLayer(data);
+timeline.register(view);
+view.register(layer);
+timeline.render();
+timeline.update();
+```
+
+## Goals
+
+Within the web context, lot of libraries deal with live audio vizualisations, usually on top of Web Audio API AnalyserNode, but outside of time-based representations. Other libraries try to solve specific temporal vizualisation use cases, for instance [wavesurfer](http://www.wavesurfer.fm). On the other hand, some web applications reinvent the wheel to propose online collaborative DAW (Digital Audio Workstation) or all-in-one temporal visualization tools.
+
+*waves.js - ui* is a library that proposes primitives to build interactive temporal visualizations of audio and timeseries data for in-browser display. It has been designed by abstracting common features required in both music production environment and analysis authoring tools. The main goal of the library is to ease the development of innovative audio-based applications requiring temporal visualizations in a web context.
 
 *ui* is part of the [waves.js](https://github.com/wavesjs/waves) library.
 
+## Library Overview
 
 Here is a synthetic view of objects that compose the library, and their interconnections:
 
@@ -28,22 +47,6 @@ Specific interaction state upon the timeline allow you to:
 - browse and zoom into the views
 - modify layers time characteristics through it timeContext or data through shape edition
 
-
-## Default example
-
-A timeline that displays a waveform and a segmentation upon the waveform.
-
-```
-// Create a timeline
-const data = [{ width: 3, x: 0 }, { width: 6, x: 6}];
-const timeline = new Timeline();
-const view = new View(viewDiv);
-const layer = new SegmentLayer(data);
-timeline.register(view);
-view.register(layer);
-timeline.render();
-timeline.update();
-```
 
 ## Conventions
 - `constructor()`: create the DOM SVG container element for views and layers
