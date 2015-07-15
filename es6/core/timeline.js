@@ -55,7 +55,7 @@ import TimelineTimeContext from './timeline-time-context';
  * Each time you set new value of offset or stretchRatio, you need to do `timeline.update()` to update the values.
  *
  */
-class Timeline extends events.EventEmitter {
+export default class Timeline extends events.EventEmitter {
   /**
    * Creates a new Timeline instance
    * @param {Object} params - an object to override defaults parameters
@@ -71,14 +71,12 @@ class Timeline extends events.EventEmitter {
     // public attributes
     /**
      *  testing attribute description
-     *  @name param
-     *  @visibility public
+     *  @target Timeline
      */
     this.params = Object.assign({}, this._defaults, params);
     this.timeContext = null;
     this.layers = [];
     this.containers = {};
-    // @NOTE realy needed ?
     this.groupedLayers = {}; // group layer by categories
     this.timeContextBehavior = new TimeContextBehavior();
     // private attributes
@@ -90,6 +88,9 @@ class Timeline extends events.EventEmitter {
     this._createInteraction(Keyboard, 'body');
   }
 
+  /**
+   *  Defines the number of pixels for one seconds in the timeline
+   */
   set pixelsPerSecond(value) {
     this.params.pixelsPerSecond = value;
     this.timeContext.xScaleRange = [0, this.params.pixelsPerSecond];
@@ -212,8 +213,6 @@ class Timeline extends events.EventEmitter {
     svg.setAttributeNS(null, 'width', width);
     svg.setAttributeNS(null, 'viewbox', `0 0 ${width} ${height}`);
 
-    console.log(ns);
-
     const defs = document.createElementNS(ns, 'defs');
 
     const offsetGroup = document.createElementNS(ns, 'g');
@@ -274,7 +273,7 @@ class Timeline extends events.EventEmitter {
   }
 
   /**
-   * Remove a layer from the timeline
+   * Removes a layer from the timeline
    * @param layer {Layer} the layer to remove
    * @TODO test
    */
@@ -420,4 +419,3 @@ class Timeline extends events.EventEmitter {
   }
 }
 
-module.exports = Timeline;
