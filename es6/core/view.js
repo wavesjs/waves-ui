@@ -58,15 +58,35 @@ import ViewTimeContext from './view-time-context';
 */
 
 export default class View {
-  constructor(el, pixelsPerSecond=100, width=1000, height=120) {
+  constructor($el, pixelsPerSecond = 100, width = 1000, height = 120) {
     this._pixelsPerSecond = pixelsPerSecond;
     this._width = width;
+
     this.height = height;
-    this.el = el;
     this.layers = [];
+    this.$el = $el;
+
+    this._maintainVisibleDuration = false;
+
     this.timeContextBehavior = new TimeContextBehavior();
     this._createTimeContext();
-    this._maintainVisibleDuration = false;
+    this._createContainer();
+  }
+
+  get offset() {
+    return this.timeContext.offset;
+  }
+
+  set offset(value) {
+    this.timeContext.offset = value;
+  }
+
+  get zoom() {
+    return this.timeContext.stretchRatio;
+  }
+
+  set zoom(value) {
+    this.timeContext.stretchRatio = value;
   }
 
   get pixelsPerSecond() {
@@ -75,6 +95,7 @@ export default class View {
 
   set pixelsPerSecond(value) {
     this._pixelsPerSecond = value;
+
     this.timeContext.xScaleRange = [0, this.pixelsPerSecond];
     this.timeContext.duration = this.width / this.pixelsPerSecond;
   }
@@ -84,26 +105,27 @@ export default class View {
   }
 
   set width(value) {
-    const widthRatio = value/this.width
+    const widthRatio = value / this.width;
+
     this._width = value;
     this.timeContext.duration = this._width / this.pixelsPerSecond;
+
     if (this.maintainVisibleDuration) {
-      this.pixelsPerSecond = this.pixelsPerSecond * widthRatio
+      this.pixelsPerSecond = this.pixelsPerSecond * widthRatio;
     }
   }
 
-  set maintainVisibleDuration(bool){
+  // @NOTE maybe expose as public instead of get/set for nothing...
+  set maintainVisibleDuration(bool) {
     this._maintainVisibleDuration = bool;
   }
 
-  get maintainVisibleDuration(){
+  get maintainVisibleDuration() {
     return this._maintainVisibleDuration;
   }
 
   /**
-   * @private
-   * @description Creates a new TimeContext for the visualisation, this `TimeContext`
-   * will be at the top of the `TimeContext` tree
+   * Creates a new TimeContext for the visualisation, this `TimeContext` will be at the top of the `TimeContext` tree
    */
   _createTimeContext() {
     const pixelsPerSecond = this.pixelsPerSecond;
@@ -111,6 +133,7 @@ export default class View {
     const xScale = d3Scale.linear()
       .domain([0, 1])
       .range([0, pixelsPerSecond]);
+
     this.timeContext = new ViewTimeContext();
     // all child context inherits the max duration allowed in container per default
     this.timeContext.duration = width / pixelsPerSecond;
@@ -118,29 +141,9 @@ export default class View {
   }
 
   /**
-  * Add a layer
-  */
-  register(layer){
-    this.layers.push(layer);
-    // Create a default timeContext for the layer
-    // We could prevent this to happen if the layer has already a timeContext
-    const timeContext = new LayerTimeContext(this.timeContext)
-    layer.setTimeContext(timeContext);
-  }
-
-  /**
-  * Remove a layer
-  */
-  remove(layer){
-    this.layers.splice(this.layers.indexOf(layer), 1);
-    // Removes layer from its container
-    this.layoutElement.removeChild(layer.container);
-  }
-
-  /**
-  * Draw views, and the layers in cascade
-  */
-  render(){
+   *  Creates the container for the view
+   */
+  _createContainer() {
     // First create DOM for the view
     const svg = document.createElementNS(ns, 'svg');
 
@@ -166,32 +169,61 @@ export default class View {
     svg.appendChild(offsetGroup);
     svg.appendChild(interactionsGroup);
 
-    this.el.appendChild(svg);
-    this.el.style.fontSize = 0; // removes additionnal height added who knows why...
-    this.el.style.transform = 'translateZ(0)'; // fixes one of the (many ?) weird canvas rendering bugs in Chrome
+    this.$el.appendChild(svg);
+    this.$el.style.fontSize = 0; // removes additionnal height added who knows why...
+    this.$el.style.transform = 'translateZ(0)'; // fixes one of the (many ?) weird canvas rendering bugs in Chrome
 
     // store all informations about this container
-    this.layoutElement = layoutGroup;
-    this.offsetElement = offsetGroup;
-    this.interactionsElement = interactionsGroup;
-    this.svgElement = svg;
-    this.DOMElement = this.el;
-    this.brushElement = null;
-    // Then call draw on each layer
-    for(let layer of this) {
-      this.layoutElement.appendChild(layer.renderContainer());
-      layer.render()
-    }
+    this.$layout = layoutGroup;
+    this.$offset = offsetGroup;
+    this.$interactions = interactionsGroup;
+    this.$svg = svg;
   }
 
   /**
-  * Update the layers
-  */
+   * Adds a layer to the view
+   */
+  register(layer) {
+    this.layers.push(layer);
+    // Create a default timeContext for the layer if missing
+    if (!layer.timeContext) {
+      const timeContext = new LayerTimeContext(this.timeContext);
+      layer.setTimeContext(timeContext);
+    }
+
+    this.$layout.appendChild(layer.$el);
+  }
+
+  /**
+   * Removes a layer
+   */
+  remove(layer) {
+    this.layers.splice(this.layers.indexOf(layer), 1);
+    // Removes layer from its container
+    this.layoutElement.removeChild(layer.container);
+  }
+
+  /**
+   * Draw views, and the layers in cascade
+   */
+  render() {
+    for (let layer of this) { layer.render(); }
+  }
+
+  /**
+   * Update the layers
+   */
   update() {
+    this.updateContainer();
+    this.updateLayers();
+  }
+
+  updateContainer() {
+    const $svg = this.$svg;
+    const $offset = this.$offset;
+    // should be in some update layout
     const timeContext = this.timeContext;
     const width = this.width;
-    const $offset = this.offsetElement;
-    const $svg = this.svgElement;
     const height = this.height;
     const translate = `translate(${timeContext.xScale(timeContext.offset)}, 0)`;
 
@@ -199,8 +231,10 @@ export default class View {
     $svg.setAttributeNS(null, 'viewbox', `0 0 ${width} ${height}`);
 
     $offset.setAttributeNS(null, 'transform', translate);
+  }
 
-    for(let layer of this) layer.update();
+  updateLayers() {
+    for (let layer of this) { layer.update(); }
   }
 
   *[Symbol.iterator]() {

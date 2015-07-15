@@ -27,6 +27,7 @@ import AbstractTimeContext from './abstract-time-context';
 export default class LayerTimeContext extends AbstractTimeContext {
   constructor(parent) {
     super({});
+
     if (!parent) { throw new Error('LayerTimeContext must have a parent'); }
 
     this.parent = parent;
@@ -88,7 +89,7 @@ export default class LayerTimeContext extends AbstractTimeContext {
       return;
     }
 
-    const xScale = this.parent.originalXScale.copy();
+    const xScale = this.parent.copy();
     const [min, max] = xScale.domain();
     const diff = (max - min) / (value * this.parent.stretchRatio);
 
