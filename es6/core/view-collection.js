@@ -28,6 +28,12 @@ export default class ViewCollection extends Array {
     this.forEach((view) => view.maintainVisibleDuration = value);
   }
 
+  // @NOTE keep this ?
+  // could prepare some vertical resizing ability
+  set height(value) {
+    this.forEach((view) => view.height = value);
+  }
+
   render() {
     this.forEach((view) => view.render());
     this._timeline.emit('render');
