@@ -81,7 +81,6 @@ export default class Surface extends EventSource {
       // register mouse move on body - more user friendly
       body.addEventListener('mousemove', onMouseMove, false);
       body.addEventListener('mouseup', onMouseUp, false);
-      // console.log(event);
 
       this.emit('event', event);
     };
@@ -129,7 +128,6 @@ export default class Surface extends EventSource {
     this.el.addEventListener('dblclick', onDblClick, false);
 
     // let svgs = this.el.querySelectorAll('svg');
-    // console.log(svgs);
     // for (let i = 0, l = svgs.length; i < l; i++) {
     //   svgs[i].addEventListener('mousedown', onMouseDown, false);
     // }

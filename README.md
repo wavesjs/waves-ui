@@ -1,34 +1,27 @@
 # WAVES - UI
 
-## Develop branch - this code introduce many breaking changes
-## DO NOT USE
-
-_parts of d3 in use: selections, scales_  
-(could be replaced, the most tricky part would be the element <=> datum binding)
-
-_visualisation part of the `wavesjs` library._
-
-wavesUI is a set of low level audio visualisation components build on top of [d3](http://d3js.org/) 
+*waves.ui* is a library that proposes primitives to build interactive temporal visualisation of audio data and metadata for the browser. It is part of the `wavesjs` library.
 
 ## Default example
 
-```
-// creates a timeline
-const timeline = new Timeline();
-// add a container
-timeline.registerContainer('foo', timelineDiv);
+A timeline that displays a waveform and a segmentation upon the waveform.
 
-// creates and configure a layer
+```
+// Create a timeline
+const timeline = new Timeline();
+// Add a container, which is a view on the timeline
+timeline.registerContainer(timelineDiv, {}, 'foo');
+// Create and configure a layer
 const timeContext = new LayerTimeContext(timeline.timeContext)
 const layer = new Layer('collection', []);
 layer.configureShape(Segments);
 layer.setTimeContext(timeContext);
 layer.timeContext.duration = 12;
 
-// adds the layer
+// Add the layer
 timeline.addLayer(layer, 'foo')
 
-// render the timeline and its registered layer
+// Render the timeline and its registered layer
 timeline.render();
 timeline.draw();
 timeline.update();
@@ -112,15 +105,31 @@ _`core/timeline`, `core/layer`, and `helpers/utils` are mandatory_
 
 ## List of components
 
+Core components
 - `timeline`
 - `layer`
+- `time-context`
+
+Shapes and behaviors
 - `waveform`
-- `segment`
-- `marker`
-- `breakpoint`
-- `label`
-- `zoomer`
-- `utils`
+- `segment` and `annotated-segment`
+- `marker` and `annotated-marker` 
+- `cursor` 
+- `dot` and `line` 
+
+Timeline-states and interactions
+- 
+-
+
+Utils
+- `orthogonal-data`
+
+## Miscellaneous
+
+_parts of d3 in use: selections, scales_  
+(could be replaced, the most tricky part would be the element <=> datum binding)
+
+
 
 ## License
 

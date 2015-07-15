@@ -1,5 +1,6 @@
 import BaseBehavior from './base-behavior';
 
+
 export default class SegmentBehavior extends BaseBehavior {
   // constructor() {}
 

@@ -4,7 +4,7 @@ export BaseShape from './base-shape';
 const xhtmlNS = 'http://www.w3.org/1999/xhtml';
 
 // @TODO creates strategies object to clean the `if...else` mess
-class Waveform extends BaseShape {
+export default class Waveform extends BaseShape {
   getClassName() { return 'waveform'; }
 
   _getAccessorList() {

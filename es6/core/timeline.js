@@ -15,7 +15,7 @@ import TimelineTimeContext from './timeline-time-context';
  *
  * Containers inside a timeline
  *
- * A temporal representation can be rendered upon multiple DOM elements, called containers (eg multiple <li> for a DAW like representation) that belong to the same timeline (and thus share same time and space relation) using the `registerContainer` method. These containers are like windows on the overall and basically unending timeline. They have a defined width and they show content from the specified offset (converted to pixel).
+ * A temporal representation can be rendered upon multiple DOM elements, called containers (eg multiple <li> for a DAW like representation) that belong to the same timeline (and share same time and space relation) using the `registerContainer` method. These containers are like windows on the overall and basically unending timeline. They have a defined width and they show content from the specified offset (converted to pixel).
  *
  * A timeline with 3 containers:
  *
@@ -37,17 +37,19 @@ import TimelineTimeContext from './timeline-time-context';
  *                   Default containers show 10 seconds of the timeline
  *
  *
- * Layers inside a timeline
+ * Layers inside a container
  *
  * Within a container, a `Layer` keeps up-to-date and renders the data. The timeline's `addLayer` method adds a `Layer` instance to a previously created container.
  *
  *
- * timeline render/draw/update
+ * The timeline rendering methods
  *
- * @TODO
+ * The rendering process is distinct from adding or modifying data or their time-contexts.
+ * `drawLayersShapes` will draw the shapes on all the layers (render dom element for newly created data)
+ * `update` (and sub-methods `updateTimelineContainers`, `updateLayersContainers` and `updateLayersShapes`) will keep the display up-to-date with the data and the time-contexts (timeline timeContext and layers timeContext).
  *
  *
- * timeline timeContext
+ * The timeline timeContext
  *
  * When one modify the timeline timeContext:
  * - timeline.timeContext.offset (in seconds) modify the containers view x position
@@ -267,7 +269,6 @@ export default class Timeline extends events.EventEmitter {
     }
 
     this.groupedLayers[group].push(layer);
-    console.log(layer)
     // render the layer's container inside the container
     container.layoutElement.appendChild(layer.renderContainer());
   }
@@ -368,7 +369,6 @@ export default class Timeline extends events.EventEmitter {
     return layers;
   }
 
-
   /**
    * Draw all the layers in the timeline
    */
@@ -418,4 +418,3 @@ export default class Timeline extends events.EventEmitter {
     layers.forEach((layer) => layer.updateShapes());
   }
 }
-

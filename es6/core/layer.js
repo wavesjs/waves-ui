@@ -6,6 +6,7 @@ import ns from './namespace';
 import Segment from '../shapes/segment';
 import SegmentBehavior from '../behaviors/segment-behavior';
 
+
 // private item -> id map to force d3 tp keep in sync with the DOM
 let   _counter = 0;
 const _datumIdMap = new Map();
@@ -525,5 +526,3 @@ export default class Layer extends events.EventEmitter {
     });
   }
 }
-
-module.exports = Layer;

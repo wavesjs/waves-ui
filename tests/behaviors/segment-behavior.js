@@ -1,70 +1,67 @@
-const assert = require('assert');
+import assert from 'assert';
 
-const Layer = require('../../es6/core/layer');
-const LayerTimeContext = require('../../es6/core/layer-time-context');
-const Segment = require('../../es6/shapes/segment');
-const SegmentBehavior = require('../../es6/behaviors/segment-behavior');
-const Timeline = require('../../es6/core/timeline');
+import Layer from '../../es6/core/layer';
+import LayerTimeContext from '../../es6/core/layer-time-context';
+import Segment from '../../es6/shapes/segment';
+import SegmentBehavior from '../../es6/behaviors/segment-behavior';
+import Timeline from '../../es6/core/timeline';
 
 
 describe('SegmentBehavior', function(){
-    describe('Edit Segment Behavior', function(){
-        it('should correctly edit a segment', function(){
-            let titleDiv = document.createElement('div');
-            titleDiv.innerHTML = this.test.title;
-            document.body.appendChild(titleDiv);
-            // Holder element for the timeline
-            let timelineDiv = document.createElement("div");
-            document.body.appendChild(timelineDiv);
+  let titleDiv;
+  let timeline;
+  let timelineDiv;
 
-            // Create a timeline
-            let timeline = new Timeline();
-            timeline.registerContainer(timelineDiv, {}, 'foo');
+  beforeEach(function(){
+    titleDiv = document.createElement('div');
+    titleDiv.innerHTML = this.currentTest.title;
+    document.body.appendChild(titleDiv);
+    timelineDiv = document.createElement("div");
+    document.body.appendChild(timelineDiv);
+  })
 
-            // TimeContext
-            let timeContext = new LayerTimeContext(timeline.timeContext)
+  describe('Edit Segment Behavior', function(){
+    it('should correctly edit a segment', function(){
+      timeline = new Timeline();
+      timeline.registerContainer(timelineDiv, {}, 'foo');
+      let timeContext = new LayerTimeContext(timeline.timeContext)
+      let data = [
+        { width: 3, x: 0 },
+        { width: 6, x: 6}
+      ];
+      let layer = new Layer('collection', data);
+      layer.setTimeContext(timeContext);
+      layer.configureShape(Segment);
+      layer.setBehavior(new SegmentBehavior());
+      layer.timeContext.duration = 12;
+      timeline.addLayer(layer, 'foo');
+      timeline.drawLayersShapes();
+      timeline.update();
+      let item = layer.d3items.nodes()[0];
+      const shape = layer._itemElShapeMap.get(item);
+      layer.edit(item, 10, 0, shape.segment);
 
-            // Layer instanciation for a marker layer
-            let data = [
-              { width: 3, x: 0 },
-              { width: 6, x: 6}
-            ];
+      // y -10 => +0.1 due to horizontal flip
+      assert.equal(layer.data[0].x, 0.1);
+      assert.equal(layer.data[0].width, 3);
 
-            let layer = new Layer('collection', data);
-            layer.setTimeContext(timeContext);
-            layer.configureShape(Segment);
-            layer.setBehavior(new SegmentBehavior());
-            layer.timeContext.duration = 12;
+      // move shape background
+      layer.edit(item, 10, 0, shape.segment);
 
-            // Attach layer to the timeline
-            timeline.addLayer(layer, 'foo');
-            ;
-            timeline.drawLayerShapes();
-            timeline.update();
+      assert.equal(layer.data[0].x, 0.2);
+      assert.equal(layer.data[0].width, 3);
 
+      // move shape leftHandler
+      layer.edit(item, 10, 0, shape.leftHandler);
 
-            let item = layer.d3items.nodes()[0];
-            layer.edit(item, 10, 0, layer.container);
+      assert.equal(layer.data[0].x, 0.3);
+      assert.equal(layer.data[0].width, 2.9);
 
-            // y -10 => +0.1 due to horizontal flip
-            assert.equal(layer.data[0].x, 0.1);
-            assert.equal(layer.data[0].width, 3);
+      // move shape leftHandler
+      layer.edit(item, -10, 0, shape.rightHandler);
 
-            // move shape background
-            layer.edit(item, 10, 0, layer.contextShape.rect);
-            assert.equal(layer.data[0].x, 0.2);
-            assert.equal(layer.data[0].width, 3);
-
-            // move shape leftHandler
-            layer.edit(item, 10, 0, layer.contextShape.leftHandler);
-            assert.equal(layer.data[0].x, 0.3);
-            assert.equal(layer.data[0].width, 2.9);
-
-            // move shape leftHandler
-            layer.edit(item, -10, 0, layer.contextShape.rightHandler);
-            assert.equal(layer.data[0].x, 0.3);
-            assert.equal(layer.data[0].width, 2.8);
-
-        });
+      assert.equal(layer.data[0].x, 0.3);
+      assert.equal(layer.data[0].width, 2.8);
     });
+  });
 });
