@@ -16,17 +16,16 @@ Here is a synthetic view of objects that compose the library, and their intercon
 
 
 The `timeline` is the central hub for all user interactions events (keyboard, mouse) and it holds the current interaction `state` which defines how the different timeline elements respond to those events. 
-The `timeline` also contains factories to instantiate the views and layers elements.
+The `timeline` also contains factories to instantiate the `views` and `layers` elements.
 
-The `views` are like windows on the overall timeline. The main attributes `width`, `pixelsPerSecond`, `offset` and `zoom` define the characteristics of each view over the timeline.
+The `views` are like windows on the overall `timeline`. The main attributes `width`, `pixelsPerSecond`, `offset` and `zoom` define the characteristics of each view over the `timeline`.
 
-The `layers` keep (1) the data, (2) which `shape` to use to display the data, and (3) how to modify the data (both programmatically or based on user interactions dispatched from the timeline and its current state). For a `layer`, a layer-time-context defines its time characteristics: `offset`, `stretchRatio`, `duration`, and `start`. These attributes have repercussions on the audio rendering contrary to the one of views, which only affect the representation.
+The `layers` keep (1) the data, (2) which `shape` to use to display the data, and (3) how to modify the data (both programmatically or based on user interactions dispatched from the timeline and its current state). layer.timeContext defines a layer time characteristics: `offset`, `stretchRatio`, `duration`, and `start`. These attributes have repercussions on the audio rendering contrary to the one of views, which only affect the representation.
 
 
 Specific interaction state upon the timeline allow you to:
 - browse and zoom into the views
-- modify layers metadata
-- modify layers data through shape edition
+- modify layers time characteristics through it timeContext or data through shape edition
 
 
 ## Default example
