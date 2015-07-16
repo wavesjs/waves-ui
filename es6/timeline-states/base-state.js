@@ -1,8 +1,14 @@
 export default class BaseState {
   constructor(timeline, options = {}) {
     this.timeline = timeline;
-    this.layers = timeline.layers;
-    // this.interactionsGroup = options.interactionsGroup;
+  }
+
+  get views() {
+    return this.timeline.views;
+  }
+
+  get layers() {
+    return this.timeline.views.layers;
   }
 
   /**
@@ -17,7 +23,7 @@ export default class BaseState {
 
   /**
    * handle registered inputs from surface, keyboard, etc...
-   * @param {Event} the event to process
+   * @param {Event} e - the event to process
    */
   handleEvent(e) {}
 }

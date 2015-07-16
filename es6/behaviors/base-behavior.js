@@ -1,7 +1,7 @@
 export default class BaseBehavior {
   constructor(options = {}) {
     this._selectedItems = new Set(); // no duplicate in Set
-    this._selectedClass = 'selected';
+    this._selectedClass = options.selectedClass || 'selected';
     this._layer = null;
 
     this._params = Object.assign({}, this.getDefaults(), options);
@@ -19,27 +19,34 @@ export default class BaseBehavior {
     return {};
   }
 
-  set selectedClass(value) { this._selectedClass = value; }
-  get selectedClass() { return this._selectedClass; }
+  set selectedClass(value) {
+    this._selectedClass = value;
+  }
 
-  get selectedItems() { return [...this._selectedItems]; }
+  get selectedClass() {
+    return this._selectedClass;
+  }
 
-  /**
-   *  @param item {DOMElement} the item to select
-   *  @param datum {Object} the related datum (@NOTE remove it ?)
-   */
-  select(item, datum) {
-    item.classList.add(this.selectedClass);
-    this._selectedItems.add(item);
+  get selectedItems() {
+    return [...this._selectedItems];
   }
 
   /**
    *  @param item {DOMElement} the item to select
    *  @param datum {Object} the related datum (@NOTE remove it ?)
    */
-  unselect(item, datum) {
-    item.classList.remove(this.selectedClass);
-    this._selectedItems.delete(item);
+  select($item, datum) {
+    $item.classList.add(this.selectedClass);
+    this._selectedItems.add($item);
+  }
+
+  /**
+   *  @param item {DOMElement} the item to select
+   *  @param datum {Object} the related datum (@NOTE remove it ?)
+   */
+  unselect($item, datum) {
+    $item.classList.remove(this.selectedClass);
+    this._selectedItems.delete($item);
   }
 
   /**
@@ -47,9 +54,9 @@ export default class BaseBehavior {
    *  @param item {DOMElement} the item to select
    *  @param datum {Object} the related datum (@NOTE remove it ?)
    */
-  toggleSelection(item, datum) {
-    const method = this._selectedItems.has(item) ? 'unselect' : 'select';
-    this[method](item);
+  toggleSelection($item, datum) {
+    const method = this._selectedItems.has($item) ? 'unselect' : 'select';
+    this[method]($item);
   }
 
   /**

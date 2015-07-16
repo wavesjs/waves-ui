@@ -3,7 +3,17 @@ import BaseShape from './base-shape';
 
 const xhtmlNS = 'http://www.w3.org/1999/xhtml';
 
-// @TODO creates strategies object to clean the `if...else` mess
+// @TODO create strategies object to clean the `if...else` mess
+var svgStrategy = {
+  render() {},
+  update() {}
+}
+
+var canvasStrategy = {
+  render() {},
+  update() {}
+}
+
 export default class Waveform extends BaseShape {
   getClassName() { return 'waveform'; }
 
@@ -21,21 +31,21 @@ export default class Waveform extends BaseShape {
   }
 
   render(renderingContext) {
-    if (this.el) { return this.el; }
+    if (this.$el) { return this.$el; }
 
     if (this.params.renderingStrategy === 'svg') {
 
-      this.el = document.createElementNS(this.ns, 'path');
-      this.el.setAttributeNS(null, 'fill', 'none');
-      this.el.setAttributeNS(null, 'shape-rendering', 'crispEdges');
-      this.el.setAttributeNS(null, 'stroke', this.params.color);
-      this.el.style.opacity = this.params.opacity;
+      this.$el = document.createElementNS(this.ns, 'path');
+      this.$el.setAttributeNS(null, 'fill', 'none');
+      this.$el.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+      this.$el.setAttributeNS(null, 'stroke', this.params.color);
+      this.$el.style.opacity = this.params.opacity;
 
     } else if (this.params.renderingStrategy === 'canvas') {
 
-      this.el = document.createElementNS(this.ns, 'foreignObject');
-      this.el.setAttributeNS(null, 'width', renderingContext.width);
-      this.el.setAttributeNS(null, 'height', renderingContext.height);
+      this.$el = document.createElementNS(this.ns, 'foreignObject');
+      this.$el.setAttributeNS(null, 'width', renderingContext.width);
+      this.$el.setAttributeNS(null, 'height', renderingContext.height);
 
       const canvas = document.createElementNS(xhtmlNS, 'xhtml:canvas');
 
@@ -43,13 +53,13 @@ export default class Waveform extends BaseShape {
       this._ctx.canvas.width = renderingContext.width;
       this._ctx.canvas.height = renderingContext.height;
 
-      this.el.appendChild(canvas);
+      this.$el.appendChild(canvas);
     }
 
-    return this.el;
+    return this.$el;
   }
 
-  update(renderingContext, group, datum, index) {
+  update(renderingContext, datum, index) {
     // define nbr of samples per pixels
     const sliceMethod = datum instanceof Float32Array ? 'subarray' : 'slice';
     const nbrSamples = datum.length;
@@ -92,15 +102,15 @@ export default class Waveform extends BaseShape {
       });
 
       const d = 'M' + instructions.join('L');
-      this.el.setAttributeNS(null, 'd', d);
+      this.$el.setAttributeNS(null, 'd', d);
 
     } else if (this.params.renderingStrategy === 'canvas') {
 
       this._ctx.canvas.width = width;
-      this.el.setAttribute('width', width);
+      this.$el.setAttribute('width', width);
       // fix chrome bug with translate
       if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
-        this.el.setAttribute('x', renderingContext.offsetX);
+        this.$el.setAttribute('x', renderingContext.offsetX);
       }
 
       this._ctx.strokeStyle = this.params.color;

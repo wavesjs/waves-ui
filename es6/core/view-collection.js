@@ -35,6 +35,14 @@ export default class ViewCollection extends Array {
     this.forEach((view) => view.height = value);
   }
 
+  // access layers
+  get layers() {
+    let layers = [];
+    this.forEach((view) => layers = layers.concat(view.layers));
+
+    return layers;
+  }
+
   render() {
     this.forEach((view) => view.render());
     this._timeline.emit('render');

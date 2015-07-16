@@ -17,23 +17,23 @@ export default class Cursor extends BaseShape {
   }
 
   render(renderingContext) {
-    if (this.el) { return this.el; }
+    if (this.$el) { return this.$el; }
 
-    this.el = document.createElementNS(ns, 'line');
-    this.el.setAttributeNS(null, 'x', 0);
-    this.el.setAttributeNS(null, 'y1', 0);
-    this.el.setAttributeNS(null, 'y2', renderingContext.height);
-    this.el.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+    this.$el = document.createElementNS(ns, 'line');
+    this.$el.setAttributeNS(null, 'x', 0);
+    this.$el.setAttributeNS(null, 'y1', 0);
+    this.$el.setAttributeNS(null, 'y2', renderingContext.height);
+    this.$el.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
-    return this.el;
+    return this.$el;
   }
 
-  update(renderingContext, group, datum, index) {
+  update(renderingContext, datum, index) {
     const x = renderingContext.xScale(this.x(datum));
     const color = this.params.color;
 
-    group.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
-    this.el.style.stroke = color;
+    this.$el.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
+    this.$el.style.stroke = color;
   }
 
   // not selectable with a drag

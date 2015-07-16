@@ -78,7 +78,7 @@ export default class Layer extends events.EventEmitter {
   //   // @TODO
   //      - clean Maps
   //      - clean listeners
-  //   // can't do `this = null` from here...
+  //      - clean behavior (behavior._layer)
   // }
 
   set yDomain(domain) {
@@ -441,6 +441,7 @@ export default class Layer extends events.EventEmitter {
 
         const $el = shape.render(this._renderingContext);
         $el.classList.add('item', shape.getClassName());
+
         this._$itemShapeMap.set($el, shape);
         this._$itemD3SelectionMap.set($el, d3Selection.select($el));
 
@@ -516,22 +517,21 @@ export default class Layer extends events.EventEmitter {
    *  updates the Shapes which b$elongs to the layer
    *  @param item {DOMElement}
    */
-  updateShapes(item = null) {
+  updateShapes($item = null) {
     this._updateRenderingContext();
 
     const that = this;
     const renderingContext = this._renderingContext;
-    const items = item !== null ? d3Selection.select(item) : this.d3items;
+    const items = $item !== null ? this._$itemD3SelectionMap.get($item) : this.d3items;
     // update common shapes
-    this._$itemCommonShapeMap.forEach((shape, item) => {
-      shape.update(renderingContext, item, this.data);
+    this._$itemCommonShapeMap.forEach((shape, $item) => {
+      shape.update(renderingContext, this.data);
     });
 
     // d3 update - entity or collection shapes
     items.each(function(datum, index) {
-      const $el = this;
-      const shape = that._$itemShapeMap.get($el);
-      shape.update(renderingContext, $el, datum, index);
+      const shape = that._$itemShapeMap.get(this);
+      shape.update(renderingContext, datum, index);
     });
   }
 }

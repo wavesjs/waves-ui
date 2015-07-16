@@ -41,6 +41,7 @@ export default class EditionState extends BaseState {
       }
 
       const item = layer.getItemFromDOMElement(this.currentTarget);
+
       if (item === null) { return; }
 
       this.currentEditedLayer = layer;
@@ -53,11 +54,8 @@ export default class EditionState extends BaseState {
 
     const layer = this.currentEditedLayer;
     const items = layer.selectedItems;
-    // the loop should be in layer to match select / unselect API
-    items.forEach((item) => {
-      layer.edit(item, e.dx, e.dy, this.currentTarget);
-    });
 
+    layer.edit(items, e.dx, e.dy, this.currentTarget);
     layer.update(items);
   }
 
