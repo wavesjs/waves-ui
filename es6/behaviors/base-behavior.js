@@ -35,18 +35,18 @@ export default class BaseBehavior {
    *  @param item {DOMElement} the item to select
    *  @param datum {Object} the related datum (@NOTE remove it ?)
    */
-  select(item, datum) {
-    item.classList.add(this.selectedClass);
-    this._selectedItems.add(item);
+  select($item, datum) {
+    $item.classList.add(this.selectedClass);
+    this._selectedItems.add($item);
   }
 
   /**
    *  @param item {DOMElement} the item to select
    *  @param datum {Object} the related datum (@NOTE remove it ?)
    */
-  unselect(item, datum) {
-    item.classList.remove(this.selectedClass);
-    this._selectedItems.delete(item);
+  unselect($item, datum) {
+    $item.classList.remove(this.selectedClass);
+    this._selectedItems.delete($item);
   }
 
   /**
@@ -54,9 +54,9 @@ export default class BaseBehavior {
    *  @param item {DOMElement} the item to select
    *  @param datum {Object} the related datum (@NOTE remove it ?)
    */
-  toggleSelection(item, datum) {
-    const method = this._selectedItems.has(item) ? 'unselect' : 'select';
-    this[method](item);
+  toggleSelection($item, datum) {
+    const method = this._selectedItems.has($item) ? 'unselect' : 'select';
+    this[method]($item);
   }
 
   /**

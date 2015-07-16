@@ -145,39 +145,39 @@ export default class View {
    */
   _createContainer() {
     // First create DOM for the view
-    const svg = document.createElementNS(ns, 'svg');
+    const $svg = document.createElementNS(ns, 'svg');
 
-    svg.setAttributeNS(null, 'height', this.height);
-    svg.setAttributeNS(null, 'shape-rendering', 'optimizeSpeed');
-    svg.setAttribute('xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
-    svg.setAttributeNS(null, 'width', this.width);
-    svg.setAttributeNS(null, 'viewbox', `0 0 ${this.width} ${this.height}`);
+    $svg.setAttributeNS(null, 'height', this.height);
+    $svg.setAttributeNS(null, 'shape-rendering', 'optimizeSpeed');
+    $svg.setAttribute('xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
+    $svg.setAttributeNS(null, 'width', this.width);
+    $svg.setAttributeNS(null, 'viewbox', `0 0 ${this.width} ${this.height}`);
 
-    const defs = document.createElementNS(ns, 'defs');
+    const $defs = document.createElementNS(ns, 'defs');
 
-    const offsetGroup = document.createElementNS(ns, 'g');
-    offsetGroup.classList.add('offset');
+    const $offsetGroup = document.createElementNS(ns, 'g');
+    $offsetGroup.classList.add('offset');
 
-    const layoutGroup = document.createElementNS(ns, 'g');
-    layoutGroup.classList.add('layout');
+    const $layoutGroup = document.createElementNS(ns, 'g');
+    $layoutGroup.classList.add('layout');
 
-    const interactionsGroup = document.createElementNS(ns, 'g');
-    interactionsGroup.classList.add('interactions');
+    const $interactionsGroup = document.createElementNS(ns, 'g');
+    $interactionsGroup.classList.add('interactions');
 
-    svg.appendChild(defs);
-    offsetGroup.appendChild(layoutGroup);
-    svg.appendChild(offsetGroup);
-    svg.appendChild(interactionsGroup);
+    $svg.appendChild($defs);
+    $offsetGroup.appendChild($layoutGroup);
+    $svg.appendChild($offsetGroup);
+    $svg.appendChild($interactionsGroup);
 
-    this.$el.appendChild(svg);
+    this.$el.appendChild($svg);
     this.$el.style.fontSize = 0; // removes additionnal height added who knows why...
     this.$el.style.transform = 'translateZ(0)'; // fixes one of the (many ?) weird canvas rendering bugs in Chrome
 
     // store all informations about this container
-    this.$layout = layoutGroup;
-    this.$offset = offsetGroup;
-    this.$interactions = interactionsGroup;
-    this.$svg = svg;
+    this.$layout = $layoutGroup;
+    this.$offset = $offsetGroup;
+    this.$interactions = $interactionsGroup;
+    this.$svg = $svg;
   }
 
   /**

@@ -23,6 +23,7 @@ export default class Segment extends BaseShape {
     this.$el = document.createElementNS(this.ns, 'g');
 
     this.$segment = document.createElementNS(this.ns, 'rect');
+    this.$segment.classList.add('segment');
     this.$segment.style.opacity = this.params.opacity;
     this.$segment.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 

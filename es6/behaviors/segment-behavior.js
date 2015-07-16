@@ -2,15 +2,13 @@ import BaseBehavior from './base-behavior';
 
 
 export default class SegmentBehavior extends BaseBehavior {
-  // constructor() {}
-
   edit(renderingContext, shape, datum, dx, dy, target) {
-    let action = 'move';
     const classList = target.classList;
+    let action = 'move';
 
-    if (target === shape.leftHandler) {
+    if (classList.contains('handler') && classList.contains('left')) {
       action = 'resizeLeft';
-    } else if (target === shape.rightHandler) {
+    } else if (classList.contains('handler') && classList.contains('right')) {
       action = 'resizeRight';
     }
 

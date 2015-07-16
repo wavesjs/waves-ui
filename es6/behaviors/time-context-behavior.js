@@ -12,11 +12,11 @@ export default class TimeContextBehavior {
   edit(layer, dx, dy, target) {
     const timeContext = layer.timeContext;
 
-    if (target === layer.contextShape.leftHandler) {
+    if (target.classList.contains('handler') && target.classList.contains('left')) {
       this._editLeft(timeContext, dx);
-    } else if (target === layer.contextShape.rightHandler) {
+    } else if (target.classList.contains('handler') && target.classList.contains('right')) {
       this._editRight(timeContext, dx);
-    } else {
+    } else if (target.classList.contains('segment')) {
       this._move(timeContext, dx);
     }
   }
@@ -55,13 +55,7 @@ export default class TimeContextBehavior {
     const lastDuration = timeContext.duration;
     const lastOffset = timeContext.offset;
 
-    if (target.classList.contains('handler') && target.classList.contains('left')) {
-      this._editLeft(timeContext, dx);
-    } else if (target.classList.contains('handler') && target.classList.contains('right')) {
-      this._editRight(timeContext, dx);
-    } else {
-      this._move(timeContext, dx);
-    }
+    this.edit(layer, dx, dy, target);
 
     const newDuration = timeContext.duration;
     const ratio = (newDuration / lastDuration);

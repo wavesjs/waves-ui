@@ -1,6 +1,7 @@
 import Layer from './layer';
 import Timeline from './timeline';
 
+// to be removed...
 
 /**
  * The enhanced-timeline rendering methods
