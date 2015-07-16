@@ -20,7 +20,7 @@ export default class Line extends BaseShape {
     return this.$el;
   }
 
-  update(renderingContext, $group, data) {
+  update(renderingContext, data) {
     data = data.slice(0);
     data.sort((a, b) => this.cx(a) < this.cx(b) ? -1 : 1);
 

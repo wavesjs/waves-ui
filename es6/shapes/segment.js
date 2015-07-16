@@ -18,39 +18,39 @@ export default class Segment extends BaseShape {
   }
 
   render(renderingContext) {
-    if (this.el) { return this.el; }
+    if (this.$el) { return this.$el; }
 
-    this.el = document.createElementNS(this.ns, 'g');
+    this.$el = document.createElementNS(this.ns, 'g');
 
-    this.segment = document.createElementNS(this.ns, 'rect');
-    this.segment.style.opacity = this.params.opacity;
-    this.segment.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+    this.$segment = document.createElementNS(this.ns, 'rect');
+    this.$segment.style.opacity = this.params.opacity;
+    this.$segment.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
-    this.el.appendChild(this.segment);
+    this.$el.appendChild(this.$segment);
 
     if (this.params.displayHandlers) {
-      this.leftHandler = document.createElementNS(this.ns, 'rect');
-      this.leftHandler.classList.add('left', 'handler');
-      this.leftHandler.setAttributeNS(null, 'width', this.params.handlerWidth);
-      this.leftHandler.setAttributeNS(null, 'shape-rendering', 'crispEdges');
-      this.leftHandler.style.opacity = this.params.handlerOpacity;
-      this.leftHandler.style.cursor = 'ew-resize';
+      this.$leftHandler = document.createElementNS(this.ns, 'rect');
+      this.$leftHandler.classList.add('left', 'handler');
+      this.$leftHandler.setAttributeNS(null, 'width', this.params.handlerWidth);
+      this.$leftHandler.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+      this.$leftHandler.style.opacity = this.params.handlerOpacity;
+      this.$leftHandler.style.cursor = 'ew-resize';
 
-      this.rightHandler = document.createElementNS(this.ns, 'rect');
-      this.rightHandler.classList.add('right', 'handler');
-      this.rightHandler.setAttributeNS(null, 'width', this.params.handlerWidth);
-      this.rightHandler.setAttributeNS(null, 'shape-rendering', 'crispEdges');
-      this.rightHandler.style.opacity = this.params.handlerOpacity;
-      this.rightHandler.style.cursor = 'ew-resize';
+      this.$rightHandler = document.createElementNS(this.ns, 'rect');
+      this.$rightHandler.classList.add('right', 'handler');
+      this.$rightHandler.setAttributeNS(null, 'width', this.params.handlerWidth);
+      this.$rightHandler.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+      this.$rightHandler.style.opacity = this.params.handlerOpacity;
+      this.$rightHandler.style.cursor = 'ew-resize';
 
-      this.el.appendChild(this.leftHandler);
-      this.el.appendChild(this.rightHandler);
+      this.$el.appendChild(this.$leftHandler);
+      this.$el.appendChild(this.$rightHandler);
     }
 
-    return this.el;
+    return this.$el;
   }
 
-  update(renderingContext, group, datum, index) {
+  update(renderingContext, datum, index) {
     const x = renderingContext.xScale(this.x(datum));
     const y = renderingContext.yScale(this.y(datum));
     const width = renderingContext.xScale(this.width(datum));
@@ -58,24 +58,23 @@ export default class Segment extends BaseShape {
     const color = this.color(datum);
     const opacity = this.opacity(datum);
 
-    group.setAttributeNS(null, 'transform', `translate(${x}, ${y})`);
+    this.$el.setAttributeNS(null, 'transform', `translate(${x}, ${y})`);
+    this.$el.style.opacity = opacity;
 
-    this.el.style.opacity = opacity;
-
-    this.segment.setAttributeNS(null, 'width', Math.max(width, 0));
-    this.segment.setAttributeNS(null, 'height', height);
-    this.segment.style.fill = color;
+    this.$segment.setAttributeNS(null, 'width', Math.max(width, 0));
+    this.$segment.setAttributeNS(null, 'height', height);
+    this.$segment.style.fill = color;
 
     if (this.params.displayHandlers) {
       // display handlers
-      this.leftHandler.setAttributeNS(null, 'height', height);
-      this.leftHandler.setAttributeNS(null, 'transform', 'translate(0, 0)');
-      this.leftHandler.style.fill = color;
+      this.$leftHandler.setAttributeNS(null, 'height', height);
+      this.$leftHandler.setAttributeNS(null, 'transform', 'translate(0, 0)');
+      this.$leftHandler.style.fill = color;
 
       const rightHandlerTranslate = `translate(${width - this.params.handlerWidth}, 0)`;
-      this.rightHandler.setAttributeNS(null, 'height', height);
-      this.rightHandler.setAttributeNS(null, 'transform', rightHandlerTranslate);
-      this.rightHandler.style.fill = color;
+      this.$rightHandler.setAttributeNS(null, 'height', height);
+      this.$rightHandler.setAttributeNS(null, 'transform', rightHandlerTranslate);
+      this.$rightHandler.style.fill = color;
     }
   }
 

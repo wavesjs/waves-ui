@@ -18,49 +18,48 @@ export default class Marker extends BaseShape {
   }
 
   render(renderingContext) {
-    if (this.el) { return this.el; }
+    if (this.$el) { return this.$el; }
 
     const height = renderingContext.height;
 
-    this.el = document.createElementNS(this.ns, 'g');
-    this.line = document.createElementNS(this.ns, 'rect');
+    this.$el = document.createElementNS(this.ns, 'g');
+    this.$line = document.createElementNS(this.ns, 'rect');
 
     // draw line
-    this.line.setAttributeNS(null, 'x', 0);
-    this.line.setAttributeNS(null, 'y', 0);
-    this.line.setAttributeNS(null, 'width', 1);
-    this.line.setAttributeNS(null, 'height', height);
-    this.line.setAttributeNS(null, 'shape-rendering', 'optimizeSpeed');
+    this.$line.setAttributeNS(null, 'x', 0);
+    this.$line.setAttributeNS(null, 'y', 0);
+    this.$line.setAttributeNS(null, 'width', 1);
+    this.$line.setAttributeNS(null, 'height', height);
+    this.$line.setAttributeNS(null, 'shape-rendering', 'optimizeSpeed');
 
-    this.el.appendChild(this.line);
+    this.$el.appendChild(this.$line);
 
     if (this.params.displayHandlers) {
-      this.handler = document.createElementNS(this.ns, 'rect');
+      this.$handler = document.createElementNS(this.ns, 'rect');
 
-      this.handler.setAttributeNS(null, 'x', -((this.params.handlerWidth - 1) / 2));
-      this.handler.setAttributeNS(null, 'y', renderingContext.height - this.params.handlerHeight);
-      this.handler.setAttributeNS(null, 'width', this.params.handlerWidth);
-      this.handler.setAttributeNS(null, 'height', this.params.handlerHeight);
-      this.handler.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+      this.$handler.setAttributeNS(null, 'x', -((this.params.handlerWidth - 1) / 2));
+      this.$handler.setAttributeNS(null, 'y', renderingContext.height - this.params.handlerHeight);
+      this.$handler.setAttributeNS(null, 'width', this.params.handlerWidth);
+      this.$handler.setAttributeNS(null, 'height', this.params.handlerHeight);
+      this.$handler.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
-      this.el.appendChild(this.handler);
+      this.$el.appendChild(this.$handler);
     }
 
-    this.el.style.opacity = this.params.opacity;
+    this.$el.style.opacity = this.params.opacity;
 
-    return this.el;
+    return this.$el;
   }
 
-  update(renderingContext, group, datum, index) {
+  update(renderingContext, datum, index) {
     const x = renderingContext.xScale(this.x(datum)) - 0.5;
     const color = this.color(datum);
 
-    group.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
-
-    this.line.style.fill = color;
+    this.$el.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
+    this.$line.style.fill = color;
 
     if (this.params.displayHandlers) {
-      this.handler.style.fill = color;
+      this.$handler.style.fill = color;
     }
   }
 

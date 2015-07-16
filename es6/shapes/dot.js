@@ -17,14 +17,13 @@ export default class Dot extends BaseShape {
     return this.$el;
   }
 
-  update(renderingContext, $group, datum, index) {
+  update(renderingContext, datum, index) {
     const cx = renderingContext.xScale(this.cx(datum));
     const cy = renderingContext.yScale(this.cy(datum));
     const r  = this.r(datum);
     const color = this.color(datum);
 
-    $group.setAttributeNS(null, 'transform', `translate(${cx}, ${cy})`);
-
+    this.$el.setAttributeNS(null, 'transform', `translate(${cx}, ${cy})`);
     this.$el.setAttributeNS(null, 'r', r);
     this.$el.style.fill = color;
   }

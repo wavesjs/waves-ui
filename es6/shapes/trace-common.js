@@ -12,7 +12,7 @@ export default class TraceCommon extends BaseShape {
     return {
       rangeColor: 'steelblue',
       meanColor: '#232323',
-      displamean: true
+      displayMean: true
     };
   }
 
@@ -24,7 +24,7 @@ export default class TraceCommon extends BaseShape {
     this.$el.appendChild(this.$range);
 
     // mean line
-    if (this.params.displamean) {
+    if (this.params.displayMean) {
       this.$mean = document.createElementNS(this.ns, 'path');
       this.$el.appendChild(this.$mean);
     }
@@ -32,13 +32,12 @@ export default class TraceCommon extends BaseShape {
     return this.$el;
   }
 
-  // @TODO use accessors
-  update(renderingContext, group, data) {
+  update(renderingContext, data) {
     // order data by x position
     data = data.slice(0);
     data.sort((a, b) => this.x(a) < this.x(b) ? -1 : 1);
 
-    if (this.params.displamean) {
+    if (this.params.displayMean) {
       this.$mean.setAttributeNS(null, 'd', this._buildMeanLine(renderingContext, data));
       this.$mean.setAttributeNS(null, 'stroke', this.params.meanColor);
       this.$mean.setAttributeNS(null, 'fill', 'none');

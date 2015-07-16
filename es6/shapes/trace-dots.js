@@ -48,7 +48,7 @@ export default class TraceDots extends BaseShape {
   }
 
   // @TODO use accessors
-  update(renderingContext, group, datum, index) {
+  update(renderingContext, datum, index) {
     const mean = this.mean(datum);
     const range = this.range(datum);
     const x = this.x(datum);

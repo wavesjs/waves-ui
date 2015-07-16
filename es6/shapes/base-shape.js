@@ -9,7 +9,7 @@ export default class BaseShape {
    *  @param options {Object} override default configuration
    */
   constructor(options = {}) {
-    this.el = null;
+    this.$el = null;
     this.ns = ns;
     this.params = Object.assign({}, this._getDefaults(), options);
     // create accessors methods and set default accessor functions
@@ -27,7 +27,7 @@ export default class BaseShape {
    */
   destroy() {
     // this.group = null;
-    this.el = null;
+    this.$el = null;
   }
 
   /**
@@ -110,7 +110,7 @@ export default class BaseShape {
    *    commonShape : undefined
    * @return  void
    */
-  update(renderingContext, group, datum, index) {}
+  update(renderingContext, datum, index) {}
 
   /**
    *  define if the shape is considered to be the given area
