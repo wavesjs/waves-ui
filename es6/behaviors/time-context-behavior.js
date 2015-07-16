@@ -5,7 +5,7 @@ export default class TimeContextBehavior {
    */
   setEditable(layer, bool = true) {
     const display = bool ? 'block' : 'none';
-    layer.interactionsGroup.style.display = display;
+    layer.$interactions.style.display = display;
     layer._isContextEditable = bool;
   }
 

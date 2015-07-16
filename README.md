@@ -11,8 +11,10 @@ const data = [{ width: 3, x: 0 }, { width: 6, x: 6}];
 const timeline = new Timeline();
 const view = new View(viewDiv);
 const layer = new SegmentLayer(data);
+
 timeline.add(view);
 view.add(layer);
+
 timeline.views.render();
 ```
 
@@ -20,7 +22,7 @@ timeline.views.render();
 ## Goals and Features
 
 *waves.js - ui* is a library that proposes primitives to build interactive temporal visualizations of audio and timeseries data for in-browser rendering. It has been designed by abstracting common features required in both music production environments and analysis authoring tools. 
-It main goal is to ease the development of audio-based web applications requiring interactive temporal visualizations.
+Its main goal is to ease the development of audio-based web applications requiring interactive temporal visualizations.
 
 *ui* is part of the [waves.js](https://github.com/wavesjs/waves) library.
 

@@ -1,6 +1,6 @@
 import BaseState from './base-state';
 
-
+// works
 // @NOTE => overlaps SelectionBehavior in some way...
 export default class EditionState extends BaseState {
   constructor(timeline) {

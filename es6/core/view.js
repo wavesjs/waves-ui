@@ -31,7 +31,7 @@ import ViewTimeContext from './view-time-context';
 *
 *                   <------------------------------->
 *                   view1 defaults to 1000px
-*                   with a default is 100px/s.
+*                   with a default pixelsPerSecond of 100px/s.
 *                   and a default `stretchRatio = 1`
 *                   view1 shows 10 seconds of the timeline
 *
@@ -200,7 +200,7 @@ export default class View {
   remove(layer) {
     this.layers.splice(this.layers.indexOf(layer), 1);
     // Removes layer from its container
-    this.layoutElement.removeChild(layer.container);
+    this.$layout.removeChild(layer.$el);
   }
 
   /**

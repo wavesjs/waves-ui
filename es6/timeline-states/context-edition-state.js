@@ -1,9 +1,12 @@
 import BaseState from './base-state';
+import TimeContextBehavior from '../behaviors/time-context-behavior';
 
-
+// works but hack with the TimeContextBehavior
 export default class ContextEditionState extends BaseState {
   constructor(timeline) {
     super(timeline);
+
+    this.timeContextBehavior = new TimeContextBehavior();
   }
 
   handleEvent(e) {
@@ -40,12 +43,12 @@ export default class ContextEditionState extends BaseState {
     const target = this.currentTarget;
 
     if (!e.originalEvent.shiftKey) {
-      this.timeline.timeContextBehavior.edit(layer, e.dx, e.dy, target);
+      this.timeContextBehavior.edit(layer, e.dx, e.dy, target);
     } else {
-      this.timeline.timeContextBehavior.stretch(layer, e.dx, e.dy, target);
+      this.timeContextBehavior.stretch(layer, e.dx, e.dy, target);
     }
 
-    this.timeline.update(this.currentLayer);
+    this.currentLayer.update();
   }
 
   onMouseUp(e) {
