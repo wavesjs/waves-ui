@@ -200,7 +200,7 @@ export default class View {
   remove(layer) {
     this.layers.splice(this.layers.indexOf(layer), 1);
     // Removes layer from its container
-    this.layoutElement.removeChild(layer.container);
+    this.$layout.removeChild(layer.$el);
   }
 
   /**

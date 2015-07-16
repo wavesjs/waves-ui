@@ -34,6 +34,13 @@ export default class Timeline extends events.EventEmitter {
     this._state = null;
     this._handleEvent = this._handleEvent.bind(this);
     this._createInteraction(Keyboard, 'body');
+
+    // init default configuration for views factory
+    this._viewsConfiguration = {};
+    this.configureViews();
+    // stores
+    this._viewsById = {};
+    this._groupedLayers = {};
   }
 
   /**
@@ -86,36 +93,117 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   * Add a view to the timeline
-   *
-   * Views display this window on the timeline in theirs DOM SVG element.
+   * Adds a view to the timeline
+   * Views display this window on the timeline in theirs own SVG element.
+   * @param {View} view
    */
   add(view) {
+    if (this.views.indexOf(view) !== -1) {
+      throw new Error('view already added to the timeline');
+    }
+
     this.views.push(view);
     this._createInteraction(Surface, view.$el);
   }
 
-  // @TODO
   remove(view) {
-
+    // @TODO
   }
 
-  // @TODO - view factory
-  // helpers
+  /**
+   *  Defines a default for each view to be created
+   *  @param {Number} pixelsPerSeconds
+   *  @param {Number} width
+   *  @param {Number} height
+   */
   configureViews(pixelsPerSecond = 100, width = 1000, height = 120) {
-
+    this._viewsConfiguration = { pixelsPerSecond, width, height };
   }
 
-  createView($el, id = 'default', height = 120) {
+  /**
+   *  Creates a new view from the configuration define in `configureViews`
+   *  @param {DOMElement} $el - the element to insert the view inside
+   *  @param {Object} options - override the defaults options if necessary
+   *  @param {String} [viewId=null] - optionnal id to give to the view, only exists in timeline's context
+   *  @return {View}
+   */
+  createView($el, options = {}, viewId = null) {
+    const config = Object.assign({}, this._viewsConfiguration, options);
+    const { pixelsPerSecond, width, height } = config;
+    const view = new View($el, pixelsPerSecond, width, height);
 
+    if (viewId !== null) {
+      if (this._viewsById[viewId] !== undefined) {
+        throw new Error(`viewId: "${viewId}" is already used`);
+      }
+
+      this._viewsById[viewId] = view;
+    }
+    // add view to the timeline
+    this.add(view);
+    return view;
   }
 
-  addLayer(layer, viewId = 'default', group = 'default') {
+  /**
+   *  Adds a layer to a view, allow to group view arbitrarily inside groups. Basically a wrapper for `view.add(layer)`
+   *  @param {Layer} layer - the layer to add
+   *  @param {View} view - the view to the insert the layer in
+   *  @param {String} [groupId='default'] - the group in which associate the layer
+   */
+  addLayer(layer, viewOrViewId, groupId = 'default') {
+    let view = viewOrViewId;
 
+    if (typeof viewOrViewId === 'string') {
+      view = this.getViewById(viewOrViewId);
+    }
+    // we should have a View instance at this point
+    view.add(layer);
+
+    if (!this._groupedLayers[groupId]) {
+      this._groupedLayers[groupId] = [];
+    }
+
+    this._groupedLayers[groupId].push(layer);
   }
 
+  /**
+   *  Removes a layer from its view (the layer is detatched from the DOM but can still be reused)
+   *  @param {Layer} layer - the layer to remove
+   */
   removeLayer(layer) {
+    this.views.forEach(function(view) {
+      const index = view.layers.indexOf(layer);
+      if (index !== -1) { view.remove(layer); }
+    });
 
+    for (let groupId in this._groupedLayers) {
+      const group = this._groupedLayers[groupId];
+      const index = group.indexOf(layer);
+
+      if (index !== -1) { group.splice(layer, 1); }
+
+      if (!group.length) {
+        delete this._groupedLayers[groupId];
+      }
+    }
+  }
+
+  /**
+   *  Returns a view from it's id
+   *  @param {String} viewId
+   *  @return {View}
+   */
+  getViewById(viewId) {
+    return this._viewsById[viewId];
+  }
+
+  /**
+   *  Returns an array of layers from their group Id
+   *  @param {String} groupId
+   *  @return {Array}
+   */
+  getLayersByGroup(groupId) {
+    return this._groupedLayers[groupId];
   }
 
   *[Symbol.iterator]() {
