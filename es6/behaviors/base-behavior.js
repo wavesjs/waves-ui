@@ -1,7 +1,7 @@
 export default class BaseBehavior {
   constructor(options = {}) {
     this._selectedItems = new Set(); // no duplicate in Set
-    this._selectedClass = 'selected';
+    this._selectedClass = options.selectedClass || 'selected';
     this._layer = null;
 
     this._params = Object.assign({}, this.getDefaults(), options);
@@ -19,10 +19,17 @@ export default class BaseBehavior {
     return {};
   }
 
-  set selectedClass(value) { this._selectedClass = value; }
-  get selectedClass() { return this._selectedClass; }
+  set selectedClass(value) {
+    this._selectedClass = value;
+  }
 
-  get selectedItems() { return [...this._selectedItems]; }
+  get selectedClass() {
+    return this._selectedClass;
+  }
+
+  get selectedItems() {
+    return [...this._selectedItems];
+  }
 
   /**
    *  @param item {DOMElement} the item to select

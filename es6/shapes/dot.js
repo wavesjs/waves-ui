@@ -10,22 +10,23 @@ export default class Dot extends BaseShape {
   }
 
   render() {
-    if (this.el) { return this.el; }
+    if (this.$el) { return this.$el; }
 
-    this.el = document.createElementNS(this.ns, 'circle');
+    this.$el = document.createElementNS(this.ns, 'circle');
 
-    return this.el;
+    return this.$el;
   }
 
-  update(renderingContext, group, datum, index) {
+  update(renderingContext, $group, datum, index) {
     const cx = renderingContext.xScale(this.cx(datum));
     const cy = renderingContext.yScale(this.cy(datum));
     const r  = this.r(datum);
     const color = this.color(datum);
 
-    group.setAttributeNS(null, 'transform', `translate(${cx}, ${cy})`);
-    this.el.setAttributeNS(null, 'r', r);
-    this.el.style.fill = color;
+    $group.setAttributeNS(null, 'transform', `translate(${cx}, ${cy})`);
+
+    this.$el.setAttributeNS(null, 'r', r);
+    this.$el.style.fill = color;
   }
 
   // x1, x2, y1, y2 => in pixel domain

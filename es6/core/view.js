@@ -183,7 +183,7 @@ export default class View {
   /**
    * Adds a layer to the view
    */
-  register(layer) {
+  add(layer) {
     this.layers.push(layer);
     // Create a default timeContext for the layer if missing
     if (!layer.timeContext) {

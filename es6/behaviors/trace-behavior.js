@@ -2,12 +2,14 @@ import BaseBehavior from './base-behavior'
 
 
 export default class TraceBehavior extends BaseBehavior {
-  edit (renderingContext, shape, datum, dx, dy, target) {
-    if (target === shape.mean) {
+  edit(renderingContext, shape, datum, dx, dy, target) {
+    // rely on element doesn't allow to edit several shapes at once...
+    // classes are not the best solution neither, but works
+    if (target.classList.contains('mean')) {
       this._editMean(renderingContext, shape, datum, dx, dy);
-    } else if (target === shape.min) {
+    } else if (target.classList.contains('min')) {
       this._editRange(renderingContext, shape, datum, dx, dy, 'min');
-    } else if (target === shape.max) {
+    } else if (target.classList.contains('max')) {
       this._editRange(renderingContext, shape, datum, dx, dy, 'max');
     }
   }
@@ -15,21 +17,21 @@ export default class TraceBehavior extends BaseBehavior {
   _editMean(renderingContext, shape, datum, dx, dy) {
     // work in pixel domain
     const x = renderingContext.xScale(shape.x(datum));
-    const y = renderingContext.yScale(shape.yMean(datum));
+    const y = renderingContext.yScale(shape.mean(datum));
 
     let targetX = x + dx;
     let targetY = y - dy;
 
     shape.x(datum, renderingContext.xScale.invert(targetX));
-    shape.yMean(datum, renderingContext.yScale.invert(targetY));
+    shape.mean(datum, renderingContext.yScale.invert(targetY));
   }
 
   _editRange(renderingContext, shape, datum, dx, dy, rangeSide) {
-    const range = renderingContext.yScale(shape.yRange(datum));
+    const range = renderingContext.yScale(shape.range(datum));
 
     let targetRange = rangeSide === 'min' ? range + 2 * dy : range - 2 * dy;
     targetRange = Math.max(targetRange, 0);
 
-    shape.yRange(datum, renderingContext.yScale.invert(targetRange));
+    shape.range(datum, renderingContext.yScale.invert(targetRange));
   }
 }

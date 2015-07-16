@@ -12,21 +12,21 @@ export default class Line extends BaseShape {
     return { color: '#000000' };
   }
 
-  render() {
-    if (this.el) { return this.el; }
+  render(renderingContext) {
+    if (this.$el) { return this.$el; }
 
-    this.el = document.createElementNS(this.ns, 'path');
+    this.$el = document.createElementNS(this.ns, 'path');
     // this.el.setAttributeNS(null, 'shape-rendering', 'crispEdges');
-    return this.el;
+    return this.$el;
   }
 
-  update(renderingContext, group, data) {
+  update(renderingContext, $group, data) {
     data = data.slice(0);
     data.sort((a, b) => this.cx(a) < this.cx(b) ? -1 : 1);
 
-    this.el.setAttributeNS(null, 'd', this._buildLine(renderingContext, data));
-    this.el.style.stroke = this.params.color;
-    this.el.style.fill = 'none';
+    this.$el.setAttributeNS(null, 'd', this._buildLine(renderingContext, data));
+    this.$el.style.stroke = this.params.color;
+    this.$el.style.fill = 'none';
 
     data = null;
   }

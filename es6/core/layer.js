@@ -78,7 +78,7 @@ export default class Layer extends events.EventEmitter {
   //   // @TODO
   //      - clean Maps
   //      - clean listeners
-  //   // can't do `this = null` from here...
+  //      - clean behavior (behavior._layer)
   // }
 
   set yDomain(domain) {
