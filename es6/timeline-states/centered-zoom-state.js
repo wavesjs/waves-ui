@@ -30,30 +30,33 @@ export default class CenteredZoomState extends BaseState {
     if (!this.mouseDown) { return; }
 
     const timeline = this.timeline;
-    const timeContext = timeline.timeContext;
-    const lastCenterTime = timeContext.xScale.invert(e.x);
 
-    timeContext.stretchRatio += e.dy / 100;
-    timeContext.stretchRatio = Math.max(timeContext.stretchRatio, 0.01);
+    this.views.forEach(function(view) {
+      const timeContext = view.timeContext;
+      const lastCenterTime = timeContext.xScale.invert(e.x);
 
-    const newCenterTime = timeContext.xScale.invert(e.x);
-    const delta = newCenterTime - lastCenterTime;
-    const offset = timeContext.offset;
-    // apply new offset to keep it centered to the mouse
-    timeContext.offset += (delta + timeContext.xScale.invert(e.dx));
+      timeContext.stretchRatio += e.dy / 100;
+      timeContext.stretchRatio = Math.max(timeContext.stretchRatio, 0.01);
 
-    // clamp other values here if needed (example: offset < 0, stretchRatio > 1, etc...)
+      const newCenterTime = timeContext.xScale.invert(e.x);
+      const delta = newCenterTime - lastCenterTime;
+      const offset = timeContext.offset;
+      // apply new offset to keep it centered to the mouse
+      timeContext.offset += (delta + timeContext.xScale.invert(e.dx));
 
-    // example keep in container when zoomed out
-    if (timeContext.stretchRatio < 1) {
-      const minOffset = timeContext.xScale.invert(0);
-      const maxOffset = timeContext.xScale.invert(timeline.containersWidth - timeContext.xScale(timeContext.duration));
+      // clamp other values here if needed (example: offset <= 0, stretchRatio >= 1, etc...)
 
-      timeContext.offset = Math.max(timeContext.offset, minOffset);
-      timeContext.offset = Math.min(timeContext.offset, maxOffset);
-    }
+      // example keep in container when zoomed out
+      // if (timeContext.stretchRatio < 1) {
+      //   const minOffset = timeContext.xScale.invert(0);
+      //   const maxOffset = timeContext.xScale.invert(view.width - timeContext.xScale(timeContext.duration));
 
-    timeline.update();
+      //   timeContext.offset = Math.max(timeContext.offset, minOffset);
+      //   timeContext.offset = Math.min(timeContext.offset, maxOffset);
+      // }
+    });
+
+    timeline.views.update();
   }
 
   onMouseUp(e) {

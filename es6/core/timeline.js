@@ -84,10 +84,18 @@ export default class Timeline extends events.EventEmitter {
     return this._state;
   }
 
+  /**
+   *  Shortcut to access the View collection
+   *  @return {ViewCollection}
+   */
   get views() {
     return this._views;
   }
 
+  /**
+   *  Shortcut to access the Layer list
+   *  @return {Array}
+   */
   get layers() {
     return this._views.layers;
   }
