@@ -1,34 +1,5 @@
 # waves.js - ui
 
-*waves.js - ui* is a library that proposes primitives to build interactive temporal visualizations of audio data and metadata for in-browser display. 
-*ui* is part of the [waves.js](https://github.com/wavesjs/waves) library.
-
-
-Here is a synthetic view of objects that compose the library, and their interconnections:
-
-```
-`Timeline` (and its current `State`)
-    1..n 
-        `View` (and its related `ViewTimeContext` and `Behavior`) 
-            1..n 
-                `Layer` (and its related `LayerTimeContext`,  `Behavior` and `Shape` - `Marker`, `Segment` ...)
-```
-
-
-The `timeline` is the central hub for all user interactions events (keyboard, mouse) and it holds the current interaction `state` which defines how the different timeline elements respond to those events. 
-The `timeline` also contains factories to instantiate the views and layers elements.
-
-The `views` are like windows on the overall timeline. The main attributes `width`, `pixelsPerSecond`, `offset` and `zoom` define the characteristics of each view over the timeline.
-
-The `layers` keep (1) the data, (2) which `shape` to use to display the data, and (3) how to modify the data (both programmatically or based on user interactions dispatched from the timeline and its current state). For a `layer`, a layer-time-context defines its time characteristics: `offset`, `stretchRatio`, `duration`, and `start`. These attributes have repercussions on the audio rendering contrary to the one of views, which only affect the representation.
-
-
-Specific interaction state upon the timeline allow you to:
-- browse and zoom into the views
-- modify layers metadata
-- modify layers data through shape edition
-
-
 ## Default example
 
 A timeline that displays a waveform and a segmentation upon the waveform.
@@ -45,16 +16,46 @@ timeline.render();
 timeline.update();
 ```
 
-List other examples
+## Goals
+
+Within the web context, lot of libraries deal with live audio vizualisations, usually on top of Web Audio API AnalyserNode, but outside of time-based representations. Other libraries try to solve specific temporal vizualisation use cases, for instance [wavesurfer](http://www.wavesurfer.fm). On the other hand, some web applications reinvent the wheel to propose online collaborative DAW (Digital Audio Workstation) or all-in-one temporal visualization tools.
+
+*waves.js - ui* is a library that proposes primitives to build interactive temporal visualizations of audio and timeseries data for in-browser display. It has been designed by abstracting common features required in both music production environment and analysis authoring tools. The main goal of the library is to ease the development of innovative audio-based applications requiring temporal visualizations in a web context.
+
+*ui* is part of the [waves.js](https://github.com/wavesjs/waves) library.
+
+## Library Overview
+
+Here is a synthetic view of objects that compose the library, and their interconnections:
+
+**`Timeline`** and its current `State`
+1..n 
+**`View`** and its related `ViewTimeContext` and `Behavior`
+1..n 
+**`Layer`** and its related `LayerTimeContext`,  `Behavior` and `Shape` - `Marker`, `Segment` ...
+
+
+The `timeline` is the main entry point of a temporal visualization. It is the central hub for all user interaction events (keyboard, mouse), and it holds the current interaction `state` which defines how the different timeline elements (views, layers, shapes) respond to those events. 
+The `timeline` also contains factories to instantiate the `views` and `layers` elements.
+
+The `views` are like windows on the overall `timeline`. The main attributes `width`, `pixelsPerSecond`, `offset` and `zoom` define the characteristics of a view over the `timeline`.
+
+The `layers` (1) keep a reference to the data, (2) configure a `Shape` to display the data, and (3) set a `Behavior` to modify the data (both programmatically or based on user interaction dispatched from the `timeline` and its current `state`). `layer.timeContext` defines the layer time characteristics: `offset`, `stretchRatio`, `duration`, and `start`. These attributes have repercussions on the audio rendering contrary to the views one, which only affect the representation.
+
+
+Specific interaction state upon the timeline allow you to:
+- browse and zoom into the views
+- modify layers time characteristics through it timeContext or data through shape edition
+
 
 ## Conventions
-
-- `register()`: attach a view to a timeline or attach a layer to a view.
-- `render()`: method for an object to renders its own DOM and its child DOM - return a DOM element
+- `constructor()`: create the DOM SVG container element for views and layers
+- `register()`: register a view to a timeline or a layer to a view, so that a timeline keeps track of its views and a view keep track of its layers.
+- `render()`: method for an object to render its child DOM SVG element
 - `update()`: method for an object to update its previously created DOM according to data or time-context
 
 
-## Demonstrators ideas
+## Examples
 
 
 ## Documentation
