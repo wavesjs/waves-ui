@@ -30,15 +30,19 @@ It main goal is to ease the development of audio-based web applications requirin
 Here is a synthetic view of objects that compose the library, and their interconnections:
 
 **`Timeline`** and its current `State`
+
 1..n 
+
 **`View`** and its related `ViewTimeContext` and `Behavior`
+
 1..n 
+
 **`Layer`** and its related `LayerTimeContext`,  `Behavior` and `Shape` - `Marker`, `Segment` ...
 
 ### Timeline
 
 The `timeline` is the main entry point of a temporal visualization. It is the central hub for all user interaction events (keyboard, mouse), and it holds the current interaction `state` which defines how the different timeline elements (views, layers, shapes) respond to those events. 
-The `timeline` also contains factories to manage the `views` and `layers` elements.
+The `timeline` also contains factories to manage its `views` and `layers`.
 
 ### View
 
@@ -46,8 +50,8 @@ The `views` are like windows on the overall `timeline`. The main attributes `wid
 
 ### Layer
 
-The `layers` (1) keep a reference to the data, (2) configure a `Shape` to display the data, and (3) set a `Behavior` to modify the data (both programmatically or based on user interaction dispatched from the `timeline` and its current `state`). 
-`layer.timeContext` defines the layer time characteristics: `offset`, `stretchRatio`, `duration`, and `start`. These attributes have repercussions on the audio rendering contrary to the views one, which only affect the representation.
+The `layers` 1. keep a reference to the data, 2. configure a `Shape` to display the data, and 3. set a `Behavior` to modify the data (both programmatically or based on user interaction dispatched from the `timeline` and its current `state`). 
+The layer `timeContext` defines its time characteristics: `offset`, `stretchRatio`, `duration`, and `start`.
 
 ### Shape
 
@@ -55,9 +59,9 @@ The library comes with usual shapes to display audio data and timeseries:
 - `waveform`
 - `segment` and `annotated-segment`
 - `marker` and `annotated-marker` 
-- `dot` and `line`, for break point functions (automation curves)
+- `dot` and `line`, for break point functions (aka automation curves)
 - `trace`
-- `cursor` 
+- `cursor`  
 The library provides a template to create new shapes.
 
 ### Interactions - Timeline-states
@@ -65,6 +69,12 @@ The library provides a template to create new shapes.
 Specific interaction state upon the timeline allow you to:
 - browse and zoom into the views
 - modify layers time characteristics through it timeContext or data through shape edition
+
+Internally they call the relevant `behavior` associated to the view, the layer or the shape.
+
+### Behavior
+
+The behaviors give an entry point to modify a shape, a layer or a view. It allows you to programmatically move DOM elements associated to a shape, a layer or a view via a target element and a move, and modify accordingly the data associated to it. 
 
 ### Utils
 
@@ -76,7 +86,6 @@ Traditionally, timeseries data can be formated like an array of object or multip
 - `add()`: add a view to a timeline or a layer to a view, so that a timeline keeps track of its views and a view keep track of its layers.
 - `render()`: method for an object to render its child DOM SVG element
 - `update()`: method for an object to update its previously created DOM according to data or time-context
-
 
 
 ## Other Examples
@@ -92,8 +101,8 @@ Traditionally, timeseries data can be formated like an array of object or multip
 - Scales
 - Edition
 - Live input
-- With Audio 
-- With Analysis
+- With Audio engine
+- With Analysis engine (LFO)
 
 ## Full Documentation
 
