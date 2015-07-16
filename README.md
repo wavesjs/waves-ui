@@ -72,7 +72,7 @@ Specific interaction state upon the timeline allow you to:
 - browse and zoom into the views
 - modify layers time characteristics through it timeContext or data through shape edition
 
-Internally they call the relevant `behavior` associated to the view, the layer or the shape.
+Internally the current interaction state call the relevant `behavior` associated to the view, the layer or the shape.
 
 ### Behavior
 

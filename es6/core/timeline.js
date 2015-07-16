@@ -8,19 +8,12 @@ import ViewCollection from './view-collection';
 
 
 /**
- * The `Timeline` class is the main entry point to create a representation of temporal data.
- * A `Timeline` instance can have multiples `View` instances, which are basically a view window on the overall timeline.
+ * The `timeline` is the main entry point of a temporal visualization.
  *
- * The timeline hold the current interaction state and is the central hub for keyboard as well as mouse events.
- * States are there to facilitating interactions with the timeline for:
- * - zooming
- * - moving
- * - editing
- *
- * Methods `register`, `render` and `update` call the same methods on all the `View` instances, which call the same methods one on all its `Layer` instances.
- * - `register`: registers a `View` instance onto the timeline (ie. the timeline can `render` and `update` its different views)
- * - `render`: renders the DOM for the element (if has one) and its descendant (here renders the views, ie. render the DOM tree for a view and attach it in the DOM at the right place)
- * - `update`: update the display according to data changes (ie. update the DOM element attached to the DOM tree with render method, based on new data).
+ * The `timeline`:
+ * - is the central hub for all user interaction events (keyboard, mouse),
+ * - holds the current interaction `state` which defines how the different timeline elements (views, layers, shapes) respond to those events,
+ * - contains factories to manage its `views` and `layers`.
  */
 export default class Timeline extends events.EventEmitter {
   /**
@@ -69,9 +62,7 @@ export default class Timeline extends events.EventEmitter {
 
 
   /**
-   * Changes the state of the timeline.
-   * `State` instances are used to define the application logic by precising specific user interaction cases, and how they impact the overal temporal data representation.
-   *
+   * Changes the state of the timeline
    * @param {BaseState} state - the state in which the timeline must be setted
    */
   set state(state) {
@@ -85,24 +76,23 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  Shortcut to access the View collection
-   *  @return {ViewCollection}
+   * Shortcut to access the View collection
+   * @return {ViewCollection}
    */
   get views() {
     return this._views;
   }
 
   /**
-   *  Shortcut to access the Layer list
-   *  @return {Array}
+   * Shortcut to access the Layer list
+   * @return {Array}
    */
   get layers() {
     return this._views.layers;
   }
 
   /**
-   * Adds a view to the timeline
-   * Views display this window on the timeline in theirs own SVG element.
+   * Adds a `View` instance to the timeline
    * @param {View} view
    */
   add(view) {
@@ -119,21 +109,21 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  Defines a default for each view to be created
-   *  @param {Number} pixelsPerSeconds
-   *  @param {Number} width
-   *  @param {Number} height
+   * Defines a default for each view to be created
+   * @param {Number} pixelsPerSeconds
+   * @param {Number} width
+   * @param {Number} height
    */
   configureViews(pixelsPerSecond = 100, width = 1000, height = 120) {
     this._viewsConfiguration = { pixelsPerSecond, width, height };
   }
 
   /**
-   *  Creates a new view from the configuration define in `configureViews`
-   *  @param {DOMElement} $el - the element to insert the view inside
-   *  @param {Object} options - override the defaults options if necessary
-   *  @param {String} [viewId=null] - optionnal id to give to the view, only exists in timeline's context
-   *  @return {View}
+   * Creates a new view from the configuration define in `configureViews`
+   * @param {DOMElement} $el - the element to insert the view inside
+   * @param {Object} options - override the defaults options if necessary
+   * @param {String} [viewId=null] - optionnal id to give to the view, only exists in timeline's context
+   * @return {View}
    */
   createView($el, options = {}, viewId = null) {
     const config = Object.assign({}, this._viewsConfiguration, options);
@@ -153,10 +143,10 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  Adds a layer to a view, allow to group view arbitrarily inside groups. Basically a wrapper for `view.add(layer)`
-   *  @param {Layer} layer - the layer to add
-   *  @param {View} view - the view to the insert the layer in
-   *  @param {String} [groupId='default'] - the group in which associate the layer
+   * Adds a layer to a view, allow to group view arbitrarily inside groups. Basically a wrapper for `view.add(layer)`
+   * @param {Layer} layer - the layer to add
+   * @param {View} view - the view to the insert the layer in
+   * @param {String} [groupId='default'] - the group in which associate the layer
    */
   addLayer(layer, viewOrViewId, groupId = 'default') {
     let view = viewOrViewId;
@@ -175,8 +165,8 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  Removes a layer from its view (the layer is detatched from the DOM but can still be reused)
-   *  @param {Layer} layer - the layer to remove
+   * Removes a layer from its view (the layer is detatched from the DOM but can still be reused)
+   * @param {Layer} layer - the layer to remove
    */
   removeLayer(layer) {
     this.views.forEach(function(view) {
@@ -197,18 +187,18 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  Returns a view from it's id
-   *  @param {String} viewId
-   *  @return {View}
+   * Returns a view from it's id
+   * @param {String} viewId
+   * @return {View}
    */
   getViewById(viewId) {
     return this._viewsById[viewId];
   }
 
   /**
-   *  Returns an array of layers from their group Id
-   *  @param {String} groupId
-   *  @return {Array}
+   * Returns an array of layers from their group Id
+   * @param {String} groupId
+   * @return {Array}
    */
   getLayersByGroup(groupId) {
     return this._groupedLayers[groupId];
