@@ -1,7 +1,7 @@
 import BaseState from './base-state';
 import TimeContextBehavior from '../behaviors/time-context-behavior';
 
-
+// works but hack with the TimeContextBehavior
 export default class ContextEditionState extends BaseState {
   constructor(timeline) {
     super(timeline);

@@ -1,6 +1,6 @@
 import BaseState from './base-state';
 
-
+// works but strange loop on view to update each timeContexts
 export default class CenteredZoomState extends BaseState {
   constructor(timeline) {
     super(timeline);
@@ -31,6 +31,8 @@ export default class CenteredZoomState extends BaseState {
 
     const timeline = this.timeline;
 
+    // @NOTE: kind of weirdo, but sure how this will beahve if view's timeContext
+    // are not consistents
     this.views.forEach(function(view) {
       const timeContext = view.timeContext;
       const lastCenterTime = timeContext.xScale.invert(e.x);
