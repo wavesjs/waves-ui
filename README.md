@@ -1,8 +1,9 @@
 # waves.js - ui
 
-## Default example
 
-A timeline that displays a waveform and a segmentation upon the waveform.
+## Basic Example
+
+A timeline that displays a waveform and a segmentation over it.
 
 ```
 // Create a timeline
@@ -10,19 +11,19 @@ const data = [{ width: 3, x: 0 }, { width: 6, x: 6}];
 const timeline = new Timeline();
 const view = new View(viewDiv);
 const layer = new SegmentLayer(data);
-timeline.register(view);
-view.register(layer);
-timeline.render();
-timeline.update();
+timeline.add(view);
+view.add(layer);
+timeline.views.render();
 ```
 
-## Goals
 
-Within the web context, lot of libraries deal with live audio vizualisations, usually on top of Web Audio API AnalyserNode, but outside of time-based representations. Other libraries try to solve specific temporal vizualisation use cases, for instance [wavesurfer](http://www.wavesurfer.fm). On the other hand, some web applications reinvent the wheel to propose online collaborative DAW (Digital Audio Workstation) or all-in-one temporal visualization tools.
+## Goals and Features
 
-*waves.js - ui* is a library that proposes primitives to build interactive temporal visualizations of audio and timeseries data for in-browser display. It has been designed by abstracting common features required in both music production environment and analysis authoring tools. The main goal of the library is to ease the development of innovative audio-based applications requiring temporal visualizations in a web context.
+*waves.js - ui* is a library that proposes primitives to build interactive temporal visualizations of audio and timeseries data for in-browser rendering. It has been designed by abstracting common features required in both music production environments and analysis authoring tools. 
+It main goal is to ease the development of audio-based web applications requiring interactive temporal visualizations.
 
 *ui* is part of the [waves.js](https://github.com/wavesjs/waves) library.
+
 
 ## Library Overview
 
@@ -34,31 +35,67 @@ Here is a synthetic view of objects that compose the library, and their intercon
 1..n 
 **`Layer`** and its related `LayerTimeContext`,  `Behavior` and `Shape` - `Marker`, `Segment` ...
 
+### Timeline
 
 The `timeline` is the main entry point of a temporal visualization. It is the central hub for all user interaction events (keyboard, mouse), and it holds the current interaction `state` which defines how the different timeline elements (views, layers, shapes) respond to those events. 
-The `timeline` also contains factories to instantiate the `views` and `layers` elements.
+The `timeline` also contains factories to manage the `views` and `layers` elements.
+
+### View
 
 The `views` are like windows on the overall `timeline`. The main attributes `width`, `pixelsPerSecond`, `offset` and `zoom` define the characteristics of a view over the `timeline`.
 
-The `layers` (1) keep a reference to the data, (2) configure a `Shape` to display the data, and (3) set a `Behavior` to modify the data (both programmatically or based on user interaction dispatched from the `timeline` and its current `state`). `layer.timeContext` defines the layer time characteristics: `offset`, `stretchRatio`, `duration`, and `start`. These attributes have repercussions on the audio rendering contrary to the views one, which only affect the representation.
+### Layer
 
+The `layers` (1) keep a reference to the data, (2) configure a `Shape` to display the data, and (3) set a `Behavior` to modify the data (both programmatically or based on user interaction dispatched from the `timeline` and its current `state`). 
+`layer.timeContext` defines the layer time characteristics: `offset`, `stretchRatio`, `duration`, and `start`. These attributes have repercussions on the audio rendering contrary to the views one, which only affect the representation.
+
+### Shape
+
+The library comes with usual shapes to display audio data and timeseries: 
+- `waveform`
+- `segment` and `annotated-segment`
+- `marker` and `annotated-marker` 
+- `dot` and `line`, for break point functions (automation curves)
+- `trace`
+- `cursor` 
+The library provides a template to create new shapes.
+
+### Interactions - Timeline-states
 
 Specific interaction state upon the timeline allow you to:
 - browse and zoom into the views
 - modify layers time characteristics through it timeContext or data through shape edition
 
+### Utils
 
-## Conventions
+Traditionally, timeseries data can be formated like an array of object or multiple arrays. An `OrthogonalData` instance can format the datas in one or another formats.
+
+### Naming Conventions
+
 - `constructor()`: create the DOM SVG container element for views and layers
-- `register()`: register a view to a timeline or a layer to a view, so that a timeline keeps track of its views and a view keep track of its layers.
+- `add()`: add a view to a timeline or a layer to a view, so that a timeline keeps track of its views and a view keep track of its layers.
 - `render()`: method for an object to render its child DOM SVG element
 - `update()`: method for an object to update its previously created DOM according to data or time-context
 
 
-## Examples
 
+## Other Examples
 
-## Documentation
+- Waveform
+- Segments
+- Markers
+- Annotated Markers
+- BreakPointFunction
+- Trace
+- Cursor
+- Zoom
+- Scales
+- Edition
+- Live input
+- With Audio 
+- With Analysis
+
+## Full Documentation
 
 [http://wavesjs.github.io/ui/](http://wavesjs.github.io/ui/)
 
@@ -120,33 +157,6 @@ npm run bundle
 ```
 
 _`core/timeline`, `core/layer`, and `helpers/utils` are mandatory_
-
-## List of components
-
-Core components
-- `timeline`
-- `layer`
-- `time-context`
-
-Shapes and behaviors
-- `waveform`
-- `segment` and `annotated-segment`
-- `marker` and `annotated-marker` 
-- `cursor` 
-- `dot` and `line` 
-
-Timeline-states and interactions
-- 
--
-
-Utils
-- `orthogonal-data`
-
-## Miscellaneous
-
-_parts of d3 in use: selections, scales_  
-(could be replaced, the most tricky part would be the element <=> datum binding)
-
 
 
 ## License
