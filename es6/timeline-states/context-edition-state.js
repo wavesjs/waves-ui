@@ -1,7 +1,7 @@
 import BaseState from './base-state';
 import TimeContextBehavior from '../behaviors/time-context-behavior';
 
-// works but hack with the TimeContextBehavior
+// works
 export default class ContextEditionState extends BaseState {
   constructor(timeline) {
     super(timeline);
@@ -46,7 +46,7 @@ export default class ContextEditionState extends BaseState {
       layer.stretchContext(e.dx, e.dy, target);
     }
 
-    layer.update();
+    this.timeline.tracks.update(layer);
   }
 
   onMouseUp(e) {

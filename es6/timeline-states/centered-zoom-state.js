@@ -1,6 +1,6 @@
 import BaseState from './base-state';
 
-// works but strange loop on view to update each timeContexts
+// broken
 export default class CenteredZoomState extends BaseState {
   constructor(timeline) {
     super(timeline);

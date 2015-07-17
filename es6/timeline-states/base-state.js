@@ -11,15 +11,15 @@ export default class BaseState {
   /**
    * Get timeline views
    */
-  get views() {
-    return this.timeline.views;
+  get tracks() {
+    return this.timeline.tracks;
   }
 
   /**
    * Get timeline layers
    */
   get layers() {
-    return this.timeline.views.layers;
+    return this.timeline.tracks.layers;
   }
 
   /**

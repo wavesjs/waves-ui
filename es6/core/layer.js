@@ -73,7 +73,7 @@ export default class Layer extends events.EventEmitter {
     this._renderContainer();
 
     // creates the timeContextBehavior for all layer, lazy instanciation
-    if (timeContextBehavior !== null) {
+    if (timeContextBehavior === null) {
       timeContextBehavior = new timeContextBehaviorCtor();
     }
   }
@@ -114,6 +114,10 @@ export default class Layer extends events.EventEmitter {
   get opacity() {
     return this.params.opacity;
   }
+
+  /**
+   * TimeContext accessors
+   */
 
   /**
    * @mandatory define the context in which the layer is drawn
@@ -292,10 +296,10 @@ export default class Layer extends events.EventEmitter {
   }
 
   /**
-   *  draw the shape to interact with the context
-   *  @params bool {Boolean} define if the layer's context is editable or not
+   *  draws the shape to interact with the context
+   *  @params {Boolean} [bool=true] - defines if the layer's context is editable or not
    */
-  setContextEditable(bool) {
+  setContextEditable(bool = true) {
     const display = bool ? 'block' : 'none';
     this.$interactions.style.display = display;
     this._isContextEditable = bool;
@@ -306,7 +310,7 @@ export default class Layer extends events.EventEmitter {
   }
 
   stretchContext(dx, dy, target) {
-    this.contextBehavior.stretch(this, dx, dy, target);
+    timeContextBehavior.stretch(this, dx, dy, target);
   }
 
   // --------------------------------------

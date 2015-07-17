@@ -1,5 +1,6 @@
+import Layer from './layer';
 /**
- * The `ViewCollection` class allow to update all timeline's views at once
+ * The `ViewCollection` class allow to update all timeline's tracks at once
  */
 export default class ViewCollection extends Array {
   constructor(timeline) {
@@ -8,39 +9,58 @@ export default class ViewCollection extends Array {
     this._timeline = timeline;
   }
 
+  // @TODO
+  // this should be in the timeline
+  _getLayersOrGroups(layerOrGroup = null) {
+    let layers = null;
+
+    if (typeof layerOrGroup === 'string') {
+      layers = this._timeline.groupedLayers[layerOrGroup];
+    } else if (layerOrGroup instanceof Layer) {
+      layers = [layerOrGroup];
+    } else {
+      layers = this.layers;
+    }
+
+    return layers;
+  }
+
   // @NOTE keep this ?
   // could prepare some vertical resizing ability
   // this should be able to modify the layers yScale to be really usefull
 
   set height(value) {
-    this.forEach((view) => view.height = value);
+    this.forEach((track) => track.height = value);
   }
 
   // access layers
   get layers() {
     let layers = [];
-    this.forEach((view) => layers = layers.concat(view.layers));
+    this.forEach((track) => layers = layers.concat(track.layers));
 
     return layers;
   }
 
   render() {
-    this.forEach((view) => view.render());
+    this.forEach((track) => track.render());
     this._timeline.emit('render');
   }
 
-  update() {
-    this.forEach((view) => view.update());
-    this._timeline.emit('update');
+  // should be update(...layersOrGroups)
+  update(layerOrGroup) {
+    const layers = this._getLayersOrGroups(layerOrGroup);
+    this.forEach((track) => track.update(layers));
+    this._timeline.emit('update', layers);
   }
 
-  updateContainer() {
-    this.forEach((view) => view.updateContainer());
+  updateContainer(trackOrTrackIds) {
+    this.forEach((track) => track.updateContainer());
     this._timeline.emit('update:containers');
   }
 
-  updateLayers() {
-    this.forEach((view) => view.updateLayers());
+  updateLayers(layerOrGroup) {
+    const layers = this._getLayersOrGroups(layerOrGroup);
+    this.forEach((track) => track.updateLayers(layers));
     this._timeline.emit('update:layers');
   }
 }
