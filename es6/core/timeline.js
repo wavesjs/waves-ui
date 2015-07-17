@@ -11,9 +11,9 @@ import ViewCollection from './view-collection';
  * The `timeline` is the main entry point of a temporal visualization.
  *
  * The `timeline`:
+ * - contains factories to manage its `views` and `layers`,
  * - is the central hub for all user interaction events (keyboard, mouse),
- * - holds the current interaction `state` which defines how the different timeline elements (views, layers, shapes) respond to those events,
- * - contains factories to manage its `views` and `layers`.
+ * - holds the current interaction `state` which defines how the different timeline elements (views, layers, shapes) respond to those events.
  */
 export default class Timeline extends events.EventEmitter {
   /**
