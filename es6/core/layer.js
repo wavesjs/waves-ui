@@ -4,8 +4,11 @@ import events from 'events';
 
 import ns from './namespace';
 import Segment from '../shapes/segment';
-import SegmentBehavior from '../behaviors/segment-behavior';
+import TimeContextBehavior from '../behaviors/time-context-behavior';
 
+// time context bahevior
+let timeContextBehavior = null;
+let timeContextBehaviorCtor = TimeContextBehavior;
 
 // private item -> id map to force d3 tp keep in sync with the DOM
 let   _counter = 0;
@@ -68,6 +71,18 @@ export default class Layer extends events.EventEmitter {
 
     // initialize timeContext layout
     this._renderContainer();
+
+    // creates the timeContextBehavior for all layer, lazy instanciation
+    if (timeContextBehavior !== null) {
+      timeContextBehavior = new timeContextBehaviorCtor();
+    }
+  }
+
+  /**
+   *  allows to override default the TimeContextBehavior
+   */
+  static configureTimeContextBehavior(ctor) {
+    timeContextBehaviorCtor = ctor;
   }
 
   // destroy() {
@@ -276,16 +291,26 @@ export default class Layer extends events.EventEmitter {
     });
   }
 
-  editContext() {
-    this.contextBehavior.edit();
+  /**
+   *  draw the shape to interact with the context
+   *  @params bool {Boolean} define if the layer's context is editable or not
+   */
+  setContextEditable(bool) {
+    const display = bool ? 'block' : 'none';
+    this.$interactions.style.display = display;
+    this._isContextEditable = bool;
   }
 
-  stretchContext() {
-    this.contextBehavior.stretch();
+  editContext(dx, dy, target) {
+    timeContextBehavior.edit(this, dx, dy, target);
+  }
+
+  stretchContext(dx, dy, target) {
+    this.contextBehavior.stretch(this, dx, dy, target);
   }
 
   // --------------------------------------
-  // H$elpers
+  // Helpers
   // --------------------------------------
 
   /**
