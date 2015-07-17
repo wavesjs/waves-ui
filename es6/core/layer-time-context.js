@@ -35,7 +35,7 @@ export default class LayerTimeContext extends AbstractTimeContext {
     this._xScale = null;
 
     this._start = 0;
-    this._duration = parent.duration;
+    this._duration = parent.visibleDuration;
     this._offset = 0;
     this._stretchRatio = 1;
     // register into the timeline's TimeContext
@@ -91,7 +91,7 @@ export default class LayerTimeContext extends AbstractTimeContext {
 
     const xScale = this.parent.originalXScale.copy();
     const [min, max] = xScale.domain();
-    const diff = (max - min) / (value * this.parent.stretchRatio);
+    const diff = (max - min) / (value * this.parent.zoom);
 
     xScale.domain([min, min + diff]);
 

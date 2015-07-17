@@ -1,39 +1,112 @@
-import d3Scale from 'd3-scale';
 import events from 'events';
 
 import Keyboard from '../interactions/keyboard';
 import Surface from '../interactions/surface';
-import View from './view';
-import ViewCollection from './view-collection';
+import TimelineTimeContext from './timeline-time-context';
+import Track from './track';
+import TrackCollection from './track-collection';
 
 
 /**
+ *
  * The `timeline` is the main entry point of a temporal visualization.
  *
  * The `timeline`:
  * - contains factories to manage its `views` and `layers`,
  * - is the central hub for all user interaction events (keyboard, mouse),
  * - holds the current interaction `state` which defines how the different timeline elements (views, layers, shapes) respond to those events.
+ *
+ *
+ * The `Timeline` class is the main entry point to create a representation of temporal data.
+ * A `Timeline` instance can have multiples `Track` instances, which are basically a track window on the overall timeline.
+ *
+ * The timeline hold the current interaction state and is the central hub for keyboard as well as mouse events.
+ * States are there to facilitating interactions with the timeline for:
+ * - zooming
+ * - moving
+ * - editing
+ *
+ * Methods `register`, `render` and `update` call the same methods on all the `Track` instances, which call the same methods one on all its `Layer` instances.
+ * - `register`: registers a `Track` instance onto the timeline (ie. the timeline can `render` and `update` its different tracks)
+ * - `render`: renders the DOM for the element (if has one) and its descendant (here renders the tracks, ie. render the DOM tree for a track and attach it in the DOM at the right place)
+ * - `update`: update the display according to data changes (ie. update the DOM element attached to the DOM tree with render method, based on new data).
  */
 export default class Timeline extends events.EventEmitter {
   /**
    * Creates a new `Timeline` instance
    */
-  constructor() {
+  constructor(pixelsPerSecond = 100, visibleWidth = 1000) {
     super();
 
-    this._views = new ViewCollection(this);
+    this._tracks = new TrackCollection(this);
 
     this._state = null;
     this._handleEvent = this._handleEvent.bind(this);
     this._createInteraction(Keyboard, 'body');
-
-    // init default configuration for views factory
-    this._viewsConfiguration = {};
-    this.configureViews();
     // stores
-    this._viewsById = {};
+    this._trackById = {};
     this._groupedLayers = {};
+
+    this.timeContext = new TimelineTimeContext(pixelsPerSecond, visibleWidth);
+  }
+
+  /**
+   *  TimeContext accessors
+   */
+  get offset() {
+    return this.timeContext.offset;
+  }
+
+  set offset(value) {
+    this.timeContext.offset = value;
+  }
+
+  get zoom() {
+    return this.timeContext.zoom;
+  }
+
+  set zoom(value) {
+    this.timeContext.zoom = value;
+  }
+
+  get pixelsPerSecond() {
+    return this.timeContext.pixelsPerSecond;
+  }
+
+  set pixelsPerSecond(value) {
+    this.timeContext.pixelsPerSecond = value;
+  }
+
+  get visibleWidth() {
+    return this.timeContext.visibleWidth;
+  }
+
+  set visibleWidth(value) {
+    this.timeContext.visibleWidth = value;
+  }
+
+  /**
+   *  @readonly
+   */
+  get visibleDuration() {
+    return this.timeContext.visibleWidth;
+  }
+
+  get visibleWidth() {
+    return this.timeContext.visibleWidth;
+  }
+
+  set visibleWidth(value) {
+    this.timeContext.visibleWidth = value;
+  }
+
+  // @NOTE maybe expose as public instead of get/set for nothing...
+  set maintainVisibleDuration(bool) {
+    this.timeContext.maintainVisibleDuration = bool;
+  }
+
+  get maintainVisibleDuration() {
+    return this.timeContext.maintainVisibleDuration;
   }
 
   /**
@@ -76,11 +149,11 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   * Shortcut to access the View collection
-   * @return {ViewCollection}
+   *  Shortcut to access the Track collection
+   *  @return {TrackCollection}
    */
-  get views() {
-    return this._views;
+  get tracks() {
+    return this._tracks;
   }
 
   /**
@@ -88,74 +161,65 @@ export default class Timeline extends events.EventEmitter {
    * @return {Array}
    */
   get layers() {
-    return this._views.layers;
+    return this._tracks.layers;
   }
 
   /**
-   * Adds a `View` instance to the timeline
-   * @param {View} view
+   * Adds a track to the timeline
+   * Tracks display this window on the timeline in theirs own SVG element.
+   * @param {Track} track
    */
-  add(view) {
-    if (this.views.indexOf(view) !== -1) {
-      throw new Error('view already added to the timeline');
+  add(track) {
+    if (this.tracks.indexOf(track) !== -1) {
+      throw new Error('track already added to the timeline');
     }
 
-    this.views.push(view);
-    this._createInteraction(Surface, view.$el);
+    track.configure(this.timeContext);
+
+    this.tracks.push(track);
+    this._createInteraction(Surface, track.$el);
   }
 
-  remove(view) {
+  remove(track) {
     // @TODO
   }
 
   /**
-   * Defines a default for each view to be created
-   * @param {Number} pixelsPerSeconds
-   * @param {Number} width
-   * @param {Number} height
+   *  Creates a new track from the configuration define in `configureTracks`
+   *  @param {DOMElement} $el - the element to insert the track inside
+   *  @param {Object} options - override the defaults options if necessary
+   *  @param {String} [trackId=null] - optionnal id to give to the track, only exists in timeline's context
+   *  @return {Track}
    */
-  configureViews(pixelsPerSecond = 100, width = 1000, height = 120) {
-    this._viewsConfiguration = { pixelsPerSecond, width, height };
-  }
+  createTrack($el, trackHeight = null, trackId = null) {
+    const track = new Track($el, trackHeight);
 
-  /**
-   * Creates a new view from the configuration define in `configureViews`
-   * @param {DOMElement} $el - the element to insert the view inside
-   * @param {Object} options - override the defaults options if necessary
-   * @param {String} [viewId=null] - optionnal id to give to the view, only exists in timeline's context
-   * @return {View}
-   */
-  createView($el, options = {}, viewId = null) {
-    const config = Object.assign({}, this._viewsConfiguration, options);
-    const { pixelsPerSecond, width, height } = config;
-    const view = new View($el, pixelsPerSecond, width, height);
-
-    if (viewId !== null) {
-      if (this._viewsById[viewId] !== undefined) {
-        throw new Error(`viewId: "${viewId}" is already used`);
+    if (trackId !== null) {
+      if (this._trackById[trackId] !== undefined) {
+        throw new Error(`trackId: "${trackId}" is already used`);
       }
 
-      this._viewsById[viewId] = view;
+      this._trackById[trackId] = track;
     }
-    // add view to the timeline
-    this.add(view);
-    return view;
+    // add track to the timeline
+    this.add(track);
+    return track;
   }
 
   /**
-   * Adds a layer to a view, allow to group view arbitrarily inside groups. Basically a wrapper for `view.add(layer)`
-   * @param {Layer} layer - the layer to add
-   * @param {View} view - the view to the insert the layer in
-   * @param {String} [groupId='default'] - the group in which associate the layer
+   *  Adds a layer to a track, allow to group track arbitrarily inside groups. Basically a wrapper for `track.add(layer)`
+   *  @param {Layer} layer - the layer to add
+   *  @param {Track} track - the track to the insert the layer in
+   *  @param {String} [groupId='default'] - the group in which associate the layer
    */
-  addLayer(layer, viewOrViewId, groupId = 'default') {
-    let view = viewOrViewId;
+  addLayer(layer, trackOrTrackId, groupId = 'default') {
+    let track = trackOrTrackId;
 
-    if (typeof viewOrViewId === 'string') {
-      view = this.getViewById(viewOrViewId);
+    if (typeof trackOrTrackId === 'string') {
+      track = this.getTrackById(trackOrTrackId);
     }
-    // we should have a View instance at this point
-    view.add(layer);
+    // we should have a Track instance at this point
+    track.add(layer);
 
     if (!this._groupedLayers[groupId]) {
       this._groupedLayers[groupId] = [];
@@ -165,13 +229,13 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   * Removes a layer from its view (the layer is detatched from the DOM but can still be reused)
-   * @param {Layer} layer - the layer to remove
+   *  Removes a layer from its track (the layer is detatched from the DOM but can still be reused)
+   *  @param {Layer} layer - the layer to remove
    */
   removeLayer(layer) {
-    this.views.forEach(function(view) {
-      const index = view.layers.indexOf(layer);
-      if (index !== -1) { view.remove(layer); }
+    this.tracks.forEach(function(track) {
+      const index = track.layers.indexOf(layer);
+      if (index !== -1) { track.remove(layer); }
     });
 
     for (let groupId in this._groupedLayers) {
@@ -187,12 +251,12 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   * Returns a view from it's id
-   * @param {String} viewId
-   * @return {View}
+   *  Returns a track from it's id
+   *  @param {String} trackId
+   *  @return {Track}
    */
-  getViewById(viewId) {
-    return this._viewsById[viewId];
+  getTrackById(trackId) {
+    return this._trackById[trackId];
   }
 
   /**
@@ -205,6 +269,6 @@ export default class Timeline extends events.EventEmitter {
   }
 
   *[Symbol.iterator]() {
-    yield* this.views[Symbol.iterator]();
+    yield* this.tracks[Symbol.iterator]();
   }
 }

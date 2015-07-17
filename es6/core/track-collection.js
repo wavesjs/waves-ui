@@ -8,29 +8,10 @@ export default class ViewCollection extends Array {
     this._timeline = timeline;
   }
 
-  set offset(value) {
-    this.forEach((view) => view.offset = value);
-  }
-
-  set zoom(value) {
-    this.forEach((view) => view.zoom = value);
-  }
-
-  set width(value) {
-    this.forEach((view) => view.width = value);
-  }
-
-  set pixelsPerSecond(value) {
-    this.forEach((view) => view.pixelsPerSecond = value);
-  }
-
-  set maintainVisibleDuration(value) {
-    this.forEach((view) => view.maintainVisibleDuration = value);
-  }
-
   // @NOTE keep this ?
   // could prepare some vertical resizing ability
   // this should be able to modify the layers yScale to be really usefull
+
   set height(value) {
     this.forEach((view) => view.height = value);
   }
