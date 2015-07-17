@@ -85,6 +85,38 @@ export default class Layer extends events.EventEmitter {
     timeContextBehaviorCtor = ctor;
   }
 
+  get start() {
+    return this.timeContext.start;
+  }
+
+  set start(value) {
+    this.timeContext.start = value;
+  }
+
+  get offset() {
+    return this.timeContext.offset;
+  }
+
+  set offset(value) {
+    this.timeContext.offset = value;
+  }
+
+  get duration() {
+    return this.timeContext.duration;
+  }
+
+  set duration(value) {
+    this.timeContext.duration = value;
+  }
+
+  get stretchRatio() {
+    return this.timeContext.stretchRatio;
+  }
+
+  set stretchRatio(value) {
+    this.timeContext.stretchRatio = value;
+  }
+
   // destroy() {
   //   this.timeContext = null;
   //   this.d3items = null;
