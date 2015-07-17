@@ -9,13 +9,13 @@ A timeline that displays a waveform and a segmentation over it.
 // Create a timeline
 const data = [{ width: 3, x: 0 }, { width: 6, x: 6}];
 const timeline = new Timeline();
-const view = new View(viewDiv);
+const track = new Track(trackDiv);
 const layer = new SegmentLayer(data);
 
-timeline.add(view);
-view.add(layer);
+timeline.add(track);
+track.add(layer);
 
-timeline.views.render();
+timeline.tracks.render();
 ```
 
 
@@ -31,28 +31,21 @@ Its main goal is to ease the development of audio-based web applications requiri
 
 Here is a synthetic view of objects that compose the library, and their interconnections:
 
-**`Timeline`** and its current `State`
-
-1..n 
-
-**`View`** and its related `ViewTimeContext` and `Behavior`
-
-1..n 
-
-**`Layer`** and its related `LayerTimeContext`,  `Behavior` and `Shape` - `Marker`, `Segment` ...
+`Timeline` 1..n `Track` 1..n `Layer` and its `Shape` (`Waveform`, `Marker`, `Segment` ...)
 
 ### Timeline
 
 The `timeline` is the main entry point of a temporal visualization.
 
 The `timeline`:
+- contains factories to manage its `tracks` and `layers`,
+- set the view window overs its `tracks`
 - is the central hub for all user interaction events (keyboard, mouse),
-- holds the current interaction `state` which defines how the different timeline elements (views, layers, shapes) respond to those events,
-- contains factories to manage its `views` and `layers`.
+- holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to those events,
 
-### View
+### Track
 
-The `views` are like windows on the overall `timeline`. The main attributes `width`, `pixelsPerSecond`, `offset` and `zoom` define the characteristics of a view over the `timeline`.
+The `tracks` are like windows on the overall `timeline`. 
 
 ### Layer
 
@@ -73,7 +66,7 @@ The library provides a template to create new shapes.
 ### Interactions - Timeline-states
 
 Specific interaction state upon the timeline allow you to:
-- browse and zoom into the views
+- browse and zoom into the tracks
 - modify layers time characteristics through it timeContext or data through shape edition
 
 Internally the current interaction state call the relevant `behavior` associated to the view, the layer or the shape.
@@ -88,8 +81,8 @@ Traditionally, timeseries data can be formated like an array of object or multip
 
 ### Naming Conventions
 
-- `constructor()`: create the DOM SVG container element for views and layers
-- `add()`: add a view to a timeline or a layer to a view, so that a timeline keeps track of its views and a view keep track of its layers.
+- `constructor()`: create the DOM SVG container element for tracks and layers
+- `add()`: add a view to a timeline or a layer to a view, so that a timeline keeps track of its tracks and a view keep track of its layers.
 - `render()`: method for an object to render its child DOM SVG element
 - `update()`: method for an object to update its previously created DOM according to data or time-context
 
