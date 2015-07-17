@@ -8,6 +8,15 @@ import TrackCollection from './track-collection';
 
 
 /**
+ *
+ * The `timeline` is the main entry point of a temporal visualization.
+ *
+ * The `timeline`:
+ * - contains factories to manage its `views` and `layers`,
+ * - is the central hub for all user interaction events (keyboard, mouse),
+ * - holds the current interaction `state` which defines how the different timeline elements (views, layers, shapes) respond to those events.
+ *
+ *
  * The `Timeline` class is the main entry point to create a representation of temporal data.
  * A `Timeline` instance can have multiples `Track` instances, which are basically a track window on the overall timeline.
  *
@@ -126,9 +135,7 @@ export default class Timeline extends events.EventEmitter {
 
 
   /**
-   * Changes the state of the timeline.
-   * `State` instances are used to define the application logic by precising specific user interaction cases, and how they impact the overal temporal data representation.
-   *
+   * Changes the state of the timeline
    * @param {BaseState} state - the state in which the timeline must be setted
    */
   set state(state) {
@@ -150,8 +157,8 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  Shortcut to access the Layer list
-   *  @return {Array}
+   * Shortcut to access the Layer list
+   * @return {Array}
    */
   get layers() {
     return this._tracks.layers;
@@ -253,9 +260,9 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  Returns an array of layers from their group Id
-   *  @param {String} groupId
-   *  @return {Array}
+   * Returns an array of layers from their group Id
+   * @param {String} groupId
+   * @return {Array}
    */
   getLayersByGroup(groupId) {
     return this._groupedLayers[groupId];

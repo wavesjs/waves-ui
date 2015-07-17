@@ -43,8 +43,12 @@ Here is a synthetic view of objects that compose the library, and their intercon
 
 ### Timeline
 
-The `timeline` is the main entry point of a temporal visualization. It is the central hub for all user interaction events (keyboard, mouse), and it holds the current interaction `state` which defines how the different timeline elements (views, layers, shapes) respond to those events. 
-The `timeline` also contains factories to manage its `views` and `layers`.
+The `timeline` is the main entry point of a temporal visualization.
+
+The `timeline`:
+- is the central hub for all user interaction events (keyboard, mouse),
+- holds the current interaction `state` which defines how the different timeline elements (views, layers, shapes) respond to those events,
+- contains factories to manage its `views` and `layers`.
 
 ### View
 
@@ -74,7 +78,7 @@ Specific interaction state upon the timeline allow you to:
 - browse and zoom into the views
 - modify layers time characteristics through it timeContext or data through shape edition
 
-Internally they call the relevant `behavior` associated to the view, the layer or the shape.
+Internally the current interaction state call the relevant `behavior` associated to the view, the layer or the shape.
 
 ### Behavior
 
