@@ -1,4 +1,3 @@
-import d3Scale from 'd3-scale';
 import events from 'events';
 
 import Keyboard from '../interactions/keyboard';
@@ -27,27 +26,19 @@ export default class Timeline extends events.EventEmitter {
   /**
    * Creates a new `Timeline` instance
    */
-  constructor(pixelsPerSecond = 100, defaultTrackWidth = 1000) {
+  constructor(pixelsPerSecond = 100, visibleWidth = 1000) {
     super();
-
-    this._pixelsPerSecond = pixelsPerSecond;
-    this._trackWidth = defaultTrackWidth;
 
     this._tracks = new TrackCollection(this);
 
     this._state = null;
     this._handleEvent = this._handleEvent.bind(this);
     this._createInteraction(Keyboard, 'body');
-
-    this._maintainVisibleDuration = false;
-    // init default configuration for tracks factory
-    // this._tracksConfiguration = {};
-    // this.configureTracks();
     // stores
     this._trackById = {};
     this._groupedLayers = {};
 
-    this._createTimeContext();
+    this.timeContext = new TimelineTimeContext(pixelsPerSecond, visibleWidth);
   }
 
   /**
@@ -70,56 +61,43 @@ export default class Timeline extends events.EventEmitter {
   }
 
   get pixelsPerSecond() {
-    return this._pixelsPerSecond;
+    return this.timeContext.pixelsPerSecond;
   }
 
   set pixelsPerSecond(value) {
-    this._pixelsPerSecond = value;
-
-    this.timeContext.xScaleRange = [0, this.pixelsPerSecond];
-    this.timeContext.duration = this.trackWidth / this.pixelsPerSecond;
+    this.timeContext.pixelsPerSecond = value;
   }
 
-  get trackWidth() {
-    return this._trackWidth;
+  get visibleWidth() {
+    return this.timeContext.visibleWidth;
   }
 
-  set trackWidth(value) {
-    const widthRatio = value / this.trackWidth;
+  set visibleWidth(value) {
+    this.timeContext.visibleWidth = value;
+  }
 
-    this._trackWidth = value;
-    this.timeContext.duration = this.trackWidth / this.pixelsPerSecond;
+  /**
+   *  @readonly
+   */
+  get visibleDuration() {
+    return this.timeContext.visibleWidth;
+  }
 
-    if (this.maintainVisibleDuration) {
-      this.pixelsPerSecond = this.pixelsPerSecond * widthRatio;
-    }
+  get visibleWidth() {
+    return this.timeContext.visibleWidth;
+  }
 
-    this.tracks.width = this.trackWidth;
+  set visibleWidth(value) {
+    this.timeContext.visibleWidth = value;
   }
 
   // @NOTE maybe expose as public instead of get/set for nothing...
   set maintainVisibleDuration(bool) {
-    this._maintainVisibleDuration = bool;
+    this.timeContext.maintainVisibleDuration = bool;
   }
 
   get maintainVisibleDuration() {
-    return this._maintainVisibleDuration;
-  }
-
-  /**
-   * Creates a new TimeContext for the visualisation, this `TimeContext` will be at the top of the `TimeContext` tree
-   */
-  _createTimeContext() {
-    const pixelsPerSecond = this.pixelsPerSecond;
-    const trackWidth = this.trackWidth;
-    const xScale = d3Scale.linear()
-      .domain([0, 1])
-      .range([0, pixelsPerSecond]);
-
-    this.timeContext = new TimelineTimeContext();
-    // all child context inherits the max duration allowed in container per default
-    this.timeContext.duration = trackWidth / pixelsPerSecond;
-    this.timeContext.xScale = xScale;
+    return this.timeContext.maintainVisibleDuration;
   }
 
   /**
@@ -189,7 +167,7 @@ export default class Timeline extends events.EventEmitter {
       throw new Error('track already added to the timeline');
     }
 
-    track.configure(this.timeContext, this.trackWidth);
+    track.configure(this.timeContext);
 
     this.tracks.push(track);
     this._createInteraction(Surface, track.$el);
@@ -198,16 +176,6 @@ export default class Timeline extends events.EventEmitter {
   remove(track) {
     // @TODO
   }
-
-  /**
-   *  Defines a default for each track to be created
-   *  @param {Number} pixelsPerSecond
-   *  @param {Number} width
-   *  @param {Number} height
-   */
-  // configureTracks(pixelsPerSecond = 100, width = 1000, height = 120) {
-  //   this._tracksConfiguration = { pixelsPerSecond, width, height };
-  // }
 
   /**
    *  Creates a new track from the configuration define in `configureTracks`

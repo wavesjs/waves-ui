@@ -66,7 +66,6 @@ export default class Track {
 
     // are set when added to the timeline
     this.renderingContext = null;
-    this._width = null;
 
     this._createContainer();
   }
@@ -80,21 +79,12 @@ export default class Track {
     // @NOTE: propagate to layers, keeping ratio ?
   }
 
-  get width() {
-    return this._width;
-  }
-
-  set width(value) {
-    this._width = value;
-  }
-
   /**
    *  This method is called when the track is added to the timeline
    *  The track cannot be updated without being added to a timeline
    */
-  configure(renderingContext, width) {
+  configure(renderingContext) {
     this.renderingContext = renderingContext;
-    this.width = width;
   }
 
   /**
@@ -185,8 +175,8 @@ export default class Track {
     const $offset = this.$offset;
     // should be in some update layout
     const renderingContext = this.renderingContext;
-    const width = this.width;
-    const height = this.height;
+    const height  = this.height;
+    const width   = renderingContext.visibleWidth;
     const offsetX = renderingContext.xScale(renderingContext.offset);
     const translate = `translate(${offsetX}, 0)`;
 

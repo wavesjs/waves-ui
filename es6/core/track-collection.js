@@ -11,9 +11,6 @@ export default class ViewCollection extends Array {
   // @NOTE keep this ?
   // could prepare some vertical resizing ability
   // this should be able to modify the layers yScale to be really usefull
-  set width(value) {
-    this.forEach((view) => view.width = value);
-  }
 
   set height(value) {
     this.forEach((view) => view.height = value);

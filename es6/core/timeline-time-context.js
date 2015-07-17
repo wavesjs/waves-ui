@@ -1,3 +1,4 @@
+import d3Scale from 'd3-scale';
 import AbstractTimeContext from './abstract-time-context';
 
 /**
@@ -7,34 +8,48 @@ import AbstractTimeContext from './abstract-time-context';
  *
  *  The `TimelineTimeContext` has 3 important attributes:
  *  - `timeContext.xScale` which defines the time to pixel transfert function, itself defined by the `pixelsPerSecond` attribute of the timeline
- *  - `timeContext.offset` defines a decay (in time domain) applied to all the views on the timeline. This allow to navigate inside durations longer than what can be represented in Layers (views) containers (e.g. horizontal scroll)
+ *  - `timeContext.offset` defines a decay (in time domain) applied to all the views on the timeline. This allow to navigate inside visibleDurations longer than what can be represented in Layers (views) containers (e.g. horizontal scroll)
  *  - `timeContext.zoom` defines the zoom factor applyed to the timeline
  *
- *  It also maintains an helper (`duration`) which represent how much time the `tracks` are displaying
+ *  It also maintains an helper (`visibleDuration`) which represent how much time the `tracks` are displaying
  *
  *  It also maintain an array of references to all the LayerTimeContext attached to the timeline to propagate changes on the time to pixel representation
  */
 export default class TimelineTimeContext extends AbstractTimeContext {
-  constructor() {
+  constructor(pixelsPerSecond, visibleWidth) {
     super({});
 
     this._children = [];
 
+    // @rename to timeToPixel
     this._xScale = null;
     this._originalXScale = null;
 
-    // params
-    this._duration = 1; // for layers inheritance only
     this._offset = 0;
     this._zoom = 1;
+    this._pixelsPerSecond = pixelsPerSecond;
+    // params
+    this._visibleWidth = visibleWidth;
+    this._visibleDuration = this.visibleWidth / this.pixelsPerSecond;
+    this._maintainVisibleDuration = false;
+
+    // create the timeToPixel scale
+    const xScale = d3Scale.linear()
+      .domain([0, 1])
+      .range([0, pixelsPerSecond]);
+
+    this.xScale = xScale;
   }
 
-  get duration() {
-    return this._duration;
+  get pixelsPerSecond() {
+    return this._pixelsPerSecond
   }
 
-  set duration(value) {
-    this._duration = value;
+  set pixelsPerSecond(value) {
+    this._pixelsPerSecond = value;
+
+    this.xScaleRange = [0, this.pixelsPerSecond];
+    this._visibleDuration = this.visibleWidth / this.pixelsPerSecond;
   }
 
   get offset() {
@@ -68,6 +83,38 @@ export default class TimelineTimeContext extends AbstractTimeContext {
     });
   }
 
+  get visibleWidth() {
+    return this._visibleWidth;
+  }
+
+  set visibleWidth(value) {
+    const widthRatio = value / this.visibleWidth;
+
+    this._visibleWidth = value;
+    this._visibleDuration = this.visibleWidth / this.pixelsPerSecond;
+
+    if (this.maintainVisibleDuration) {
+      this.pixelsPerSecond = this.pixelsPerSecond * widthRatio;
+    }
+  }
+
+  get visibleDuration() {
+    return this._visibleDuration;
+  }
+
+  // set visibleDuration(value) {
+  //   this._visibleDuration = value;
+  // }
+
+  get maintainVisibleDuration() {
+    return this._maintainVisibleDuration;
+  }
+
+  set maintainVisibleDuration(bool) {
+    this._maintainVisibleDuration = bool;
+  }
+
+  // @TODO rename to timeToPixel
   get xScale() {
     return this._xScale;
   }
