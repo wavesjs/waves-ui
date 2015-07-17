@@ -5,16 +5,16 @@ import AbstractTimeContext from './abstract-time-context';
  *
  *  A ViewTimeContext instance represents the mapping between the time and the pixel domains
  *
- *  The `timelineTimeContext` has 3 important attributes:
+ *  The `TimelineTimeContext` has 3 important attributes:
  *  - `timeContext.xScale` which defines the time to pixel transfert function, itself defined by the `pixelsPerSecond` attribute of the timeline
  *  - `timeContext.offset` defines a decay (in time domain) applied to all the views on the timeline. This allow to navigate inside durations longer than what can be represented in Layers (views) containers (e.g. horizontal scroll)
- *  - `timeContext.stretchRatio` defines the zoom factor applyed to the timeline
+ *  - `timeContext.zoom` defines the zoom factor applyed to the timeline
  *
- *  It owns an helper `timeContext.duration` which maintain a view on how much time the views applyed to the timeline (the `containers`) are representing
+ *  It also maintains an helper (`duration`) which represent how much time the `tracks` are displaying
  *
- *  It also maintain an array of references to all the LayerTimeContext attached to the timeline to propagate some global change on the time to pixel representation
+ *  It also maintain an array of references to all the LayerTimeContext attached to the timeline to propagate changes on the time to pixel representation
  */
-export default class ViewTimeContext extends AbstractTimeContext {
+export default class TimelineTimeContext extends AbstractTimeContext {
   constructor() {
     super({});
 
@@ -26,7 +26,7 @@ export default class ViewTimeContext extends AbstractTimeContext {
     // params
     this._duration = 1; // for layers inheritance only
     this._offset = 0;
-    this._stretchRatio = 1;
+    this._zoom = 1;
   }
 
   get duration() {
@@ -45,11 +45,11 @@ export default class ViewTimeContext extends AbstractTimeContext {
     this._offset = value;
   }
 
-  get stretchRatio() {
-    return this._stretchRatio;
+  get zoom() {
+    return this._zoom;
   }
 
-  set stretchRatio(value) {
+  set zoom(value) {
     const xScale = this.originalXScale.copy();
     const [min, max] = xScale.domain();
     const diff = (max - min) / value;
@@ -57,14 +57,14 @@ export default class ViewTimeContext extends AbstractTimeContext {
     xScale.domain([min, min + diff]);
 
     this._xScale = xScale;
-    this._stretchRatio = value;
+    this._zoom = value;
 
     // Propagate change to children who have their own xScale
-    const ratioChange = value / (this._stretchRatio);
+    const ratioChange = value / (this._zoom);
 
     this._children.forEach(function(child) {
       if (!child._xScale) { return; }
-      child.stretchRatio = child.stretchRatio * ratioChange;
+      child.stretchRatio = child.zoom * ratioChange;
     });
   }
 

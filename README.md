@@ -58,13 +58,15 @@ The layer `timeContext` defines its time characteristics: `offset`, `stretchRati
 ### Shape
 
 The library comes with usual shapes to display audio data and timeseries: 
+
 - `waveform`
 - `segment` and `annotated-segment`
 - `marker` and `annotated-marker` 
 - `dot` and `line`, for break point functions (aka automation curves)
 - `trace`
-- `cursor`  
-The library provides a template to create new shapes.
+- `cursor` 
+
+The library also provides a template (`BaseShape`) to create new shapes.
 
 ### Interactions - Timeline-states
 

@@ -91,7 +91,7 @@ export default class LayerTimeContext extends AbstractTimeContext {
 
     const xScale = this.parent.originalXScale.copy();
     const [min, max] = xScale.domain();
-    const diff = (max - min) / (value * this.parent.stretchRatio);
+    const diff = (max - min) / (value * this.parent.zoom);
 
     xScale.domain([min, min + diff]);
 

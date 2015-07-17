@@ -64,6 +64,8 @@ export default class Layer extends events.EventEmitter {
       .domain(this.params.yDomain)
       .range([0, this.params.height]);
 
+    this.contextBehavior = '';
+
     // initialize timeContext layout
     this._renderContainer();
   }
@@ -272,6 +274,14 @@ export default class Layer extends events.EventEmitter {
       this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);
       this.emit('edit', shape, datum);
     });
+  }
+
+  editContext() {
+    this.contextBehavior.edit();
+  }
+
+  stretchContext() {
+    this.contextBehavior.stretch();
   }
 
   // --------------------------------------

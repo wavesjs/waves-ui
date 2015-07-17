@@ -43,7 +43,7 @@ export default class ContextEditionState extends BaseState {
     const target = this.currentTarget;
 
     if (!e.originalEvent.shiftKey) {
-      this.timeContextBehavior.edit(layer, e.dx, e.dy, target);
+      layer.editContext(e.dx, e.dy, target);
     } else {
       this.timeContextBehavior.stretch(layer, e.dx, e.dy, target);
     }
