@@ -1,12 +1,10 @@
 import BaseState from './base-state';
 import TimeContextBehavior from '../behaviors/time-context-behavior';
 
-// works but hack with the TimeContextBehavior
+// works
 export default class ContextEditionState extends BaseState {
   constructor(timeline) {
     super(timeline);
-
-    this.timeContextBehavior = new TimeContextBehavior();
   }
 
   handleEvent(e) {
@@ -45,10 +43,10 @@ export default class ContextEditionState extends BaseState {
     if (!e.originalEvent.shiftKey) {
       layer.editContext(e.dx, e.dy, target);
     } else {
-      this.timeContextBehavior.stretch(layer, e.dx, e.dy, target);
+      layer.stretchContext(e.dx, e.dy, target);
     }
 
-    this.currentLayer.update();
+    this.timeline.tracks.update(layer);
   }
 
   onMouseUp(e) {

@@ -1,7 +1,7 @@
 import ns from '../core/namespace';
 import BaseState from './base-state';
 
-// works (maybe same problem as CenteredZoom)
+// broken
 export default class BrushZoomState extends BaseState {
   constructor(timeline) {
     super(timeline);

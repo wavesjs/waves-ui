@@ -164,9 +164,9 @@ export default class Track {
   /**
    * Update the layers
    */
-  update() {
+  update(layers = null) {
     this.updateContainer();
-    this.updateLayers();
+    this.updateLayers(layers);
   }
 
   updateContainer() {
@@ -186,8 +186,13 @@ export default class Track {
     $offset.setAttributeNS(null, 'transform', translate);
   }
 
-  updateLayers() {
-    for (let layer of this) { layer.update(); }
+  updateLayers(layers = null) {
+    layers = (layers === null) ? this.layers : layers;
+
+    layers.forEach((layer) => {
+      if (this.layers.indexOf(layer) === -1) { return; }
+      layer.update();
+    });
   }
 
   *[Symbol.iterator]() {

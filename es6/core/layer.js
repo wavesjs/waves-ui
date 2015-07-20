@@ -4,8 +4,11 @@ import events from 'events';
 
 import ns from './namespace';
 import Segment from '../shapes/segment';
-import SegmentBehavior from '../behaviors/segment-behavior';
+import TimeContextBehavior from '../behaviors/time-context-behavior';
 
+// time context bahevior
+let timeContextBehavior = null;
+let timeContextBehaviorCtor = TimeContextBehavior;
 
 // private item -> id map to force d3 tp keep in sync with the DOM
 let   _counter = 0;
@@ -68,6 +71,50 @@ export default class Layer extends events.EventEmitter {
 
     // initialize timeContext layout
     this._renderContainer();
+
+    // creates the timeContextBehavior for all layer, lazy instanciation
+    if (timeContextBehavior === null) {
+      timeContextBehavior = new timeContextBehaviorCtor();
+    }
+  }
+
+  /**
+   *  allows to override default the TimeContextBehavior
+   */
+  static configureTimeContextBehavior(ctor) {
+    timeContextBehaviorCtor = ctor;
+  }
+
+  get start() {
+    return this.timeContext.start;
+  }
+
+  set start(value) {
+    this.timeContext.start = value;
+  }
+
+  get offset() {
+    return this.timeContext.offset;
+  }
+
+  set offset(value) {
+    this.timeContext.offset = value;
+  }
+
+  get duration() {
+    return this.timeContext.duration;
+  }
+
+  set duration(value) {
+    this.timeContext.duration = value;
+  }
+
+  get stretchRatio() {
+    return this.timeContext.stretchRatio;
+  }
+
+  set stretchRatio(value) {
+    this.timeContext.stretchRatio = value;
   }
 
   // destroy() {
@@ -99,6 +146,10 @@ export default class Layer extends events.EventEmitter {
   get opacity() {
     return this.params.opacity;
   }
+
+  /**
+   * TimeContext accessors
+   */
 
   /**
    * @mandatory define the context in which the layer is drawn
@@ -276,16 +327,26 @@ export default class Layer extends events.EventEmitter {
     });
   }
 
-  editContext() {
-    this.contextBehavior.edit();
+  /**
+   *  draws the shape to interact with the context
+   *  @params {Boolean} [bool=true] - defines if the layer's context is editable or not
+   */
+  setContextEditable(bool = true) {
+    const display = bool ? 'block' : 'none';
+    this.$interactions.style.display = display;
+    this._isContextEditable = bool;
   }
 
-  stretchContext() {
-    this.contextBehavior.stretch();
+  editContext(dx, dy, target) {
+    timeContextBehavior.edit(this, dx, dy, target);
+  }
+
+  stretchContext(dx, dy, target) {
+    timeContextBehavior.stretch(this, dx, dy, target);
   }
 
   // --------------------------------------
-  // H$elpers
+  // Helpers
   // --------------------------------------
 
   /**

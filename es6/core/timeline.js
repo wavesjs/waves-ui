@@ -92,6 +92,11 @@ export default class Timeline extends events.EventEmitter {
     return this.timeContext.maintainVisibleDuration;
   }
 
+  // @readonly - used in track collection
+  get groupedLayers() {
+    return this._groupedLayers;
+  }
+
   /**
    * Factory method to add interaction modules the timeline should listen to.
    * By default, the timeline listen to Keyboard, and instance a Surface on each container

@@ -1,14 +1,4 @@
 export default class TimeContextBehavior {
-  /**
-   *  draw the shape to interact with the context
-   *  @params bool {Boolean} define if the layer's context is editable or not
-   */
-  setEditable(layer, bool = true) {
-    const display = bool ? 'block' : 'none';
-    layer.$interactions.style.display = display;
-    layer._isContextEditable = bool;
-  }
-
   edit(layer, dx, dy, target) {
     const timeContext = layer.timeContext;
 
