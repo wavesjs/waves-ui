@@ -1,5 +1,5 @@
 /**
-* `State` instances are used to define the application logic by precising specific user interaction cases, and how they impact the overal temporal data representation.
+* `State` instances are used to define the application logic by precising specific user interaction cases, and how they impact the overal temporal representation.
 * States manage interactions like zooming, browsing, or editing the timeline.
 * Customized states should extend this BaseState.
 */

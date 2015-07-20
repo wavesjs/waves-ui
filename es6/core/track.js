@@ -10,11 +10,10 @@ import ns from './namespace';
 * As a temporal representation, a track establishes a relation between *time* in seconds and *space* in pixels.
 *
 * A `Track` instance can have multiple `Layer` instances.
-* A comon use case is to have all the tracks from a `Timeline` instance sharing the same `pixelsPerSecond` and `offset` attributes.
 *
 * Tracks inside a timeline
 *
-* A temporal representation can be rendered upon multiple DOM elements, the tracks (eg multiple <li> for a DAW like representation) that belong to the same timeline using the `add` method. These tracks are like windows on the overall and basically unending timeline. They have a defined width and they show content from the specified offset (converted to pixel).
+* A temporal representation can be rendered upon multiple DOM elements, the tracks (eg multiple <li> for a DAW like representation) that belong to the same timeline using the `add` method. These tracks are like windows on the overall and basically unending timeline.
 *
 * A timeline with 3 tracks:
 *

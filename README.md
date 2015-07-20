@@ -31,26 +31,27 @@ Its main goal is to ease the development of audio-based web applications requiri
 
 Here is a synthetic view of objects that compose the library, and their interconnections:
 
-`Timeline` 1..n `Track` 1..n `Layer` and its `Shape` (`Waveform`, `Marker`, `Segment` ...)
+`Timeline` 1..n `Track` 1..n `Layer` and its associated `Shape`: `Waveform`, `Marker`, `Segment` ...)
 
 ### Timeline
 
-The `timeline` is the main entry point of a temporal visualization.
-
-The `timeline`:
+The `timeline` is the main entry point of a temporal visualization, it:
 - contains factories to manage its `tracks` and `layers`,
-- set the view window overs its `tracks`
+- get or set the view window overs its `tracks` through `offset`, `zoom`, `pixelsPerSecond`, `visibleWidth`,
 - is the central hub for all user interaction events (keyboard, mouse),
-- holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to those events,
+- holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to those events.
 
 ### Track
 
-The `tracks` are like windows on the overall `timeline`. 
+The `tracks` organize the vertical arrangement of the `layers`.  
 
 ### Layer
 
-The `layers` 1. keep a reference to the data, 2. configure a `Shape` to display the data, and 3. set a `Behavior` to modify the data (both programmatically or based on user interaction dispatched from the `timeline` and its current `state`). 
-The layer `timeContext` defines its time characteristics: `offset`, `stretchRatio`, `duration`, and `start`.
+The `layers`: 
+- keep a reference to the audio data or timeserie, 
+- get or set `start`, `offset`, `duration`, `stretchRatio`,
+- configure a `Shape` to display the data, 
+- set a `Behavior` to modify the data (both programmatically or based on user interaction dispatched from the `timeline` and its current `state`). 
 
 ### Shape
 

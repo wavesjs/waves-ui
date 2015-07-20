@@ -8,28 +8,11 @@ import TrackCollection from './track-collection';
 
 
 /**
- *
- * The `timeline` is the main entry point of a temporal visualization.
- *
- * The `timeline`:
- * - contains factories to manage its `views` and `layers`,
+ * The `timeline` is the main entry point of a temporal visualization, it:
+ * - contains factories to manage its `tracks` and `layers`,
+ * - get or set the view window overs its `tracks` through `offset`, `zoom`,  * `pixelsPerSecond`, `visibleWidth`,
  * - is the central hub for all user interaction events (keyboard, mouse),
- * - holds the current interaction `state` which defines how the different timeline elements (views, layers, shapes) respond to those events.
- *
- *
- * The `Timeline` class is the main entry point to create a representation of temporal data.
- * A `Timeline` instance can have multiples `Track` instances, which are basically a track window on the overall timeline.
- *
- * The timeline hold the current interaction state and is the central hub for keyboard as well as mouse events.
- * States are there to facilitating interactions with the timeline for:
- * - zooming
- * - moving
- * - editing
- *
- * Methods `register`, `render` and `update` call the same methods on all the `Track` instances, which call the same methods one on all its `Layer` instances.
- * - `register`: registers a `Track` instance onto the timeline (ie. the timeline can `render` and `update` its different tracks)
- * - `render`: renders the DOM for the element (if has one) and its descendant (here renders the tracks, ie. render the DOM tree for a track and attach it in the DOM at the right place)
- * - `update`: update the display according to data changes (ie. update the DOM element attached to the DOM tree with render method, based on new data).
+ * - holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to user interactions.
  */
 export default class Timeline extends events.EventEmitter {
   /**
