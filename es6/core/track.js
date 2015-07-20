@@ -58,7 +58,7 @@ import ns from './namespace';
 */
 
 export default class Track {
-  constructor($el, height = 120) {
+  constructor($el, height = 100) {
     this.$el = $el;
     this.layers = [];
     this._height = height;
@@ -106,7 +106,12 @@ export default class Track {
   _createContainer() {
     const $svg = document.createElementNS(ns, 'svg');
     $svg.setAttributeNS(null, 'shape-rendering', 'optimizeSpeed');
+    $svg.setAttributeNS(null, 'height', this.height);
     $svg.setAttribute('xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
+
+    const $background = document.createElementNS(ns, 'rect');
+    $background.setAttributeNS(null, 'height', '100%');
+    $background.setAttributeNS(null, 'width', '100%')
 
     const $defs = document.createElementNS(ns, 'defs');
 
@@ -120,6 +125,7 @@ export default class Track {
     $interactionsGroup.classList.add('interactions');
 
     $svg.appendChild($defs);
+    $offsetGroup.appendChild($background);
     $offsetGroup.appendChild($layoutGroup);
     $svg.appendChild($offsetGroup);
     $svg.appendChild($interactionsGroup);
@@ -134,6 +140,7 @@ export default class Track {
     this.$offset = $offsetGroup;
     this.$interactions = $interactionsGroup;
     this.$svg = $svg;
+    this.$background = $background
   }
 
   /**
