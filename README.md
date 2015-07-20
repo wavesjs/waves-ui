@@ -55,7 +55,7 @@ The `layers`:
 - configure a `Shape` to display the data, 
 - set a `Behavior` to modify the data (both programmatically or based on user interaction dispatched from the `timeline` and its current `state`). 
 
-Each `layers` is associated to a DOM element.
+Each `layer` is associated to a DOM element.
 
 ### Shape
 
@@ -68,7 +68,7 @@ The library comes with usual shapes to display audio data and timeseries:
 - `trace`
 - `cursor` 
 
-The library also provides a template (`BaseShape`) to create new shapes.
+The library also provides a template (`BaseShape`) to create new kind of shapes.
 
 ### Interactions - Timeline-states
 
@@ -77,28 +77,19 @@ The `timeline` registers events to listen to from:
 - the mouse upon each of its tracks. 
 
 A `timeline-state` sorts these events and call the appropriate methods to:
-- browse and zoom into the tracks (brush-zoom-state, centered-zoom-state)
-- modify layers time characteristics (context-edition-state)
-- modify layers data (edition-state)
+- browse and zoom into the tracks (`BrushZoomState`, `CenteredZoomState`)
+- modify layers time characteristics (`ContextEditionState`)
+- modify layers data (`EditionState`)
 
 ### Behavior
 
-The behaviors give an entry point to modify a shape, a layer or the tracks. 
-It allows you to programmatically move DOM elements associated to a shape, a layer or a track and modify accordingly the data associated to it. 
+The `behaviors` give an entry point to modify a shape or a layer directly from its rendering. It allows you to programmatically move DOM elements associated to a shape or a layer and modify accordingly the data associated to it. 
 
 ### Utils
 
 Traditionally, timeseries data can be formated like an array of object or multiple arrays. An `OrthogonalData` instance can format the datas in one or another formats.
 
-### Naming Conventions
-
-- `constructor()`: create the DOM SVG container element for tracks and layers
-- `add()`: add a view to a timeline or a layer to a view, so that a timeline keeps track of its tracks and a view keep track of its layers.
-- `render()`: method for an object to render its child DOM SVG element
-- `update()`: method for an object to update its previously created DOM according to data or time-context
-
-
-## Other Examples
+## Examples
 
 - Waveform
 - Segments
