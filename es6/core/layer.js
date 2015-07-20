@@ -199,6 +199,11 @@ export default class Layer extends events.EventEmitter {
     // group to apply offset
     this.$offset = document.createElementNS(ns, 'g');
     this.$offset.classList.add('offset', 'items');
+    // layer background
+    this.$background = document.createElementNS(ns, 'rect');
+    this.$background.setAttributeNS(null, 'height', '100%');
+    this.$background.setAttributeNS(null, 'width', '100%');
+    this.$background.setAttributeNS(null, 'style', 'fill-opacity:0');
     // context interactions
     this.$interactions = document.createElementNS(ns, 'g');
     this.$interactions.classList.add('interactions');
@@ -217,6 +222,7 @@ export default class Layer extends events.EventEmitter {
     // create the DOM tree
     this.$el.appendChild(this.$boundingBox);
     this.$boundingBox.appendChild(this.$offset);
+    this.$offset.appendChild(this.$background);
     this.$boundingBox.appendChild(this.$interactions);
 
     // draw a Segment in context background to debug it's size
