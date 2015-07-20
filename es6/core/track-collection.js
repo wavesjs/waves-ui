@@ -1,8 +1,8 @@
 import Layer from './layer';
 /**
- * The `ViewCollection` class allow to update all timeline's tracks at once
+ * The `TrackCollection` class allow to update all timeline's tracks at once
  */
-export default class ViewCollection extends Array {
+export default class TrackCollection extends Array {
   constructor(timeline) {
     super();
 

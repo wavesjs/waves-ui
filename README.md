@@ -31,7 +31,7 @@ Its main goal is to ease the development of audio-based web applications requiri
 
 Here is a synthetic view of objects that compose the library, and their interconnections:
 
-`Timeline` 1..n `Track` 1..n `Layer` and its associated `Shape`: `Waveform`, `Marker`, `Segment` ...)
+`Timeline` 1..n `Track` 1..n `Layer` and its associated `Shape`: `Waveform`, `Marker`, `Segment` ...
 
 ### Timeline
 
@@ -43,15 +43,19 @@ The `timeline` is the main entry point of a temporal visualization, it:
 
 ### Track
 
-The `tracks` organize the vertical arrangement of the `layers`.  
+The `tracks` simply organize the vertical arrangement of the `layers`. They are similar to the tracks of a common Digital Audio Workstation. 
+
+Each `track` is associated to a DOM element.
 
 ### Layer
 
 The `layers`: 
-- keep a reference to the audio data or timeserie, 
-- get or set `start`, `offset`, `duration`, `stretchRatio`,
+- contain a reference to the audio data or timeserie, 
+- have `start`, `offset`, `duration`, `stretchRatio` getters/setters to position it on the overall timeline,
 - configure a `Shape` to display the data, 
 - set a `Behavior` to modify the data (both programmatically or based on user interaction dispatched from the `timeline` and its current `state`). 
+
+Each `layers` is associated to a DOM element.
 
 ### Shape
 
@@ -68,15 +72,19 @@ The library also provides a template (`BaseShape`) to create new shapes.
 
 ### Interactions - Timeline-states
 
-Specific interaction state upon the timeline allow you to:
-- browse and zoom into the tracks
-- modify layers time characteristics through it timeContext or data through shape edition
+The `timeline` registers events to listen to from: 
+- the keyboard,
+- the mouse upon each of its tracks. 
 
-Internally the current interaction state call the relevant `behavior` associated to the view, the layer or the shape.
+A `timeline-state` sorts these events and call the appropriate methods to:
+- browse and zoom into the tracks (brush-zoom-state, centered-zoom-state)
+- modify layers time characteristics (context-edition-state)
+- modify layers data (edition-state)
 
 ### Behavior
 
-The behaviors give an entry point to modify a shape, a layer or a view. It allows you to programmatically move DOM elements associated to a shape, a layer or a view via a target element and a move, and modify accordingly the data associated to it. 
+The behaviors give an entry point to modify a shape, a layer or the tracks. 
+It allows you to programmatically move DOM elements associated to a shape, a layer or a track and modify accordingly the data associated to it. 
 
 ### Utils
 

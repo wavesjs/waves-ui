@@ -6,7 +6,7 @@ const body = window.document.body;
 
 
 /**
- *  http://javascript.info/tutorial/keyboard-events
+ * http://javascript.info/tutorial/keyboard-events
  */
 export default class Keyboard extends EventSource {
   constructor(el = body) {
