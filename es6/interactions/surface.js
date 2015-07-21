@@ -7,7 +7,7 @@ const body = window.document.body;
 
 export default class Surface extends EventSource {
   /**
-   * @param el <DOMElement> the DOM element to monitore
+   * @param el <DOMElement> the DOM element to monitor
    * @param padding <Object> the padding of the current surface @TODO
    */
   constructor(el /*, padding */) {
@@ -66,27 +66,26 @@ export default class Surface extends EventSource {
    * keep this private to avoir double event binding
    * main logic of the surface is here
    * should be extended with needed events
-   * @NOTE should we stop the propagation inside the timeline ?
    */
   _bindEvents() {
 
     // @NOTE add mouseup on body too
-    var onMouseDown = (e) => {
-      // e.stopPropagation();
-      let event = this._createEvent('mousedown', e);
+    const onMouseDown = (e) => {
+      // By removing the previous selection we prevent bypassing the mousemove events coming from SVG in Firefox.
+      window.getSelection().removeAllRanges();
+      const event = this._createEvent('mousedown', e);
 
       this.isMouseDown = true;
       this.mouseDownEvent = event;
       this.lastEvent = event;
-      // register mouse move on body - more user friendly
-      body.addEventListener('mousemove', onMouseMove, false);
-      body.addEventListener('mouseup', onMouseUp, false);
+      // register mouse move on window - more user friendly
+      window.addEventListener('mousemove', onMouseMove, false);
+      window.addEventListener('mouseup', onMouseUp, false);
 
       this.emit('event', event);
     };
 
-    var onMouseMove = (e) => {
-      // e.stopPropagation();
+    const onMouseMove = (e) => {
       let event = this._createEvent('mousemove', e);
       event.defineArea(this.mouseDownEvent, this.lastEvent);
       // update `lastEvent` for next call
@@ -95,8 +94,7 @@ export default class Surface extends EventSource {
       this.emit('event', event);
     };
 
-    var onMouseUp = (e) => {
-      // e.stopPropagation();
+    const onMouseUp = (e) => {
       let event = this._createEvent('mouseup', e);
       event.defineArea(this.mouseDownEvent, this.lastEvent);
 
@@ -104,25 +102,23 @@ export default class Surface extends EventSource {
       this.mouseDownEvent = null;
       this.lastEvent = null;
       // remove listener on
-      body.removeEventListener('mousemove', onMouseMove);
-      body.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
 
       this.emit('event', event);
     };
 
-    var onClick = (e) => {
-      // e.stopPropagation();
+    const onClick = (e) => {
       let event = this._createEvent('click', e);
       this.emit('event', event);
     };
 
-    var onDblClick = (e) => {
-      // e.stopPropagation();
+    const onDblClick = (e) => {
       let event = this._createEvent('dblclick', e);
       this.emit('event', event);
     };
 
-    // bind callbacks
+    // Bind callbacks
     this.el.addEventListener('mousedown', onMouseDown, false);
     this.el.addEventListener('click', onClick, false);
     this.el.addEventListener('dblclick', onDblClick, false);
