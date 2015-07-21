@@ -125,7 +125,7 @@ export default class Track {
     $interactionsGroup.classList.add('interactions');
 
     $svg.appendChild($defs);
-    $offsetGroup.appendChild($background);
+    $svg.appendChild($background);
     $offsetGroup.appendChild($layoutGroup);
     $svg.appendChild($offsetGroup);
     $svg.appendChild($interactionsGroup);
