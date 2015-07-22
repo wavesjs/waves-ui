@@ -22,9 +22,7 @@ export default class Timeline extends events.EventEmitter {
     super();
 
     this._tracks = new TrackCollection(this);
-
     this._state = null;
-    this._handleEvent = this._handleEvent.bind(this);
     this._createInteraction(Keyboard, 'body');
     // stores
     this._trackById = {};
@@ -99,14 +97,14 @@ export default class Timeline extends events.EventEmitter {
 
   /**
    * Factory method to add interaction modules the timeline should listen to.
-   * By default, the timeline listen to Keyboard, and instance a Surface on each container
+   * By default, the timeline listen to Keyboard, and instanciate a `Surface` on each container.
    * @param {EventSource} ctor - the contructor of the interaction module to instanciate
    * @param el {DOMElement} the DOM element to bind to the EventSource module
    * @param options {Object} options to be applied to the ctor (defaults to `{}`)
    */
   _createInteraction(ctor, el, options = {}) {
     const interaction = new ctor(el, options);
-    interaction.on('event', this._handleEvent);
+    interaction.on('event', (e) => {this._handleEvent(e)});
   }
 
   /**
@@ -154,7 +152,7 @@ export default class Timeline extends events.EventEmitter {
 
   /**
    * Adds a track to the timeline
-   * Tracks display this window on the timeline in theirs own SVG element.
+   * Tracks display a view window on the timeline in theirs own SVG element.
    * @param {Track} track
    */
   add(track) {
@@ -179,7 +177,7 @@ export default class Timeline extends events.EventEmitter {
    *  @param {String} [trackId=null] - optionnal id to give to the track, only exists in timeline's context
    *  @return {Track}
    */
-  createTrack($el, trackHeight = null, trackId = null) {
+  createTrack($el, trackHeight = 100, trackId = null) {
     const track = new Track($el, trackHeight);
 
     if (trackId !== null) {
@@ -189,7 +187,8 @@ export default class Timeline extends events.EventEmitter {
 
       this._trackById[trackId] = track;
     }
-    // add track to the timeline
+
+    // Add track to the timeline
     this.add(track);
     return track;
   }
