@@ -1,11 +1,25 @@
+import d3Scale from 'd3-scale';
+
 import BaseState from './base-state';
 
-// broken
+
+/**
+ * `CenteredZoomState` is a timeline state that allows the user to browse the timeline by clicking on a track, and then
+ * - moving down to zoom in
+ * - moving up to zoom out
+ * - moving left to move in time, after
+ * - moving right to move in time, before
+ */
 export default class CenteredZoomState extends BaseState {
   constructor(timeline) {
     super(timeline);
-
     this.currentLayer = null;
+    // Set max/min zoom
+    // maxZoom: 1px per sample
+    // minZoom: 10 000 px per 1 hour
+    // with a default to 44.1kHz sample rate
+    this.maxZoom = 44100*1/this.timeline.timeContext.pixelsPerSecond;
+    this.minZoom = 10000/3600/this.timeline.timeContext.pixelsPerSecond;
   }
 
   handleEvent(e) {
@@ -24,41 +38,41 @@ export default class CenteredZoomState extends BaseState {
 
   onMouseDown(e) {
     this.mouseDown = true;
+    const actualZoom = this.timeline.timeContext.zoom;
+    const initialY = e.y;
+    this.yScale = d3Scale.linear()
+                    .domain([initialY, 0])
+                    .range([actualZoom, -2*actualZoom]);
   }
 
   onMouseMove(e) {
     if (!this.mouseDown) { return; }
 
-    const timeline = this.timeline;
+    const timeContext = this.timeline.timeContext;
+    const lastCenterTime = timeContext.xScale.invert(e.x);
 
-    // @NOTE: kind of weirdo, but sure how this will beahve if view's timeContext
-    // are not consistents
-    this.views.forEach(function(view) {
-      const timeContext = view.timeContext;
-      const lastCenterTime = timeContext.xScale.invert(e.x);
+    timeContext.zoom = Math.min(Math.max(this.yScale(e.y), this.minZoom), this.maxZoom);
 
-      timeContext.stretchRatio += e.dy / 100;
-      timeContext.stretchRatio = Math.max(timeContext.stretchRatio, 0.01);
+    const newCenterTime = timeContext.xScale.invert(e.x);
+    const delta = newCenterTime - lastCenterTime;
 
-      const newCenterTime = timeContext.xScale.invert(e.x);
-      const delta = newCenterTime - lastCenterTime;
-      const offset = timeContext.offset;
-      // apply new offset to keep it centered to the mouse
-      timeContext.offset += (delta + timeContext.xScale.invert(e.dx));
+    // Apply new offset to keep it centered to the mouse
+    timeContext.offset += (delta + timeContext.xScale.invert(e.dx));
 
-      // clamp other values here if needed (example: offset <= 0, stretchRatio >= 1, etc...)
+    // Other possible experiments with centered-zoom-state
+    //
+    // Example 1: Prevent timeline.offset to be negative
+    // timeContext.offset = Math.min(timeContext.offset, 0);
+    //
+    // Example 2: Keep in container when zoomed out
+    // if (timeContext.stretchRatio < 1) {
+    //   const minOffset = timeContext.xScale.invert(0);
+    //   const maxOffset = timeContext.xScale.invert(view.width - timeContext.xScale(timeContext.duration));
+    //   timeContext.offset = Math.max(timeContext.offset, minOffset);
+    //   timeContext.offset = Math.min(timeContext.offset, maxOffset);
+    // }
 
-      // example keep in container when zoomed out
-      // if (timeContext.stretchRatio < 1) {
-      //   const minOffset = timeContext.xScale.invert(0);
-      //   const maxOffset = timeContext.xScale.invert(view.width - timeContext.xScale(timeContext.duration));
-
-      //   timeContext.offset = Math.max(timeContext.offset, minOffset);
-      //   timeContext.offset = Math.min(timeContext.offset, maxOffset);
-      // }
-    });
-
-    timeline.views.update();
+    this.timeline.tracks.update();
   }
 
   onMouseUp(e) {
