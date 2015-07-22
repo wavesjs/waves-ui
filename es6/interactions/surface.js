@@ -4,13 +4,15 @@ import WaveEvent from './wave-event';
 
 const body = window.document.body;
 
-
+/**
+ * `Surface` normalizes mouse user interactions with the timeline upon the DOM container element of `Track` instances.
+ * As soon as a `track` is added to a `timeline`, its attached `Surface` instance will emit the mouse events.
+ */
 export default class Surface extends EventSource {
   /**
-   * @param el <DOMElement> the DOM element to monitor
-   * @param padding <Object> the padding of the current surface @TODO
+   * @param {DOMElement} el - the DOM element to monitor
    */
-  constructor(el /*, padding */) {
+  constructor(el /*, padding of the current surface @TODO */) {
     super(el);
 
     // this.isMouseDown = false;
@@ -19,7 +21,7 @@ export default class Surface extends EventSource {
   }
 
   /**
-   *  factory method for `Event` class
+   * Factory method for `Event` class
    */
   _createEvent(type, e) {
     const event = new WaveEvent(type, e);
@@ -32,8 +34,8 @@ export default class Surface extends EventSource {
   }
 
   /**
-   * @param  e <Event> raw event from listener
-   * @return <Object> the x, y coordinates coordinates relative to the surface element
+   * @param {Event} e - raw event from listener
+   * @return {Object} The x, y coordinates coordinates relative to the surface element
    */
   _getRelativePosition(e) {
     // @TODO: should be able to ignore padding
@@ -43,12 +45,12 @@ export default class Surface extends EventSource {
     const scrollLeft = body.scrollLeft + document.documentElement.scrollLeft;
     const scrollTop  = body.scrollTop + document.documentElement.scrollTop;
 
-    // adapted from http://www.quirksmode.org/js/events_properties.html#position
+    // Adapted from http://www.quirksmode.org/js/events_properties.html#position
     if (e.pageX || e.pageY) {
       x = e.pageX;
       y = e.pageY;
     } else if (e.clientX || e.clientY) {
-      // normalize to pageX, pageY
+      // Normalize to pageX, pageY
       x = e.clientX + scrollLeft;
       y = e.clientY + scrollTop;
     }
@@ -57,15 +59,15 @@ export default class Surface extends EventSource {
     x = x - (clientRect.left + scrollLeft);
     y = y - (clientRect.top  + scrollTop );
 
-    // should handle padding
+    // Should handle padding
 
     return { x, y };
   }
 
   /**
-   * keep this private to avoir double event binding
-   * main logic of the surface is here
-   * should be extended with needed events
+   * Keep this private to avoid double event binding
+   * Main logic of the surface is here
+   * Should be extended with needed events (mouseenter, mouseleave, wheel ...)
    */
   _bindEvents() {
 
@@ -78,7 +80,7 @@ export default class Surface extends EventSource {
       this.isMouseDown = true;
       this.mouseDownEvent = event;
       this.lastEvent = event;
-      // register mouse move on window - more user friendly
+      // Register mousemove and mouseup listeners on window
       window.addEventListener('mousemove', onMouseMove, false);
       window.addEventListener('mouseup', onMouseUp, false);
 
@@ -88,7 +90,7 @@ export default class Surface extends EventSource {
     const onMouseMove = (e) => {
       let event = this._createEvent('mousemove', e);
       event.defineArea(this.mouseDownEvent, this.lastEvent);
-      // update `lastEvent` for next call
+      // Update `lastEvent` for next call
       this.lastEvent = event;
 
       this.emit('event', event);
@@ -101,7 +103,7 @@ export default class Surface extends EventSource {
       this.isMouseDown = false;
       this.mouseDownEvent = null;
       this.lastEvent = null;
-      // remove listener on
+      // Remove mousemove and mouseup listeners on window
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
 
@@ -122,12 +124,5 @@ export default class Surface extends EventSource {
     this.el.addEventListener('mousedown', onMouseDown, false);
     this.el.addEventListener('click', onClick, false);
     this.el.addEventListener('dblclick', onDblClick, false);
-
-    // let svgs = this.el.querySelectorAll('svg');
-    // for (let i = 0, l = svgs.length; i < l; i++) {
-    //   svgs[i].addEventListener('mousedown', onMouseDown, false);
-    // }
-
-    // @TODO: mouseenter, mouseleave, wheel ?
   }
 }
