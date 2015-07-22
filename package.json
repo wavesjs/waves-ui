@@ -13,7 +13,8 @@
     "watch": "node ./bin/scripts.js --watch",
     "test": "tac6",
     "pretest": "npm run hint",
-    "hint": "jshint ./es6; true"
+    "hint": "jshint ./es6; true",
+    "coverage": "browserify -t [ babelify --blacklist regenerator ] -t coverify tests/core/timeline.js |  testling -u --no-show | coverify"
   },
   "license": "BSD-3",
   "repository": {

@@ -1,5 +1,4 @@
 import d3Scale from 'd3-scale';
-
 // import LayerTimeContext from './layer-time-context';
 import ns from './namespace';
 // import TimeContextBehavior from '../behaviors/time-context-behavior';
