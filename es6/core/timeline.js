@@ -70,15 +70,7 @@ export default class Timeline extends events.EventEmitter {
    *  @readonly
    */
   get visibleDuration() {
-    return this.timeContext.visibleWidth;
-  }
-
-  get visibleWidth() {
-    return this.timeContext.visibleWidth;
-  }
-
-  set visibleWidth(value) {
-    this.timeContext.visibleWidth = value;
+    return this.timeContext.visibleDuration;
   }
 
   // @NOTE maybe expose as public instead of get/set for nothing...
