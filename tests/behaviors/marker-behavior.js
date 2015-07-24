@@ -1,4 +1,4 @@
-import assert from 'assert';
+const test = require('tape');
 
 import Layer from '../../es6/core/layer';
 import Marker from '../../es6/shapes/marker';
@@ -7,37 +7,24 @@ import MarkerBehavior from '../../es6/behaviors/marker-behavior';
 import Timeline from '../../es6/core/timeline';
 
 
-describe('MarkerBehavior', function(){
-  let titleDiv;
-  let timeline;
-  let timelineDiv;
+test('MarkerBehavior', (assert) => {
+  const trackDiv = document.createElement("div");
+  document.body.appendChild(trackDiv);
+  const timeline = new Timeline();
+  const track = timeline.createTrack(trackDiv);
+  const timeContext = new LayerTimeContext(timeline.timeContext)
+  const data = [{ x: 3 }, { x: 6 }];
+  const layer = new Layer('collection', data);
+  layer.setTimeContext(timeContext);
+  layer.configureShape(Marker);
+  layer.setBehavior(new MarkerBehavior());
+  layer.timeContext.duration = 12;
+  timeline.addLayer(layer, track);
+  timeline.tracks.render();
+  timeline.tracks.update();
+  const item = layer.d3items.nodes()[0];
+  layer.edit(item, 10, 0, undefined);
 
-  beforeEach(function(){
-      titleDiv = document.createElement('div');
-      titleDiv.innerHTML = this.currentTest.title;
-      document.body.appendChild(titleDiv);
-      timelineDiv = document.createElement("div");
-      document.body.appendChild(timelineDiv);
-  })
-
-  describe('Edit Marker Behavior', function(){
-    it('should correctly edit marker using marker behavior', function(){
-      timeline = new Timeline();
-      timeline.registerContainer(timelineDiv, {}, 'foo');
-      let timeContext = new LayerTimeContext(timeline.timeContext)
-      let data = [{ x: 3 }, { x: 6 }];
-      let layer = new Layer('collection', data);
-      layer.setTimeContext(timeContext);
-      layer.configureShape(Marker);
-      layer.setBehavior(new MarkerBehavior());
-      layer.timeContext.duration = 12;
-      timeline.addLayer(layer, 'foo');
-      timeline.drawLayersShapes();
-      timeline.update();
-      let item = layer.d3items.nodes()[0];
-      layer.edit(item, 10, 0, undefined);
-
-      assert.equal(layer.data[0].x, 3.1);
-    })
-  })
+  assert.equal(layer.data[0].x, 3.1);
+  assert.end();
 })
