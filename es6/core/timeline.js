@@ -201,6 +201,7 @@ export default class Timeline extends events.EventEmitter {
     track.add(layer);
 
     if (!this._groupedLayers[groupId]) {
+      console.log(groupId);
       this._groupedLayers[groupId] = [];
     }
 
