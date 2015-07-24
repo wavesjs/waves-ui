@@ -10,7 +10,6 @@ import Timeline from '../../es6/core/timeline';
 test("Edit Breakpoint Behavior", (assert) => {
   const trackDiv = document.createElement("div");
   document.body.appendChild(trackDiv);
-
   const timeline = new Timeline();
   const track = timeline.createTrack(trackDiv);
   const timeContext = new LayerTimeContext(timeline.timeContext)

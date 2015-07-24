@@ -53,5 +53,4 @@ test('SegmentBehavior', (assert) => {
   assert.equal(layer.data[0].width, 2.8);
 
   assert.end();
-
 });
