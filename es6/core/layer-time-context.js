@@ -91,7 +91,7 @@ export default class LayerTimeContext {
     const timeToPixel = this._timeToPixel ?
       this._timeToPixel : d3Scale.linear().domain([0, 1]);
 
-    timeToPixel.range([0, this.parent.originalPixelsPerSecond * value]);
+    timeToPixel.range([0, this.parent.computedPixelsPerSecond * value]);
 
     this._timeToPixel = timeToPixel;
     this._stretchRatio = value;
