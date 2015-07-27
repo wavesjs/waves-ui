@@ -1,5 +1,7 @@
 const test = require('tape');
 
+// import {test} from 'tape';
+
 import Layer from '../../es6/core/layer';
 import LayerTimeContext from '../../es6/core/layer-time-context';
 import Segment from '../../es6/shapes/segment';
@@ -28,6 +30,7 @@ test('SegmentBehavior', (assert) => {
   timeline.tracks.update();
   const item = layer.d3items.nodes()[0];
   const shape = layer._$itemShapeMap.get(item);
+
   layer.edit(item, 10, 0, shape.$segment);
 
   // y -10 => +0.1 due to horizontal flip

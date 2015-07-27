@@ -1,6 +1,7 @@
 import events from 'events';
 
 import Keyboard from '../interactions/keyboard';
+import LayerTimeContext from './layer-time-context';
 import Surface from '../interactions/surface';
 import TimelineTimeContext from './timeline-time-context';
 import Track from './track';
@@ -66,6 +67,10 @@ export default class Timeline extends events.EventEmitter {
     this.timeContext.visibleWidth = value;
   }
 
+  get timeToPixel() {
+    return this.timeContext.timeToPixel;
+  }
+
   /**
    *  @readonly
    */
@@ -96,7 +101,7 @@ export default class Timeline extends events.EventEmitter {
    */
   _createInteraction(ctor, el, options = {}) {
     const interaction = new ctor(el, options);
-    interaction.on('event', (e) => {this._handleEvent(e)});
+    interaction.on('event', (e) => this._handleEvent(e));
   }
 
   /**
@@ -182,6 +187,9 @@ export default class Timeline extends events.EventEmitter {
 
     // Add track to the timeline
     this.add(track);
+    track.render();
+    track.update();
+
     return track;
   }
 
@@ -197,15 +205,24 @@ export default class Timeline extends events.EventEmitter {
     if (typeof trackOrTrackId === 'string') {
       track = this.getTrackById(trackOrTrackId);
     }
+
+    // creates the `LayerTimeContext` if not present
+    if (!layer.timeContext) {
+      const timeContext = new LayerTimeContext(this.timeContext);
+      layer.setTimeContext(timeContext);
+    }
+
     // we should have a Track instance at this point
     track.add(layer);
 
     if (!this._groupedLayers[groupId]) {
-      console.log(groupId);
       this._groupedLayers[groupId] = [];
     }
 
     this._groupedLayers[groupId].push(layer);
+
+    layer.render();
+    layer.update();
   }
 
   /**

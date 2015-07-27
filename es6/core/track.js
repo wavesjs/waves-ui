@@ -25,7 +25,7 @@ import ns from './namespace';
 * +-------------------------------------------------+-- - -  -  -   -
 *
 * +----------------->
-* timeline.timeContext.xScale(timeline.timeContext.offset)
+* timeline.timeContext.timeToPixel(timeline.timeContext.offset)
 *
 *                   <------------------------------->
 *                   timeline's tracks defaults to 1000px
@@ -183,7 +183,7 @@ export default class Track {
     const renderingContext = this.renderingContext;
     const height  = this.height;
     const width   = renderingContext.visibleWidth;
-    const offsetX = renderingContext.xScale(renderingContext.offset);
+    const offsetX = renderingContext.timeToPixel(renderingContext.offset);
     const translate = `translate(${offsetX}, 0)`;
 
     $svg.setAttributeNS(null, 'height', height);

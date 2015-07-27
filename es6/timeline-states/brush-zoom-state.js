@@ -60,21 +60,20 @@ export default class BrushZoomState extends BaseState {
       brush.parentNode.removeChild(brush);
     });
 
-    this.views.forEach((view) => {
-      const timeContext = view.timeContext;
-      // update timeContext
-      const startX = this.startX;
-      const endX = e.x;
+    // update timeContext
+    const startX = this.startX;
+    const endX = e.x;
 
-      const minTime = timeContext.xScale.invert(Math.max(0, Math.min(startX, endX)));
-      const maxTime = timeContext.xScale.invert(Math.max(startX, endX));
-      const deltaDuration = maxTime - minTime;
+    const minPixel = Math.max(0, Math.min(startX, endX));
+    const maxPixel = Math.max(startX, endX);
+    const minTime = timeline.timeToPixel.invert(minPixel);
+    const maxTime = timeline.timeToPixel.invert(maxPixel);
 
-      const stretchRatio = timeContext.duration / deltaDuration;
+    const deltaDuration = maxTime - minTime;
+    const stretchRatio = timeline.duration / deltaDuration;
 
-      view.offset = -minTime;
-      view.zoom = stretchRatio;
-    });
+    view.offset = -minTime;
+    view.zoom = stretchRatio;
 
     this.views.update();
   }

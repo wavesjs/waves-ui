@@ -18,8 +18,8 @@ export default class CenteredZoomState extends BaseState {
     // maxZoom: 1px per sample
     // minZoom: 10 000 px per 1 hour
     // with a default to 44.1kHz sample rate
-    this.maxZoom = 44100*1/this.timeline.timeContext.pixelsPerSecond;
-    this.minZoom = 10000/3600/this.timeline.timeContext.pixelsPerSecond;
+    this.maxZoom = 44100 * 1 / this.timeline.timeContext.pixelsPerSecond;
+    this.minZoom = 10000 / 3600 / this.timeline.timeContext.pixelsPerSecond;
   }
 
   handleEvent(e) {
@@ -41,8 +41,8 @@ export default class CenteredZoomState extends BaseState {
     const actualZoom = this.timeline.timeContext.zoom;
     const initialY = e.y;
     this.yScale = d3Scale.linear()
-                    .domain([initialY, 0])
-                    .range([actualZoom, -2*actualZoom]);
+      .domain([initialY, 0])
+      .range([actualZoom, -2 * actualZoom]);
   }
 
   onMouseMove(e) {

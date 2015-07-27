@@ -39,7 +39,7 @@ test('TimeContextBehavior should edit shape accordingly', (assert) => {
 
   layer.editContext(-20, 0, layer.contextShape.$segment);
 
-  // start can't be negative: -20 should give -0.1 start if not blocked, but it's blocked by the lib
+  // Start can't be negative: -20 should give -0.1 start if not blocked, but it's blocked by the lib
   assert.equal(layer.timeContext.start, 0);
   assert.equal(layer.timeContext.duration, 12);
   assert.equal(layer.timeContext.offset, -0.1);
@@ -77,7 +77,7 @@ test('TimeContextBehavior should edit shape accordingly v2', (assert) => {
   assert.equal(layer.timeContext.offset, -0.1);
 
   layer.editContext(-20, 0, layer.contextShape.$segment);
-  // // start can't be negative: -20 should give -0.6 start if not blocked
+  // start can't be negative: -20 should give -0.6 start if not blocked
   assert.equal(layer.timeContext.start, 0);
   assert.equal(layer.timeContext.duration, 12);
   assert.equal(layer.timeContext.offset, -0.1);
