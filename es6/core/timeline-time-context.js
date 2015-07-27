@@ -25,10 +25,10 @@ export default class TimelineTimeContext {
 
     this._offset = 0;
     this._zoom = 1;
-    this._pixelsPerSecond = pixelsPerSecond;
+    this._computedPixelsPerSecond = pixelsPerSecond;
     // params
     this._visibleWidth = visibleWidth;
-    this._visibleDuration = this.visibleWidth / this._pixelsPerSecond;
+    this._visibleDuration = this.visibleWidth / this._computedPixelsPerSecond;
     this._maintainVisibleDuration = false;
 
     // create the timeToPixel scale
@@ -39,7 +39,7 @@ export default class TimelineTimeContext {
     this.timeToPixel = scale;
     // this.originalXScale = this.timeToPixel.copy();
 
-    this._originalPixelsPerSecond = this._pixelsPerSecond;
+    this._originalPixelsPerSecond = this._computedPixelsPerSecond;
   }
 
   get pixelsPerSecond() {
@@ -47,7 +47,7 @@ export default class TimelineTimeContext {
   }
 
   set pixelsPerSecond(value) {
-    this._pixelsPerSecond = value * this.zoom;
+    this._computedPixelsPerSecond = value * this.zoom;
     this._originalPixelsPerSecond = value;
     this._updateTimeToPixelRange();
 
@@ -59,7 +59,7 @@ export default class TimelineTimeContext {
   }
 
   get computedPixelsPerSecond() {
-    return this._pixelsPerSecond;
+    return this._computedPixelsPerSecond;
   }
 
   get offset() {
@@ -78,7 +78,7 @@ export default class TimelineTimeContext {
     // Compute change to propagate to children who have their own timeToPixel
     const ratioChange = value / this._zoom;
     this._zoom = value;
-    this._pixelsPerSecond = this._originalPixelsPerSecond * value;
+    this._computedPixelsPerSecond = this._originalPixelsPerSecond * value;
     this._updateTimeToPixelRange();
 
     this._children.forEach(function(child) {
@@ -95,10 +95,10 @@ export default class TimelineTimeContext {
     const widthRatio = value / this.visibleWidth;
 
     this._visibleWidth = value;
-    this._visibleDuration = this.visibleWidth / this._pixelsPerSecond;
+    this._visibleDuration = this.visibleWidth / this._computedPixelsPerSecond;
 
     if (this.maintainVisibleDuration) {
-      this.pixelsPerSecond = this._pixelsPerSecond * widthRatio;
+      this.pixelsPerSecond = this._computedPixelsPerSecond * widthRatio;
     }
   }
 
@@ -128,7 +128,7 @@ export default class TimelineTimeContext {
   }
 
   _updateTimeToPixelRange() {
-    this._visibleDuration = this.visibleWidth / this._pixelsPerSecond;
-    this.timeToPixel.range([0, this._pixelsPerSecond]);
+    this._visibleDuration = this.visibleWidth / this._computedPixelsPerSecond;
+    this.timeToPixel.range([0, this._computedPixelsPerSecond]);
   }
 }
