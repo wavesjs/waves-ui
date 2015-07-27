@@ -1,7 +1,7 @@
 import BaseState from './base-state';
 import TimeContextBehavior from '../behaviors/time-context-behavior';
 
-// works
+
 export default class ContextEditionState extends BaseState {
   constructor(timeline) {
     super(timeline);
@@ -40,6 +40,7 @@ export default class ContextEditionState extends BaseState {
     const layer = this.currentLayer;
     const target = this.currentTarget;
 
+    // in this example the context is stretched when shift is pressed
     if (!e.originalEvent.shiftKey) {
       layer.editContext(e.dx, e.dy, target);
     } else {
