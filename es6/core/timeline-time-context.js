@@ -7,7 +7,7 @@ import d3Scale from 'd3-scale';
  *  A ViewTimeContext instance represents the mapping between the time and the pixel domains
  *
  *  The `TimelineTimeContext` has 3 important attributes:
- *  - `timeContext.xScale` which defines the time to pixel transfert function, itself defined by the `pixelsPerSecond` attribute of the timeline
+ *  - `timeContext.timeToPixel` which defines the time to pixel transfert function, itself defined by the `pixelsPerSecond` attribute of the timeline
  *  - `timeContext.offset` defines a decay (in time domain) applied to all the views on the timeline. This allow to navigate inside visibleDurations longer than what can be represented in Layers (views) containers (e.g. horizontal scroll)
  *  - `timeContext.zoom` defines the zoom factor applyed to the timeline
  *
@@ -20,8 +20,8 @@ export default class TimelineTimeContext {
     this._children = [];
 
     // @rename to timeToPixel
-    this._xScale = null;
-    this._originalXScale = null;
+    this._timeToPixel = null;
+    // this._originalXScale = null;
 
     this._offset = 0;
     this._zoom = 1;
@@ -32,12 +32,14 @@ export default class TimelineTimeContext {
     this._maintainVisibleDuration = false;
 
     // create the timeToPixel scale
-    const xScale = d3Scale.linear()
+    const scale = d3Scale.linear()
       .domain([0, 1])
       .range([0, pixelsPerSecond]);
 
-    this.xScale = xScale;
-    this.originalXScale = this.xScale.copy();
+    this.timeToPixel = scale;
+    // this.originalXScale = this.timeToPixel.copy();
+
+    this._originalPixelsPerSecond = this.pixelsPerSecond;
   }
 
   get pixelsPerSecond() {
@@ -45,10 +47,15 @@ export default class TimelineTimeContext {
   }
 
   set pixelsPerSecond(value) {
-    this._pixelsPerSecond = value;
+    this._pixelsPerSecond = value * this.zoom;
+    this._originalPixelsPerSecond = value;
+    this._updateTimeToPixelRange();
 
-    this.xScaleRange = [0, this.pixelsPerSecond];
-    this._visibleDuration = this.visibleWidth / this.pixelsPerSecond;
+    // force children scale update
+    this._children.forEach(function(child) {
+      if (!child._xScale) { return; }
+      child.stretchRatio = child.stretchRatio;
+    });
   }
 
   get offset() {
@@ -64,21 +71,15 @@ export default class TimelineTimeContext {
   }
 
   set zoom(value) {
-    const xScale = this.originalXScale.copy();
-    const [min, max] = xScale.domain();
-    const diff = (max - min) / value;
-
-    xScale.domain([min, min + diff]);
-
-    this._xScale = xScale;
+    // Compute change to propagate to children who have their own timeToPixel
+    const ratioChange = value / this._zoom;
     this._zoom = value;
-
-    // Propagate change to children who have their own xScale
-    const ratioChange = value / (this._zoom);
+    this._pixelsPerSecond = this._originalPixelsPerSecond * value;
+    this._updateTimeToPixelRange();
 
     this._children.forEach(function(child) {
-      if (!child._xScale) { return; }
-      child.stretchRatio = child.zoom * ratioChange;
+      if (!child._timeToPixel) { return; }
+      child.stretchRatio = child.stretchRatio * ratioChange;
     });
   }
 
@@ -97,13 +98,10 @@ export default class TimelineTimeContext {
     }
   }
 
+  /** @readonly */
   get visibleDuration() {
     return this._visibleDuration;
   }
-
-  // set visibleDuration(value) {
-  //   this._visibleDuration = value;
-  // }
 
   get maintainVisibleDuration() {
     return this._maintainVisibleDuration;
@@ -113,31 +111,20 @@ export default class TimelineTimeContext {
     this._maintainVisibleDuration = bool;
   }
 
-  // @TODO rename to timeToPixel
-  get xScale() {
-    return this._xScale;
+  get timeToPixel() {
+    return this._timeToPixel;
   }
 
-  set xScale(scale) {
-    this._xScale = scale;
+  set timeToPixel(scale) {
+    this._timeToPixel = scale;
   }
 
-  get xScaleRange() {
-    return this._xScale.range();
+  get originalPixelsPerSecond() {
+    return this._originalPixelsPerSecond;
   }
 
-  set xScaleRange(arr) {
-    this._xScale.range(arr);
-    this._originalXScale.range(arr);
-    // propagate to children
-    this._children.forEach((child) => { child.xScaleRange = arr; });
-  }
-
-  get originalXScale() {
-    return this._originalXScale;
-  }
-
-  set originalXScale(scale) {
-    this._originalXScale = scale;
+  _updateTimeToPixelRange() {
+    this._visibleDuration = this.visibleWidth / this.pixelsPerSecond;
+    this.timeToPixel.range([0, this._pixelsPerSecond]);
   }
 }

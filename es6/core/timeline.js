@@ -67,6 +67,10 @@ export default class Timeline extends events.EventEmitter {
     this.timeContext.visibleWidth = value;
   }
 
+  get timeToPixel() {
+    return this.timeContext.timeToPixel;
+  }
+
   /**
    *  @readonly
    */
@@ -202,9 +206,8 @@ export default class Timeline extends events.EventEmitter {
       track = this.getTrackById(trackOrTrackId);
     }
 
-    // create the LayerTimeContext if not present
+    // creates the `LayerTimeContext` if not present
     if (!layer.timeContext) {
-      console.log('should pass here');
       const timeContext = new LayerTimeContext(this.timeContext);
       layer.setTimeContext(timeContext);
     }

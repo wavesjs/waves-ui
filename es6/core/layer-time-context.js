@@ -1,7 +1,10 @@
+import d3Scale from 'd3-scale';
+
+
 /**
  *  @class LayerTimeContext
  *
- *  A `LayerTimeContext` instance represent a time segment into a `TimelineTimeContext`. It must be attached to a `TimelineTimeContext` (the one of the timeline it belongs to). It relies on its parent's xScale (time to pixel transfert function) to create the time to pixel representation of the Layer (the view) it is attached to.
+ *  A `LayerTimeContext` instance represent a time segment into a `TimelineTimeContext`. It must be attached to a `TimelineTimeContext` (the one of the timeline it belongs to). It relies on its parent's `timeToPixel` (time to pixel transfert function) to create the time to pixel representation of the Layer (the view) it is attached to.
  *
  *  The `layerTimeContext` has four important attributes
  *  - `timeContext.start` represent the time at which temporal data must be represented in the timeline (for instance the begining of a soundfile in a DAW)
@@ -28,7 +31,7 @@ export default class LayerTimeContext {
 
     this.parent = parent;
 
-    this._xScale = null;
+    this._timeToPixel = null;
 
     this._start = 0;
     this._duration = parent.visibleDuration;
@@ -45,7 +48,7 @@ export default class LayerTimeContext {
     ctx.start = this.start;
     ctx.duration = this.duration;
     ctx.offset = this.offset;
-    ctx.stretchRatio = this.stretchRatio; // creates the xScale if needed
+    ctx.stretchRatio = this.stretchRatio; // creates the local scale if needed
 
     return ctx;
   }
@@ -79,37 +82,27 @@ export default class LayerTimeContext {
   }
 
   set stretchRatio(value) {
-    // remove local xScale if ratio = 1
+    // remove local scale if ratio = 1
     if (value ===  1) {
-      this._xScale = null;
+      this._timeToPixel = null;
       return;
     }
+    // reuse previsously created local scale if exists
+    const timeToPixel = this._timeToPixel ?
+      this._timeToPixel : d3Scale.linear().domain([0, 1]);
 
-    const xScale = this.parent.originalXScale.copy();
-    const [min, max] = xScale.domain();
-    const diff = (max - min) / (value * this.parent.zoom);
+    timeToPixel.range([0, this.parent.originalPixelsPerSecond * value]);
 
-    xScale.domain([min, min + diff]);
-
-    this._xScale = xScale;
+    this._timeToPixel = timeToPixel;
     this._stretchRatio = value;
   }
 
   // read only
-  get xScale() {
-    if (!this._xScale) {
-      return this.parent.xScale;
+  get timeToPixel() {
+    if (!this._timeToPixel) {
+      return this.parent.timeToPixel;
     }
 
-    return this._xScale;
-  }
-
-  get xScaleRange() {
-    return this.xScale.range();
-  }
-
-  set xScaleRange(arr) {
-    if (!this._xScale) { return; }
-    this._xScale.range(arr);
+    return this._timeToPixel;
   }
 }

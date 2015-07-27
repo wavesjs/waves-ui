@@ -271,14 +271,16 @@ export default class Layer extends events.EventEmitter {
    *  update the values in `_renderingContext`
    *  is particulary needed when updating `stretchRatio` as the pointer
    *  to the `xScale` may change
+   *  @TODO
+   *  rename `xScale` and `yScale`
    */
   _updateRenderingContext() {
-    this._renderingContext.xScale = this.timeContext.xScale;
+    this._renderingContext.xScale = this.timeContext.timeToPixel;
     this._renderingContext.yScale = this._yScale;
     this._renderingContext.height = this.params.height;
-    this._renderingContext.width  = this.timeContext.xScale(this.timeContext.duration);
-    // for foreign oject issue in chrome
-    this._renderingContext.offsetX = this.timeContext.xScale(this.timeContext.offset);
+    this._renderingContext.width  = this.timeContext.timeToPixel(this.timeContext.duration);
+    // for foreign object issue in chrome
+    this._renderingContext.offsetX = this.timeContext.timeToPixel(this.timeContext.offset);
   }
 
   // --------------------------------------
@@ -427,9 +429,9 @@ export default class Layer extends events.EventEmitter {
    *  @return {Array} list of the DOM elements in the given area
    */
   getItemsInArea(area) {
-    const start    = this.timeContext.xScale(this.timeContext.start);
-    const duration = this.timeContext.xScale(this.timeContext.duration);
-    const offset   = this.timeContext.xScale(this.timeContext.offset);
+    const start    = this.timeContext.timeToPixel(this.timeContext.start);
+    const duration = this.timeContext.timeToPixel(this.timeContext.duration);
+    const offset   = this.timeContext.timeToPixel(this.timeContext.offset);
     const top      = this.params.top;
     // be aware af context's translations - constrain in working view
     let x1 = Math.max(area.left, start);
@@ -558,10 +560,10 @@ export default class Layer extends events.EventEmitter {
 
     const timeContext = this.timeContext;
 
-    const width  = timeContext.xScale(timeContext.duration);
+    const width  = timeContext.timeToPixel(timeContext.duration);
     // offset is relative to tim$eline's timeContext
-    const x      = timeContext.parent.xScale(timeContext.start);
-    const offset = timeContext.xScale(timeContext.offset);
+    const x      = timeContext.parent.timeToPixel(timeContext.start);
+    const offset = timeContext.timeToPixel(timeContext.offset);
     const top    = this.params.top;
     const height = this.params.height;
     // matrix to invert the coordinate system
