@@ -51,5 +51,8 @@ module.exports = {
     MarkerLayer         : require('./dist/helpers/marker-layer'),
     SegmentLayer        : require('./dist/helpers/segment-layer'),
     WaveformLayer       : require('./dist/helpers/waveform-layer'),
+  },
+  utils: {
+    OrthogonalData      : require('./dist/utils/orthogonal-data'),
   }
 }
