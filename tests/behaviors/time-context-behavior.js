@@ -26,6 +26,7 @@ test('TimeContextBehavior should edit shape accordingly', (assert) => {
   // assert.equal(layer.timeContext.offset, 0)
 
   // timeline.timeContextBehavior.edit(layer, 10, 0, layer.contextShape.$leftHandler);
+  layer.editContext(10, 0, layer.contextShape.$leftHandler);
 
   // assert.equal(layer.timeContext.start, 0.2)
   // assert.equal(layer.timeContext.duration, 11.9)
