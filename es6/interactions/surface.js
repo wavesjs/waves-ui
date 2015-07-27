@@ -70,8 +70,6 @@ export default class Surface extends EventSource {
    * Should be extended with needed events (mouseenter, mouseleave, wheel ...)
    */
   _bindEvents() {
-
-    // @NOTE add mouseup on body too
     const onMouseDown = (e) => {
       // By removing the previous selection we prevent bypassing the mousemove events coming from SVG in Firefox.
       window.getSelection().removeAllRanges();
