@@ -28,7 +28,7 @@ export default class TimelineTimeContext {
     this._pixelsPerSecond = pixelsPerSecond;
     // params
     this._visibleWidth = visibleWidth;
-    this._visibleDuration = this.visibleWidth / this.pixelsPerSecond;
+    this._visibleDuration = this.visibleWidth / this._pixelsPerSecond;
     this._maintainVisibleDuration = false;
 
     // create the timeToPixel scale
@@ -39,7 +39,7 @@ export default class TimelineTimeContext {
     this.timeToPixel = scale;
     // this.originalXScale = this.timeToPixel.copy();
 
-    this._originalPixelsPerSecond = this.pixelsPerSecond;
+    this._originalPixelsPerSecond = this._pixelsPerSecond;
   }
 
   get pixelsPerSecond() {
@@ -95,10 +95,10 @@ export default class TimelineTimeContext {
     const widthRatio = value / this.visibleWidth;
 
     this._visibleWidth = value;
-    this._visibleDuration = this.visibleWidth / this.pixelsPerSecond;
+    this._visibleDuration = this.visibleWidth / this._pixelsPerSecond;
 
     if (this.maintainVisibleDuration) {
-      this.pixelsPerSecond = this.pixelsPerSecond * widthRatio;
+      this.pixelsPerSecond = this._pixelsPerSecond * widthRatio;
     }
   }
 
