@@ -28,11 +28,11 @@ export default class BrushZoomState extends BaseState {
     this.brushes = [];
     this.startX = e.x;
     // create brush in each containers
-    this.views.forEach((view) => {
-      const interactions = view.$interactions;
+    this.tracks.forEach((track) => {
+      const interactions = track.$interactions;
 
       const brush = document.createElementNS(ns, 'rect');
-      brush.setAttributeNS(null, 'height', view.height);
+      brush.setAttributeNS(null, 'height', track.height);
       brush.setAttributeNS(null, 'y', 0);
       brush.style.fill = '#787878';
       brush.style.opacity = 0.2;
@@ -75,15 +75,15 @@ export default class BrushZoomState extends BaseState {
     view.offset = -minTime;
     view.zoom = stretchRatio;
 
-    this.views.update();
+    this.tracks.update();
   }
 
   onKeyDown(e) {
     // reset on space bar
     if (e.originalEvent.keyCode === 32) {
-      this.views.offset = 0;
-      this.views.zoom = 1;
-      this.views.update();
+      this.timeline.offset = 0;
+      this.timeline.zoom = 1;
+      this.tracks.update();
     }
   }
 }

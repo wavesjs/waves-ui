@@ -61,6 +61,6 @@ export default class TrackCollection extends Array {
   updateLayers(layerOrGroup) {
     const layers = this._getLayersOrGroups(layerOrGroup);
     this.forEach((track) => track.updateLayers(layers));
-    this._timeline.emit('update:layers');
+    this._timeline.emit('update:layers', layers);
   }
 }

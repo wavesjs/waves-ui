@@ -43,7 +43,7 @@ export default class TimelineTimeContext {
   }
 
   get pixelsPerSecond() {
-    return this._pixelsPerSecond;
+    return this._originalPixelsPerSecond;
   }
 
   set pixelsPerSecond(value) {
@@ -56,6 +56,10 @@ export default class TimelineTimeContext {
       if (!child._timeToPixel) { return; }
       child.stretchRatio = child.stretchRatio;
     });
+  }
+
+  get computedPixelsPerSecond() {
+    return this._pixelsPerSecond;
   }
 
   get offset() {
