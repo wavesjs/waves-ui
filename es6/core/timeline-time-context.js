@@ -128,7 +128,7 @@ export default class TimelineTimeContext {
   }
 
   _updateTimeToPixelRange() {
-    this._visibleDuration = this.visibleWidth / this.pixelsPerSecond;
+    this._visibleDuration = this.visibleWidth / this._pixelsPerSecond;
     this.timeToPixel.range([0, this._pixelsPerSecond]);
   }
 }
