@@ -1,5 +1,3 @@
-import AbstractTimeContext from './abstract-time-context';
-
 /**
  *  @class LayerTimeContext
  *
@@ -24,10 +22,8 @@ import AbstractTimeContext from './abstract-time-context';
  *      The parts of the sound file represented with '*' are hidden from the view
  *
  */
-export default class LayerTimeContext extends AbstractTimeContext {
+export default class LayerTimeContext {
   constructor(parent) {
-    super({});
-
     if (!parent) { throw new Error('LayerTimeContext must have a parent'); }
 
     this.parent = parent;

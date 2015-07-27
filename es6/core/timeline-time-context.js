@@ -1,5 +1,5 @@
 import d3Scale from 'd3-scale';
-import AbstractTimeContext from './abstract-time-context';
+
 
 /**
  *  @class ViewTimeContext
@@ -15,10 +15,8 @@ import AbstractTimeContext from './abstract-time-context';
  *
  *  It also maintain an array of references to all the LayerTimeContext attached to the timeline to propagate changes on the time to pixel representation
  */
-export default class TimelineTimeContext extends AbstractTimeContext {
+export default class TimelineTimeContext {
   constructor(pixelsPerSecond, visibleWidth) {
-    super({});
-
     this._children = [];
 
     // @rename to timeToPixel
@@ -39,6 +37,7 @@ export default class TimelineTimeContext extends AbstractTimeContext {
       .range([0, pixelsPerSecond]);
 
     this.xScale = xScale;
+    this.originalXScale = this.xScale.copy();
   }
 
   get pixelsPerSecond() {
@@ -121,10 +120,6 @@ export default class TimelineTimeContext extends AbstractTimeContext {
 
   set xScale(scale) {
     this._xScale = scale;
-
-    if (!this._originalXScale) {
-      this._originalXScale = this._xScale.copy();
-    }
   }
 
   get xScaleRange() {

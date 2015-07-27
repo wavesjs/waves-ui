@@ -96,7 +96,7 @@ export default class Timeline extends events.EventEmitter {
    */
   _createInteraction(ctor, el, options = {}) {
     const interaction = new ctor(el, options);
-    interaction.on('event', (e) => {this._handleEvent(e)});
+    interaction.on('event', (e) => this._handleEvent(e));
   }
 
   /**
