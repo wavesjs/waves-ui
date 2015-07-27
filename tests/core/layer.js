@@ -5,7 +5,7 @@ import LayerTimeContext from '../../es6/core/layer-time-context';
 import Timeline from '../../es6/core/timeline';
 
 
-test('Layer', (assert) => {
+test('Layer with default params', (assert) => {
   const trackDiv = document.createElement("div");
   document.body.appendChild(trackDiv);
   const timeline = new Timeline();
@@ -24,3 +24,4 @@ test('Layer', (assert) => {
   assert.equal(boundingClientRect.height, 100);  // default value
   assert.end();
 });
+
