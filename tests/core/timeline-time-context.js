@@ -18,8 +18,9 @@ test("TimelineTimeContext set values", (assert) => {
     const timeContext = new TimelineTimeContext(100, 1000);
     timeContext.pixelsPerSecond = 1000;
     assert.equal(timeContext.visibleDuration, 1, "visibleDuration is 1 second");
-    // assert.equal(timeContext.zoom, 1, "zoom is 1, unchanged !!");
-    // timeContext.zoom = 2;
-    // assert.equal(timeContext.pixelsPerSecond, 1000, "unchanged !!!")
+    assert.equal(timeContext.zoom, 1, "zoom is unchanged");
+    timeContext.zoom = 2;
+    assert.equal(timeContext.pixelsPerSecond, 1000, "pps is unchanged");
+    assert.equal(timeContext.visibleDuration, 0.5, "0.5 seconds");
     assert.end();
 });
