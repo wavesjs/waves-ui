@@ -235,6 +235,7 @@ export default class Timeline extends events.EventEmitter {
       if (index !== -1) { track.remove(layer); }
     });
 
+    // clean references in helpers
     for (let groupId in this._groupedLayers) {
       const group = this._groupedLayers[groupId];
       const index = group.indexOf(layer);
