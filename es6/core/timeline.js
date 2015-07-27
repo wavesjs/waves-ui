@@ -24,7 +24,11 @@ export default class Timeline extends events.EventEmitter {
 
     this._tracks = new TrackCollection(this);
     this._state = null;
-    this._createInteraction(Keyboard, 'body');
+
+    // default interactions
+    this._surfaceCtor = Surface;
+    this.createInteraction(Keyboard, 'body');
+
     // stores
     this._trackById = {};
     this._groupedLayers = {};
@@ -93,13 +97,22 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
+   *  Override the default Surface that is instanciated on each
+   *  @param {EventSource} ctor - the constructor to use to build surfaces
+   */
+  configureSurface(ctor) {
+    this._surfaceCtor = ctor;
+  }
+
+  /**
    * Factory method to add interaction modules the timeline should listen to.
    * By default, the timeline listen to Keyboard, and instanciate a `Surface` on each container.
+   * Can be used to install any interaction implementing the `EventSource` interface
    * @param {EventSource} ctor - the contructor of the interaction module to instanciate
    * @param el {DOMElement} the DOM element to bind to the EventSource module
    * @param options {Object} options to be applied to the ctor (defaults to `{}`)
    */
-  _createInteraction(ctor, el, options = {}) {
+  createInteraction(ctor, el, options = {}) {
     const interaction = new ctor(el, options);
     interaction.on('event', (e) => this._handleEvent(e));
   }
@@ -160,11 +173,15 @@ export default class Timeline extends events.EventEmitter {
     track.configure(this.timeContext);
 
     this.tracks.push(track);
-    this._createInteraction(Surface, track.$el);
+    this.createInteraction(this._surfaceCtor, track.$el);
   }
 
+  /**
+   *  Removes a track from the timeline
+   *  @TODO
+   */
   remove(track) {
-    // @TODO
+    // should destroy interaction too, avoid ghost eventListeners
   }
 
   /**
