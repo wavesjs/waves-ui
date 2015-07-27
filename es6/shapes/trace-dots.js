@@ -57,9 +57,9 @@ export default class TraceDots extends BaseShape {
     this.$mean.setAttributeNS(null, 'transform', `translate(0, ${meanPos})`);
 
     const halfRange = range / 2;
-    const max = renderingContext.yScale(mean + halfRange);
-    const min = renderingContext.yScale(mean - halfRange);
-    const xPos = renderingContext.xScale(x);
+    const max = renderingContext.valueToPixel(mean + halfRange);
+    const min = renderingContext.valueToPixel(mean - halfRange);
+    const xPos = renderingContext.timeToPixel(x);
 
     this.$max.setAttributeNS(null, 'transform', `translate(0, ${max})`);
     this.$min.setAttributeNS(null, 'transform', `translate(0, ${min})`);

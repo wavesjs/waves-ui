@@ -52,7 +52,7 @@ export default class Marker extends BaseShape {
   }
 
   update(renderingContext, datum, index) {
-    const x = renderingContext.xScale(this.x(datum)) - 0.5;
+    const x = renderingContext.timeToPixel(this.x(datum)) - 0.5;
     const color = this.color(datum);
 
     this.$el.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
@@ -65,7 +65,7 @@ export default class Marker extends BaseShape {
 
   inArea(renderingContext, datum, x1, y1, x2, y2) {
     // handlers only are selectable
-    const x = renderingContext.xScale(this.x(datum));
+    const x = renderingContext.timeToPixel(this.x(datum));
     const shapeX1 = x - (this.params.handlerWidth - 1) / 2;
     const shapeX2 = shapeX1 + this.params.handlerWidth;
     const shapeY1 = renderingContext.height - this.params.handlerHeight;

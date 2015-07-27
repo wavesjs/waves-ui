@@ -64,12 +64,12 @@ export default class Waveform extends BaseShape {
     const sliceMethod = datum instanceof Float32Array ? 'subarray' : 'slice';
     const nbrSamples = datum.length;
     const duration = nbrSamples / this.params.sampleRate;
-    const width = renderingContext.xScale(duration);
+    const width = renderingContext.timeToPixel(duration);
     const samplesPerPixel = nbrSamples / width;
     let minMax = [];
     // get min/max per pixels
     for (let i = 0; i <= width; i++) {
-      const startTime = renderingContext.xScale.invert(i);
+      const startTime = renderingContext.timeToPixel.invert(i);
       const startSample = startTime * this.params.sampleRate;
 
       const extract = datum[sliceMethod](startSample, startSample + samplesPerPixel);
@@ -94,9 +94,9 @@ export default class Waveform extends BaseShape {
     if (this.params.renderingStrategy === 'svg') {
 
       let instructions = minMax.map((datum, index) => {
-        const x  = Math.floor(renderingContext.xScale(datum.time));
-        let y1 = Math.round(renderingContext.yScale(this.y(datum.values[MIN])));
-        let y2 = Math.round(renderingContext.yScale(this.y(datum.values[MAX])));
+        const x  = Math.floor(renderingContext.timeToPixel(datum.time));
+        let y1 = Math.round(renderingContext.valueToPixel(this.y(datum.values[MIN])));
+        let y2 = Math.round(renderingContext.valueToPixel(this.y(datum.values[MAX])));
 
         return `${x},${y1}L${x},${y2}`;
       });
@@ -115,12 +115,12 @@ export default class Waveform extends BaseShape {
 
       this._ctx.strokeStyle = this.params.color;
       this._ctx.globalAlpha = this.params.opacity;
-      this._ctx.moveTo(renderingContext.xScale(0), renderingContext.yScale(0));
+      this._ctx.moveTo(renderingContext.timeToPixel(0), renderingContext.valueToPixel(0));
 
       minMax.forEach((datum) => {
-        const x  = renderingContext.xScale(datum.time);
-        const y1 = renderingContext.yScale(this.y(datum.values[MIN]));
-        const y2 = renderingContext.yScale(this.y(datum.values[MAX]));
+        const x  = renderingContext.timeToPixel(datum.time);
+        const y1 = renderingContext.valueToPixel(this.y(datum.values[MIN]));
+        const y2 = renderingContext.valueToPixel(this.y(datum.values[MAX]));
 
         this._ctx.moveTo(x, y1);
         this._ctx.lineTo(x, y2);

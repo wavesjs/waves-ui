@@ -63,7 +63,7 @@ export default class Layer extends events.EventEmitter {
     this._isContextEditable = false;
     this._behavior = null;
 
-    this._yScale = d3Scale.linear()
+    this._valueToPixel = d3Scale.linear()
       .domain(this.params.yDomain)
       .range([0, this.params.height]);
 
@@ -132,7 +132,7 @@ export default class Layer extends events.EventEmitter {
 
   set yDomain(domain) {
     this.params.yDomain = domain;
-    this._yScale.domain(domain);
+    this._valueToPixel.domain(domain);
   }
 
   get yDomain() {
@@ -203,7 +203,9 @@ export default class Layer extends events.EventEmitter {
     this.$background = document.createElementNS(ns, 'rect');
     this.$background.setAttributeNS(null, 'height', '100%');
     this.$background.setAttributeNS(null, 'width', '100%');
-    this.$background.setAttributeNS(null, 'style', 'fill-opacity:0');
+    this.$background.classList.add('background');
+    this.$background.style.fillOpacity = 0;
+    this.$background.style.pointerEvents = 'none';
     // context interactions
     this.$interactions = document.createElementNS(ns, 'g');
     this.$interactions.classList.add('interactions');
@@ -214,8 +216,8 @@ export default class Layer extends events.EventEmitter {
       opacity: () => 0.1,
       color  : () => '#787878',
       width  : () => this.timeContext.duration,
-      height : () => this._renderingContext.yScale.domain()[1],
-      y      : () => this._renderingContext.yScale.domain()[0]
+      height : () => this._renderingContext.valueToPixel.domain()[1],
+      y      : () => this._renderingContext.valueToPixel.domain()[0]
     });
 
     this.$interactions.appendChild(this.contextShape.render());
@@ -270,13 +272,11 @@ export default class Layer extends events.EventEmitter {
   /**
    *  update the values in `_renderingContext`
    *  is particulary needed when updating `stretchRatio` as the pointer
-   *  to the `xScale` may change
-   *  @TODO
-   *  rename `xScale` and `yScale`
+   *  to the `timeToPixel` scale may change
    */
   _updateRenderingContext() {
-    this._renderingContext.xScale = this.timeContext.timeToPixel;
-    this._renderingContext.yScale = this._yScale;
+    this._renderingContext.timeToPixel = this.timeContext.timeToPixel;
+    this._renderingContext.valueToPixel = this._valueToPixel;
     this._renderingContext.height = this.params.height;
     this._renderingContext.width  = this.timeContext.timeToPixel(this.timeContext.duration);
     // for foreign object issue in chrome

@@ -53,8 +53,8 @@ export default class TraceCommon extends BaseShape {
 
   _buildMeanLine(renderingContext, data) {
     let instructions = data.map((datum, index) => {
-      const x = renderingContext.xScale(this.x(datum));
-      const y = renderingContext.yScale(this.mean(datum));
+      const x = renderingContext.timeToPixel(this.x(datum));
+      const y = renderingContext.valueToPixel(this.mean(datum));
       return `${x},${y}`;
     });
 
@@ -72,9 +72,9 @@ export default class TraceCommon extends BaseShape {
       const mean = this.mean(datum);
       const halfRange = this.range(datum) / 2;
 
-      const x  = renderingContext.xScale(this.x(datum));
-      const y0 = renderingContext.yScale(mean + halfRange);
-      const y1 = renderingContext.yScale(mean - halfRange);
+      const x  = renderingContext.timeToPixel(this.x(datum));
+      const y0 = renderingContext.valueToPixel(mean + halfRange);
+      const y1 = renderingContext.valueToPixel(mean - halfRange);
 
       const start = `${x},${y0}`;
       const end   = `${x},${y1}`;

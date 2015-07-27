@@ -53,7 +53,7 @@ export default class TimelineTimeContext {
 
     // force children scale update
     this._children.forEach(function(child) {
-      if (!child._xScale) { return; }
+      if (!child._timeToPixel) { return; }
       child.stretchRatio = child.stretchRatio;
     });
   }

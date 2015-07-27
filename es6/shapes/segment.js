@@ -52,10 +52,10 @@ export default class Segment extends BaseShape {
   }
 
   update(renderingContext, datum, index) {
-    const x = renderingContext.xScale(this.x(datum));
-    const y = renderingContext.yScale(this.y(datum));
-    const width = renderingContext.xScale(this.width(datum));
-    const height = renderingContext.yScale(this.height(datum));
+    const x = renderingContext.timeToPixel(this.x(datum));
+    const y = renderingContext.valueToPixel(this.y(datum));
+    const width = renderingContext.timeToPixel(this.width(datum));
+    const height = renderingContext.valueToPixel(this.height(datum));
     const color = this.color(datum);
     const opacity = this.opacity(datum);
 
@@ -80,10 +80,10 @@ export default class Segment extends BaseShape {
   }
 
   inArea(renderingContext, datum, x1, y1, x2, y2) {
-    const shapeX1 = renderingContext.xScale(this.x(datum));
-    const shapeX2 = renderingContext.xScale(this.x(datum) + this.width(datum));
-    const shapeY1 = renderingContext.yScale(this.y(datum));
-    const shapeY2 = renderingContext.yScale(this.y(datum) + this.height(datum));
+    const shapeX1 = renderingContext.timeToPixel(this.x(datum));
+    const shapeX2 = renderingContext.timeToPixel(this.x(datum) + this.width(datum));
+    const shapeY1 = renderingContext.valueToPixel(this.y(datum));
+    const shapeY2 = renderingContext.valueToPixel(this.y(datum) + this.height(datum));
 
     // http://jsfiddle.net/uthyZ/ - check overlaping area
     const xOverlap = Math.max(0, Math.min(x2, shapeX2) - Math.max(x1, shapeX1));

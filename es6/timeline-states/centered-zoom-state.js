@@ -37,10 +37,12 @@ export default class CenteredZoomState extends BaseState {
   }
 
   onMouseDown(e) {
-    this.mouseDown = true;
+    this.mouseDown = true; // is done in surface
+
     const actualZoom = this.timeline.timeContext.zoom;
     const initialY = e.y;
-    this.yScale = d3Scale.linear()
+
+    this.valueToPixel = d3Scale.linear()
       .domain([initialY, 0])
       .range([actualZoom, -2 * actualZoom]);
   }
@@ -49,15 +51,15 @@ export default class CenteredZoomState extends BaseState {
     if (!this.mouseDown) { return; }
 
     const timeContext = this.timeline.timeContext;
-    const lastCenterTime = timeContext.xScale.invert(e.x);
+    const lastCenterTime = timeContext.timeToPixel.invert(e.x);
 
-    timeContext.zoom = Math.min(Math.max(this.yScale(e.y), this.minZoom), this.maxZoom);
+    timeContext.zoom = Math.min(Math.max(this.valueToPixel(e.y), this.minZoom), this.maxZoom);
 
-    const newCenterTime = timeContext.xScale.invert(e.x);
+    const newCenterTime = timeContext.timeToPixel.invert(e.x);
     const delta = newCenterTime - lastCenterTime;
 
     // Apply new offset to keep it centered to the mouse
-    timeContext.offset += (delta + timeContext.xScale.invert(e.dx));
+    timeContext.offset += (delta + timeContext.timeToPixel.invert(e.dx));
 
     // Other possible experiments with centered-zoom-state
     //
@@ -66,8 +68,8 @@ export default class CenteredZoomState extends BaseState {
     //
     // Example 2: Keep in container when zoomed out
     // if (timeContext.stretchRatio < 1) {
-    //   const minOffset = timeContext.xScale.invert(0);
-    //   const maxOffset = timeContext.xScale.invert(view.width - timeContext.xScale(timeContext.duration));
+    //   const minOffset = timeContext.timeToPixel.invert(0);
+    //   const maxOffset = timeContext.timeToPixel.invert(view.width - timeContext.timeToPixel(timeContext.duration));
     //   timeContext.offset = Math.max(timeContext.offset, minOffset);
     //   timeContext.offset = Math.min(timeContext.offset, maxOffset);
     // }

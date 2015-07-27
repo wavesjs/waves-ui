@@ -7,15 +7,15 @@ export default class BreakpointBehavior extends BaseBehavior {
     const data  = this._layer.data;
     const layerHeight = renderingContext.height;
     // current position
-    const x = renderingContext.xScale(shape.cx(datum));
-    const y = renderingContext.yScale(shape.cy(datum));
+    const x = renderingContext.timeToPixel(shape.cx(datum));
+    const y = renderingContext.valueToPixel(shape.cy(datum));
     // target position
     let targetX = x + dx;
     let targetY = y - dy;
 
     if (data.length > 2) {
       // create a sorted map of all `x` positions
-      const xMap = data.map((d) => renderingContext.xScale(shape.cx(d)));
+      const xMap = data.map((d) => renderingContext.timeToPixel(shape.cx(d)));
       xMap.sort((a, b) => a < b ? -1 : 1);
       // find index of our shape x position
       const index = xMap.indexOf(x);
@@ -33,8 +33,8 @@ export default class BreakpointBehavior extends BaseBehavior {
     }
 
     // update datum with new values
-    shape.cx(datum, renderingContext.xScale.invert(targetX));
-    shape.cy(datum, renderingContext.yScale.invert(targetY));
+    shape.cx(datum, renderingContext.timeToPixel.invert(targetX));
+    shape.cy(datum, renderingContext.valueToPixel.invert(targetY));
   }
 
 }

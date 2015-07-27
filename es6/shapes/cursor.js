@@ -29,7 +29,7 @@ export default class Cursor extends BaseShape {
   }
 
   update(renderingContext, datum, index) {
-    const x = renderingContext.xScale(this.x(datum));
+    const x = renderingContext.timeToPixel(this.x(datum));
     const color = this.params.color;
 
     this.$el.setAttributeNS(null, 'transform', `translate(${x}, 0)`);

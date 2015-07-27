@@ -18,8 +18,8 @@ export default class Dot extends BaseShape {
   }
 
   update(renderingContext, datum, index) {
-    const cx = renderingContext.xScale(this.cx(datum));
-    const cy = renderingContext.yScale(this.cy(datum));
+    const cx = renderingContext.timeToPixel(this.cx(datum));
+    const cy = renderingContext.valueToPixel(this.cy(datum));
     const r  = this.r(datum);
     const color = this.color(datum);
 
@@ -30,8 +30,8 @@ export default class Dot extends BaseShape {
 
   // x1, x2, y1, y2 => in pixel domain
   inArea(renderingContext, datum, x1, y1, x2, y2) {
-    const cx = renderingContext.xScale(this.cx(datum));
-    const cy = renderingContext.yScale(this.cy(datum));
+    const cx = renderingContext.timeToPixel(this.cx(datum));
+    const cy = renderingContext.valueToPixel(this.cy(datum));
 
     if ((cx > x1 && cx < x2) && (cy > y1 && cy < y2)) {
       return true;
