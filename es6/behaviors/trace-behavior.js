@@ -1,4 +1,4 @@
-import BaseBehavior from './base-behavior'
+import BaseBehavior from './base-behavior';
 
 
 export default class TraceBehavior extends BaseBehavior {

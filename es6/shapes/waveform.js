@@ -4,15 +4,15 @@ import BaseShape from './base-shape';
 const xhtmlNS = 'http://www.w3.org/1999/xhtml';
 
 // @TODO create strategies object to clean the `if...else` mess
-var svgStrategy = {
-  render() {},
-  update() {}
-}
+// var svgStrategy = {
+//   render() {},
+//   update() {}
+// };
 
-var canvasStrategy = {
-  render() {},
-  update() {}
-}
+// var canvasStrategy = {
+//   render() {},
+//   update() {}
+// };
 
 export default class Waveform extends BaseShape {
   getClassName() { return 'waveform'; }

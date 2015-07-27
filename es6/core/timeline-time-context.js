@@ -43,7 +43,7 @@ export default class TimelineTimeContext {
   }
 
   get pixelsPerSecond() {
-    return this._pixelsPerSecond
+    return this._pixelsPerSecond;
   }
 
   set pixelsPerSecond(value) {

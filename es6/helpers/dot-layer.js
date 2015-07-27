@@ -5,7 +5,8 @@ import Layer from '../core/layer';
 
 export default class DotLayer extends Layer {
   constructor(data, options = {}) {
-    super('collection', data, options)
+    super('collection', data, options);
+
     this.configureShape(Dot);
     this.setBehavior(new BreakpointBehavior());
   }

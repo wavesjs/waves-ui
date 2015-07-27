@@ -140,7 +140,7 @@ export default class Track {
     this.$offset = $offsetGroup;
     this.$interactions = $interactionsGroup;
     this.$svg = $svg;
-    this.$background = $background
+    this.$background = $background;
   }
 
   /**
@@ -203,6 +203,6 @@ export default class Track {
   }
 
   *[Symbol.iterator]() {
-    yield* this.layers[Symbol.iterator]()
+    yield* this.layers[Symbol.iterator]();
   }
 }
