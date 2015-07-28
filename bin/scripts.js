@@ -1,12 +1,17 @@
-var pkg = require('../package.json');
-var childProcess = require('child_process');
-var util = require('util');
-// devDependencies
 var babel = require('babel');
 var browserify = require('browserify');
+var childProcess = require('child_process');
+var clc = require('cli-color');
+var fs = require("fs");
 var fse = require('fs-extra');
+var LineByLineReader = require('line-by-line');
+var minimist = require('minimist');
 var nodeWatch = require('node-watch');
+var pad = require('node-string-pad');
+var pkg = require('../package.json');
 var uglifyJS = require('uglify-js');
+var util = require('util');
+
 
 // CONFIG
 // -----------------------------------------------
@@ -48,6 +53,8 @@ switch (command) {
     break;
   case '--transpile':
     transpileAll();
+  case '--cover-report':
+    coverReport();
     break;
 }
 
@@ -139,3 +146,37 @@ function transpile(src) {
     });
   });
 }
+
+// Cover report
+function coverReport() {
+  'use strict';
+
+  var argv = minimist(process.argv.slice(3));
+  var chunks = [];
+  var uncovered = clc.red.bold;
+  var covered = clc.green;
+  var f = fs.readFileSync(argv['i']);
+  var json = JSON.parse(f);
+  Object.keys(json).forEach(function(key){
+    if(json[key].length > 0 && key === '/Users/goldszmidt/sam/pro/dev/ui/es6/core/track.js'){
+      console.log(key);
+      var notCovered = {};
+      for(var i=0; i<json[key].length;i++ ){
+        var line = json[key][i]['lineNum'];
+        var range = json[key][i].lines[0].range;
+        notCovered[line] = range;
+      }
+      var file = new LineByLineReader(key);
+      var l = 0;
+      file.on('line', function (line) {
+        if(notCovered[l]){
+          process.stdout.write(pad(l.toString(), 6)+' '+uncovered(line)+'\n');
+        }else{
+          process.stdout.write(pad(l.toString(), 6)+' '+covered(line)+'\n');
+        }
+        l++;
+      });
+    }
+  });
+}
+
