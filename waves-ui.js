@@ -43,6 +43,7 @@ module.exports = {
     ContextEditionState : require('./dist/states/context-edition-state'),
     EditionState        : require('./dist/states/edition-state'),
     SelectionState      : require('./dist/states/selection-state'),
+    SimpleEditionState  : require('./dist/states/simple-edition-state'),
   },
   helpers: {
     AnnotatedMarkerLayer: require('./dist/helpers/annotated-marker-layer'),

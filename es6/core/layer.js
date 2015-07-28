@@ -40,7 +40,7 @@ export default class Layer extends events.EventEmitter {
       opacity: 1,
       debugContext: false, // pass the context in debug mode
       contextHandlerWidth: 2,
-      className: ''
+      className: null
     };
 
     this.params = Object.assign({}, defaults, options);
@@ -193,7 +193,9 @@ export default class Layer extends events.EventEmitter {
   _renderContainer() {
     // wrapper group for `start, top and context flip matrix
     this.$el = document.createElementNS(ns, 'g');
-    this.$el.classList.add('layer', this.params.className);
+    if (this.params.className !== null) {
+      this.$el.classList.add('layer', this.params.className);
+    }
     // clip the context with a `svg` element
     this.$boundingBox = document.createElementNS(ns, 'svg');
     this.$boundingBox.classList.add('bounding-box');
