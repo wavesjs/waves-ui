@@ -1,7 +1,11 @@
+/**
+ * OrthogonalData transforms an object of arrays `{foo: [1, 2], bar: [3, 4]}`
+ * to or from an array of objects `[{foo: 1, bar: 3}, {foo: 2, bar: 4}]`
+ */
 export default class OrthogonalData {
   constructor() {
-    this._cols = null; // object of arrays
-    this._rows = null; // array of objects
+    this._cols = null; // Object of arrays
+    this._rows = null; // Array of objects
   }
 
   // verify that data are consistents
@@ -20,6 +24,9 @@ export default class OrthogonalData {
     }
   }
 
+  /**
+   * Update array of objects from object of arrays
+   */
   updateFromCols() {
     let keys = Object.keys(this._cols);
 
@@ -35,6 +42,9 @@ export default class OrthogonalData {
     this._checkConsistency();
   }
 
+  /**
+   * Update object of arrays from array of objects
+   */
   updateFromRows() {
     this._rows.forEach((obj, index) => {
       for (let key in obj) {
@@ -46,6 +56,9 @@ export default class OrthogonalData {
     this._checkConsistency();
   }
 
+  /**
+   * Set an object of arrays
+   */
   set cols(obj) {
     this._cols = obj;
     this._rows = [];
@@ -53,6 +66,9 @@ export default class OrthogonalData {
     this.updateFromCols();
   }
 
+  /**
+   * Set an array of objects
+   */
   set rows(arr) {
     this._rows = arr;
     this._cols = {};
@@ -60,10 +76,16 @@ export default class OrthogonalData {
     this.updateFromRows();
   }
 
+  /**
+   * Get an object of arrays
+   */
   get cols() {
     return this._cols;
   }
 
+  /**
+   * Get an array of objects
+   */
   get rows() {
     return this._rows;
   }
