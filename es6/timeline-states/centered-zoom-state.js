@@ -1,5 +1,4 @@
 import d3Scale from 'd3-scale';
-
 import BaseState from './base-state';
 
 
@@ -44,7 +43,7 @@ export default class CenteredZoomState extends BaseState {
 
     this.valueToPixel = d3Scale.linear()
       .domain([initialY, 0])
-      .range([actualZoom, -2 * actualZoom]);
+      .range([actualZoom, -1 * actualZoom]);
   }
 
   onMouseMove(e) {
