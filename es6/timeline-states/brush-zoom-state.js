@@ -1,7 +1,12 @@
 import ns from '../core/namespace';
 import BaseState from './base-state';
 
-// broken
+
+/**
+ * Protools like zoom with zone selection
+ * Press space bar to reset zoom default (1)
+ * @TODO could also handle 'g' and 'h' key to zoom, de-zoom
+ */
 export default class BrushZoomState extends BaseState {
   constructor(timeline) {
     super(timeline);
@@ -63,17 +68,20 @@ export default class BrushZoomState extends BaseState {
     // update timeContext
     const startX = this.startX;
     const endX = e.x;
+    // return if no drag
+    if (Math.abs(startX - endX) < 1) { return; }
 
-    const minPixel = Math.max(0, Math.min(startX, endX));
-    const maxPixel = Math.max(startX, endX);
-    const minTime = timeline.timeToPixel.invert(minPixel);
-    const maxTime = timeline.timeToPixel.invert(maxPixel);
+    const leftX = Math.max(0, Math.min(startX, endX));
+    const rightX = Math.max(startX, endX);
+
+    let minTime = this.timeline.timeToPixel.invert(leftX);
+    let maxTime = this.timeline.timeToPixel.invert(rightX);
 
     const deltaDuration = maxTime - minTime;
-    const stretchRatio = timeline.duration / deltaDuration;
+    const zoom = this.timeline.visibleDuration / deltaDuration;
 
-    view.offset = -minTime;
-    view.zoom = stretchRatio;
+    this.timeline.offset -= minTime;
+    this.timeline.zoom *= zoom;
 
     this.tracks.update();
   }

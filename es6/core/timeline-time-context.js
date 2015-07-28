@@ -123,10 +123,6 @@ export default class TimelineTimeContext {
     this._timeToPixel = scale;
   }
 
-  get originalPixelsPerSecond() {
-    return this._originalPixelsPerSecond;
-  }
-
   _updateTimeToPixelRange() {
     this._visibleDuration = this.visibleWidth / this._computedPixelsPerSecond;
     this.timeToPixel.range([0, this._computedPixelsPerSecond]);
