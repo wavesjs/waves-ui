@@ -39,7 +39,8 @@ export default class Layer extends events.EventEmitter {
       yDomain: [0, 1],
       opacity: 1,
       debugContext: false, // pass the context in debug mode
-      contextHandlerWidth: 2
+      contextHandlerWidth: 2,
+      className: ''
     };
 
     this.params = Object.assign({}, defaults, options);
@@ -192,7 +193,7 @@ export default class Layer extends events.EventEmitter {
   _renderContainer() {
     // wrapper group for `start, top and context flip matrix
     this.$el = document.createElementNS(ns, 'g');
-    this.$el.classList.add('layer');
+    this.$el.classList.add('layer', this.params.className);
     // clip the context with a `svg` element
     this.$boundingBox = document.createElementNS(ns, 'svg');
     this.$boundingBox.classList.add('bounding-box');
@@ -294,6 +295,7 @@ export default class Layer extends events.EventEmitter {
   select(...$items) {
     if (!this._behavior) { return; }
     if (!$items.length) { $items = this.d3items.nodes(); }
+    if (Array.isArray($items[0])) { $items = $items[0]; }
 
     $items.forEach(($el) => {
       const item = this._$itemD3SelectionMap.get($el);
@@ -305,6 +307,7 @@ export default class Layer extends events.EventEmitter {
   unselect(...$items) {
     if (!this._behavior) { return; }
     if (!$items.length) { $items = this.d3items.nodes(); }
+    if (Array.isArray($items[0])) { $items = $items[0]; }
 
     $items.forEach(($el) => {
       const item = this._$itemD3SelectionMap.get($el);
@@ -315,6 +318,7 @@ export default class Layer extends events.EventEmitter {
   toggleS$election(...$items) {
     if (!this._behavior) { return; }
     if (!$items.length) { $items = this.d3items.nodes(); }
+    if (Array.isArray($items[0])) { $items = $items[0]; }
 
     $items.forEach(($el) => {
       const item = this._$itemD3SelectionMap.get($el);
@@ -454,7 +458,7 @@ export default class Layer extends events.EventEmitter {
       return shape.inArea(renderingContext, datum, x1, y1, x2, y2);
     });
 
-    return items[0].slice(0);
+    return items.nodes().slice(0);
   }
 
   // --------------------------------------

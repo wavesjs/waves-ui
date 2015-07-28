@@ -2,10 +2,10 @@ import BaseBehavior from './base-behavior';
 
 
 export default class TraceBehavior extends BaseBehavior {
-  edit(renderingContext, shape, datum, dx, dy, target) {
+  edit(renderingContext, shape, datum, dx, dy, target, forceDefault = false) {
     // rely on element doesn't allow to edit several shapes at once...
     // classes are not the best solution neither, but works
-    if (target.classList.contains('mean')) {
+    if (target.classList.contains('mean') || forceDefault) {
       this._editMean(renderingContext, shape, datum, dx, dy);
     } else if (target.classList.contains('min')) {
       this._editRange(renderingContext, shape, datum, dx, dy, 'min');

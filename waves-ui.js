@@ -37,12 +37,12 @@ module.exports = {
   },
   // rename folder ?
   states: {
-    BaseState           : require('./dist/timeline-states/base-state'),
-    BrushZoomState      : require('./dist/timeline-states/brush-zoom-state'),
-    CenteredZoomState   : require('./dist/timeline-states/centered-zoom-state'),
-    ContextEditionState : require('./dist/timeline-states/context-edition-state'),
-    EditionState        : require('./dist/timeline-states/edition-state'),
-    SelectionState      : require('./dist/timeline-states/selection-state'),
+    BaseState           : require('./dist/states/base-state'),
+    BrushZoomState      : require('./dist/states/brush-zoom-state'),
+    CenteredZoomState   : require('./dist/states/centered-zoom-state'),
+    ContextEditionState : require('./dist/states/context-edition-state'),
+    EditionState        : require('./dist/states/edition-state'),
+    SelectionState      : require('./dist/states/selection-state'),
   },
   helpers: {
     AnnotatedMarkerLayer: require('./dist/helpers/annotated-marker-layer'),

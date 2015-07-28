@@ -275,6 +275,29 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
+   *  Returns the track containing a given DOM Element, if no match found return null
+   *  @param {DOMElement} $el
+   *  @return {Track|null}
+   */
+  getTrackFromDOMElement($el) {
+    let $svg = null;
+    let track = null;
+    // find the closest `.track` element
+    do {
+      if ($el.classList.contains('track')) {
+        $svg = $el;
+      }
+      $el = $el.parentNode;
+    } while ($svg === null);
+    // find the related `Track`
+    this.tracks.forEach(function(_track) {
+      if (_track.$svg === $svg) { track = _track; }
+    });
+
+    return track;
+  }
+
+  /**
    * Returns an array of layers from their group Id
    * @param {String} groupId
    * @return {Array}

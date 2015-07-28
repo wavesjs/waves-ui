@@ -25,6 +25,8 @@
     background-color: #787878;
     background-color: #242424;
   }
+
+  code { color: white; }
   </style>
 </head>
 <body>
@@ -32,7 +34,7 @@
   <div id="timeline"></div>
 
   <script src="../waves-ui.umd.js"></script>
-  <script>
+  <script id="example">
   var $timeline = document.querySelector('#timeline');
   var width = $timeline.getBoundingClientRect().width;
   var height = 200;
@@ -52,14 +54,25 @@
 
   var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
 
-  var track = timeline.createTrack($timeline, height);
+  timeline.createTrack($timeline, height, 'main');
 
   var segmentLayer = new wavesUI.core.Layer('collection', data, { height });
   segmentLayer.configureShape(wavesUI.shapes.Segment, {}, {
     displayHandlers: false
   });
 
-  timeline.addLayer(segmentLayer, track);
+  timeline.addLayer(segmentLayer, 'main');
+  </script>
+  <script>
+  var timeline = document.querySelector('#timeline');
+  var tag = document.querySelector('#example');
+  var pre = document.createElement('pre')
+  var code = document.createElement('code');
+
+  pre.appendChild(code);
+  code.innerText = tag.innerText;
+
+  document.body.appendChild(pre);
   </script>
 </body>
 </html>

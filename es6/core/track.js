@@ -104,6 +104,7 @@ export default class Track {
     $svg.setAttributeNS(null, 'shape-rendering', 'optimizeSpeed');
     $svg.setAttributeNS(null, 'height', this.height);
     $svg.setAttribute('xmlns:xhtml', 'http://www.w3.org/1999/xhtml');
+    $svg.classList.add('track');
 
     const $background = document.createElementNS(ns, 'rect');
     $background.setAttributeNS(null, 'height', '100%');
