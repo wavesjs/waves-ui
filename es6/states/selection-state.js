@@ -134,7 +134,7 @@ export default class SelectionState extends BaseState {
             currentItems.indexOf(item) === -1 &&
             previousSelection.indexOf(item) === -1
           ) {
-            toUnselect.push(item)
+            toUnselect.push(item);
           }
         });
 
