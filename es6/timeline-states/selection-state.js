@@ -2,9 +2,6 @@ import BaseState from './base-state';
 import ns from '../core/namespace';
 
 
-/**
- *  @NOTE Broken
- */
 export default class SelectionState extends BaseState {
   constructor(timeline /*, options = {} */) {
     super(timeline /*, options */);
@@ -14,6 +11,8 @@ export default class SelectionState extends BaseState {
     this.selectedItems = null;
     this.mouseDown = false;
     this.shiftKey = false;
+
+    this._layerSelectedItemsMap = new Map();
   }
 
   enter() {
@@ -96,81 +95,53 @@ export default class SelectionState extends BaseState {
     if (!this._currentTrack) { return; }
 
     this._addBrush(this._currentTrack);
-    // const container = this.timeline.getContainerFromDOMElement(e.currentTarget);
-    // this.currentContainer = container;
 
-
-    // let newLayer;
-    // find the layer
-    // for (let layer of this.layers) {
-    //   if (layer.hasItem(e.target)) {
-    //     newLayer = layer;
-    //     break;
-    //   }
-    // }
-
-    // if (this.currentLayer && newLayer && newLayer !== this.currentLayer) {
-    //   this.currentLayer.unselectAll();
-    // }
-
-    // if (newLayer && newLayer !== this.currentLayer) {
-    //   this.currentLayer = newLayer;
-    // }
-
-    // if (!this.currentLayer) { return; }
-
-    // this.previousSelection = this.currentLayer.selectedItems.slice(0);
-    // // create brush
-    // if (!this.shiftKey) { this.currentLayer.unselect(); }
+    // recreate the map
+    this._layerSelectedItemsMap = new Map();
+    this._currentTrack.layers.forEach((layer) => {
+      this._layerSelectedItemsMap.set(layer, layer.selectedItems.slice(0));
+    });
   }
 
   onMouseMove(e) {
     this._updateBrush(e, this._currentTrack);
 
     this._currentTrack.layers.forEach((layer) => {
-      const previousSelectedItems = layer.selectedItems;
-      const newSelectedItems = layer.getItemsInArea(e.area);
+      const currentSelection = layer.selectedItems;
+      const currentItems = layer.getItemsInArea(e.area);
 
       // if is not pressed
       if (!e.originalEvent.shiftKey) {
-        layer.unselect(previousSelectedItems);
-        layer.select(newSelectedItems);
+        layer.unselect(currentSelection);
+        layer.select(currentItems);
       } else {
         const toSelect = [];
         const toUnselect = [];
+        // use the selection from the previous drag
+        const previousSelection = this._layerSelectedItemsMap.get(layer);
+        // toUnselect = toUnselect.concat(previousSelectedItems);
+
+        currentItems.forEach((item) => {
+          if (previousSelection.indexOf(item) === -1) {
+            toSelect.push(item);
+          } else {
+            toUnselect.push(item);
+          }
+        });
+
+        currentSelection.forEach((item) => {
+          if (
+            currentItems.indexOf(item) === -1 &&
+            previousSelection.indexOf(item) === -1
+          ) {
+            toUnselect.push(item)
+          }
+        });
+
+        layer.unselect(toUnselect);
+        layer.select(toSelect);
       }
     });
-
-    // if (this.currentLayer) {
-    //   // select all dots in area
-    //   const items = this.currentLayer.getItemsInArea(e.area);
-    //   const currentSelection = this.currentLayer.selectedItems;
-    //   // 1. select all items
-    //   items.forEach((item) => this.currentLayer.select(item));
-    //   // handle shift key
-    //   if (this.shiftKey) {
-    //     this.previousSelection.forEach((item) => {
-    //       if (items.indexOf(item) !== -1) {
-    //         // 2.1  if the item was is not in item, unselect it
-    //         this.currentLayer.unselect(item);
-    //       } else {
-    //         // 2.2  else select it
-    //         this.currentLayer.select(item);
-    //       }
-    //     });
-    //   }
-
-    //   // 3. if an item of the current selection is no more in the items
-    //   //    and is not in previous selection, unselect it
-    //   currentSelection.forEach((item) => {
-    //     if (
-    //       items.indexOf(item) === -1 &&
-    //       this.previousSelection.indexOf(item) === -1
-    //     ) {
-    //       this.currentLayer.unselect(item);
-    //     }
-    //   });
-    // }
   }
 
   onMouseUp(e) {
@@ -178,7 +149,6 @@ export default class SelectionState extends BaseState {
 
   }
 
-  // @NOTE: 'mousedown' and 'mouseup' are called before 'click'
   onClick(e) {
     if (!this._currentTrack) { return; }
 
@@ -190,7 +160,9 @@ export default class SelectionState extends BaseState {
       }
 
       if (item) {
-        const method = layer.selectedItems.indexOf(item) !== -1 ? 'unselect' : 'select';
+        const method = layer.selectedItems.indexOf(item) !== -1 ?
+          'unselect' : 'select';
+
         layer[method](item);
       }
     });
