@@ -168,6 +168,19 @@ npm run bundle
 
 _`core/timeline`, `core/layer`, and `helpers/utils` are mandatory_
 
+## Pull-Request, Tests and Coverage
+
+To work with us (!), you need to install the following dependencies
+
+- "babel": "^4.5.0"
+- "browserify": "^9.0.3"
+- "testling": "^1.7.1"
+- "coverify": "^1.4.0"
+
+so that `npm run test`, `npm run coverage` will correctly run.
+We didn't put this dependencies in the package.json because you have probably already installed this one globally, and because they are huge.
+
+PR are reviewed as long as they provide test and a good code coverage.
 
 ## License
 
