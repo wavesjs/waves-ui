@@ -4,7 +4,7 @@ import Layer from '../core/layer';
 
 
 export default class DotLayer extends Layer {
-  constructor(data, options = {}) {
+  constructor(data, options = {}, accessors = {}) {
     super('collection', data, options);
 
     this.configureShape(Dot);

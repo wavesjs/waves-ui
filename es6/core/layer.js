@@ -315,14 +315,14 @@ export default class Layer extends events.EventEmitter {
     });
   }
 
-  toggleS$election(...$items) {
+  toggleSelection(...$items) {
     if (!this._behavior) { return; }
     if (!$items.length) { $items = this.d3items.nodes(); }
     if (Array.isArray($items[0])) { $items = $items[0]; }
 
     $items.forEach(($el) => {
       const item = this._$itemD3SelectionMap.get($el);
-      this._behavior.toggleS$election($el, item.datum());
+      this._behavior.toggleSelection($el, item.datum());
     });
   }
 

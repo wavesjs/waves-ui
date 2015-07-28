@@ -73,8 +73,6 @@ export default class TraceDots extends BaseShape {
     const min = mean - (range / 2);
     const max = mean + (range / 2);
 
-    console.log(x1, x2, y1, y2, x, min, max);
-
     if (x > x1 && x < x2 && (min > y1 || max < y2)) {
       return true;
     }
