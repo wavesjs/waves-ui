@@ -65,4 +65,20 @@ export default class TraceDots extends BaseShape {
     this.$min.setAttributeNS(null, 'transform', `translate(0, ${min})`);
     this.$el.setAttributeNS(null, 'transform', `translate(${xPos}, 0)`);
   }
+
+  inArea(renderingContext, datum, x1, y1, x2, y2) {
+    const x = renderingContext.timeToPixel(this.x(datum));
+    const mean = renderingContext.valueToPixel(this.mean(datum));
+    const range = renderingContext.valueToPixel(this.range(datum));
+    const min = mean - (range / 2);
+    const max = mean + (range / 2);
+
+    console.log(x1, x2, y1, y2, x, min, max);
+
+    if (x > x1 && x < x2 && (min > y1 || max < y2)) {
+      return true;
+    }
+
+    return false;
+  }
 }
