@@ -53,7 +53,7 @@ export default class TraceDots extends BaseShape {
     const range = this.range(datum);
     const x = this.x(datum);
     // y positions
-    const meanPos = `${renderingContext.yScale(mean)}`;
+    const meanPos = `${renderingContext.valueToPixel(mean)}`;
     this.$mean.setAttributeNS(null, 'transform', `translate(0, ${meanPos})`);
 
     const halfRange = range / 2;

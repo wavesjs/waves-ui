@@ -29,6 +29,9 @@ export default class Surface extends EventSource {
     const pos = this._getRelativePosition(e);
     event.x = pos.x;
     event.y = pos.y;
+    this.dx = null;
+    this.dy = null;
+    this.area = null; // @TODO rename
 
     return event;
   }
@@ -64,6 +67,19 @@ export default class Surface extends EventSource {
     return { x, y };
   }
 
+  _defineArea(e, mouseDownEvent, lastEvent) {
+    if (!mouseDownEvent || !lastEvent) { return; }
+    e.dx = e.x - lastEvent.x;
+    e.dy = e.y - lastEvent.y;
+
+    const left = mouseDownEvent.x < e.x ? mouseDownEvent.x : e.x;
+    const top  = mouseDownEvent.y < e.y ? mouseDownEvent.y : e.y;
+    const width  = Math.abs(Math.round(e.x - mouseDownEvent.x));
+    const height = Math.abs(Math.round(e.y - mouseDownEvent.y));
+
+    e.area = { left, top, width, height };
+  }
+
   /**
    * Keep this private to avoid double event binding
    * Main logic of the surface is here
@@ -87,7 +103,7 @@ export default class Surface extends EventSource {
 
     const onMouseMove = (e) => {
       let event = this._createEvent('mousemove', e);
-      event.defineArea(this.mouseDownEvent, this.lastEvent);
+      this._defineArea(event, this.mouseDownEvent, this.lastEvent);
       // Update `lastEvent` for next call
       this.lastEvent = event;
 
@@ -96,7 +112,7 @@ export default class Surface extends EventSource {
 
     const onMouseUp = (e) => {
       let event = this._createEvent('mouseup', e);
-      event.defineArea(this.mouseDownEvent, this.lastEvent);
+      this._defineArea(event, this.mouseDownEvent, this.lastEvent);
 
       this.isMouseDown = false;
       this.mouseDownEvent = null;
