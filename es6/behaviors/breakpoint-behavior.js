@@ -3,7 +3,7 @@ import BaseBehavior from './base-behavior';
 
 export default class BreakpointBehavior extends BaseBehavior {
 
-  edit(renderingContext, shape, datum, dx, dy, target, forceDefault = false) {
+  edit(renderingContext, shape, datum, dx, dy, target) {
     const data  = this._layer.data;
     const layerHeight = renderingContext.height;
     // current position

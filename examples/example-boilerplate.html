@@ -4,64 +4,45 @@
   <meta charset="utf-8" />
   <title>Example boilerplate</title>
 
+  <link rel="stylesheet" type="text/css" href="./assets/common.css" />
+  <script src="https://rawgit.com/wavesjs/ui/develop/waves-ui.min.js"></script>
+
   <style>
-  html {
-    background-color: #242424;
-    /*background-color: #787878;*/
-  }
 
-  body {
-    margin: 0;
-    padding: 20px;
-  }
-
-  h1 {
-    color: #ffffff;
-    font-family: monospace;
-    font-weight: normal;
-  }
-
-  #timeline {
-    background-color: #787878;
-    background-color: #242424;
-  }
-
-  code { color: white; }
   </style>
 </head>
 <body>
   <h1>Simple Segment Layer</h1>
   <div id="timeline"></div>
 
-  <script src="../waves-ui.umd.js"></script>
   <script id="example">
-  var $timeline = document.querySelector('#timeline');
-  var width = $timeline.getBoundingClientRect().width;
-  var height = 200;
+    var $timeline = document.querySelector('#timeline');
+    var width = $timeline.getBoundingClientRect().width;
+    var height = 200;
 
-  var duration = 20;
-  var data = [{
-    width: 5,
-    x: 0,
-    color: 'steelblue'
-  }, {
-    width: 5,
-    x: 10,
-    color: 'orange'
-  }]
+    var duration = 20;
+    var data = [{
+      width: 5,
+      x: 0,
+      color: 'steelblue'
+    }, {
+      width: 5,
+      x: 10,
+      color: 'orange'
+    }]
 
-  var pixelsPerSecond = width / duration;
+    var pixelsPerSecond = width / duration;
 
-  var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
+    var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
 
-  timeline.createTrack($timeline, height, 'main');
+    timeline.createTrack($timeline, height, 'main');
 
-  var segmentLayer = new wavesUI.core.Layer('collection', data, { height });
-  segmentLayer.configureShape(wavesUI.shapes.Segment, {}, {
-    displayHandlers: false
-  });
+    var segmentLayer = new wavesUI.core.Layer('collection', data, { height });
+    segmentLayer.configureShape(wavesUI.shapes.Segment, {}, {
+      displayHandlers: false
+    });
 
-  timeline.addLayer(segmentLayer, 'main');
+    timeline.addLayer(segmentLayer, 'main');
   </script>
   <script>
   var timeline = document.querySelector('#timeline');

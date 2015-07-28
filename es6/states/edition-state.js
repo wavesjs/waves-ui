@@ -3,6 +3,7 @@ import BaseState from './base-state';
 
 /**
  *  Does not handle selection, must be used in conjonction with a selectionState of some sort
+ *  could maybe be merged with the SelectionState
  */
 export default class EditionState extends BaseState {
   constructor(timeline) {
@@ -30,30 +31,10 @@ export default class EditionState extends BaseState {
   }
 
   onMouseDown(e) {
-    // this.mouseDown = true;
-    // keep target consistent with mouse down
-    // @NOTE: move this to Surface ?
     this.currentTarget = e.target;
-
-    // this.layers.forEach((layer) => {
-    //   if (!layer.hasElement(this.currentTarget)) { return; }
-
-    //   if (!e.originalEvent.shiftKey) {
-    //     layer.unselect();
-    //   }
-
-    //   const item = layer.getItemFromDOMElement(this.currentTarget);
-
-    //   if (item === null) { return; }
-
-    //   this.currentEditedLayer = layer;
-    //   layer.select(item);
-    // });
   }
 
   onMouseMove(e) {
-    // if (!this.mouseDown || !this.currentEditedLayer) { return; }
-
     this.layers.forEach((layer) => {
       const items = layer.selectedItems;
 

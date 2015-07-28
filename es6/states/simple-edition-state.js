@@ -30,9 +30,7 @@ export default class SimpleEditionState extends BaseState {
   }
 
   onMouseDown(e) {
-    this.mouseDown = true;
     // keep target consistent with mouse down
-    // @NOTE: move this to Surface ?
     this.currentTarget = e.target;
 
     this.layers.forEach((layer) => {
@@ -52,7 +50,7 @@ export default class SimpleEditionState extends BaseState {
   }
 
   onMouseMove(e) {
-    if (!this.mouseDown || !this.currentEditedLayer) { return; }
+    if (!this.currentEditedLayer) { return; }
 
     this.layers.forEach((layer) => {
       const items = layer.selectedItems;
@@ -64,6 +62,5 @@ export default class SimpleEditionState extends BaseState {
 
   onMouseUp(e) {
     this.currentEditedLayer = null;
-    this.mouseDown = false;
   }
 }
