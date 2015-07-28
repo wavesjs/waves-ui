@@ -146,7 +146,6 @@ export default class SelectionState extends BaseState {
 
   onMouseUp(e) {
     this._removeBrush(this._currentTrack);
-
   }
 
   onClick(e) {
@@ -160,10 +159,7 @@ export default class SelectionState extends BaseState {
       }
 
       if (item) {
-        const method = layer.selectedItems.indexOf(item) !== -1 ?
-          'unselect' : 'select';
-
-        layer[method](item);
+        layer.toggleSelection(item);
       }
     });
   }
