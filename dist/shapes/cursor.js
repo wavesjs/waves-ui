@@ -1,16 +1,26 @@
-"use strict";
+'use strict';
 
-var _classCallCheck = require("babel-runtime/helpers/class-call-check")["default"];
+var _inherits = require('babel-runtime/helpers/inherits')['default'];
 
-var _inherits = require("babel-runtime/helpers/inherits")["default"];
+var _createClass = require('babel-runtime/helpers/create-class')['default'];
 
-var _createClass = require("babel-runtime/helpers/create-class")["default"];
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
 
-var _interopRequire = require("babel-runtime/helpers/interop-require")["default"];
+var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
 
-var BaseShape = _interopRequire(require("./base-shape"));
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
-var ns = _interopRequire(require("../core/namespace"));
+_Object$defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _baseShape = require('./base-shape');
+
+var _baseShape2 = _interopRequireDefault(_baseShape);
+
+var _coreNamespace = require('../core/namespace');
+
+var _coreNamespace2 = _interopRequireDefault(_coreNamespace);
 
 var Cursor = (function (_BaseShape) {
   function Cursor() {
@@ -23,61 +33,60 @@ var Cursor = (function (_BaseShape) {
 
   _inherits(Cursor, _BaseShape);
 
-  _createClass(Cursor, {
-    getClassName: {
-      value: function getClassName() {
-        return "cursor";
-      }
-    },
-    _getAccessorList: {
-      value: function _getAccessorList() {
-        return { x: 0 };
-      }
-    },
-    _getDefaults: {
-      value: function _getDefaults() {
-        return {
-          color: "#000000",
-          opacity: 1
-        };
-      }
-    },
-    render: {
-      value: function render(renderingContext) {
-        if (this.$el) {
-          return this.$el;
-        }
-
-        this.$el = document.createElementNS(ns, "line");
-        this.$el.setAttributeNS(null, "x", 0);
-        this.$el.setAttributeNS(null, "y1", 0);
-        this.$el.setAttributeNS(null, "y2", renderingContext.height);
-        this.$el.setAttributeNS(null, "shape-rendering", "crispEdges");
-
+  _createClass(Cursor, [{
+    key: 'getClassName',
+    value: function getClassName() {
+      return 'cursor';
+    }
+  }, {
+    key: '_getAccessorList',
+    value: function _getAccessorList() {
+      return { x: 0 };
+    }
+  }, {
+    key: '_getDefaults',
+    value: function _getDefaults() {
+      return {
+        color: '#000000',
+        opacity: 1
+      };
+    }
+  }, {
+    key: 'render',
+    value: function render(renderingContext) {
+      if (this.$el) {
         return this.$el;
       }
-    },
-    update: {
-      value: function update(renderingContext, datum, index) {
-        var x = renderingContext.timeToPixel(this.x(datum));
-        var color = this.params.color;
 
-        this.$el.setAttributeNS(null, "transform", "translate(" + x + ", 0)");
-        this.$el.style.stroke = color;
-      }
-    },
-    inArea: {
+      this.$el = document.createElementNS(_coreNamespace2['default'], 'line');
+      this.$el.setAttributeNS(null, 'x', 0);
+      this.$el.setAttributeNS(null, 'y1', 0);
+      this.$el.setAttributeNS(null, 'y2', renderingContext.height);
+      this.$el.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
-      // not selectable with a drag
-
-      value: function inArea() {
-        return false;
-      }
+      return this.$el;
     }
-  });
+  }, {
+    key: 'update',
+    value: function update(renderingContext, datum, index) {
+      var x = renderingContext.timeToPixel(this.x(datum));
+      var color = this.params.color;
+
+      this.$el.setAttributeNS(null, 'transform', 'translate(' + x + ', 0)');
+      this.$el.style.stroke = color;
+    }
+  }, {
+    key: 'inArea',
+
+    // not selectable with a drag
+    value: function inArea() {
+      return false;
+    }
+  }]);
 
   return Cursor;
-})(BaseShape);
+})(_baseShape2['default']);
 
-module.exports = Cursor;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVzNi91dGlscy9vcnRob2dvbmFsLWRhdGEuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7OztJQUFPLFNBQVMsMkJBQU0sY0FBYzs7SUFDN0IsRUFBRSwyQkFBTSxtQkFBbUI7O0lBR2IsTUFBTTtXQUFOLE1BQU07MEJBQU4sTUFBTTs7Ozs7OztZQUFOLE1BQU07O2VBQU4sTUFBTTtBQUN6QixnQkFBWTthQUFBLHdCQUFHO0FBQUUsZUFBTyxRQUFRLENBQUM7T0FBRTs7QUFFbkMsb0JBQWdCO2FBQUEsNEJBQUc7QUFDakIsZUFBTyxFQUFFLENBQUMsRUFBRSxDQUFDLEVBQUUsQ0FBQztPQUNqQjs7QUFFRCxnQkFBWTthQUFBLHdCQUFHO0FBQ2IsZUFBTztBQUNMLGVBQUssRUFBRSxTQUFTO0FBQ2hCLGlCQUFPLEVBQUUsQ0FBQztTQUNYLENBQUM7T0FDSDs7QUFFRCxVQUFNO2FBQUEsZ0JBQUMsZ0JBQWdCLEVBQUU7QUFDdkIsWUFBSSxJQUFJLENBQUMsR0FBRyxFQUFFO0FBQUUsaUJBQU8sSUFBSSxDQUFDLEdBQUcsQ0FBQztTQUFFOztBQUVsQyxZQUFJLENBQUMsR0FBRyxHQUFHLFFBQVEsQ0FBQyxlQUFlLENBQUMsRUFBRSxFQUFFLE1BQU0sQ0FBQyxDQUFDO0FBQ2hELFlBQUksQ0FBQyxHQUFHLENBQUMsY0FBYyxDQUFDLElBQUksRUFBRSxHQUFHLEVBQUUsQ0FBQyxDQUFDLENBQUM7QUFDdEMsWUFBSSxDQUFDLEdBQUcsQ0FBQyxjQUFjLENBQUMsSUFBSSxFQUFFLElBQUksRUFBRSxDQUFDLENBQUMsQ0FBQztBQUN2QyxZQUFJLENBQUMsR0FBRyxDQUFDLGNBQWMsQ0FBQyxJQUFJLEVBQUUsSUFBSSxFQUFFLGdCQUFnQixDQUFDLE1BQU0sQ0FBQyxDQUFDO0FBQzdELFlBQUksQ0FBQyxHQUFHLENBQUMsY0FBYyxDQUFDLElBQUksRUFBRSxpQkFBaUIsRUFBRSxZQUFZLENBQUMsQ0FBQzs7QUFFL0QsZUFBTyxJQUFJLENBQUMsR0FBRyxDQUFDO09BQ2pCOztBQUVELFVBQU07YUFBQSxnQkFBQyxnQkFBZ0IsRUFBRSxLQUFLLEVBQUUsS0FBSyxFQUFFO0FBQ3JDLFlBQU0sQ0FBQyxHQUFHLGdCQUFnQixDQUFDLFdBQVcsQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUM7QUFDdEQsWUFBTSxLQUFLLEdBQUcsSUFBSSxDQUFDLE1BQU0sQ0FBQyxLQUFLLENBQUM7O0FBRWhDLFlBQUksQ0FBQyxHQUFHLENBQUMsY0FBYyxDQUFDLElBQUksRUFBRSxXQUFXLGlCQUFlLENBQUMsVUFBTyxDQUFDO0FBQ2pFLFlBQUksQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLE1BQU0sR0FBRyxLQUFLLENBQUM7T0FDL0I7O0FBR0QsVUFBTTs7OzthQUFBLGtCQUFHO0FBQUUsZUFBTyxLQUFLLENBQUM7T0FBRTs7OztTQW5DUCxNQUFNO0dBQVMsU0FBUzs7aUJBQXhCLE1BQU0iLCJmaWxlIjoiZXM2L3V0aWxzL29ydGhvZ29uYWwtZGF0YS5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBCYXNlU2hhcGUgZnJvbSAnLi9iYXNlLXNoYXBlJztcbmltcG9ydCBucyBmcm9tICcuLi9jb3JlL25hbWVzcGFjZSc7XG5cblxuZXhwb3J0IGRlZmF1bHQgY2xhc3MgQ3Vyc29yIGV4dGVuZHMgQmFzZVNoYXBlIHtcbiAgZ2V0Q2xhc3NOYW1lKCkgeyByZXR1cm4gJ2N1cnNvcic7IH1cblxuICBfZ2V0QWNjZXNzb3JMaXN0KCkge1xuICAgIHJldHVybiB7IHg6IDAgfTtcbiAgfVxuXG4gIF9nZXREZWZhdWx0cygpIHtcbiAgICByZXR1cm4ge1xuICAgICAgY29sb3I6ICcjMDAwMDAwJyxcbiAgICAgIG9wYWNpdHk6IDFcbiAgICB9O1xuICB9XG5cbiAgcmVuZGVyKHJlbmRlcmluZ0NvbnRleHQpIHtcbiAgICBpZiAodGhpcy4kZWwpIHsgcmV0dXJuIHRoaXMuJGVsOyB9XG5cbiAgICB0aGlzLiRlbCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnROUyhucywgJ2xpbmUnKTtcbiAgICB0aGlzLiRlbC5zZXRBdHRyaWJ1dGVOUyhudWxsLCAneCcsIDApO1xuICAgIHRoaXMuJGVsLnNldEF0dHJpYnV0ZU5TKG51bGwsICd5MScsIDApO1xuICAgIHRoaXMuJGVsLnNldEF0dHJpYnV0ZU5TKG51bGwsICd5MicsIHJlbmRlcmluZ0NvbnRleHQuaGVpZ2h0KTtcbiAgICB0aGlzLiRlbC5zZXRBdHRyaWJ1dGVOUyhudWxsLCAnc2hhcGUtcmVuZGVyaW5nJywgJ2NyaXNwRWRnZXMnKTtcblxuICAgIHJldHVybiB0aGlzLiRlbDtcbiAgfVxuXG4gIHVwZGF0ZShyZW5kZXJpbmdDb250ZXh0LCBkYXR1bSwgaW5kZXgpIHtcbiAgICBjb25zdCB4ID0gcmVuZGVyaW5nQ29udGV4dC50aW1lVG9QaXhlbCh0aGlzLngoZGF0dW0pKTtcbiAgICBjb25zdCBjb2xvciA9IHRoaXMucGFyYW1zLmNvbG9yO1xuXG4gICAgdGhpcy4kZWwuc2V0QXR0cmlidXRlTlMobnVsbCwgJ3RyYW5zZm9ybScsIGB0cmFuc2xhdGUoJHt4fSwgMClgKTtcbiAgICB0aGlzLiRlbC5zdHlsZS5zdHJva2UgPSBjb2xvcjtcbiAgfVxuXG4gIC8vIG5vdCBzZWxlY3RhYmxlIHdpdGggYSBkcmFnXG4gIGluQXJlYSgpIHsgcmV0dXJuIGZhbHNlOyB9XG59XG4iXX0=
+exports['default'] = Cursor;
+module.exports = exports['default'];
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVzNi91dGlscy9vcnRob2dvbmFsLWRhdGEuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozt5QkFBc0IsY0FBYzs7Ozs2QkFDckIsbUJBQW1COzs7O0lBR2IsTUFBTTtXQUFOLE1BQU07MEJBQU4sTUFBTTs7Ozs7OztZQUFOLE1BQU07O2VBQU4sTUFBTTs7V0FDYix3QkFBRztBQUFFLGFBQU8sUUFBUSxDQUFDO0tBQUU7OztXQUVuQiw0QkFBRztBQUNqQixhQUFPLEVBQUUsQ0FBQyxFQUFFLENBQUMsRUFBRSxDQUFDO0tBQ2pCOzs7V0FFVyx3QkFBRztBQUNiLGFBQU87QUFDTCxhQUFLLEVBQUUsU0FBUztBQUNoQixlQUFPLEVBQUUsQ0FBQztPQUNYLENBQUM7S0FDSDs7O1dBRUssZ0JBQUMsZ0JBQWdCLEVBQUU7QUFDdkIsVUFBSSxJQUFJLENBQUMsR0FBRyxFQUFFO0FBQUUsZUFBTyxJQUFJLENBQUMsR0FBRyxDQUFDO09BQUU7O0FBRWxDLFVBQUksQ0FBQyxHQUFHLEdBQUcsUUFBUSxDQUFDLGVBQWUsNkJBQUssTUFBTSxDQUFDLENBQUM7QUFDaEQsVUFBSSxDQUFDLEdBQUcsQ0FBQyxjQUFjLENBQUMsSUFBSSxFQUFFLEdBQUcsRUFBRSxDQUFDLENBQUMsQ0FBQztBQUN0QyxVQUFJLENBQUMsR0FBRyxDQUFDLGNBQWMsQ0FBQyxJQUFJLEVBQUUsSUFBSSxFQUFFLENBQUMsQ0FBQyxDQUFDO0FBQ3ZDLFVBQUksQ0FBQyxHQUFHLENBQUMsY0FBYyxDQUFDLElBQUksRUFBRSxJQUFJLEVBQUUsZ0JBQWdCLENBQUMsTUFBTSxDQUFDLENBQUM7QUFDN0QsVUFBSSxDQUFDLEdBQUcsQ0FBQyxjQUFjLENBQUMsSUFBSSxFQUFFLGlCQUFpQixFQUFFLFlBQVksQ0FBQyxDQUFDOztBQUUvRCxhQUFPLElBQUksQ0FBQyxHQUFHLENBQUM7S0FDakI7OztXQUVLLGdCQUFDLGdCQUFnQixFQUFFLEtBQUssRUFBRSxLQUFLLEVBQUU7QUFDckMsVUFBTSxDQUFDLEdBQUcsZ0JBQWdCLENBQUMsV0FBVyxDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQztBQUN0RCxVQUFNLEtBQUssR0FBRyxJQUFJLENBQUMsTUFBTSxDQUFDLEtBQUssQ0FBQzs7QUFFaEMsVUFBSSxDQUFDLEdBQUcsQ0FBQyxjQUFjLENBQUMsSUFBSSxFQUFFLFdBQVcsaUJBQWUsQ0FBQyxVQUFPLENBQUM7QUFDakUsVUFBSSxDQUFDLEdBQUcsQ0FBQyxLQUFLLENBQUMsTUFBTSxHQUFHLEtBQUssQ0FBQztLQUMvQjs7Ozs7V0FHSyxrQkFBRztBQUFFLGFBQU8sS0FBSyxDQUFDO0tBQUU7OztTQW5DUCxNQUFNOzs7cUJBQU4sTUFBTSIsImZpbGUiOiJlczYvdXRpbHMvb3J0aG9nb25hbC1kYXRhLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IEJhc2VTaGFwZSBmcm9tICcuL2Jhc2Utc2hhcGUnO1xuaW1wb3J0IG5zIGZyb20gJy4uL2NvcmUvbmFtZXNwYWNlJztcblxuXG5leHBvcnQgZGVmYXVsdCBjbGFzcyBDdXJzb3IgZXh0ZW5kcyBCYXNlU2hhcGUge1xuICBnZXRDbGFzc05hbWUoKSB7IHJldHVybiAnY3Vyc29yJzsgfVxuXG4gIF9nZXRBY2Nlc3Nvckxpc3QoKSB7XG4gICAgcmV0dXJuIHsgeDogMCB9O1xuICB9XG5cbiAgX2dldERlZmF1bHRzKCkge1xuICAgIHJldHVybiB7XG4gICAgICBjb2xvcjogJyMwMDAwMDAnLFxuICAgICAgb3BhY2l0eTogMVxuICAgIH07XG4gIH1cblxuICByZW5kZXIocmVuZGVyaW5nQ29udGV4dCkge1xuICAgIGlmICh0aGlzLiRlbCkgeyByZXR1cm4gdGhpcy4kZWw7IH1cblxuICAgIHRoaXMuJGVsID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudE5TKG5zLCAnbGluZScpO1xuICAgIHRoaXMuJGVsLnNldEF0dHJpYnV0ZU5TKG51bGwsICd4JywgMCk7XG4gICAgdGhpcy4kZWwuc2V0QXR0cmlidXRlTlMobnVsbCwgJ3kxJywgMCk7XG4gICAgdGhpcy4kZWwuc2V0QXR0cmlidXRlTlMobnVsbCwgJ3kyJywgcmVuZGVyaW5nQ29udGV4dC5oZWlnaHQpO1xuICAgIHRoaXMuJGVsLnNldEF0dHJpYnV0ZU5TKG51bGwsICdzaGFwZS1yZW5kZXJpbmcnLCAnY3Jpc3BFZGdlcycpO1xuXG4gICAgcmV0dXJuIHRoaXMuJGVsO1xuICB9XG5cbiAgdXBkYXRlKHJlbmRlcmluZ0NvbnRleHQsIGRhdHVtLCBpbmRleCkge1xuICAgIGNvbnN0IHggPSByZW5kZXJpbmdDb250ZXh0LnRpbWVUb1BpeGVsKHRoaXMueChkYXR1bSkpO1xuICAgIGNvbnN0IGNvbG9yID0gdGhpcy5wYXJhbXMuY29sb3I7XG5cbiAgICB0aGlzLiRlbC5zZXRBdHRyaWJ1dGVOUyhudWxsLCAndHJhbnNmb3JtJywgYHRyYW5zbGF0ZSgke3h9LCAwKWApO1xuICAgIHRoaXMuJGVsLnN0eWxlLnN0cm9rZSA9IGNvbG9yO1xuICB9XG5cbiAgLy8gbm90IHNlbGVjdGFibGUgd2l0aCBhIGRyYWdcbiAgaW5BcmVhKCkgeyByZXR1cm4gZmFsc2U7IH1cbn1cbiJdfQ==

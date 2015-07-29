@@ -1,14 +1,24 @@
-"use strict";
+'use strict';
 
-var _classCallCheck = require("babel-runtime/helpers/class-call-check")["default"];
+var _createClass = require('babel-runtime/helpers/create-class')['default'];
 
-var _createClass = require("babel-runtime/helpers/create-class")["default"];
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
 
-var _core = require("babel-runtime/core-js")["default"];
+var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
 
-var _interopRequire = require("babel-runtime/helpers/interop-require")["default"];
+var _Object$assign = require('babel-runtime/core-js/object/assign')['default'];
 
-var ns = _interopRequire(require("../core/namespace"));
+var _Object$keys = require('babel-runtime/core-js/object/keys')['default'];
+
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+
+_Object$defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _coreNamespace = require('../core/namespace');
+
+var _coreNamespace2 = _interopRequireDefault(_coreNamespace);
 
 // @NOTE: accessors should receive datum index as argument
 // to allow the use of sampleRate to define x position
@@ -24,163 +34,154 @@ var BaseShape = (function () {
     _classCallCheck(this, BaseShape);
 
     this.$el = null;
-    this.ns = ns;
-    this.params = _core.Object.assign({}, this._getDefaults(), options);
+    this.ns = _coreNamespace2['default'];
+    this.params = _Object$assign({}, this._getDefaults(), options);
     // create accessors methods and set default accessor functions
     var accessors = this._getAccessorList();
     this._createAccessors(accessors);
     this._setDefaultAccessors(accessors);
   }
 
-  _createClass(BaseShape, {
-    _getDefaults: {
-      value: function _getDefaults() {
-        return {};
-      }
-    },
-    destroy: {
-
-      /**
-       *  clean references, is called from the `layer`
-       */
-
-      value: function destroy() {
-        // this.group = null;
-        this.$el = null;
-      }
-    },
-    getClassName: {
-
-      /**
-       * @return {String} the name of the shape, used as a class in the element group
-       */
-
-      value: function getClassName() {
-        return "shape";
-      }
-    },
-    _getAccessorList: {
-
-      // should only be called once
-      // setSvgDefinition(defs) {}
-
-      /**
-       * @TODO rename
-       * @return {Object}
-       *    keys are the accessors methods names to create
-       *    values are the default values for each given accessor
-       */
-
-      value: function _getAccessorList() {
-        return {};
-      }
-    },
-    install: {
-
-      /**
-       *  install the given accessors on the shape
-       */
-
-      value: function install(accessors) {
-        for (var key in accessors) {
-          this[key] = accessors[key];
-        }
-      }
-    },
-    _createAccessors: {
-
-      /**
-       * generic method to create accessors
-       * adds accessor to the prototype if not already present
-       */
-
-      value: function _createAccessors(accessors) {
-        this._accessors = {};
-        // add it to the prototype
-        var proto = _core.Object.getPrototypeOf(this);
-        // create a getter / setter for each accessors
-        // setter : `this.x = callback`
-        // getter : `this.x(datum)`
-        _core.Object.keys(accessors).forEach(function (name) {
-          if (proto.hasOwnProperty(name)) {
-            return;
-          }
-
-          Object.defineProperty(proto, name, {
-            get: function get() {
-              return this._accessors[name];
-            },
-            set: function set(func) {
-              this._accessors[name] = func;
-            }
-          });
-        });
-      }
-    },
-    _setDefaultAccessors: {
-
-      /**
-       * create a function to be used as a default
-       * accessor for each accesors
-       */
-
-      value: function _setDefaultAccessors(accessors) {
-        var _this = this;
-
-        _core.Object.keys(accessors).forEach(function (name) {
-          var defaultValue = accessors[name];
-          var accessor = function accessor(d) {
-            var v = arguments[1] === undefined ? null : arguments[1];
-
-            if (v === null) {
-              return d[name] || defaultValue;
-            }
-            d[name] = v;
-          };
-          // set accessor as the default one
-          _this[name] = accessor;
-        });
-      }
-    },
-    render: {
-
-      /**
-       * @param  renderingContext {Context} the renderingContext the layer which owns this item
-       * @return  {DOMElement} the DOM element to insert in the item's group
-       */
-
-      value: function render(renderingContext) {}
-    },
-    update: {
-
-      /**
-       * @param  group {DOMElement} group of the item in which the shape is drawn
-       * @param  renderingContext {Context} the renderingContext the layer which owns this item
-       * @param
-       *    simpleShape : datum {Object} the datum related to this item's group
-       *    commonShape : datum {Array} the associated to the Layer
-       * @param
-       *    simpleShape : index {Number} the current index of the datum
-       *    commonShape : undefined
-       * @return  void
-       */
-
-      value: function update(renderingContext, datum, index) {}
-    },
-    inArea: {
-
-      /**
-       *  define if the shape is considered to be the given area
-       *  arguments are passed in domain unit (time, whatever)
-       *  @return {Boolean}
-       */
-
-      value: function inArea(renderingContext, datum, x1, y1, x2, y2) {}
+  _createClass(BaseShape, [{
+    key: '_getDefaults',
+    value: function _getDefaults() {
+      return {};
     }
-  });
+  }, {
+    key: 'destroy',
+
+    /**
+     *  clean references, is called from the `layer`
+     */
+    value: function destroy() {
+      // this.group = null;
+      this.$el = null;
+    }
+  }, {
+    key: 'getClassName',
+
+    /**
+     * @return {String} the name of the shape, used as a class in the element group
+     */
+    value: function getClassName() {
+      return 'shape';
+    }
+  }, {
+    key: '_getAccessorList',
+
+    // should only be called once
+    // setSvgDefinition(defs) {}
+
+    /**
+     * @TODO rename
+     * @return {Object}
+     *    keys are the accessors methods names to create
+     *    values are the default values for each given accessor
+     */
+    value: function _getAccessorList() {
+      return {};
+    }
+  }, {
+    key: 'install',
+
+    /**
+     *  install the given accessors on the shape
+     */
+    value: function install(accessors) {
+      for (var key in accessors) {
+        this[key] = accessors[key];
+      }
+    }
+  }, {
+    key: '_createAccessors',
+
+    /**
+     * generic method to create accessors
+     * adds accessor to the prototype if not already present
+     */
+    value: function _createAccessors(accessors) {
+      this._accessors = {};
+      // add it to the prototype
+      var proto = Object.getPrototypeOf(this);
+      // create a getter / setter for each accessors
+      // setter : `this.x = callback`
+      // getter : `this.x(datum)`
+      _Object$keys(accessors).forEach(function (name) {
+        if (proto.hasOwnProperty(name)) {
+          return;
+        }
+
+        _Object$defineProperty(proto, name, {
+          get: function get() {
+            return this._accessors[name];
+          },
+          set: function set(func) {
+            this._accessors[name] = func;
+          }
+        });
+      });
+    }
+  }, {
+    key: '_setDefaultAccessors',
+
+    /**
+     * create a function to be used as a default
+     * accessor for each accesors
+     */
+    value: function _setDefaultAccessors(accessors) {
+      var _this = this;
+
+      _Object$keys(accessors).forEach(function (name) {
+        var defaultValue = accessors[name];
+        var accessor = function accessor(d) {
+          var v = arguments[1] === undefined ? null : arguments[1];
+
+          if (v === null) {
+            return d[name] || defaultValue;
+          }
+          d[name] = v;
+        };
+        // set accessor as the default one
+        _this[name] = accessor;
+      });
+    }
+  }, {
+    key: 'render',
+
+    /**
+     * @param  renderingContext {Context} the renderingContext the layer which owns this item
+     * @return  {DOMElement} the DOM element to insert in the item's group
+     */
+    value: function render(renderingContext) {}
+  }, {
+    key: 'update',
+
+    /**
+     * @param  group {DOMElement} group of the item in which the shape is drawn
+     * @param  renderingContext {Context} the renderingContext the layer which owns this item
+     * @param
+     *    simpleShape : datum {Object} the datum related to this item's group
+     *    commonShape : datum {Array} the associated to the Layer
+     * @param
+     *    simpleShape : index {Number} the current index of the datum
+     *    commonShape : undefined
+     * @return  void
+     */
+    value: function update(renderingContext, datum, index) {}
+  }, {
+    key: 'inArea',
+
+    /**
+     *  define if the shape is considered to be the given area
+     *  arguments are passed in domain unit (time, whatever)
+     *  @return {Boolean}
+     */
+    value: function inArea(renderingContext, datum, x1, y1, x2, y2) {}
+  }]);
 
   return BaseShape;
 })();
 
-module.exports = BaseShape;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVzNi91dGlscy9vcnRob2dvbmFsLWRhdGEuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7OztJQUFPLEVBQUUsMkJBQU0sbUJBQW1COzs7OztJQU1iLFNBQVM7Ozs7O0FBSWpCLFdBSlEsU0FBUyxHQUlGO1FBQWQsT0FBTyxnQ0FBRyxFQUFFOzswQkFKTCxTQUFTOztBQUsxQixRQUFJLENBQUMsR0FBRyxHQUFHLElBQUksQ0FBQztBQUNoQixRQUFJLENBQUMsRUFBRSxHQUFHLEVBQUUsQ0FBQztBQUNiLFFBQUksQ0FBQyxNQUFNLEdBQUcsTUFBQSxNQUFNLENBQUMsTUFBTSxDQUFDLEVBQUUsRUFBRSxJQUFJLENBQUMsWUFBWSxFQUFFLEVBQUUsT0FBTyxDQUFDLENBQUM7O0FBRTlELFFBQU0sU0FBUyxHQUFHLElBQUksQ0FBQyxnQkFBZ0IsRUFBRSxDQUFDO0FBQzFDLFFBQUksQ0FBQyxnQkFBZ0IsQ0FBQyxTQUFTLENBQUMsQ0FBQztBQUNqQyxRQUFJLENBQUMsb0JBQW9CLENBQUMsU0FBUyxDQUFDLENBQUM7R0FDdEM7O2VBWmtCLFNBQVM7QUFjNUIsZ0JBQVk7YUFBQSx3QkFBRztBQUNiLGVBQU8sRUFBRSxDQUFDO09BQ1g7O0FBS0QsV0FBTzs7Ozs7O2FBQUEsbUJBQUc7O0FBRVIsWUFBSSxDQUFDLEdBQUcsR0FBRyxJQUFJLENBQUM7T0FDakI7O0FBS0QsZ0JBQVk7Ozs7OzthQUFBLHdCQUFHO0FBQUUsZUFBTyxPQUFPLENBQUM7T0FBRTs7QUFXbEMsb0JBQWdCOzs7Ozs7Ozs7Ozs7YUFBQSw0QkFBRztBQUFFLGVBQU8sRUFBRSxDQUFDO09BQUU7O0FBTWpDLFdBQU87Ozs7OzthQUFBLGlCQUFDLFNBQVMsRUFBRTtBQUNqQixhQUFLLElBQUksR0FBRyxJQUFJLFNBQVMsRUFBRTtBQUFFLGNBQUksQ0FBQyxHQUFHLENBQUMsR0FBRyxTQUFTLENBQUMsR0FBRyxDQUFDLENBQUM7U0FBRTtPQUMzRDs7QUFNRCxvQkFBZ0I7Ozs7Ozs7YUFBQSwwQkFBQyxTQUFTLEVBQUU7QUFDMUIsWUFBSSxDQUFDLFVBQVUsR0FBRyxFQUFFLENBQUM7O0FBRXJCLFlBQU0sS0FBSyxHQUFHLE1BQUEsTUFBTSxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsQ0FBQzs7OztBQUkxQyxjQUFBLE1BQU0sQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLENBQUMsT0FBTyxDQUFDLFVBQUMsSUFBSSxFQUFLO0FBQ3ZDLGNBQUksS0FBSyxDQUFDLGNBQWMsQ0FBQyxJQUFJLENBQUMsRUFBRTtBQUFFLG1CQUFPO1dBQUU7O0FBRTNDLGdCQUFNLENBQUMsY0FBYyxDQUFDLEtBQUssRUFBRSxJQUFJLEVBQUU7QUFDakMsZUFBRyxFQUFFLGVBQVc7QUFBRSxxQkFBTyxJQUFJLENBQUMsVUFBVSxDQUFDLElBQUksQ0FBQyxDQUFDO2FBQUU7QUFDakQsZUFBRyxFQUFFLGFBQVMsSUFBSSxFQUFFO0FBQ2xCLGtCQUFJLENBQUMsVUFBVSxDQUFDLElBQUksQ0FBQyxHQUFHLElBQUksQ0FBQzthQUM5QjtXQUNGLENBQUMsQ0FBQztTQUNKLENBQUMsQ0FBQztPQUNKOztBQU1ELHdCQUFvQjs7Ozs7OzthQUFBLDhCQUFDLFNBQVMsRUFBRTs7O0FBQzlCLGNBQUEsTUFBTSxDQUFDLElBQUksQ0FBQyxTQUFTLENBQUMsQ0FBQyxPQUFPLENBQUMsVUFBQyxJQUFJLEVBQUs7QUFDdkMsY0FBTSxZQUFZLEdBQUcsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDO0FBQ3JDLGNBQUksUUFBUSxHQUFHLGtCQUFTLENBQUMsRUFBWTtnQkFBVixDQUFDLGdDQUFHLElBQUk7O0FBQ2pDLGdCQUFJLENBQUMsS0FBSyxJQUFJLEVBQUU7QUFBRSxxQkFBTyxDQUFDLENBQUMsSUFBSSxDQUFDLElBQUksWUFBWSxDQUFDO2FBQUU7QUFDbkQsYUFBQyxDQUFDLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztXQUNiLENBQUM7O0FBRUYsZ0JBQUssSUFBSSxDQUFDLEdBQUcsUUFBUSxDQUFDO1NBQ3ZCLENBQUMsQ0FBQztPQUNKOztBQU1ELFVBQU07Ozs7Ozs7YUFBQSxnQkFBQyxnQkFBZ0IsRUFBRSxFQUFFOztBQWEzQixVQUFNOzs7Ozs7Ozs7Ozs7OzthQUFBLGdCQUFDLGdCQUFnQixFQUFFLEtBQUssRUFBRSxLQUFLLEVBQUUsRUFBRTs7QUFPekMsVUFBTTs7Ozs7Ozs7YUFBQSxnQkFBQyxnQkFBZ0IsRUFBRSxLQUFLLEVBQUUsRUFBRSxFQUFFLEVBQUUsRUFBRSxFQUFFLEVBQUUsRUFBRSxFQUFFLEVBQUU7Ozs7U0FqSC9CLFNBQVM7OztpQkFBVCxTQUFTIiwiZmlsZSI6ImVzNi91dGlscy9vcnRob2dvbmFsLWRhdGEuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgbnMgZnJvbSAnLi4vY29yZS9uYW1lc3BhY2UnO1xuXG5cbi8vIEBOT1RFOiBhY2Nlc3NvcnMgc2hvdWxkIHJlY2VpdmUgZGF0dW0gaW5kZXggYXMgYXJndW1lbnRcbi8vIHRvIGFsbG93IHRoZSB1c2Ugb2Ygc2FtcGxlUmF0ZSB0byBkZWZpbmUgeCBwb3NpdGlvblxuXG5leHBvcnQgZGVmYXVsdCBjbGFzcyBCYXNlU2hhcGUge1xuICAvKipcbiAgICogIEBwYXJhbSBvcHRpb25zIHtPYmplY3R9IG92ZXJyaWRlIGRlZmF1bHQgY29uZmlndXJhdGlvblxuICAgKi9cbiAgY29uc3RydWN0b3Iob3B0aW9ucyA9IHt9KSB7XG4gICAgdGhpcy4kZWwgPSBudWxsO1xuICAgIHRoaXMubnMgPSBucztcbiAgICB0aGlzLnBhcmFtcyA9IE9iamVjdC5hc3NpZ24oe30sIHRoaXMuX2dldERlZmF1bHRzKCksIG9wdGlvbnMpO1xuICAgIC8vIGNyZWF0ZSBhY2Nlc3NvcnMgbWV0aG9kcyBhbmQgc2V0IGRlZmF1bHQgYWNjZXNzb3IgZnVuY3Rpb25zXG4gICAgY29uc3QgYWNjZXNzb3JzID0gdGhpcy5fZ2V0QWNjZXNzb3JMaXN0KCk7XG4gICAgdGhpcy5fY3JlYXRlQWNjZXNzb3JzKGFjY2Vzc29ycyk7XG4gICAgdGhpcy5fc2V0RGVmYXVsdEFjY2Vzc29ycyhhY2Nlc3NvcnMpO1xuICB9XG5cbiAgX2dldERlZmF1bHRzKCkge1xuICAgIHJldHVybiB7fTtcbiAgfVxuXG4gIC8qKlxuICAgKiAgY2xlYW4gcmVmZXJlbmNlcywgaXMgY2FsbGVkIGZyb20gdGhlIGBsYXllcmBcbiAgICovXG4gIGRlc3Ryb3koKSB7XG4gICAgLy8gdGhpcy5ncm91cCA9IG51bGw7XG4gICAgdGhpcy4kZWwgPSBudWxsO1xuICB9XG5cbiAgLyoqXG4gICAqIEByZXR1cm4ge1N0cmluZ30gdGhlIG5hbWUgb2YgdGhlIHNoYXBlLCB1c2VkIGFzIGEgY2xhc3MgaW4gdGhlIGVsZW1lbnQgZ3JvdXBcbiAgICovXG4gIGdldENsYXNzTmFtZSgpIHsgcmV0dXJuICdzaGFwZSc7IH1cblxuICAvLyBzaG91bGQgb25seSBiZSBjYWxsZWQgb25jZVxuICAvLyBzZXRTdmdEZWZpbml0aW9uKGRlZnMpIHt9XG5cbiAgLyoqXG4gICAqIEBUT0RPIHJlbmFtZVxuICAgKiBAcmV0dXJuIHtPYmplY3R9XG4gICAqICAgIGtleXMgYXJlIHRoZSBhY2Nlc3NvcnMgbWV0aG9kcyBuYW1lcyB0byBjcmVhdGVcbiAgICogICAgdmFsdWVzIGFyZSB0aGUgZGVmYXVsdCB2YWx1ZXMgZm9yIGVhY2ggZ2l2ZW4gYWNjZXNzb3JcbiAgICovXG4gIF9nZXRBY2Nlc3Nvckxpc3QoKSB7IHJldHVybiB7fTsgfVxuXG5cbiAgLyoqXG4gICAqICBpbnN0YWxsIHRoZSBnaXZlbiBhY2Nlc3NvcnMgb24gdGhlIHNoYXBlXG4gICAqL1xuICBpbnN0YWxsKGFjY2Vzc29ycykge1xuICAgIGZvciAobGV0IGtleSBpbiBhY2Nlc3NvcnMpIHsgdGhpc1trZXldID0gYWNjZXNzb3JzW2tleV07IH1cbiAgfVxuXG4gIC8qKlxuICAgKiBnZW5lcmljIG1ldGhvZCB0byBjcmVhdGUgYWNjZXNzb3JzXG4gICAqIGFkZHMgYWNjZXNzb3IgdG8gdGhlIHByb3RvdHlwZSBpZiBub3QgYWxyZWFkeSBwcmVzZW50XG4gICAqL1xuICBfY3JlYXRlQWNjZXNzb3JzKGFjY2Vzc29ycykge1xuICAgIHRoaXMuX2FjY2Vzc29ycyA9IHt9O1xuICAgIC8vIGFkZCBpdCB0byB0aGUgcHJvdG90eXBlXG4gICAgY29uc3QgcHJvdG8gPSBPYmplY3QuZ2V0UHJvdG90eXBlT2YodGhpcyk7XG4gICAgLy8gY3JlYXRlIGEgZ2V0dGVyIC8gc2V0dGVyIGZvciBlYWNoIGFjY2Vzc29yc1xuICAgIC8vIHNldHRlciA6IGB0aGlzLnggPSBjYWxsYmFja2BcbiAgICAvLyBnZXR0ZXIgOiBgdGhpcy54KGRhdHVtKWBcbiAgICBPYmplY3Qua2V5cyhhY2Nlc3NvcnMpLmZvckVhY2goKG5hbWUpID0+IHtcbiAgICAgIGlmIChwcm90by5oYXNPd25Qcm9wZXJ0eShuYW1lKSkgeyByZXR1cm47IH1cblxuICAgICAgT2JqZWN0LmRlZmluZVByb3BlcnR5KHByb3RvLCBuYW1lLCB7XG4gICAgICAgIGdldDogZnVuY3Rpb24oKSB7IHJldHVybiB0aGlzLl9hY2Nlc3NvcnNbbmFtZV07IH0sXG4gICAgICAgIHNldDogZnVuY3Rpb24oZnVuYykge1xuICAgICAgICAgIHRoaXMuX2FjY2Vzc29yc1tuYW1lXSA9IGZ1bmM7XG4gICAgICAgIH1cbiAgICAgIH0pO1xuICAgIH0pO1xuICB9XG5cbiAgLyoqXG4gICAqIGNyZWF0ZSBhIGZ1bmN0aW9uIHRvIGJlIHVzZWQgYXMgYSBkZWZhdWx0XG4gICAqIGFjY2Vzc29yIGZvciBlYWNoIGFjY2Vzb3JzXG4gICAqL1xuICBfc2V0RGVmYXVsdEFjY2Vzc29ycyhhY2Nlc3NvcnMpIHtcbiAgICBPYmplY3Qua2V5cyhhY2Nlc3NvcnMpLmZvckVhY2goKG5hbWUpID0+IHtcbiAgICAgIGNvbnN0IGRlZmF1bHRWYWx1ZSA9IGFjY2Vzc29yc1tuYW1lXTtcbiAgICAgIGxldCBhY2Nlc3NvciA9IGZ1bmN0aW9uKGQsIHYgPSBudWxsKSB7XG4gICAgICAgIGlmICh2ID09PSBudWxsKSB7IHJldHVybiBkW25hbWVdIHx8IGRlZmF1bHRWYWx1ZTsgfVxuICAgICAgICBkW25hbWVdID0gdjtcbiAgICAgIH07XG4gICAgICAvLyBzZXQgYWNjZXNzb3IgYXMgdGhlIGRlZmF1bHQgb25lXG4gICAgICB0aGlzW25hbWVdID0gYWNjZXNzb3I7XG4gICAgfSk7XG4gIH1cblxuICAvKipcbiAgICogQHBhcmFtICByZW5kZXJpbmdDb250ZXh0IHtDb250ZXh0fSB0aGUgcmVuZGVyaW5nQ29udGV4dCB0aGUgbGF5ZXIgd2hpY2ggb3ducyB0aGlzIGl0ZW1cbiAgICogQHJldHVybiAge0RPTUVsZW1lbnR9IHRoZSBET00gZWxlbWVudCB0byBpbnNlcnQgaW4gdGhlIGl0ZW0ncyBncm91cFxuICAgKi9cbiAgcmVuZGVyKHJlbmRlcmluZ0NvbnRleHQpIHt9XG5cbiAgLyoqXG4gICAqIEBwYXJhbSAgZ3JvdXAge0RPTUVsZW1lbnR9IGdyb3VwIG9mIHRoZSBpdGVtIGluIHdoaWNoIHRoZSBzaGFwZSBpcyBkcmF3blxuICAgKiBAcGFyYW0gIHJlbmRlcmluZ0NvbnRleHQge0NvbnRleHR9IHRoZSByZW5kZXJpbmdDb250ZXh0IHRoZSBsYXllciB3aGljaCBvd25zIHRoaXMgaXRlbVxuICAgKiBAcGFyYW1cbiAgICogICAgc2ltcGxlU2hhcGUgOiBkYXR1bSB7T2JqZWN0fSB0aGUgZGF0dW0gcmVsYXRlZCB0byB0aGlzIGl0ZW0ncyBncm91cFxuICAgKiAgICBjb21tb25TaGFwZSA6IGRhdHVtIHtBcnJheX0gdGhlIGFzc29jaWF0ZWQgdG8gdGhlIExheWVyXG4gICAqIEBwYXJhbVxuICAgKiAgICBzaW1wbGVTaGFwZSA6IGluZGV4IHtOdW1iZXJ9IHRoZSBjdXJyZW50IGluZGV4IG9mIHRoZSBkYXR1bVxuICAgKiAgICBjb21tb25TaGFwZSA6IHVuZGVmaW5lZFxuICAgKiBAcmV0dXJuICB2b2lkXG4gICAqL1xuICB1cGRhdGUocmVuZGVyaW5nQ29udGV4dCwgZGF0dW0sIGluZGV4KSB7fVxuXG4gIC8qKlxuICAgKiAgZGVmaW5lIGlmIHRoZSBzaGFwZSBpcyBjb25zaWRlcmVkIHRvIGJlIHRoZSBnaXZlbiBhcmVhXG4gICAqICBhcmd1bWVudHMgYXJlIHBhc3NlZCBpbiBkb21haW4gdW5pdCAodGltZSwgd2hhdGV2ZXIpXG4gICAqICBAcmV0dXJuIHtCb29sZWFufVxuICAgKi9cbiAgaW5BcmVhKHJlbmRlcmluZ0NvbnRleHQsIGRhdHVtLCB4MSwgeTEsIHgyLCB5Mikge31cbn1cbiJdfQ==
+exports['default'] = BaseShape;
+module.exports = exports['default'];
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVzNi91dGlscy9vcnRob2dvbmFsLWRhdGEuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7OzZCQUFlLG1CQUFtQjs7Ozs7OztJQU1iLFNBQVM7Ozs7O0FBSWpCLFdBSlEsU0FBUyxHQUlGO1FBQWQsT0FBTyxnQ0FBRyxFQUFFOzswQkFKTCxTQUFTOztBQUsxQixRQUFJLENBQUMsR0FBRyxHQUFHLElBQUksQ0FBQztBQUNoQixRQUFJLENBQUMsRUFBRSw2QkFBSyxDQUFDO0FBQ2IsUUFBSSxDQUFDLE1BQU0sR0FBRyxlQUFjLEVBQUUsRUFBRSxJQUFJLENBQUMsWUFBWSxFQUFFLEVBQUUsT0FBTyxDQUFDLENBQUM7O0FBRTlELFFBQU0sU0FBUyxHQUFHLElBQUksQ0FBQyxnQkFBZ0IsRUFBRSxDQUFDO0FBQzFDLFFBQUksQ0FBQyxnQkFBZ0IsQ0FBQyxTQUFTLENBQUMsQ0FBQztBQUNqQyxRQUFJLENBQUMsb0JBQW9CLENBQUMsU0FBUyxDQUFDLENBQUM7R0FDdEM7O2VBWmtCLFNBQVM7O1dBY2hCLHdCQUFHO0FBQ2IsYUFBTyxFQUFFLENBQUM7S0FDWDs7Ozs7OztXQUtNLG1CQUFHOztBQUVSLFVBQUksQ0FBQyxHQUFHLEdBQUcsSUFBSSxDQUFDO0tBQ2pCOzs7Ozs7O1dBS1csd0JBQUc7QUFBRSxhQUFPLE9BQU8sQ0FBQztLQUFFOzs7Ozs7Ozs7Ozs7O1dBV2xCLDRCQUFHO0FBQUUsYUFBTyxFQUFFLENBQUM7S0FBRTs7Ozs7OztXQU0xQixpQkFBQyxTQUFTLEVBQUU7QUFDakIsV0FBSyxJQUFJLEdBQUcsSUFBSSxTQUFTLEVBQUU7QUFBRSxZQUFJLENBQUMsR0FBRyxDQUFDLEdBQUcsU0FBUyxDQUFDLEdBQUcsQ0FBQyxDQUFDO09BQUU7S0FDM0Q7Ozs7Ozs7O1dBTWUsMEJBQUMsU0FBUyxFQUFFO0FBQzFCLFVBQUksQ0FBQyxVQUFVLEdBQUcsRUFBRSxDQUFDOztBQUVyQixVQUFNLEtBQUssR0FBRyxNQUFNLENBQUMsY0FBYyxDQUFDLElBQUksQ0FBQyxDQUFDOzs7O0FBSTFDLG1CQUFZLFNBQVMsQ0FBQyxDQUFDLE9BQU8sQ0FBQyxVQUFDLElBQUksRUFBSztBQUN2QyxZQUFJLEtBQUssQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLEVBQUU7QUFBRSxpQkFBTztTQUFFOztBQUUzQywrQkFBc0IsS0FBSyxFQUFFLElBQUksRUFBRTtBQUNqQyxhQUFHLEVBQUUsZUFBVztBQUFFLG1CQUFPLElBQUksQ0FBQyxVQUFVLENBQUMsSUFBSSxDQUFDLENBQUM7V0FBRTtBQUNqRCxhQUFHLEVBQUUsYUFBUyxJQUFJLEVBQUU7QUFDbEIsZ0JBQUksQ0FBQyxVQUFVLENBQUMsSUFBSSxDQUFDLEdBQUcsSUFBSSxDQUFDO1dBQzlCO1NBQ0YsQ0FBQyxDQUFDO09BQ0osQ0FBQyxDQUFDO0tBQ0o7Ozs7Ozs7O1dBTW1CLDhCQUFDLFNBQVMsRUFBRTs7O0FBQzlCLG1CQUFZLFNBQVMsQ0FBQyxDQUFDLE9BQU8sQ0FBQyxVQUFDLElBQUksRUFBSztBQUN2QyxZQUFNLFlBQVksR0FBRyxTQUFTLENBQUMsSUFBSSxDQUFDLENBQUM7QUFDckMsWUFBSSxRQUFRLEdBQUcsU0FBWCxRQUFRLENBQVksQ0FBQyxFQUFZO2NBQVYsQ0FBQyxnQ0FBRyxJQUFJOztBQUNqQyxjQUFJLENBQUMsS0FBSyxJQUFJLEVBQUU7QUFBRSxtQkFBTyxDQUFDLENBQUMsSUFBSSxDQUFDLElBQUksWUFBWSxDQUFDO1dBQUU7QUFDbkQsV0FBQyxDQUFDLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztTQUNiLENBQUM7O0FBRUYsY0FBSyxJQUFJLENBQUMsR0FBRyxRQUFRLENBQUM7T0FDdkIsQ0FBQyxDQUFDO0tBQ0o7Ozs7Ozs7O1dBTUssZ0JBQUMsZ0JBQWdCLEVBQUUsRUFBRTs7Ozs7Ozs7Ozs7Ozs7O1dBYXJCLGdCQUFDLGdCQUFnQixFQUFFLEtBQUssRUFBRSxLQUFLLEVBQUUsRUFBRTs7Ozs7Ozs7O1dBT25DLGdCQUFDLGdCQUFnQixFQUFFLEtBQUssRUFBRSxFQUFFLEVBQUUsRUFBRSxFQUFFLEVBQUUsRUFBRSxFQUFFLEVBQUUsRUFBRTs7O1NBakgvQixTQUFTOzs7cUJBQVQsU0FBUyIsImZpbGUiOiJlczYvdXRpbHMvb3J0aG9nb25hbC1kYXRhLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IG5zIGZyb20gJy4uL2NvcmUvbmFtZXNwYWNlJztcblxuXG4vLyBATk9URTogYWNjZXNzb3JzIHNob3VsZCByZWNlaXZlIGRhdHVtIGluZGV4IGFzIGFyZ3VtZW50XG4vLyB0byBhbGxvdyB0aGUgdXNlIG9mIHNhbXBsZVJhdGUgdG8gZGVmaW5lIHggcG9zaXRpb25cblxuZXhwb3J0IGRlZmF1bHQgY2xhc3MgQmFzZVNoYXBlIHtcbiAgLyoqXG4gICAqICBAcGFyYW0gb3B0aW9ucyB7T2JqZWN0fSBvdmVycmlkZSBkZWZhdWx0IGNvbmZpZ3VyYXRpb25cbiAgICovXG4gIGNvbnN0cnVjdG9yKG9wdGlvbnMgPSB7fSkge1xuICAgIHRoaXMuJGVsID0gbnVsbDtcbiAgICB0aGlzLm5zID0gbnM7XG4gICAgdGhpcy5wYXJhbXMgPSBPYmplY3QuYXNzaWduKHt9LCB0aGlzLl9nZXREZWZhdWx0cygpLCBvcHRpb25zKTtcbiAgICAvLyBjcmVhdGUgYWNjZXNzb3JzIG1ldGhvZHMgYW5kIHNldCBkZWZhdWx0IGFjY2Vzc29yIGZ1bmN0aW9uc1xuICAgIGNvbnN0IGFjY2Vzc29ycyA9IHRoaXMuX2dldEFjY2Vzc29yTGlzdCgpO1xuICAgIHRoaXMuX2NyZWF0ZUFjY2Vzc29ycyhhY2Nlc3NvcnMpO1xuICAgIHRoaXMuX3NldERlZmF1bHRBY2Nlc3NvcnMoYWNjZXNzb3JzKTtcbiAgfVxuXG4gIF9nZXREZWZhdWx0cygpIHtcbiAgICByZXR1cm4ge307XG4gIH1cblxuICAvKipcbiAgICogIGNsZWFuIHJlZmVyZW5jZXMsIGlzIGNhbGxlZCBmcm9tIHRoZSBgbGF5ZXJgXG4gICAqL1xuICBkZXN0cm95KCkge1xuICAgIC8vIHRoaXMuZ3JvdXAgPSBudWxsO1xuICAgIHRoaXMuJGVsID0gbnVsbDtcbiAgfVxuXG4gIC8qKlxuICAgKiBAcmV0dXJuIHtTdHJpbmd9IHRoZSBuYW1lIG9mIHRoZSBzaGFwZSwgdXNlZCBhcyBhIGNsYXNzIGluIHRoZSBlbGVtZW50IGdyb3VwXG4gICAqL1xuICBnZXRDbGFzc05hbWUoKSB7IHJldHVybiAnc2hhcGUnOyB9XG5cbiAgLy8gc2hvdWxkIG9ubHkgYmUgY2FsbGVkIG9uY2VcbiAgLy8gc2V0U3ZnRGVmaW5pdGlvbihkZWZzKSB7fVxuXG4gIC8qKlxuICAgKiBAVE9ETyByZW5hbWVcbiAgICogQHJldHVybiB7T2JqZWN0fVxuICAgKiAgICBrZXlzIGFyZSB0aGUgYWNjZXNzb3JzIG1ldGhvZHMgbmFtZXMgdG8gY3JlYXRlXG4gICAqICAgIHZhbHVlcyBhcmUgdGhlIGRlZmF1bHQgdmFsdWVzIGZvciBlYWNoIGdpdmVuIGFjY2Vzc29yXG4gICAqL1xuICBfZ2V0QWNjZXNzb3JMaXN0KCkgeyByZXR1cm4ge307IH1cblxuXG4gIC8qKlxuICAgKiAgaW5zdGFsbCB0aGUgZ2l2ZW4gYWNjZXNzb3JzIG9uIHRoZSBzaGFwZVxuICAgKi9cbiAgaW5zdGFsbChhY2Nlc3NvcnMpIHtcbiAgICBmb3IgKGxldCBrZXkgaW4gYWNjZXNzb3JzKSB7IHRoaXNba2V5XSA9IGFjY2Vzc29yc1trZXldOyB9XG4gIH1cblxuICAvKipcbiAgICogZ2VuZXJpYyBtZXRob2QgdG8gY3JlYXRlIGFjY2Vzc29yc1xuICAgKiBhZGRzIGFjY2Vzc29yIHRvIHRoZSBwcm90b3R5cGUgaWYgbm90IGFscmVhZHkgcHJlc2VudFxuICAgKi9cbiAgX2NyZWF0ZUFjY2Vzc29ycyhhY2Nlc3NvcnMpIHtcbiAgICB0aGlzLl9hY2Nlc3NvcnMgPSB7fTtcbiAgICAvLyBhZGQgaXQgdG8gdGhlIHByb3RvdHlwZVxuICAgIGNvbnN0IHByb3RvID0gT2JqZWN0LmdldFByb3RvdHlwZU9mKHRoaXMpO1xuICAgIC8vIGNyZWF0ZSBhIGdldHRlciAvIHNldHRlciBmb3IgZWFjaCBhY2Nlc3NvcnNcbiAgICAvLyBzZXR0ZXIgOiBgdGhpcy54ID0gY2FsbGJhY2tgXG4gICAgLy8gZ2V0dGVyIDogYHRoaXMueChkYXR1bSlgXG4gICAgT2JqZWN0LmtleXMoYWNjZXNzb3JzKS5mb3JFYWNoKChuYW1lKSA9PiB7XG4gICAgICBpZiAocHJvdG8uaGFzT3duUHJvcGVydHkobmFtZSkpIHsgcmV0dXJuOyB9XG5cbiAgICAgIE9iamVjdC5kZWZpbmVQcm9wZXJ0eShwcm90bywgbmFtZSwge1xuICAgICAgICBnZXQ6IGZ1bmN0aW9uKCkgeyByZXR1cm4gdGhpcy5fYWNjZXNzb3JzW25hbWVdOyB9LFxuICAgICAgICBzZXQ6IGZ1bmN0aW9uKGZ1bmMpIHtcbiAgICAgICAgICB0aGlzLl9hY2Nlc3NvcnNbbmFtZV0gPSBmdW5jO1xuICAgICAgICB9XG4gICAgICB9KTtcbiAgICB9KTtcbiAgfVxuXG4gIC8qKlxuICAgKiBjcmVhdGUgYSBmdW5jdGlvbiB0byBiZSB1c2VkIGFzIGEgZGVmYXVsdFxuICAgKiBhY2Nlc3NvciBmb3IgZWFjaCBhY2Nlc29yc1xuICAgKi9cbiAgX3NldERlZmF1bHRBY2Nlc3NvcnMoYWNjZXNzb3JzKSB7XG4gICAgT2JqZWN0LmtleXMoYWNjZXNzb3JzKS5mb3JFYWNoKChuYW1lKSA9PiB7XG4gICAgICBjb25zdCBkZWZhdWx0VmFsdWUgPSBhY2Nlc3NvcnNbbmFtZV07XG4gICAgICBsZXQgYWNjZXNzb3IgPSBmdW5jdGlvbihkLCB2ID0gbnVsbCkge1xuICAgICAgICBpZiAodiA9PT0gbnVsbCkgeyByZXR1cm4gZFtuYW1lXSB8fCBkZWZhdWx0VmFsdWU7IH1cbiAgICAgICAgZFtuYW1lXSA9IHY7XG4gICAgICB9O1xuICAgICAgLy8gc2V0IGFjY2Vzc29yIGFzIHRoZSBkZWZhdWx0IG9uZVxuICAgICAgdGhpc1tuYW1lXSA9IGFjY2Vzc29yO1xuICAgIH0pO1xuICB9XG5cbiAgLyoqXG4gICAqIEBwYXJhbSAgcmVuZGVyaW5nQ29udGV4dCB7Q29udGV4dH0gdGhlIHJlbmRlcmluZ0NvbnRleHQgdGhlIGxheWVyIHdoaWNoIG93bnMgdGhpcyBpdGVtXG4gICAqIEByZXR1cm4gIHtET01FbGVtZW50fSB0aGUgRE9NIGVsZW1lbnQgdG8gaW5zZXJ0IGluIHRoZSBpdGVtJ3MgZ3JvdXBcbiAgICovXG4gIHJlbmRlcihyZW5kZXJpbmdDb250ZXh0KSB7fVxuXG4gIC8qKlxuICAgKiBAcGFyYW0gIGdyb3VwIHtET01FbGVtZW50fSBncm91cCBvZiB0aGUgaXRlbSBpbiB3aGljaCB0aGUgc2hhcGUgaXMgZHJhd25cbiAgICogQHBhcmFtICByZW5kZXJpbmdDb250ZXh0IHtDb250ZXh0fSB0aGUgcmVuZGVyaW5nQ29udGV4dCB0aGUgbGF5ZXIgd2hpY2ggb3ducyB0aGlzIGl0ZW1cbiAgICogQHBhcmFtXG4gICAqICAgIHNpbXBsZVNoYXBlIDogZGF0dW0ge09iamVjdH0gdGhlIGRhdHVtIHJlbGF0ZWQgdG8gdGhpcyBpdGVtJ3MgZ3JvdXBcbiAgICogICAgY29tbW9uU2hhcGUgOiBkYXR1bSB7QXJyYXl9IHRoZSBhc3NvY2lhdGVkIHRvIHRoZSBMYXllclxuICAgKiBAcGFyYW1cbiAgICogICAgc2ltcGxlU2hhcGUgOiBpbmRleCB7TnVtYmVyfSB0aGUgY3VycmVudCBpbmRleCBvZiB0aGUgZGF0dW1cbiAgICogICAgY29tbW9uU2hhcGUgOiB1bmRlZmluZWRcbiAgICogQHJldHVybiAgdm9pZFxuICAgKi9cbiAgdXBkYXRlKHJlbmRlcmluZ0NvbnRleHQsIGRhdHVtLCBpbmRleCkge31cblxuICAvKipcbiAgICogIGRlZmluZSBpZiB0aGUgc2hhcGUgaXMgY29uc2lkZXJlZCB0byBiZSB0aGUgZ2l2ZW4gYXJlYVxuICAgKiAgYXJndW1lbnRzIGFyZSBwYXNzZWQgaW4gZG9tYWluIHVuaXQgKHRpbWUsIHdoYXRldmVyKVxuICAgKiAgQHJldHVybiB7Qm9vbGVhbn1cbiAgICovXG4gIGluQXJlYShyZW5kZXJpbmdDb250ZXh0LCBkYXR1bSwgeDEsIHkxLCB4MiwgeTIpIHt9XG59XG4iXX0=
