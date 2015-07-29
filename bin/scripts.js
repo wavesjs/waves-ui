@@ -121,7 +121,7 @@ function uglify() {
 
 // transpile all files in `srcDir`
 function transpileAll() {
-  var cmd = 'find '+ srcDir +' -type f';
+  var cmd = 'find ' + srcDir + ' -type f';
 
   childProcess.exec(cmd , function(err, stdout, stderr) {
     if (err) { console.error(err); }
@@ -138,6 +138,7 @@ function transpileAll() {
 // transpile one file
 function transpile(src) {
   var target = createTargetName(src);
+  // if async transform is used all source maps refers to the last file... looks like a babel bug
   var res = babel.transformFileSync(src, babelOptions);
 
   fse.outputFile(target, res.code, function(err) {

@@ -48,7 +48,7 @@ module.exports = {
   helpers: {
     AnnotatedMarkerLayer: require('./dist/helpers/annotated-marker-layer'),
     CursorLayer         : require('./dist/helpers/cursor-layer'),
-    DotLayer            : require('./dist/helpers/dot-layer'),
+    BreakpointLayer     : require('./dist/helpers/breakpoint-layer'),
     MarkerLayer         : require('./dist/helpers/marker-layer'),
     SegmentLayer        : require('./dist/helpers/segment-layer'),
     WaveformLayer       : require('./dist/helpers/waveform-layer'),
