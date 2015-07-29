@@ -116,7 +116,7 @@ test('TimeContextBehavior should stretch behavior correctly', (assert) => {
   assert.equal(layer.timeContext.start, 0.2);
   assert.equal(layer.timeContext.duration, 12);
   assert.equal(layer.timeContext.offset, 0);
-  assert.equal(layer.timeContext.stretchRatio, 11.9/12*sR);
+  assert.ok(layer.timeContext.stretchRatio - 11.9/12*sR < Number.EPSILON);
 
   sR = 11.9/12*sR;
   layer.stretchContext(-10, 0, layer.contextShape.$rightHandler);
@@ -124,6 +124,6 @@ test('TimeContextBehavior should stretch behavior correctly', (assert) => {
   assert.equal(layer.timeContext.start, 0.2);
   assert.equal(layer.timeContext.duration, 12);
   assert.equal(layer.timeContext.offset, 0);
-  assert.equal(layer.timeContext.stretchRatio, 11.8/11.9*sR);
+  assert.ok(layer.timeContext.stretchRatio - 11.8/11.9*sR < Number.EPSILON);
   assert.end();
 })
