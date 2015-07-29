@@ -6,7 +6,7 @@ import KeyBoard from '../../es6/interactions/keyboard';
 const body = window.document.body;
 
 test('KeyBoard keydown', (assert) => {
-    const keyboard = new KeyBoard();
+    const keyboard = new KeyBoard(body);
     const keyboardEventInit = {'keyCode': 65, 'shiftKey':true, 'ctrlKey': true, 'altKey': false, 'metaKey': false}
     const keyDownEvent = new KeyboardEvent('keydown', keyboardEventInit);
     const keyUpEvent = new KeyboardEvent('keyup', keyboardEventInit);

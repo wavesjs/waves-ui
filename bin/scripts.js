@@ -4,7 +4,6 @@ var childProcess = require('child_process');
 var clc = require('cli-color');
 var fs = require("fs");
 var fse = require('fs-extra');
-var LineByLineReader = require('line-by-line');
 var minimist = require('minimist');
 var nodeWatch = require('node-watch');
 var pad = require('node-string-pad');
@@ -55,7 +54,7 @@ switch (command) {
     transpileAll();
     break;
   case '--cover-report':
-    // coverReport();
+    coverReport();
     break;
 }
 
@@ -149,35 +148,35 @@ function transpile(src) {
 }
 
 // Cover report
-// function coverReport() {
-//   'use strict';
+function coverReport() {
+  'use strict';
 
-//   var argv = minimist(process.argv.slice(3));
-//   var chunks = [];
-//   var uncovered = clc.red.bold;
-//   var covered = clc.green;
-//   var f = fs.readFileSync(argv['i']);
-//   var json = JSON.parse(f);
-//   Object.keys(json).forEach(function(key){
-//     if(json[key].length > 0 && key === '/Users/goldszmidt/sam/pro/dev/ui/es6/core/track.js'){
-//       console.log(key);
-//       var notCovered = {};
-//       for(var i=0; i<json[key].length;i++ ){
-//         var line = json[key][i]['lineNum'];
-//         var range = json[key][i].lines[0].range;
-//         notCovered[line] = range;
-//       }
-//       var file = new LineByLineReader(key);
-//       var l = 0;
-//       file.on('line', function (line) {
-//         if(notCovered[l]){
-//           process.stdout.write(pad(l.toString(), 6)+' '+uncovered(line)+'\n');
-//         }else{
-//           process.stdout.write(pad(l.toString(), 6)+' '+covered(line)+'\n');
-//         }
-//         l++;
-//       });
-//     }
-//   });
-// }
+  var argv = minimist(process.argv.slice(3));
+  var chunks = [];
+  var uncovered = clc.red.bold;
+  var covered = clc.green;
+  var f = fs.readFileSync(argv['i']);
+  var json = JSON.parse(f);
+  Object.keys(json).forEach(function(key){
+    if(json[key].length > 0){
+      console.log(key);
+      var notCovered = {};
+      for(var i=0; i<json[key].length;i++ ){
+        var line = json[key][i]['lineNum'];
+        var range = json[key][i].lines[0].range;
+        notCovered[line] = range;
+      }
+      var file = fs.readFileSync(key, 'utf8')
+      file = file.split('\n');
+      for(var i=0; i<file.length; i++){
+        var line = file[i];
+        if(notCovered[i]){
+          console.log(pad((i+1).toString(), 6)+' '+uncovered(line));
+        }else{
+          console.log(pad((i+1).toString(), 6)+' '+covered(line));
+        }
+      };
+    }
+  });
+}
 
