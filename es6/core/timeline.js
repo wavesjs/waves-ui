@@ -19,7 +19,10 @@ export default class Timeline extends events.EventEmitter {
   /**
    * Creates a new `Timeline` instance
    */
-  constructor(pixelsPerSecond = 100, visibleWidth = 1000) {
+  constructor(pixelsPerSecond = 100, visibleWidth = 1000, {
+    registerKeyboard: true
+  } = {}) {
+
     super();
 
     this._tracks = new TrackCollection(this);
@@ -27,7 +30,17 @@ export default class Timeline extends events.EventEmitter {
 
     // default interactions
     this._surfaceCtor = Surface;
-    this.createInteraction(Keyboard, 'body');
+
+    if (registerKeyboard) {
+      const that = this;
+
+      function registerKeyboard() {
+        that.createInteraction(Keyboard, document.body);
+        document.removeEventListener('DOMContentLoaded', registerKeyboard);
+      }
+
+      document.addEventListener('DOMContentLoaded', registerKeyboard, false);
+    }
 
     // stores
     this._trackById = {};

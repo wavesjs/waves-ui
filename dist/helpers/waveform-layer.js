@@ -1,34 +1,44 @@
-"use strict";
+'use strict';
 
-var _classCallCheck = require("babel-runtime/helpers/class-call-check")["default"];
+var _inherits = require('babel-runtime/helpers/inherits')['default'];
 
-var _inherits = require("babel-runtime/helpers/inherits")["default"];
+var _get = require('babel-runtime/helpers/get')['default'];
 
-var _get = require("babel-runtime/helpers/get")["default"];
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
 
-var _core = require("babel-runtime/core-js")["default"];
+var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
 
-var _interopRequire = require("babel-runtime/helpers/interop-require")["default"];
+var _Object$assign = require('babel-runtime/core-js/object/assign')['default'];
 
-var Layer = _interopRequire(require("../core/layer"));
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
-var Waveform = _interopRequire(require("../shapes/waveform"));
+_Object$defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _coreLayer = require('../core/layer');
+
+var _coreLayer2 = _interopRequireDefault(_coreLayer);
+
+var _shapesWaveform = require('../shapes/waveform');
+
+var _shapesWaveform2 = _interopRequireDefault(_shapesWaveform);
 
 var defaults = {
   yDomain: [-1, 1],
   channel: 0,
-  color: "steelblue"
+  color: 'steelblue'
 };
 
 var WaveformLayer = (function (_Layer) {
   function WaveformLayer(buffer, options) {
     _classCallCheck(this, WaveformLayer);
 
-    options = _core.Object.assign({}, defaults, options);
+    options = _Object$assign({}, defaults, options);
 
-    _get(_core.Object.getPrototypeOf(WaveformLayer.prototype), "constructor", this).call(this, "entity", buffer.getChannelData(options.channel), options);
+    _get(Object.getPrototypeOf(WaveformLayer.prototype), 'constructor', this).call(this, 'entity', buffer.getChannelData(options.channel), options);
 
-    this.configureShape(Waveform, {
+    this.configureShape(_shapesWaveform2['default'], {
       y: function y(d) {
         var v = arguments[1] === undefined ? null : arguments[1];
 
@@ -46,7 +56,8 @@ var WaveformLayer = (function (_Layer) {
   _inherits(WaveformLayer, _Layer);
 
   return WaveformLayer;
-})(Layer);
+})(_coreLayer2['default']);
 
-module.exports = WaveformLayer;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVzNi91dGlscy9vcnRob2dvbmFsLWRhdGEuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7O0lBQU8sS0FBSywyQkFBTSxlQUFlOztJQUMxQixRQUFRLDJCQUFNLG9CQUFvQjs7QUFHekMsSUFBTSxRQUFRLEdBQUc7QUFDZixTQUFPLEVBQUUsQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUM7QUFDaEIsU0FBTyxFQUFFLENBQUM7QUFDVixPQUFLLEVBQUUsV0FBVztDQUNuQixDQUFDOztJQUVtQixhQUFhO0FBQ3JCLFdBRFEsYUFBYSxDQUNwQixNQUFNLEVBQUUsT0FBTyxFQUFFOzBCQURWLGFBQWE7O0FBRTlCLFdBQU8sR0FBRyxNQUFBLE1BQU0sQ0FBQyxNQUFNLENBQUMsRUFBRSxFQUFFLFFBQVEsRUFBRSxPQUFPLENBQUMsQ0FBQzs7QUFFL0MscUNBSmlCLGFBQWEsNkNBSXhCLFFBQVEsRUFBRSxNQUFNLENBQUMsY0FBYyxDQUFDLE9BQU8sQ0FBQyxPQUFPLENBQUMsRUFBRSxPQUFPLEVBQUU7O0FBRWpFLFFBQUksQ0FBQyxjQUFjLENBQUMsUUFBUSxFQUFFO0FBQzVCLE9BQUMsRUFBRSxXQUFTLENBQUMsRUFBWTtZQUFWLENBQUMsZ0NBQUcsSUFBSTs7QUFDckIsWUFBSSxDQUFDLEtBQUssSUFBSSxFQUFFO0FBQUUsV0FBQyxHQUFHLENBQUMsQ0FBQztTQUFFO0FBQzFCLGVBQU8sQ0FBQyxDQUFDO09BQ1Y7S0FDRixFQUFFO0FBQ0QsZ0JBQVUsRUFBRSxNQUFNLENBQUMsVUFBVTtBQUM3QixXQUFLLEVBQUUsT0FBTyxDQUFDLEtBQUs7S0FDckIsQ0FBQyxDQUFDO0dBQ0o7O1lBZmtCLGFBQWE7O1NBQWIsYUFBYTtHQUFTLEtBQUs7O2lCQUEzQixhQUFhIiwiZmlsZSI6ImVzNi91dGlscy9vcnRob2dvbmFsLWRhdGEuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgTGF5ZXIgZnJvbSAnLi4vY29yZS9sYXllcic7XG5pbXBvcnQgV2F2ZWZvcm0gZnJvbSAnLi4vc2hhcGVzL3dhdmVmb3JtJztcblxuXG5jb25zdCBkZWZhdWx0cyA9IHtcbiAgeURvbWFpbjogWy0xLCAxXSxcbiAgY2hhbm5lbDogMCxcbiAgY29sb3I6ICdzdGVlbGJsdWUnXG59O1xuXG5leHBvcnQgZGVmYXVsdCBjbGFzcyBXYXZlZm9ybUxheWVyIGV4dGVuZHMgTGF5ZXIge1xuICBjb25zdHJ1Y3RvcihidWZmZXIsIG9wdGlvbnMpIHtcbiAgICBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7fSwgZGVmYXVsdHMsIG9wdGlvbnMpO1xuXG4gICAgc3VwZXIoJ2VudGl0eScsIGJ1ZmZlci5nZXRDaGFubmVsRGF0YShvcHRpb25zLmNoYW5uZWwpLCBvcHRpb25zKTtcblxuICAgIHRoaXMuY29uZmlndXJlU2hhcGUoV2F2ZWZvcm0sIHtcbiAgICAgIHk6IGZ1bmN0aW9uKGQsIHYgPSBudWxsKSB7XG4gICAgICAgIGlmICh2ICE9PSBudWxsKSB7IGQgPSB2OyB9XG4gICAgICAgIHJldHVybiBkO1xuICAgICAgfVxuICAgIH0sIHtcbiAgICAgIHNhbXBsZVJhdGU6IGJ1ZmZlci5zYW1wbGVSYXRlLFxuICAgICAgY29sb3I6IG9wdGlvbnMuY29sb3JcbiAgICB9KTtcbiAgfVxufVxuIl19
+exports['default'] = WaveformLayer;
+module.exports = exports['default'];
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVzNi91dGlscy9vcnRob2dvbmFsLWRhdGEuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7O3lCQUFrQixlQUFlOzs7OzhCQUNaLG9CQUFvQjs7OztBQUd6QyxJQUFNLFFBQVEsR0FBRztBQUNmLFNBQU8sRUFBRSxDQUFDLENBQUMsQ0FBQyxFQUFFLENBQUMsQ0FBQztBQUNoQixTQUFPLEVBQUUsQ0FBQztBQUNWLE9BQUssRUFBRSxXQUFXO0NBQ25CLENBQUM7O0lBRW1CLGFBQWE7QUFDckIsV0FEUSxhQUFhLENBQ3BCLE1BQU0sRUFBRSxPQUFPLEVBQUU7MEJBRFYsYUFBYTs7QUFFOUIsV0FBTyxHQUFHLGVBQWMsRUFBRSxFQUFFLFFBQVEsRUFBRSxPQUFPLENBQUMsQ0FBQzs7QUFFL0MsK0JBSmlCLGFBQWEsNkNBSXhCLFFBQVEsRUFBRSxNQUFNLENBQUMsY0FBYyxDQUFDLE9BQU8sQ0FBQyxPQUFPLENBQUMsRUFBRSxPQUFPLEVBQUU7O0FBRWpFLFFBQUksQ0FBQyxjQUFjLDhCQUFXO0FBQzVCLE9BQUMsRUFBRSxXQUFTLENBQUMsRUFBWTtZQUFWLENBQUMsZ0NBQUcsSUFBSTs7QUFDckIsWUFBSSxDQUFDLEtBQUssSUFBSSxFQUFFO0FBQUUsV0FBQyxHQUFHLENBQUMsQ0FBQztTQUFFO0FBQzFCLGVBQU8sQ0FBQyxDQUFDO09BQ1Y7S0FDRixFQUFFO0FBQ0QsZ0JBQVUsRUFBRSxNQUFNLENBQUMsVUFBVTtBQUM3QixXQUFLLEVBQUUsT0FBTyxDQUFDLEtBQUs7S0FDckIsQ0FBQyxDQUFDO0dBQ0o7O1lBZmtCLGFBQWE7O1NBQWIsYUFBYTs7O3FCQUFiLGFBQWEiLCJmaWxlIjoiZXM2L3V0aWxzL29ydGhvZ29uYWwtZGF0YS5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBMYXllciBmcm9tICcuLi9jb3JlL2xheWVyJztcbmltcG9ydCBXYXZlZm9ybSBmcm9tICcuLi9zaGFwZXMvd2F2ZWZvcm0nO1xuXG5cbmNvbnN0IGRlZmF1bHRzID0ge1xuICB5RG9tYWluOiBbLTEsIDFdLFxuICBjaGFubmVsOiAwLFxuICBjb2xvcjogJ3N0ZWVsYmx1ZSdcbn07XG5cbmV4cG9ydCBkZWZhdWx0IGNsYXNzIFdhdmVmb3JtTGF5ZXIgZXh0ZW5kcyBMYXllciB7XG4gIGNvbnN0cnVjdG9yKGJ1ZmZlciwgb3B0aW9ucykge1xuICAgIG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHt9LCBkZWZhdWx0cywgb3B0aW9ucyk7XG5cbiAgICBzdXBlcignZW50aXR5JywgYnVmZmVyLmdldENoYW5uZWxEYXRhKG9wdGlvbnMuY2hhbm5lbCksIG9wdGlvbnMpO1xuXG4gICAgdGhpcy5jb25maWd1cmVTaGFwZShXYXZlZm9ybSwge1xuICAgICAgeTogZnVuY3Rpb24oZCwgdiA9IG51bGwpIHtcbiAgICAgICAgaWYgKHYgIT09IG51bGwpIHsgZCA9IHY7IH1cbiAgICAgICAgcmV0dXJuIGQ7XG4gICAgICB9XG4gICAgfSwge1xuICAgICAgc2FtcGxlUmF0ZTogYnVmZmVyLnNhbXBsZVJhdGUsXG4gICAgICBjb2xvcjogb3B0aW9ucy5jb2xvclxuICAgIH0pO1xuICB9XG59XG4iXX0=

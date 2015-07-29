@@ -53,8 +53,9 @@ switch (command) {
     break;
   case '--transpile':
     transpileAll();
+    break;
   case '--cover-report':
-    coverReport();
+    // coverReport();
     break;
 }
 
@@ -123,6 +124,7 @@ function transpileAll() {
   var cmd = 'find '+ srcDir +' -type f';
 
   childProcess.exec(cmd , function(err, stdout, stderr) {
+    if (err) { console.error(err); }
     var fileList = stdout.split('\n');
 
     fileList.forEach(function(file) {
@@ -148,35 +150,35 @@ function transpile(src) {
 }
 
 // Cover report
-function coverReport() {
-  'use strict';
+// function coverReport() {
+//   'use strict';
 
-  var argv = minimist(process.argv.slice(3));
-  var chunks = [];
-  var uncovered = clc.red.bold;
-  var covered = clc.green;
-  var f = fs.readFileSync(argv['i']);
-  var json = JSON.parse(f);
-  Object.keys(json).forEach(function(key){
-    if(json[key].length > 0 && key === '/Users/goldszmidt/sam/pro/dev/ui/es6/core/track.js'){
-      console.log(key);
-      var notCovered = {};
-      for(var i=0; i<json[key].length;i++ ){
-        var line = json[key][i]['lineNum'];
-        var range = json[key][i].lines[0].range;
-        notCovered[line] = range;
-      }
-      var file = new LineByLineReader(key);
-      var l = 0;
-      file.on('line', function (line) {
-        if(notCovered[l]){
-          process.stdout.write(pad(l.toString(), 6)+' '+uncovered(line)+'\n');
-        }else{
-          process.stdout.write(pad(l.toString(), 6)+' '+covered(line)+'\n');
-        }
-        l++;
-      });
-    }
-  });
-}
+//   var argv = minimist(process.argv.slice(3));
+//   var chunks = [];
+//   var uncovered = clc.red.bold;
+//   var covered = clc.green;
+//   var f = fs.readFileSync(argv['i']);
+//   var json = JSON.parse(f);
+//   Object.keys(json).forEach(function(key){
+//     if(json[key].length > 0 && key === '/Users/goldszmidt/sam/pro/dev/ui/es6/core/track.js'){
+//       console.log(key);
+//       var notCovered = {};
+//       for(var i=0; i<json[key].length;i++ ){
+//         var line = json[key][i]['lineNum'];
+//         var range = json[key][i].lines[0].range;
+//         notCovered[line] = range;
+//       }
+//       var file = new LineByLineReader(key);
+//       var l = 0;
+//       file.on('line', function (line) {
+//         if(notCovered[l]){
+//           process.stdout.write(pad(l.toString(), 6)+' '+uncovered(line)+'\n');
+//         }else{
+//           process.stdout.write(pad(l.toString(), 6)+' '+covered(line)+'\n');
+//         }
+//         l++;
+//       });
+//     }
+//   });
+// }
 
