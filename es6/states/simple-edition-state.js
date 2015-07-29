@@ -52,12 +52,11 @@ export default class SimpleEditionState extends BaseState {
   onMouseMove(e) {
     if (!this.currentEditedLayer) { return; }
 
-    this.layers.forEach((layer) => {
-      const items = layer.selectedItems;
+    const layer = this.currentEditedLayer;
+    const items = layer.selectedItems;
 
-      layer.edit(items, e.dx, e.dy, this.currentTarget);
-      layer.update(items);
-    });
+    layer.edit(items, e.dx, e.dy, this.currentTarget);
+    layer.update(items);
   }
 
   onMouseUp(e) {

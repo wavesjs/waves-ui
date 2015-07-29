@@ -45,8 +45,8 @@ export default class Surface extends EventSource {
     let x = 0;
     let y = 0;
     const clientRect = this.el.getBoundingClientRect();
-    const scrollLeft = body.scrollLeft + document.documentElement.scrollLeft;
-    const scrollTop  = body.scrollTop + document.documentElement.scrollTop;
+    const scrollLeft = document.body.scrollLeft + document.documentElement.scrollLeft;
+    const scrollTop  = document.body.scrollTop + document.documentElement.scrollTop;
 
     // Adapted from http://www.quirksmode.org/js/events_properties.html#position
     if (e.pageX || e.pageY) {

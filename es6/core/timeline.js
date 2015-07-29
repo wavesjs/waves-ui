@@ -30,16 +30,8 @@ export default class Timeline extends events.EventEmitter {
 
     // default interactions
     this._surfaceCtor = Surface;
-
     if (registerKeyboard) {
-      const that = this;
-
-      function registerKeyboard() {
-        that.createInteraction(Keyboard, document.body);
-        document.removeEventListener('DOMContentLoaded', registerKeyboard);
-      }
-
-      document.addEventListener('DOMContentLoaded', registerKeyboard, false);
+      this.createInteraction(Keyboard, document.body);
     }
 
     // stores
