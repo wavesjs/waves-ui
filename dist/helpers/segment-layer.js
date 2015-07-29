@@ -1,16 +1,14 @@
 'use strict';
 
-var _inherits = require('babel-runtime/helpers/inherits')['default'];
-
 var _get = require('babel-runtime/helpers/get')['default'];
+
+var _inherits = require('babel-runtime/helpers/inherits')['default'];
 
 var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
 
-var _Object$defineProperty = require('babel-runtime/core-js/object/define-property')['default'];
-
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
-_Object$defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
@@ -27,9 +25,11 @@ var _behaviorsSegmentBehavior = require('../behaviors/segment-behavior');
 var _behaviorsSegmentBehavior2 = _interopRequireDefault(_behaviorsSegmentBehavior);
 
 var SegmentLayer = (function (_Layer) {
+  _inherits(SegmentLayer, _Layer);
+
   function SegmentLayer(data) {
-    var options = arguments[1] === undefined ? {} : arguments[1];
-    var accessors = arguments[2] === undefined ? {} : arguments[2];
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var accessors = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
     _classCallCheck(this, SegmentLayer);
 
@@ -42,11 +42,9 @@ var SegmentLayer = (function (_Layer) {
     this.setBehavior(new _behaviorsSegmentBehavior2['default']());
   }
 
-  _inherits(SegmentLayer, _Layer);
-
   return SegmentLayer;
 })(_coreLayer2['default']);
 
 exports['default'] = SegmentLayer;
 module.exports = exports['default'];
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVzNi91dGlscy9vcnRob2dvbmFsLWRhdGEuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozt5QkFBa0IsZUFBZTs7Ozs2QkFDYixtQkFBbUI7Ozs7d0NBQ1gsK0JBQStCOzs7O0lBR3RDLFlBQVk7QUFDcEIsV0FEUSxZQUFZLENBQ25CLElBQUksRUFBZ0M7UUFBOUIsT0FBTyxnQ0FBRyxFQUFFO1FBQUUsU0FBUyxnQ0FBRyxFQUFFOzswQkFEM0IsWUFBWTs7QUFFN0IsK0JBRmlCLFlBQVksNkNBRXZCLFlBQVksRUFBRSxJQUFJLEVBQUUsT0FBTyxFQUFFOztBQUVuQyxRQUFJLENBQUMsY0FBYyw2QkFBVSxFQUFFLEVBQUU7QUFDL0IscUJBQWUsRUFBRSxPQUFPLENBQUMsZUFBZTtLQUN6QyxDQUFDLENBQUM7O0FBRUgsUUFBSSxDQUFDLFdBQVcsQ0FBQywyQ0FBcUIsQ0FBQyxDQUFDO0dBQ3pDOztZQVRrQixZQUFZOztTQUFaLFlBQVk7OztxQkFBWixZQUFZIiwiZmlsZSI6ImVzNi91dGlscy9vcnRob2dvbmFsLWRhdGEuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgTGF5ZXIgZnJvbSAnLi4vY29yZS9sYXllcic7XG5pbXBvcnQgU2VnbWVudCBmcm9tICcuLi9zaGFwZXMvc2VnbWVudCc7XG5pbXBvcnQgU2VnbWVudEJlaGF2aW9yIGZyb20gJy4uL2JlaGF2aW9ycy9zZWdtZW50LWJlaGF2aW9yJztcblxuXG5leHBvcnQgZGVmYXVsdCBjbGFzcyBTZWdtZW50TGF5ZXIgZXh0ZW5kcyBMYXllciB7XG4gIGNvbnN0cnVjdG9yKGRhdGEsIG9wdGlvbnMgPSB7fSwgYWNjZXNzb3JzID0ge30pIHtcbiAgICBzdXBlcignY29sbGVjdGlvbicsIGRhdGEsIG9wdGlvbnMpO1xuXG4gICAgdGhpcy5jb25maWd1cmVTaGFwZShTZWdtZW50LCB7fSwge1xuICAgICAgZGlzcGxheUhhbmRsZXJzOiBvcHRpb25zLmRpc3BsYXlIYW5kbGVyc1xuICAgIH0pO1xuXG4gICAgdGhpcy5zZXRCZWhhdmlvcihuZXcgU2VnbWVudEJlaGF2aW9yKCkpO1xuICB9XG59XG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVzNi9oZWxwZXJzL3NlZ21lbnQtbGF5ZXIuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7eUJBQWtCLGVBQWU7Ozs7NkJBQ2IsbUJBQW1COzs7O3dDQUNYLCtCQUErQjs7OztJQUd0QyxZQUFZO1lBQVosWUFBWTs7QUFDcEIsV0FEUSxZQUFZLENBQ25CLElBQUksRUFBZ0M7UUFBOUIsT0FBTyx5REFBRyxFQUFFO1FBQUUsU0FBUyx5REFBRyxFQUFFOzswQkFEM0IsWUFBWTs7QUFFN0IsK0JBRmlCLFlBQVksNkNBRXZCLFlBQVksRUFBRSxJQUFJLEVBQUUsT0FBTyxFQUFFOztBQUVuQyxRQUFJLENBQUMsY0FBYyw2QkFBVSxFQUFFLEVBQUU7QUFDL0IscUJBQWUsRUFBRSxPQUFPLENBQUMsZUFBZTtLQUN6QyxDQUFDLENBQUM7O0FBRUgsUUFBSSxDQUFDLFdBQVcsQ0FBQywyQ0FBcUIsQ0FBQyxDQUFDO0dBQ3pDOztTQVRrQixZQUFZOzs7cUJBQVosWUFBWSIsImZpbGUiOiJlczYvaGVscGVycy9zZWdtZW50LWxheWVyLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IExheWVyIGZyb20gJy4uL2NvcmUvbGF5ZXInO1xuaW1wb3J0IFNlZ21lbnQgZnJvbSAnLi4vc2hhcGVzL3NlZ21lbnQnO1xuaW1wb3J0IFNlZ21lbnRCZWhhdmlvciBmcm9tICcuLi9iZWhhdmlvcnMvc2VnbWVudC1iZWhhdmlvcic7XG5cblxuZXhwb3J0IGRlZmF1bHQgY2xhc3MgU2VnbWVudExheWVyIGV4dGVuZHMgTGF5ZXIge1xuICBjb25zdHJ1Y3RvcihkYXRhLCBvcHRpb25zID0ge30sIGFjY2Vzc29ycyA9IHt9KSB7XG4gICAgc3VwZXIoJ2NvbGxlY3Rpb24nLCBkYXRhLCBvcHRpb25zKTtcblxuICAgIHRoaXMuY29uZmlndXJlU2hhcGUoU2VnbWVudCwge30sIHtcbiAgICAgIGRpc3BsYXlIYW5kbGVyczogb3B0aW9ucy5kaXNwbGF5SGFuZGxlcnNcbiAgICB9KTtcblxuICAgIHRoaXMuc2V0QmVoYXZpb3IobmV3IFNlZ21lbnRCZWhhdmlvcigpKTtcbiAgfVxufVxuIl19
