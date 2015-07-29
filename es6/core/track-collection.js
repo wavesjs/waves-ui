@@ -1,4 +1,6 @@
 import Layer from './layer';
+
+
 /**
  * The `TrackCollection` class allow to update all timeline's tracks at once
  */
