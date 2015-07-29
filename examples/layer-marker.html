@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Breakpoint Layer</title>
+  <title>Marker Layer</title>
 
   <link rel="stylesheet" type="text/css" href="./assets/common.css" />
   <link rel="stylesheet" type="text/css" href="./assets/prism.css" />
@@ -13,7 +13,7 @@
 </head>
 <body>
 
-  <h1>Breakpoint Layer</h1>
+  <h1>Marker Layer</h1>
 
   <!-- SIMPLE USAGE -->
   <h2 id="simple-use">Simple Usage</h2>
@@ -23,34 +23,27 @@
     var $track = document.querySelector('#track-1');
     var width = $track.getBoundingClientRect().width;
     var height = 200;
-    var duration = 4;
+    var duration = 10;
 
     // some data to visualize
-    var data = [
-      { cx: 0, cy: 0.2 },
-      { cx: 1, cy: 0.4 },
-      { cx: 2, cy: 0.8 },
-      { cx: 3, cy: 0.4 },
-      { cx: 4, cy: 0.6 },
-    ];
+    var data = [{ x: 2 }, { x: 4 }, { x: 7 }, { x: 8 }];
 
     // define the numbr of pixels per seconds the timeline should display
     var pixelsPerSecond = width / duration;
     // create a timeline
     var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
-    // create a new track into the `track-1` element and give it a id ('main')
+    // create a new track into the `$track` element and give it a id ('main')
     timeline.createTrack($track, height, 'main');
 
     // create the layer
-    var breakpointLayer = new wavesUI.helpers.BreakpointLayer(data, {
+    var markerLayer = new wavesUI.helpers.MarkerLayer(data, {
       height: height,
-      color: 'steelblue'
+      displayHandlers: false,
+      color: 'red',
     });
 
-    // uncomment the following to make it editable
-    // timeline.state = new wavesUI.states.SimpleEditionState(timeline);
     // insert the layer inside the 'main' track
-    timeline.addLayer(breakpointLayer, 'main');
+    timeline.addLayer(markerLayer, 'main');
   </script>
 
   <!-- ADVANCED USAGE -->
@@ -61,50 +54,37 @@
     var $track = document.querySelector('#track-2');
     var width = $track.getBoundingClientRect().width;
     var height = 200;
-    var duration = 4;
+    var duration = 10;
 
-    // some data to visualize
-    var data = [
-      { x: 0, y: 0.2 },
-      { x: 1, y: 0.4 },
-      { x: 2, y: 0.8 },
-      { x: 3, y: 0.4 },
-      { x: 4, y: 0.6 },
-    ];
+    var data = [{ time: 2 }, { time: 4 }, { time: 7 }, { time: 8 }];
 
     var pixelsPerSecond = width / duration;
 
     var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
     var track = new wavesUI.core.Track($track, height);
 
-    var breakpointLayer = new wavesUI.core.Layer('collection', data, {
+    var markerLayer = new wavesUI.core.Layer('collection', data, {
       height: height
     });
 
-    var accessors = {
-      cx: function(d, v) {
-        if (v !== undefined) { d.x = v; }
-        return d.x;
-      },
-      cy: function(d, v) {
-        if (v !== undefined) { d.y = v; }
-        return d.y;
-      },
-      color: function(d) {
-        return 'steelblue'
-      }
-    };
-
     var timeContext = new wavesUI.core.LayerTimeContext(timeline.timeContext);
 
-    breakpointLayer.setTimeContext(timeContext);
-    breakpointLayer.configureCommonShape(wavesUI.shapes.Line, accessors, { color: '#565656' });
-    breakpointLayer.configureShape(wavesUI.shapes.Dot, accessors);
-    breakpointLayer.setBehavior(new wavesUI.behaviors.BreakpointBehavior());
+    markerLayer.setTimeContext(timeContext);
+    markerLayer.configureShape(wavesUI.shapes.Marker, {
+      x: function(d, v) {
+        if (v !== undefined) { d.time = v; }
+        return d.time;
+      },
+      color: function() {
+        return 'red';
+      }
+    });
+
+    markerLayer.setBehavior(new wavesUI.behaviors.MarkerBehavior());
 
     timeline.state = new wavesUI.states.SimpleEditionState(timeline);
 
-    track.add(breakpointLayer);
+    track.add(markerLayer);
     timeline.add(track);
 
     timeline.tracks.render();

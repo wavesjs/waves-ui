@@ -12,7 +12,7 @@ export default class Marker extends BaseShape {
     return {
       handlerWidth: 7,
       handlerHeight: 10,
-      displayHandler: true,
+      displayHandlers: true,
       opacity: 1
     };
   }
@@ -34,7 +34,7 @@ export default class Marker extends BaseShape {
 
     this.$el.appendChild(this.$line);
 
-    if (this.params.displayHandler) {
+    if (this.params.displayHandlers) {
       this.$handler = document.createElementNS(this.ns, 'rect');
 
       this.$handler.setAttributeNS(null, 'x', -((this.params.handlerWidth - 1) / 2));
@@ -58,7 +58,7 @@ export default class Marker extends BaseShape {
     this.$el.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
     this.$line.style.fill = color;
 
-    if (this.params.displayHandler) {
+    if (this.params.displayHandlers) {
       this.$handler.style.fill = color;
     }
   }

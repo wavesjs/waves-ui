@@ -4,7 +4,6 @@ import WaveEvent from './wave-event';
 
 const body = window.document.body;
 
-
 /**
  * http://javascript.info/tutorial/keyboard-events
  */
