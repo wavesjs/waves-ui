@@ -173,6 +173,7 @@ _`core/timeline`, `core/layer`, and `helpers/utils` are mandatory_
 To work with us (!), you need to install the following dependencies
 
 - "babel": "^4.5.0"
+- "babelify": "^6.1.3"
 - "browserify": "^9.0.3"
 - "testling": "^1.7.1"
 - "coverify": "^1.4.0"
