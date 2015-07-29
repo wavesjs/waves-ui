@@ -127,8 +127,9 @@ function transpileAll() {
     if (err) { console.error(err); }
     var fileList = stdout.split('\n');
 
-    fileList.forEach(function(file) {
+    fileList.forEach(function(file, index) {
       if (!file) { return; }
+      // if (index > 1) { return; }
       transpile(file);
     });
   });
@@ -137,15 +138,12 @@ function transpileAll() {
 // transpile one file
 function transpile(src) {
   var target = createTargetName(src);
+  var res = babel.transformFileSync(src, babelOptions);
 
-  babel.transformFile(src, babelOptions, function(err, res) {
-    if (err) { return console.log(err.message); }
+  fse.outputFile(target, res.code, function(err) {
+    if (err) { return console.error(err.message); }
 
-    fse.outputFile(target, res.code, function(err, res) {
-      if (err) { return console.log(err.message); }
-
-      console.log(util.format(green + '=> "%s" successfully transpiled to "%s"' + NC, src, target));
-    });
+    console.log(util.format(green + '=> "%s" successfully transpiled to "%s"' + NC, src, target));
   });
 }
 

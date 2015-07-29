@@ -20,7 +20,7 @@ export default class Timeline extends events.EventEmitter {
    * Creates a new `Timeline` instance
    */
   constructor(pixelsPerSecond = 100, visibleWidth = 1000, {
-    registerKeyboard: true
+    registerKeyboard = true
   } = {}) {
 
     super();

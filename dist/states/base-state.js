@@ -9,61 +9,59 @@ var _createClass = require("babel-runtime/helpers/create-class")["default"];
 
 var _classCallCheck = require("babel-runtime/helpers/class-call-check")["default"];
 
-var _Object$defineProperty = require("babel-runtime/core-js/object/define-property")["default"];
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
 var BaseState = (function () {
   function BaseState(timeline) {
-    var options = arguments[1] === undefined ? {} : arguments[1];
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     _classCallCheck(this, BaseState);
 
     this.timeline = timeline;
   }
 
+  /**
+   * Get timeline views
+   */
+
   _createClass(BaseState, [{
-    key: "tracks",
-
-    /**
-     * Get timeline views
-     */
-    get: function () {
-      return this.timeline.tracks;
-    }
-  }, {
-    key: "layers",
-
-    /**
-     * Get timeline layers
-     */
-    get: function () {
-      return this.timeline.tracks.layers;
-    }
-  }, {
     key: "enter",
 
     /**
      * Called when the timeline is entering the state
      */
     value: function enter() {}
-  }, {
-    key: "exit",
 
     /**
      * Called when the timeline is leaving the state
      */
-    value: function exit() {}
   }, {
-    key: "handleEvent",
+    key: "exit",
+    value: function exit() {}
 
     /**
      * handle registered inputs from mouse and keyboard
      * @param {Event} e - the event to process
      */
+  }, {
+    key: "handleEvent",
     value: function handleEvent(e) {}
+  }, {
+    key: "tracks",
+    get: function get() {
+      return this.timeline.tracks;
+    }
+
+    /**
+     * Get timeline layers
+     */
+  }, {
+    key: "layers",
+    get: function get() {
+      return this.timeline.tracks.layers;
+    }
   }]);
 
   return BaseState;
@@ -71,4 +69,4 @@ var BaseState = (function () {
 
 exports["default"] = BaseState;
 module.exports = exports["default"];
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVzNi91dGlscy9vcnRob2dvbmFsLWRhdGEuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7SUFLcUIsU0FBUztBQUNqQixXQURRLFNBQVMsQ0FDaEIsUUFBUSxFQUFnQjtRQUFkLE9BQU8sZ0NBQUcsRUFBRTs7MEJBRGYsU0FBUzs7QUFFMUIsUUFBSSxDQUFDLFFBQVEsR0FBRyxRQUFRLENBQUM7R0FDMUI7O2VBSGtCLFNBQVM7Ozs7OztTQVFsQixZQUFHO0FBQ1gsYUFBTyxJQUFJLENBQUMsUUFBUSxDQUFDLE1BQU0sQ0FBQztLQUM3Qjs7Ozs7OztTQUtTLFlBQUc7QUFDWCxhQUFPLElBQUksQ0FBQyxRQUFRLENBQUMsTUFBTSxDQUFDLE1BQU0sQ0FBQztLQUNwQzs7Ozs7OztXQUtJLGlCQUFHLEVBQUU7Ozs7Ozs7V0FLTixnQkFBRyxFQUFFOzs7Ozs7OztXQU1FLHFCQUFDLENBQUMsRUFBRSxFQUFFOzs7U0FqQ0UsU0FBUzs7O3FCQUFULFNBQVMiLCJmaWxlIjoiZXM2L3V0aWxzL29ydGhvZ29uYWwtZGF0YS5qcyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuKiBgU3RhdGVgIGluc3RhbmNlcyBhcmUgdXNlZCB0byBkZWZpbmUgdGhlIGFwcGxpY2F0aW9uIGxvZ2ljIGJ5IHByZWNpc2luZyBzcGVjaWZpYyB1c2VyIGludGVyYWN0aW9uIGNhc2VzLCBhbmQgaG93IHRoZXkgaW1wYWN0IHRoZSBvdmVyYWwgdGVtcG9yYWwgcmVwcmVzZW50YXRpb24uXG4qIFN0YXRlcyBtYW5hZ2UgaW50ZXJhY3Rpb25zIGxpa2Ugem9vbWluZywgYnJvd3NpbmcsIG9yIGVkaXRpbmcgdGhlIHRpbWVsaW5lLlxuKiBDdXN0b21pemVkIHN0YXRlcyBzaG91bGQgZXh0ZW5kIHRoaXMgQmFzZVN0YXRlLlxuKi9cbmV4cG9ydCBkZWZhdWx0IGNsYXNzIEJhc2VTdGF0ZSB7XG4gIGNvbnN0cnVjdG9yKHRpbWVsaW5lLCBvcHRpb25zID0ge30pIHtcbiAgICB0aGlzLnRpbWVsaW5lID0gdGltZWxpbmU7XG4gIH1cblxuICAvKipcbiAgICogR2V0IHRpbWVsaW5lIHZpZXdzXG4gICAqL1xuICBnZXQgdHJhY2tzKCkge1xuICAgIHJldHVybiB0aGlzLnRpbWVsaW5lLnRyYWNrcztcbiAgfVxuXG4gIC8qKlxuICAgKiBHZXQgdGltZWxpbmUgbGF5ZXJzXG4gICAqL1xuICBnZXQgbGF5ZXJzKCkge1xuICAgIHJldHVybiB0aGlzLnRpbWVsaW5lLnRyYWNrcy5sYXllcnM7XG4gIH1cblxuICAvKipcbiAgICogQ2FsbGVkIHdoZW4gdGhlIHRpbWVsaW5lIGlzIGVudGVyaW5nIHRoZSBzdGF0ZVxuICAgKi9cbiAgZW50ZXIoKSB7fVxuXG4gIC8qKlxuICAgKiBDYWxsZWQgd2hlbiB0aGUgdGltZWxpbmUgaXMgbGVhdmluZyB0aGUgc3RhdGVcbiAgICovXG4gIGV4aXQoKSB7fVxuXG4gIC8qKlxuICAgKiBoYW5kbGUgcmVnaXN0ZXJlZCBpbnB1dHMgZnJvbSBtb3VzZSBhbmQga2V5Ym9hcmRcbiAgICogQHBhcmFtIHtFdmVudH0gZSAtIHRoZSBldmVudCB0byBwcm9jZXNzXG4gICAqL1xuICBoYW5kbGVFdmVudChlKSB7fVxufVxuIl19
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImVzNi9zdGF0ZXMvYmFzZS1zdGF0ZS5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7SUFLcUIsU0FBUztBQUNqQixXQURRLFNBQVMsQ0FDaEIsUUFBUSxFQUFnQjtRQUFkLE9BQU8seURBQUcsRUFBRTs7MEJBRGYsU0FBUzs7QUFFMUIsUUFBSSxDQUFDLFFBQVEsR0FBRyxRQUFRLENBQUM7R0FDMUI7Ozs7OztlQUhrQixTQUFTOzs7Ozs7V0FzQnZCLGlCQUFHLEVBQUU7Ozs7Ozs7V0FLTixnQkFBRyxFQUFFOzs7Ozs7OztXQU1FLHFCQUFDLENBQUMsRUFBRSxFQUFFOzs7U0F6QlAsZUFBRztBQUNYLGFBQU8sSUFBSSxDQUFDLFFBQVEsQ0FBQyxNQUFNLENBQUM7S0FDN0I7Ozs7Ozs7U0FLUyxlQUFHO0FBQ1gsYUFBTyxJQUFJLENBQUMsUUFBUSxDQUFDLE1BQU0sQ0FBQyxNQUFNLENBQUM7S0FDcEM7OztTQWpCa0IsU0FBUzs7O3FCQUFULFNBQVMiLCJmaWxlIjoiZXM2L3N0YXRlcy9iYXNlLXN0YXRlLmpzIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4qIGBTdGF0ZWAgaW5zdGFuY2VzIGFyZSB1c2VkIHRvIGRlZmluZSB0aGUgYXBwbGljYXRpb24gbG9naWMgYnkgcHJlY2lzaW5nIHNwZWNpZmljIHVzZXIgaW50ZXJhY3Rpb24gY2FzZXMsIGFuZCBob3cgdGhleSBpbXBhY3QgdGhlIG92ZXJhbCB0ZW1wb3JhbCByZXByZXNlbnRhdGlvbi5cbiogU3RhdGVzIG1hbmFnZSBpbnRlcmFjdGlvbnMgbGlrZSB6b29taW5nLCBicm93c2luZywgb3IgZWRpdGluZyB0aGUgdGltZWxpbmUuXG4qIEN1c3RvbWl6ZWQgc3RhdGVzIHNob3VsZCBleHRlbmQgdGhpcyBCYXNlU3RhdGUuXG4qL1xuZXhwb3J0IGRlZmF1bHQgY2xhc3MgQmFzZVN0YXRlIHtcbiAgY29uc3RydWN0b3IodGltZWxpbmUsIG9wdGlvbnMgPSB7fSkge1xuICAgIHRoaXMudGltZWxpbmUgPSB0aW1lbGluZTtcbiAgfVxuXG4gIC8qKlxuICAgKiBHZXQgdGltZWxpbmUgdmlld3NcbiAgICovXG4gIGdldCB0cmFja3MoKSB7XG4gICAgcmV0dXJuIHRoaXMudGltZWxpbmUudHJhY2tzO1xuICB9XG5cbiAgLyoqXG4gICAqIEdldCB0aW1lbGluZSBsYXllcnNcbiAgICovXG4gIGdldCBsYXllcnMoKSB7XG4gICAgcmV0dXJuIHRoaXMudGltZWxpbmUudHJhY2tzLmxheWVycztcbiAgfVxuXG4gIC8qKlxuICAgKiBDYWxsZWQgd2hlbiB0aGUgdGltZWxpbmUgaXMgZW50ZXJpbmcgdGhlIHN0YXRlXG4gICAqL1xuICBlbnRlcigpIHt9XG5cbiAgLyoqXG4gICAqIENhbGxlZCB3aGVuIHRoZSB0aW1lbGluZSBpcyBsZWF2aW5nIHRoZSBzdGF0ZVxuICAgKi9cbiAgZXhpdCgpIHt9XG5cbiAgLyoqXG4gICAqIGhhbmRsZSByZWdpc3RlcmVkIGlucHV0cyBmcm9tIG1vdXNlIGFuZCBrZXlib2FyZFxuICAgKiBAcGFyYW0ge0V2ZW50fSBlIC0gdGhlIGV2ZW50IHRvIHByb2Nlc3NcbiAgICovXG4gIGhhbmRsZUV2ZW50KGUpIHt9XG59XG4iXX0=
