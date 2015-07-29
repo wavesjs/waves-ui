@@ -41,15 +41,13 @@ import ns from './namespace';
 * - timeline.renderingContext.stretchRatio modify timeline's zoom
 * Each time you set new value of offset or stretchRatio, you need to do `timeline.update()` to update the values.
 * Track SVG structure
-* <svg>
-*  <defs> Unused for the moment, could be used to define custom shapes for use with layers
-*  </defs>
+* <svg class="track" xmlns:xhtml="http://www.w3.org/1999/xhtml" height="100" shape-rendering="optimizeSpeed">
+*  <defs></defs> Unused for the moment, could be used to define custom shapes for use with layers
+*  <rect style="fill-opacity:0" width="100%" height="100%"></rect>
 *  <g class="offset">
-*   <g class="layout"> The layers are inserted here
-*   </g>
+*    <g class="layout"></g> The layers are inserted here
 *  </g>
-*  <g class="interactions"> Placeholder to visualize interactions (eg. brush)
-*  </g>
+*  <g class="interactions"></g> Placeholder to visualize interactions (eg. brush)
 * </svg>
 */
 
@@ -75,19 +73,19 @@ export default class Track {
   }
 
   /**
-   *  This method is called when the track is added to the timeline
-   *  The track cannot be updated without being added to a timeline
+   * This method is called when the track is added to the timeline
+   * The track cannot be updated without being added to a timeline
    */
   configure(renderingContext) {
     this.renderingContext = renderingContext;
   }
 
   /**
-   *  Destroy a track
-   *  The layers from this track can still be reused elsewhere
+   * Destroy a track
+   * The layers from this track can still be reused elsewhere
    */
   destroy() {
-    // detatch everything from the DOM
+    // Detach everything from the DOM
     this.$el.removeChild(this.$svg);
     this.layers.forEach((layer) => this.$layout.removeChild(layer.$el));
     // clean references
@@ -97,7 +95,7 @@ export default class Track {
   }
 
   /**
-   *  Creates the container for the track
+   * Creates the container for the track
    */
   _createContainer() {
     const $svg = document.createElementNS(ns, 'svg');
@@ -177,10 +175,10 @@ export default class Track {
   updateContainer() {
     const $svg = this.$svg;
     const $offset = this.$offset;
-    // should be in some update layout
+    // Should be in some update layout
     const renderingContext = this.renderingContext;
-    const height  = this.height;
-    const width   = renderingContext.visibleWidth;
+    const height = this.height;
+    const width = renderingContext.visibleWidth;
     const offsetX = renderingContext.timeToPixel(renderingContext.offset);
     const translate = `translate(${offsetX}, 0)`;
 
