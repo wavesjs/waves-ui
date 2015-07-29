@@ -31,7 +31,7 @@ export default class Timeline extends events.EventEmitter {
     const that = this;
 
     function registerKeyboard() {
-      that.createInteraction(Keyboard, 'body');
+      that.createInteraction(Keyboard, document.body);
       document.removeEventListener('DOMContentLoaded', registerKeyboard);
     }
 

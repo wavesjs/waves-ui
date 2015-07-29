@@ -10,7 +10,7 @@ const body = window.document.body;
  */
 export default class Keyboard extends EventSource {
   constructor(el = body) {
-    super(body);
+    super(el);
   }
 
   _createEvent(type, e) {
