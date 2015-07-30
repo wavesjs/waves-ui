@@ -1,4 +1,4 @@
-import d3Scale from 'd3-scale';
+import scales from '../utils/scales';
 
 
 /**
@@ -89,7 +89,7 @@ export default class LayerTimeContext {
     }
     // reuse previsously created local scale if exists
     const timeToPixel = this._timeToPixel ?
-      this._timeToPixel : d3Scale.linear().domain([0, 1]);
+      this._timeToPixel : scales.linear().domain([0, 1]);
 
     timeToPixel.range([0, this.parent.computedPixelsPerSecond * value]);
 

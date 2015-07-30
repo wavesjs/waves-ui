@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "babel-runtime": "^5.8.12",
-    "d3-scale": "0.0.1",
     "d3-selection": "^0.4.7",
     "docchi": "^0.10.3",
     "docchidown": "git://github.com/ouhouhsami/docchidown",

@@ -1,4 +1,3 @@
-import d3Scale from 'd3-scale';
 import ns from './namespace';
 
 

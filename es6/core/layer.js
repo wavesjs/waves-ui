@@ -1,4 +1,4 @@
-import d3Scale from 'd3-scale';
+import scales from '../utils/scales';
 import d3Selection from 'd3-selection';
 import events from 'events';
 
@@ -64,7 +64,7 @@ export default class Layer extends events.EventEmitter {
     this._isContextEditable = false;
     this._behavior = null;
 
-    this._valueToPixel = d3Scale.linear()
+    this._valueToPixel = scales.linear()
       .domain(this.params.yDomain)
       .range([0, this.params.height]);
 

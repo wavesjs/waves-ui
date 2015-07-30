@@ -138,7 +138,11 @@ function transpileAll() {
 function transpile(src) {
   var target = createTargetName(src);
   // if async transform is used all source maps refers to the last file... looks like a babel bug
-  var res = babel.transformFileSync(src, babelOptions);
+  // try {
+    var res = babel.transformFileSync(src, babelOptions);
+  // } catch(err) {
+  //   console.log(err.message);
+  // }
 
   fse.outputFile(target, res.code, function(err) {
     if (err) { return console.error(err.message); }

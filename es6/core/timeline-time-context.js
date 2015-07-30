@@ -1,4 +1,4 @@
-import d3Scale from 'd3-scale';
+import scales from '../utils/scales';
 
 
 /**
@@ -32,7 +32,7 @@ export default class TimelineTimeContext {
     this._maintainVisibleDuration = false;
 
     // create the timeToPixel scale
-    const scale = d3Scale.linear()
+    const scale = scales.linear()
       .domain([0, 1])
       .range([0, pixelsPerSecond]);
 

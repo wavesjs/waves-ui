@@ -1,4 +1,4 @@
-import d3Scale from 'd3-scale';
+import scales from '../utils/scales';
 import BaseState from './base-state';
 
 
@@ -41,7 +41,7 @@ export default class CenteredZoomState extends BaseState {
     const actualZoom = this.timeline.timeContext.zoom;
     const initialY = e.y;
 
-    this.valueToPixel = d3Scale.linear()
+    this.valueToPixel = scales.linear()
       .domain([initialY, 0])
       .range([actualZoom, -1 * actualZoom]);
   }
