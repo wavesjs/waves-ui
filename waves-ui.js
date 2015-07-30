@@ -51,6 +51,7 @@ module.exports = {
     BreakpointLayer     : require('./dist/helpers/breakpoint-layer'),
     MarkerLayer         : require('./dist/helpers/marker-layer'),
     SegmentLayer        : require('./dist/helpers/segment-layer'),
+    TraceLayer          : require('./dist/helpers/trace-layer'),
     WaveformLayer       : require('./dist/helpers/waveform-layer'),
   },
   utils: {
