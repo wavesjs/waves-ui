@@ -9,7 +9,6 @@ export default {
     function _updateCoefs() {
       _slope = (_range[1] - _range[0]) / (_domain[1] - _domain[0]);
       _intercept = _range[0] - (_slope * _domain[0]);
-      console.log(_slope, _intercept);
     }
 
     function scale (value) {
