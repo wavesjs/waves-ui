@@ -586,7 +586,6 @@ export default class Layer extends events.EventEmitter {
     // maintain context shape
     this.contextShape.update(
       this._renderingContext,
-      this.$interactions,
       this.timeContext,
       0
     );
