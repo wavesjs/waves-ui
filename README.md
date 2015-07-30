@@ -1,21 +1,12 @@
 # waves.js - ui
 
+> Library to display and edit audio and timeseries data in the browser.
 
 ## Basic Example
 
 A timeline that displays a waveform and a segmentation over it.
 
 ```
-// Create a timeline
-const data = [{ width: 3, x: 0 }, { width: 6, x: 6}];
-const timeline = new Timeline();
-const track = new Track(trackDiv);
-const layer = new SegmentLayer(data);
-
-timeline.add(track);
-track.add(layer);
-
-timeline.tracks.render();
 ```
 
 
@@ -35,15 +26,15 @@ Here is a synthetic view of objects that compose the library, and their intercon
 
 ### Timeline
 
-The `timeline` is the main entry point of a temporal visualization, it:
+The `timeline` is the main entry point of a temporal representation, it:
 - contains factories to manage its `tracks` and `layers`,
-- get or set the view window overs its `tracks` through `offset`, `zoom`, `pixelsPerSecond`, `visibleWidth`,
+- gets or sets the view window overs its `tracks` through `offset`, `zoom`, `pixelsPerSecond`, `visibleWidth`,
 - is the central hub for all user interaction events (keyboard, mouse),
 - holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to those events.
 
 ### Track
 
-The `tracks` simply organize the vertical arrangement of the `layers`. They are similar to the tracks of a common Digital Audio Workstation. 
+The `tracks` simply organize the vertical arrangement of the `layers`. They are similar to the tracks of a Digital Audio Workstation. 
 
 Each `track` is associated to a DOM element.
 
@@ -70,16 +61,19 @@ The library comes with usual shapes to display audio data and timeseries:
 
 The library also provides a template (`BaseShape`) to create new kind of shapes.
 
-### Interactions - Timeline-states
+### Interactions - states
 
 The `timeline` registers events to listen to from: 
 - the keyboard,
 - the mouse upon each of its tracks. 
 
-A `timeline-state` sorts these events and call the appropriate methods to:
+A `state` of the timeline sorts these events and call the appropriate methods to:
 - browse and zoom into the tracks (`BrushZoomState`, `CenteredZoomState`)
 - modify layers time characteristics (`ContextEditionState`)
 - modify layers data (`EditionState`)
+- select layers time characteristics, data (`SelectionState`)
+
+`BaseState` is the base class to implement a specific `state`.
 
 ### Behavior
 
@@ -148,13 +142,13 @@ define(['waves-ui'], function(wavesUI) {
 
 #### Global
 
-add the script tag in your at the bottom of the `<body>`
+Add the script tag in your html file at the bottom of the `<body>`
 
 ```html
 <script scr="/path/to/waves-ui.umd.js"></script>
 ```
 
-the library is exposed in the `window.wavesUI` namespace.
+The library is exposed in the `window.wavesUI` namespace.
 
 
 ## Custom build
@@ -170,7 +164,7 @@ _`core/timeline`, `core/layer`, and `helpers/utils` are mandatory_
 
 ## Pull-Request, Tests and Coverage
 
-To work with us (!), you need to install the following dependencies
+To work with us (!), you need to install the following dependencies:
 
 - "babel": "^4.5.0"
 - "babelify": "^6.1.3"
@@ -179,9 +173,9 @@ To work with us (!), you need to install the following dependencies
 - "coverify": "^1.4.0"
 
 so that `npm run test`, `npm run coverage` will correctly run.
-We didn't put this dependencies in the package.json because you have probably already installed this one globally, and because they are huge.
+We didn't put this dependencies in the package.json because you have probably already installed these ones globally and because they are huge.
 
-PR are reviewed as long as they provide test and a good code coverage.
+PR are reviewed as long as they provide test and keep a good code coverage.
 
 ## License
 
