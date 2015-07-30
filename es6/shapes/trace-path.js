@@ -1,7 +1,7 @@
 import BaseShape from './base-shape';
 
 
-export default class TraceCommon extends BaseShape {
+export default class TracePath extends BaseShape {
   getClassName() { return 'trace-common'; }
 
   _getAccessorList() {

@@ -17,7 +17,7 @@ module.exports = {
     Line                : require('./dist/shapes/line'),
     Marker              : require('./dist/shapes/marker'),
     Segment             : require('./dist/shapes/segment'),
-    TraceCommon         : require('./dist/shapes/trace-common'),
+    TracePath           : require('./dist/shapes/trace-path'),
     TraceDots           : require('./dist/shapes/trace-dots'),
     Waveform            : require('./dist/shapes/waveform'),
   },
