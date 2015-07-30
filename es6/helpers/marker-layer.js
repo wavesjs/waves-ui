@@ -4,12 +4,19 @@ import MarkerBehavior from '../behaviors/marker-behavior';
 
 
 export default class MarkerLayer extends Layer {
-  constructor(data, options = {}) {
+  constructor(data, options = {}, accessors = {}) {
     super('collection', data, options);
 
-    this.configureShape(Marker, {}, {
-      displayHandler: options.displayHandler
+    options = Object.assign({ displayHandlers: true }, options);
+    const color = options.color;
+    if (color) {
+      accessors.color = function() { return color; };
+    }
+
+    this.configureShape(Marker, accessors, {
+      displayHandlers: options.displayHandlers
     });
+
     this.setBehavior(new MarkerBehavior());
   }
 }
