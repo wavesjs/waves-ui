@@ -61,16 +61,19 @@ The library comes with usual shapes to display audio data and timeseries:
 
 The library also provides a template (`BaseShape`) to create new kind of shapes.
 
-### Interactions - Timeline-states
+### Interactions - states
 
 The `timeline` registers events to listen to from: 
 - the keyboard,
 - the mouse upon each of its tracks. 
 
-A `timeline-state` sorts these events and call the appropriate methods to:
+A `state` of the timeline sorts these events and call the appropriate methods to:
 - browse and zoom into the tracks (`BrushZoomState`, `CenteredZoomState`)
 - modify layers time characteristics (`ContextEditionState`)
 - modify layers data (`EditionState`)
+- select layers time characteristics, data (`SelectionState`)
+
+`BaseState` is the base class to implement a specific `state`.
 
 ### Behavior
 
