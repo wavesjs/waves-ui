@@ -39,10 +39,12 @@ export default class CenteredZoomState extends BaseState {
     this.mouseDown = true; // is done in surface
 
     const actualZoom = this.timeline.timeContext.zoom;
+    const initialY = e.y;
 
+    // @NOTE : weird problem -> unzoom a lot faster than zoom...
     this.valueToPixel = scales.linear()
-      .domain([0, 200])
-      .range([actualZoom, actualZoom * 3]);
+      .domain([initialY, initialY + 200])
+      .range([actualZoom, actualZoom * 2]);
   }
 
   onMouseMove(e) {

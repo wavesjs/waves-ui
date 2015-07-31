@@ -17,6 +17,7 @@ module.exports = {
     Line                 : require('./dist/shapes/line'),
     Marker               : require('./dist/shapes/marker'),
     Segment              : require('./dist/shapes/segment'),
+    Ticks                : require('./dist/shapes/ticks'),
     TracePath            : require('./dist/shapes/trace-path'),
     TraceDots            : require('./dist/shapes/trace-dots'),
     Waveform             : require('./dist/shapes/waveform'),
@@ -54,7 +55,12 @@ module.exports = {
     TraceLayer           : require('./dist/helpers/trace-layer'),
     WaveformLayer        : require('./dist/helpers/waveform-layer'),
   },
+  axis: {
+    AxisLayer            : require('./dist/axis/axis-layer'),
+    timeAxisGenerator    : require('./dist/axis/time-axis-generator'),
+  },
   utils: {
+    format               : require('./dist/utils/format'),
     OrthogonalData       : require('./dist/utils/orthogonal-data'),
     scales               : require('./dist/utils/scales'),
   }
