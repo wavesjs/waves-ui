@@ -5,6 +5,7 @@ import Cursor from '../shapes/cursor';
 export default class CursorLayer extends Layer {
   constructor(options = {}) {
     const data = { currentPosition: 0 };
+    options = Object.assign({ color: 'red' }, options);
 
     super('entity', data, options);
 
@@ -14,10 +15,10 @@ export default class CursorLayer extends Layer {
   }
 
   set currentPosition(value) {
-    this.data.currentPosition = value;
+    this.data[0].currentPosition = value;
   }
 
   get currentPosition() {
-    return this.data.currentPosition;
+    return this.data[0].currentPosition;
   }
 }

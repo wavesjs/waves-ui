@@ -76,11 +76,11 @@ export default function timeGenerator(timeContext) {
     }
 
     // avoid floating point errors
-    const marker = Math.round(formattedTime / step) % markerModulo === 0 ? true : false;
+    const focused = Math.round(formattedTime / step) % markerModulo === 0 ? true : false;
 
-    const datum = { x: formattedTime, marker };
+    const datum = { x: formattedTime, focused };
 
-    if (marker === true) {
+    if (focused === true) {
       const date = new Date(1000 * formattedTime);
       const min = padLeft(date.getMinutes(), 0, 2);
       const sec = padLeft(date.getSeconds(), 0, 2);

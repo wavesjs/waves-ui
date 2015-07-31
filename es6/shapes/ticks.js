@@ -17,7 +17,7 @@ export default class Axis extends BaseShape {
 
     data.forEach((datum) => {
       const x = renderingContext.timeToPixel(datum.x);
-      const opacity = datum.marker ? 0.8 : 0.3;
+      const opacity = datum.focused ? 0.8 : 0.3;
       // const height = datum.marker ? layerHeight : layerHeight - 10;
       const height = layerHeight;
 

@@ -19,11 +19,14 @@ export default class Cursor extends BaseShape {
   render(renderingContext) {
     if (this.$el) { return this.$el; }
 
+    console.log(this.params);
+
     this.$el = document.createElementNS(ns, 'line');
     this.$el.setAttributeNS(null, 'x', 0);
     this.$el.setAttributeNS(null, 'y1', 0);
     this.$el.setAttributeNS(null, 'y2', renderingContext.height);
     this.$el.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+    this.$el.setAttributeNS(null, 'stroke', this.params.color);
 
     return this.$el;
   }
@@ -31,6 +34,7 @@ export default class Cursor extends BaseShape {
   update(renderingContext, datum, index) {
     const x = renderingContext.timeToPixel(this.x(datum));
     const color = this.params.color;
+    // console.log(datum, x);
 
     this.$el.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
     this.$el.style.stroke = color;
