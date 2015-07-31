@@ -36,25 +36,23 @@ export default class CenteredZoomState extends BaseState {
   }
 
   onMouseDown(e) {
-    this.mouseDown = true; // is done in surface
+    this.initialZoom = this.timeline.timeContext.zoom;
 
-    const actualZoom = this.timeline.timeContext.zoom;
     const initialY = e.y;
 
-    // @NOTE : weird problem -> unzoom a lot faster than zoom...
-    this.valueToPixel = scales.linear()
-      .domain([initialY, initialY + 200])
-      .range([actualZoom, actualZoom * 2]);
+    this._pixelToExponent = scales.linear()
+      .domain([initialY, initialY + 100]) // 100px => factor 2
+      .range([0, 1]);
   }
 
   onMouseMove(e) {
-    if (!this.mouseDown) { return; }
-
     const timeContext = this.timeline.timeContext;
     const lastCenterTime = timeContext.timeToPixel.invert(e.x); // ?
-    const y = this.valueToPixel(e.y);
+    const exponent = this._pixelToExponent(e.y);
+    // -1...1 => 1/2...2
+    const targetZoom = this.initialZoom * Math.pow(2, exponent);
 
-    timeContext.zoom = Math.min(Math.max(y, this.minZoom), this.maxZoom);
+    timeContext.zoom = Math.min(Math.max(targetZoom, this.minZoom), this.maxZoom);
 
     const newCenterTime = timeContext.timeToPixel.invert(e.x); // ?
     const delta = newCenterTime - lastCenterTime;
@@ -78,7 +76,5 @@ export default class CenteredZoomState extends BaseState {
     this.timeline.tracks.update();
   }
 
-  onMouseUp(e) {
-    this.mouseDown = false;
-  }
+  onMouseUp(e) {}
 }
