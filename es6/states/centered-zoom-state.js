@@ -37,24 +37,22 @@ export default class CenteredZoomState extends BaseState {
 
   onMouseDown(e) {
     this.initialZoom = this.timeline.timeContext.zoom;
-
-    const initialY = e.y;
+    this.initialY = e.y;
 
     this._pixelToExponent = scales.linear()
-      .domain([initialY, initialY + 100]) // 100px => factor 2
+      .domain([0, 100]) // 100px => factor 2
       .range([0, 1]);
   }
 
   onMouseMove(e) {
     const timeContext = this.timeline.timeContext;
-    const lastCenterTime = timeContext.timeToPixel.invert(e.x); // ?
-    const exponent = this._pixelToExponent(e.y);
-    // -1...1 => 1/2...2
-    const targetZoom = this.initialZoom * Math.pow(2, exponent);
+    const lastCenterTime = timeContext.timeToPixel.invert(e.x);
+    const exponent = this._pixelToExponent(e.y - this.initialY);
+    const targetZoom = this.initialZoom * Math.pow(2, exponent); // -1...1 -> 1/2...2
 
     timeContext.zoom = Math.min(Math.max(targetZoom, this.minZoom), this.maxZoom);
 
-    const newCenterTime = timeContext.timeToPixel.invert(e.x); // ?
+    const newCenterTime = timeContext.timeToPixel.invert(e.x);
     const delta = newCenterTime - lastCenterTime;
 
     // Apply new offset to keep it centered to the mouse
