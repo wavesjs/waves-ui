@@ -2,6 +2,14 @@ import BaseShape from './base-shape';
 
 
 export default class Axis extends BaseShape {
+  _getClassName() {
+    return 'tick';
+  }
+
+  _getDefaults() {
+    return { color: 'steelblue' };
+  }
+
   render(renderingContext) {
     this.$el = document.createElementNS(this.ns, 'g');
     return this.$el;
@@ -16,7 +24,7 @@ export default class Axis extends BaseShape {
     const layerHeight = renderingContext.height; // valueToPixel(1);
 
     data.forEach((datum) => {
-      const x = renderingContext.timeToPixel(datum.x);
+      const x = renderingContext.timeToPixel(datum.time);
       const opacity = datum.focused ? 0.8 : 0.3;
       // const height = datum.marker ? layerHeight : layerHeight - 10;
       const height = layerHeight;
@@ -30,7 +38,7 @@ export default class Axis extends BaseShape {
       tick.setAttributeNS(null, 'y2', height);
 
       tick.setAttributeNS(null, 'fill', 'none');
-      tick.setAttributeNS(null, 'stroke', 'steelblue');
+      tick.setAttributeNS(null, 'stroke', this.params.color);
       tick.setAttributeNS(null, 'shape-rendering', 'crispEdges');
       tick.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
       tick.setAttributeNS(null, 'opacity', opacity);

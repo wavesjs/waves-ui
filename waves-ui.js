@@ -58,6 +58,7 @@ module.exports = {
   axis: {
     AxisLayer            : require('./dist/axis/axis-layer'),
     timeAxisGenerator    : require('./dist/axis/time-axis-generator'),
+    bpmAxisGenerator     : require('./dist/axis/bpm-axis-generator'),
   },
   utils: {
     format               : require('./dist/utils/format'),

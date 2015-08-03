@@ -19,6 +19,14 @@ export default class AxisLayer extends Layer {
     this._generator = generator;
   }
 
+  set generator(func) {
+    this._generator = func;
+  }
+
+  get generator() {
+    return this._generator;
+  }
+
   /**
    *  This method is the main difference with a classical layer
    *  This one generates and maintains it's own data
