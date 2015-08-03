@@ -67,14 +67,21 @@ export default class Waveform extends BaseShape {
     const width = renderingContext.timeToPixel(duration);
     const samplesPerPixel = nbrSamples / width;
     let minMax = [];
+
+    // use timeline's TimeContext attributes to compute/draw visible area only
+    const minX = -renderingContext.trackOffsetX;
+    const maxX = renderingContext.visibleWidth + minX;
+
     // get min/max per pixels
-    for (let i = 0; i <= width; i++) {
-      const startTime = renderingContext.timeToPixel.invert(i);
+    for (let px = minX; px <= maxX; px++) {
+      const startTime = renderingContext.timeToPixel.invert(px);
       const startSample = startTime * this.params.sampleRate;
 
       const extract = datum[sliceMethod](startSample, startSample + samplesPerPixel);
+
       let min = Infinity;
       let max = -Infinity;
+
       for (let j = 0; j < extract.length; j++) {
         let sample = extract[j];
         if (sample < min) { min = sample; }
@@ -83,6 +90,8 @@ export default class Waveform extends BaseShape {
       // disallow Infinity
       min = (min === Infinity || min === -Infinity) ? 0 : min;
       max = (max === Infinity || max === -Infinity) ? 0 : max;
+
+      if (min === 0 && max === 0) { continue; }
 
       minMax.push({ time: startTime, values: [min, max] });
     }

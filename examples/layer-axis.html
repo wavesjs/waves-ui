@@ -31,17 +31,18 @@
     // create a timeline
     var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
     // create a new track into the `track-1` element and give it a id ('main')
-    timeline.createTrack($track, height * 2, 'main');
+    timeline.createTrack($track, height * 2 + 20, 'main');
     // time axis
     var timeAxis = new wavesUI.helpers.TimeAxisLayer({
       height: height,
+      top: 10,
       color: 'steelblue'
     });
 
     // bpm axis
     var gridAxis = new wavesUI.helpers.GridAxisLayer({
       height: height,
-      top: height,
+      top: height + 10,
       bpm: 90,
       signature: '3/4',
       color: 'orange'

@@ -19,6 +19,17 @@ export default class AxisLayer extends Layer {
     this._generator = generator;
   }
 
+  // can't access timeContext from outside
+  set stretchRatio(value) { return; }
+  set offset(value) { console.log(value); return; }
+  set start(value) { return; }
+  set duration(value) { return; }
+  get stretchRatio() { return; }
+  get offset() { return; }
+  get start() { return; }
+  get duration() { return; }
+
+
   set generator(func) {
     this._generator = func;
   }
@@ -39,15 +50,24 @@ export default class AxisLayer extends Layer {
     Array.prototype.splice.apply(this.data[0], data);
   }
 
-  // can't access timeContext from outside
-  set stretchRatio(value) { return; }
-  set offset(value) { console.log(value); return; }
-  set start(value) { return; }
-  set duration(value) { return; }
-  get stretchRatio() { return; }
-  get offset() { return; }
-  get start() { return; }
-  get duration() { return; }
+  /**
+   *  update the values in `_renderingContext`
+   *  is particulary needed when updating `stretchRatio` as the pointer
+   *  to the `timeToPixel` scale may change
+   */
+  _updateRenderingContext() {
+    this._renderingContext.timeToPixel = this.timeContext.timeToPixel;
+    this._renderingContext.valueToPixel = this._valueToPixel;
+    this._renderingContext.height = this.params.height;
+    this._renderingContext.width  = this.timeContext.timeToPixel(this.timeContext.duration);
+
+    // for foreign object issue in chrome
+    this._renderingContext.offsetX = this.timeContext.timeToPixel(this.timeContext.offset);
+
+    // expose some timeline attributes - allow to improve perf in some cases - cf. Waveform
+    this._renderingContext.trackOffsetX = this.timeContext.timeToPixel(this.timeContext.offset);
+    this._renderingContext.visibleWidth = this.timeContext.visibleWidth;
+  }
 
   render() {
     super.render();
@@ -75,7 +95,6 @@ export default class AxisLayer extends Layer {
     // layer background
     this.$background = document.createElementNS(ns, 'rect');
     this.$background.setAttributeNS(null, 'height', '100%');
-    this.$background.setAttributeNS(null, 'width', '100%');
     this.$background.classList.add('background');
     this.$background.style.fillOpacity = 0;
     this.$background.style.pointerEvents = 'none';
@@ -95,5 +114,7 @@ export default class AxisLayer extends Layer {
     // matrix to invert the coordinate system
     const translateMatrix = `matrix(1, 0, 0, -1, 0, ${top + height})`;
     this.$el.setAttributeNS(null, 'transform', translateMatrix);
+
+    this.$background.setAttributeNS(null, 'width', height);
   }
 }
