@@ -7,7 +7,11 @@ export default class Axis extends BaseShape {
   }
 
   _getDefaults() {
-    return { color: 'steelblue' };
+    return {
+      color: 'steelblue',
+      focusedOpacity: 0.8,
+      defaultOpacity: 0.3
+    };
   }
 
   render(renderingContext) {
@@ -25,8 +29,9 @@ export default class Axis extends BaseShape {
 
     data.forEach((datum) => {
       const x = renderingContext.timeToPixel(datum.time);
-      const opacity = datum.focused ? 0.8 : 0.3;
-      // const height = datum.marker ? layerHeight : layerHeight - 10;
+      const opacity = datum.focused ?
+        this.params.focusedOpacity : this.params.defaultOpacity;
+
       const height = layerHeight;
 
       const tick = document.createElementNS(this.ns, 'line');
