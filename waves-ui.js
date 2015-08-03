@@ -48,17 +48,19 @@ module.exports = {
   },
   helpers: {
     AnnotatedMarkerLayer : require('./dist/helpers/annotated-marker-layer'),
-    CursorLayer          : require('./dist/helpers/cursor-layer'),
     BreakpointLayer      : require('./dist/helpers/breakpoint-layer'),
+    CursorLayer          : require('./dist/helpers/cursor-layer'),
+    GridAxisLayer        : require('./dist/helpers/grid-axis-layer'),
     MarkerLayer          : require('./dist/helpers/marker-layer'),
     SegmentLayer         : require('./dist/helpers/segment-layer'),
+    TimeAxisLayer        : require('./dist/helpers/time-axis-layer'),
     TraceLayer           : require('./dist/helpers/trace-layer'),
     WaveformLayer        : require('./dist/helpers/waveform-layer'),
   },
   axis: {
     AxisLayer            : require('./dist/axis/axis-layer'),
     timeAxisGenerator    : require('./dist/axis/time-axis-generator'),
-    bpmAxisGenerator     : require('./dist/axis/bpm-axis-generator'),
+    gridAxisGenerator     : require('./dist/axis/grid-axis-generator'),
   },
   utils: {
     format               : require('./dist/utils/format'),

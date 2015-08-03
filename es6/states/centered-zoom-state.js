@@ -45,6 +45,9 @@ export default class CenteredZoomState extends BaseState {
   }
 
   onMouseMove(e) {
+    // prevent annoying text selection when dragging
+    e.originalEvent.preventDefault();
+
     const timeContext = this.timeline.timeContext;
     const lastCenterTime = timeContext.timeToPixel.invert(e.x);
     const exponent = this._pixelToExponent(e.y - this.initialY);

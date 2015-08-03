@@ -1,5 +1,5 @@
 
-export default function bpmAxisGenerator(bpm, signature) {
+export default function gridAxisGenerator(bpm, signature) {
   const _bps =  bpm / 60; // sec
   const _unit = 1 / parseInt(signature.split('/')[1], 10);
   const _nbrUnitsPerMesure = parseInt(signature.split('/')[0], 10);
