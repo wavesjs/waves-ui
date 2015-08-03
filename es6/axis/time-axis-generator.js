@@ -35,7 +35,7 @@ export default function timeAxisGenerator() {
       step = 1;
       toFixed = 0;
       markerModulo = 30;
-      includeModulo = 2;
+      includeModulo = 1;
       type = '30sec';
     }
 

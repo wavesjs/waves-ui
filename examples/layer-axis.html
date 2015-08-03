@@ -25,7 +25,7 @@
     var $track = document.querySelector('#track-1');
     var width = $track.getBoundingClientRect().width;
     var height = 20;
-    var duration = 20;
+    var duration = 40;
     // define the numbr of pixels per seconds the timeline should display
     var pixelsPerSecond = width / duration;
     // create a timeline
@@ -43,7 +43,8 @@
       height: height,
       top: height,
       bpm: 90,
-      color: 'green'
+      signature: '3/4',
+      color: 'orange'
     });
 
     timeline.addLayer(timeAxis, 'main', 'default', true);
