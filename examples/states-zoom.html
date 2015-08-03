@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Zoom States</title>
+
+  <link rel="stylesheet" type="text/css" href="./assets/common.css" />
+  <link rel="stylesheet" type="text/css" href="./assets/prism.css" />
+
+  <script src="../waves-ui.umd.js"></script>
+  <script src="./assets/prism.js"></script>
+  <script src="./assets/insert-code.js"></script>
+  <script src="./assets/waves-loaders.min.js"></script>
+</head>
+<body>
+
+  <h1>Zoom States</h1>
+
+  <!-- SIMPLE USAGE -->
+  <h2 id="simple-use">Centered Zoom State</h2>
+
+  <p class="note">click and drag to zoom and navigate into the timeline</p>
+  <div class="track" id="track-1"></div>
+  <script class="example" rel="track-1">
+    var loader = new wavesLoaders.AudioBufferLoader();
+
+    loader.load('./assets/drum-loop.wav').then(function(buffer) {
+      var $track = document.querySelector('#track-1');
+      var width = $track.getBoundingClientRect().width;
+      var height = 200;
+      var duration = buffer.duration;
+      // define the numbr of pixels per seconds the timeline should display
+      var pixelsPerSecond = width / duration;
+      // create a timeline
+      var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
+      // create a new track into the `track-1` element and give it a id ('main')
+      timeline.createTrack($track, height, 'main');
+
+      // create the layer
+      var waveformLayer = new wavesUI.helpers.WaveformLayer(buffer, {
+        height: height
+      });
+
+      // insert the layer inside the 'main' track
+      timeline.addLayer(waveformLayer, 'main');
+      // set the timeline's state to `CenteredZoomState`
+      timeline.state = new wavesUI.states.CenteredZoomState(timeline);
+    }).catch(function(err) {
+      console.error(err.stack);
+    });
+  </script>
+
+  <!-- ADVANCED USAGE -->
+  <h2 id="advanced-use">Brush Zoom State</h2>
+
+  <p class="note">click and drag to zoom, press space bar to reset</p>
+  <div class="track" id="track-2"></div>
+
+  <script class="example" rel="track-2">
+    var loader = new wavesLoaders.AudioBufferLoader();
+
+    loader.load('./assets/drum-loop.wav').then(function(buffer) {
+      var $track = document.querySelector('#track-2');
+      var width = $track.getBoundingClientRect().width;
+      var height = 200;
+      var duration = buffer.duration;
+      // define the numbr of pixels per seconds the timeline should display
+      var pixelsPerSecond = width / duration;
+      // create a timeline
+      var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
+      // create a new track into the `track-1` element and give it a id ('main')
+      timeline.createTrack($track, height, 'main');
+
+      // create the layer
+      var waveformLayer = new wavesUI.helpers.WaveformLayer(buffer, {
+        height: height
+      });
+
+      // insert the layer inside the 'main' track
+      timeline.addLayer(waveformLayer, 'main');
+      // set the timeline's state to `BrushZoomState`
+      timeline.state = new wavesUI.states.BrushZoomState(timeline);
+    }).catch(function(err) {
+      console.error(err.stack);
+    });
+  </script>
+</body>
+</html>
