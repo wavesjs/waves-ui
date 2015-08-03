@@ -221,7 +221,7 @@ export default class Timeline extends events.EventEmitter {
    *  @param {Track} track - the track to the insert the layer in
    *  @param {String} [groupId='default'] - the group in which associate the layer
    */
-  addLayer(layer, trackOrTrackId, groupId = 'default') {
+  addLayer(layer, trackOrTrackId, groupId = 'default', isAxis = false) {
     let track = trackOrTrackId;
 
     if (typeof trackOrTrackId === 'string') {
@@ -230,7 +230,9 @@ export default class Timeline extends events.EventEmitter {
 
     // creates the `LayerTimeContext` if not present
     if (!layer.timeContext) {
-      const timeContext = new LayerTimeContext(this.timeContext);
+      const timeContext = isAxis ?
+        this.timeContext : new LayerTimeContext(this.timeContext);
+
       layer.setTimeContext(timeContext);
     }
 

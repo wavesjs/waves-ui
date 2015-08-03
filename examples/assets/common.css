@@ -29,3 +29,10 @@ pre {
 :not(pre) > code[class*="language-"], pre[class*="language-"] {
   background-color: #202020 !important;
 }
+
+.note {
+  color: #efefef;
+  font-size: 11px;
+  font-family: monospace;
+  font-style: italic;
+}
