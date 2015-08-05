@@ -15,6 +15,7 @@ export default class Surface extends EventSource {
   constructor(el /*, padding of the current surface @TODO */) {
     super(el);
 
+    this.sourceName = 'surface';
     // this.isMouseDown = false;
     this.mouseDownEvent = null;
     this.lastEvent = null;
@@ -24,7 +25,7 @@ export default class Surface extends EventSource {
    * Factory method for `Event` class
    */
   _createEvent(type, e) {
-    const event = new WaveEvent(type, e);
+    const event = new WaveEvent(this.sourceName, type, e);
 
     const pos = this._getRelativePosition(e);
     event.x = pos.x;

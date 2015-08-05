@@ -10,10 +10,12 @@ const singleton = null;
 export default class Keyboard extends EventSource {
   constructor(el) {
     super(el);
+
+    this.sourceName = 'keyboard';
   }
 
   _createEvent(type, e) {
-    const event = new WaveEvent(type, e);
+    const event = new WaveEvent(this.sourceName, type, e);
 
     event.shiftKey = e.shiftKey;
     event.ctrlKey = e.ctrlKey;
