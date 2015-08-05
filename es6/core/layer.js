@@ -1,5 +1,4 @@
 import scales from '../utils/scales';
-import d3Selection from 'd3-selection';
 import events from 'events';
 
 import ns from './namespace';
@@ -10,20 +9,14 @@ import TimeContextBehavior from '../behaviors/time-context-behavior';
 let timeContextBehavior = null;
 let timeContextBehaviorCtor = TimeContextBehavior;
 
-// private item -> id map to force d3 tp keep in sync with the DOM
-let   _counter = 0;
-const _datumIdMap = new Map();
-
 export default class Layer extends events.EventEmitter {
   /**
    * Structure of the DOM view of a Layer
    *
    * <g class="layer"> Flip y axis, timeContext.start and top position from params are applied on this $elmt
    *   <svg class="bounding-box"> timeContext.duration is applied on this $elmt
-   *    <g class="layer-interactions"> Contains the timeContext edition elements (a segment)
-   *    </g>
-   *    <g class="offset items"> The shapes are inserted here, and we apply timeContext.offset on this $elmt
-   *    </g>
+   *    <g class="layer-interactions"> Contains the timeContext edition elements (a segment) </g>
+   *    <g class="offset items"> The shapes are inserted here, and we apply timeContext.offset on this $elmt </g>
    *   </svg>
    * </g>
    */
@@ -38,7 +31,6 @@ export default class Layer extends events.EventEmitter {
       id: '',
       yDomain: [0, 1],
       opacity: 1,
-      debugContext: false, // pass the context in debug mode
       contextHandlerWidth: 2,
       className: null
     };
@@ -52,13 +44,11 @@ export default class Layer extends events.EventEmitter {
     this.$offset = null;
     this.$interactions = null;
 
-    this.d3items = null; // d3 collection of the layer items
-
     this._shapeConfiguration = null; // { ctor, accessors, options }
     this._commonShapeConfiguration = null; // { ctor, accessors, options }
-
+    // map to associate datums, $items, and shapes
     this._$itemShapeMap = new Map(); // item group <DOMElement> => shape
-    this._$itemD3SelectionMap = new Map(); // item group <DOMElement> => shape
+    this._$itemDataMap = new Map();
     this._$itemCommonShapeMap = new Map(); // one entry max in this map
 
     this._isContextEditable = false;
@@ -118,19 +108,6 @@ export default class Layer extends events.EventEmitter {
     this.timeContext.stretchRatio = value;
   }
 
-  // destroy() {
-  //   this.timeContext = null;
-  //   this.d3items = null;
-  //   this.data = null;
-  //   this.params = null;
-  //   this._behavior = null;
-  //
-  //   // @TODO
-  //      - clean Maps
-  //      - clean listeners
-  //      - clean behavior (behavior._layer)
-  // }
-
   set yDomain(domain) {
     this.params.yDomain = domain;
     this._valueToPixel.domain(domain);
@@ -148,9 +125,17 @@ export default class Layer extends events.EventEmitter {
     return this.params.opacity;
   }
 
-  /**
-   * TimeContext accessors
-   */
+  // destroy() {
+  //   this.timeContext = null;
+  //   this.data = null;
+  //   this.params = null;
+  //   this._behavior = null;
+  //
+  //   // @TODO
+  //      - clean Maps
+  //      - clean listeners
+  //      - clean behavior (behavior._layer)
+  // }
 
   /**
    * @mandatory define the context in which the layer is drawn
@@ -229,14 +214,6 @@ export default class Layer extends events.EventEmitter {
     this.$boundingBox.appendChild(this.$offset);
     this.$offset.appendChild(this.$background);
     this.$boundingBox.appendChild(this.$interactions);
-
-    // draw a Segment in context background to debug it's size
-    if (this.params.debug) {
-      this.$debugRect = document.createElementNS(ns, 'Segment');
-      this.$boundingBox.appendChild(this.$debugRect);
-      this.$debugRect.style.fill = '#ababab';
-      this.$debugRect.style.fillOpacity = 0.1;
-    }
   }
 
   // --------------------------------------
@@ -282,10 +259,8 @@ export default class Layer extends events.EventEmitter {
     this._renderingContext.valueToPixel = this._valueToPixel;
     this._renderingContext.height = this.params.height;
     this._renderingContext.width  = this.timeContext.timeToPixel(this.timeContext.duration);
-
     // for foreign object issue in chrome
     this._renderingContext.offsetX = this.timeContext.timeToPixel(this.timeContext.offset);
-
     // expose some timeline attributes - allow to improve perf in some cases - cf. Waveform
     this._renderingContext.trackOffsetX = this.timeContext.parent.timeToPixel(this.timeContext.parent.offset);
     this._renderingContext.visibleWidth = this.timeContext.parent.visibleWidth;
@@ -301,49 +276,49 @@ export default class Layer extends events.EventEmitter {
 
   select(...$items) {
     if (!this._behavior) { return; }
-    if (!$items.length) { $items = this.d3items.nodes(); }
+    if (!$items.length) { $items = this._$itemDataMap.keys(); }
     if (Array.isArray($items[0])) { $items = $items[0]; }
 
-    $items.forEach(($el) => {
-      const item = this._$itemD3SelectionMap.get($el);
-      this._behavior.select($el, item.datum());
-      this._toFront($el);
-    });
+    for (let $item of $items) {
+      const datum = this._$itemDataMap.get($item);
+      this._behavior.select($item, datum);
+      this._toFront($item);
+    }
   }
 
   unselect(...$items) {
     if (!this._behavior) { return; }
-    if (!$items.length) { $items = this.d3items.nodes(); }
+    if (!$items.length) { $items = this._$itemDataMap.keys(); }
     if (Array.isArray($items[0])) { $items = $items[0]; }
 
-    $items.forEach(($el) => {
-      const item = this._$itemD3SelectionMap.get($el);
-      this._behavior.unselect($el, item.datum());
-    });
+    for (let $item of $items) {
+      const datum = this._$itemDataMap.get($item);
+      this._behavior.unselect($item, datum);
+    }
   }
 
   toggleSelection(...$items) {
     if (!this._behavior) { return; }
-    if (!$items.length) { $items = this.d3items.nodes(); }
+    if (!$items.length) { $items = this._$itemDataMap.keys(); }
     if (Array.isArray($items[0])) { $items = $items[0]; }
 
-    $items.forEach(($el) => {
-      const item = this._$itemD3SelectionMap.get($el);
-      this._behavior.toggleSelection($el, item.datum());
-    });
+    for (let $item of $items) {
+      const datum = this._$itemDataMap.get($item);
+      this._behavior.toggleSelection($item, datum);
+    }
   }
 
   edit($items, dx, dy, target) {
     if (!this._behavior) { return; }
     $items = !Array.isArray($items) ? [$items] : $items;
 
-    $items.forEach(($el) => {
-      const item  = this._$itemD3SelectionMap.get($el);
-      const shape = this._$itemShapeMap.get($el);
-      const datum = item.datum();
+    for (let $item of $items) {
+      const shape = this._$itemShapeMap.get($item);
+      const datum = this._$itemDataMap.get($item);
+
       this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);
       this.emit('edit', shape, datum);
-    });
+    }
   }
 
   /**
@@ -372,14 +347,14 @@ export default class Layer extends events.EventEmitter {
    *  Moves an `$el`'s group to the end of the layer (svg z-index...)
    *  @param `$el` {DOMElement} the DOMElement to be moved
    */
-  _toFront($el) {
-    this.$offset.appendChild($el);
+  _toFront($item) {
+    this.$offset.appendChild($item);
   }
 
   /**
-   *  Returns the d3Selection item to which the given DOMElement b$elongs
-   *  @param `$el` {DOMElement} the element to be tested
-   *  @return {DOMElement|null} item group containing the `$el` if b$elongs to this layer, null otherwise
+   *  Returns the $item to which the given DOMElement belongs
+   *  @param {DOMElement} $el the element to be tested
+   *  @return {DOMElement|null} item group containing the `$el` if belongs to this layer, null otherwise
    */
   getItemFromDOMElement($el) {
     let $item;
@@ -398,29 +373,26 @@ export default class Layer extends events.EventEmitter {
 
   /**
    *  Returns the datum associated to a specific item DOMElement
-   *  use d3 internally to retrieve the datum
-   *  @param $item {DOMElement}
+   *  @param {DOMElement} $item
    *  @return {Object|Array|null} depending on the user data structure
    */
   getDatumFromItem($item) {
-    const d3item = this._$itemD3SelectionMap.get($item);
-    return d3item ? d3item.datum() : null;
+    return this._$itemDataMap.get($item);
   }
 
   /**
-   *  Defines if the given d3 selection is an item of the layer
-   *  @param item {DOMElement}
+   *  Defines if the given DOMElement is an item of the layer
+   *  @param {DOMElement} $item
    *  @return {bool}
    */
   hasItem($item) {
-    const nodes = this.d3items.nodes();
-    return nodes.indexOf($item) !== -1;
+    return this._$itemDataMap.has($item);
   }
 
   /**
-   *  Defines if a given element b$elongs to the layer
-   *  is more general than `hasItem`, can be used to check interaction elements too
-   *  @param $el {DOMElement}
+   *  Defines if a given element belongs to the layer
+   *  is more general than `hasItem`, can be used to check interactions elements too
+   *  @param {DOMElement} $el
    *  @return {bool}
    */
   hasElement($el) {
@@ -436,8 +408,9 @@ export default class Layer extends events.EventEmitter {
   }
 
   /**
-   *  @param area {Object} area in which to find the elements
-   *  @return {Array} list of the DOM elements in the given area
+   *  retrieve all the $items in a given area
+   *  @param {Object} area - The area in which to find the elements
+   *  @return {Array} - list of the DOM elements in the given area
    */
   getItemsInArea(area) {
     const start    = this.timeContext.timeToPixel(this.timeContext.start);
@@ -456,54 +429,23 @@ export default class Layer extends events.EventEmitter {
     y1 += this.params.top;
     y2 += this.params.top;
 
-    const itemShapeMap = this._$itemShapeMap;
-    const renderingContext = this._renderingContext;
+    const $filteredItems = [];
 
-    const items = this.d3items.filter(function(datum, index) {
-      const group = this;
-      const shape = itemShapeMap.get(group);
-      return shape.inArea(renderingContext, datum, x1, y1, x2, y2);
-    });
+    for (let [$item, datum] of this._$itemDataMap.entries()) {
+      const shape = this._$itemShapeMap.get($item);
+      const inArea = shape.inArea(this._renderingContext, datum, x1, y1, x2, y2);
 
-    return items.nodes().slice(0);
+      if (inArea) { $filteredItems.push($item); }
+    }
+
+    return $filteredItems;
   }
 
   // --------------------------------------
   // Rendering / Display methods
   // --------------------------------------
 
-  // /**
-  //  *  Returns the previsouly created layer's container
-  //  *  @return {DOMElement}
-  //  */
-  // renderContainer() {
-  //   return this.$el;
-  // }
-
-  // /**
-  //  *  Creates the DOM according to given data and shapes
-  //  */
-  // render(){
-  //   this.drawShapes();
-  // }
-
   render() {
-    // force d3 to keep data in sync with the DOM with a unique id
-    this.data.forEach(function(datum) {
-      if (_datumIdMap.has(datum)) { return; }
-      _datumIdMap.set(datum, _counter++);
-    });
-
-    // select items
-    this.d3items = d3Selection.select(this.$offset)
-      .selectAll('.item')
-      .filter(function() {
-        return !this.classList.contains('common');
-      })
-      .data(this.data, function(datum) {
-        return _datumIdMap.get(datum);
-      });
-
     // render `commonShape` only once
     if (
       this._commonShapeConfiguration !== null &&
@@ -521,38 +463,40 @@ export default class Layer extends events.EventEmitter {
       this.$offset.appendChild($group);
     }
 
-    // ... enter
-    this.d3items.enter()
-      .append((datum, index) => {
-        // @NOTE: d3 binds `this` to the container group
-        const { ctor, accessors, options } = this._shapeConfiguration;
-        const shape = new ctor(options);
-        shape.install(accessors);
+    // append elements all at once
+    const fragment = document.createDocumentFragment();
+    const values = this._$itemDataMap.values(); // iterator
 
-        const $el = shape.render(this._renderingContext);
-        $el.classList.add('item', shape.getClassName());
+    // enter
+    this.data.forEach((datum) => {
+      for (let value of values) { if (value === datum) { return; } }
 
-        this._$itemShapeMap.set($el, shape);
-        this._$itemD3SelectionMap.set($el, d3Selection.select($el));
+      const { ctor, accessors, options } = this._shapeConfiguration;
+      const shape = new ctor(options);
+      shape.install(accessors);
 
-        return $el;
-      });
+      const $el = shape.render(this._renderingContext);
+      $el.classList.add('item', shape.getClassName());
 
-    // ... exit
-    const _$itemShapeMap = this._$itemShapeMap;
-    const _$itemD3SelectionMap = this._$itemD3SelectionMap;
+      this._$itemShapeMap.set($el, shape);
+      this._$itemDataMap.set($el, datum);
 
-    this.d3items.exit()
-      .each(function(datum, index) {
-        const $el = this;
-        const shape = _$itemShapeMap.get($el);
-        // clean all shape/item references
-        shape.destroy();
-        _datumIdMap.delete(datum);
-        _$itemShapeMap.delete($el);
-        _$itemD3SelectionMap.delete($el);
-      })
-      .remove();
+      fragment.appendChild($el);
+    });
+
+    this.$offset.appendChild(fragment);
+
+    // remove
+    for (let [$item, datum] of this._$itemDataMap.entries()) {
+      if (this.data.indexOf(datum) !== -1) { continue; }
+
+      this.$offset.removeChild($item);
+      const shape = this._$itemShapeMap.get($item);
+      shape.destroy();
+
+      this._$itemDataMap.delete($item);
+      this._$itemShapeMap.delete($item);
+    }
   }
 
   /**
@@ -564,15 +508,14 @@ export default class Layer extends events.EventEmitter {
   }
 
   /**
-   *  updates the context of the layer
+   *  updates the layer's container
    */
   updateContainer() {
     this._updateRenderingContext();
 
     const timeContext = this.timeContext;
-
     const width  = timeContext.timeToPixel(timeContext.duration);
-    // offset is relative to tim$eline's timeContext
+    // x is relative to timeline's timeContext
     const x      = timeContext.parent.timeToPixel(timeContext.start);
     const offset = timeContext.timeToPixel(timeContext.offset);
     const top    = this.params.top;
@@ -587,40 +530,24 @@ export default class Layer extends events.EventEmitter {
     this.$boundingBox.style.opacity = this.params.opacity;
 
     this.$offset.setAttributeNS(null, 'transform', `translate(${offset}, 0)`);
-
     // maintain context shape
-    this.contextShape.update(
-      this._renderingContext,
-      this.timeContext,
-      0
-    );
-
-    // debug context
-    if (this.params.debug) {
-      this.$debugRect.setAttributeNS(null, 'width', width);
-      this.$debugRect.setAttributeNS(null, 'height', height);
-    }
+    this.contextShape.update(this._renderingContext, this.timeContext, 0);
   }
 
   /**
-   *  updates the Shapes which b$elongs to the layer
-   *  @param item {DOMElement}
+   *  updates the Shapes which belongs to the layer
+   *  @param {DOMElement} $el - Not implemented
    */
-  updateShapes($item = null) {
+  updateShapes($el = null) {
     this._updateRenderingContext();
-
-    const that = this;
-    const renderingContext = this._renderingContext;
-    const items = $item !== null ? this._$itemD3SelectionMap.get($item) : this.d3items;
     // update common shapes
     this._$itemCommonShapeMap.forEach((shape, $item) => {
-      shape.update(renderingContext, this.data);
+      shape.update(this._renderingContext, this.data);
     });
 
-    // d3 update - entity or collection shapes
-    items.each(function(datum, index) {
-      const shape = that._$itemShapeMap.get(this);
-      shape.update(renderingContext, datum);
-    });
+    for (let [$item, datum] of this._$itemDataMap.entries()) {
+      const shape = this._$itemShapeMap.get($item);
+      shape.update(this._renderingContext, datum);
+    }
   }
 }
