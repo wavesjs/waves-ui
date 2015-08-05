@@ -9,9 +9,13 @@ const singleton = null;
  */
 export default class Keyboard extends EventSource {
   constructor(el) {
-    super(el);
+    // kind of singleton
+    if (Keyboard._instance) { return Keyboard._instance; }
 
+    super(el);
     this.sourceName = 'keyboard';
+
+    Keyboard._instance = this;
   }
 
   _createEvent(type, e) {
