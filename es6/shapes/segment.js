@@ -51,9 +51,10 @@ export default class Segment extends BaseShape {
     return this.$el;
   }
 
-  update(renderingContext, datum, index) {
+  update(renderingContext, datum) {
     const x = renderingContext.timeToPixel(this.x(datum));
     const y = renderingContext.valueToPixel(this.y(datum));
+
     const width = renderingContext.timeToPixel(this.width(datum));
     const height = renderingContext.valueToPixel(this.height(datum));
     const color = this.color(datum);

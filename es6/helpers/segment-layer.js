@@ -7,7 +7,9 @@ export default class SegmentLayer extends Layer {
   constructor(data, options = {}, accessors = {}) {
     super('collection', data, options);
 
-    options = Object.assign({ displayHandlers: true }, options);
+    options = Object.assign({
+      displayHandlers: true
+    }, options);
 
     this.configureShape(Segment, accessors, {
       displayHandlers: options.displayHandlers

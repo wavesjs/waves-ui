@@ -59,7 +59,7 @@ export default class Waveform extends BaseShape {
     return this.$el;
   }
 
-  update(renderingContext, datum, index) {
+  update(renderingContext, datum) {
     // define nbr of samples per pixels
     const sliceMethod = datum instanceof Float32Array ? 'subarray' : 'slice';
     const nbrSamples = datum.length;

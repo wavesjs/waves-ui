@@ -5,7 +5,8 @@ import Waveform from '../shapes/waveform';
 const defaults = {
   yDomain: [-1, 1],
   channel: 0,
-  color: 'steelblue'
+  color: 'steelblue',
+  renderingStrategy: 'svg'
 };
 
 export default class WaveformLayer extends Layer {
@@ -21,7 +22,8 @@ export default class WaveformLayer extends Layer {
       }
     }, {
       sampleRate: buffer.sampleRate,
-      color: options.color
+      color: options.color,
+      renderingStrategy: options.renderingStrategy
     });
   }
 }

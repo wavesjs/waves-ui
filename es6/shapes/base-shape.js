@@ -105,12 +105,9 @@ export default class BaseShape {
    * @param
    *    simpleShape : datum {Object} the datum related to this item's group
    *    commonShape : datum {Array} the associated to the Layer
-   * @param
-   *    simpleShape : index {Number} the current index of the datum
-   *    commonShape : undefined
    * @return  void
    */
-  update(renderingContext, datum, index) {}
+  update(renderingContext, datum) {}
 
   /**
    *  define if the shape is considered to be the given area

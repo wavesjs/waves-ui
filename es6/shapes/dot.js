@@ -17,7 +17,7 @@ export default class Dot extends BaseShape {
     return this.$el;
   }
 
-  update(renderingContext, datum, index) {
+  update(renderingContext, datum) {
     const cx = renderingContext.timeToPixel(this.cx(datum));
     const cy = renderingContext.valueToPixel(this.cy(datum));
     const r  = this.r(datum);

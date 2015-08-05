@@ -30,8 +30,8 @@ export default class AnnotatedSegment extends Segment {
     return this.$el;
   }
 
-  update(renderingContext, datum, index) {
-    super.update(renderingContext, datum, index);
+  update(renderingContext, datum) {
+    super.update(renderingContext, datum);
 
     this.$label.innerHTML = this.text(datum);
   }

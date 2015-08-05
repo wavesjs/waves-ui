@@ -23,21 +23,20 @@ export default class Marker extends BaseShape {
     const height = renderingContext.height;
 
     this.$el = document.createElementNS(this.ns, 'g');
-    this.$line = document.createElementNS(this.ns, 'rect');
+    this.$line = document.createElementNS(this.ns, 'line');
 
     // draw line
     this.$line.setAttributeNS(null, 'x', 0);
-    this.$line.setAttributeNS(null, 'y', 0);
-    this.$line.setAttributeNS(null, 'width', 1);
-    this.$line.setAttributeNS(null, 'height', height);
-    this.$line.setAttributeNS(null, 'shape-rendering', 'optimizeSpeed');
+    this.$line.setAttributeNS(null, 'y1', 0);
+    this.$line.setAttributeNS(null, 'y2', height);
+    this.$line.setAttributeNS(null, 'shape-rendering', 'crispEdges');
 
     this.$el.appendChild(this.$line);
 
     if (this.params.displayHandlers) {
       this.$handler = document.createElementNS(this.ns, 'rect');
 
-      this.$handler.setAttributeNS(null, 'x', -((this.params.handlerWidth - 1) / 2));
+      this.$handler.setAttributeNS(null, 'x', -((this.params.handlerWidth) / 2 ));
       this.$handler.setAttributeNS(null, 'y', renderingContext.height - this.params.handlerHeight);
       this.$handler.setAttributeNS(null, 'width', this.params.handlerWidth);
       this.$handler.setAttributeNS(null, 'height', this.params.handlerHeight);
@@ -51,12 +50,12 @@ export default class Marker extends BaseShape {
     return this.$el;
   }
 
-  update(renderingContext, datum, index) {
+  update(renderingContext, datum) {
     const x = renderingContext.timeToPixel(this.x(datum)) - 0.5;
     const color = this.color(datum);
 
     this.$el.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
-    this.$line.style.fill = color;
+    this.$line.style.stroke = color;
 
     if (this.params.displayHandlers) {
       this.$handler.style.fill = color;

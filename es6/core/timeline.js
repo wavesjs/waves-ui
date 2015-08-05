@@ -30,6 +30,7 @@ export default class Timeline extends events.EventEmitter {
 
     // default interactions
     this._surfaceCtor = Surface;
+
     if (registerKeyboard) {
       this.createInteraction(Keyboard, document.body);
     }
@@ -142,7 +143,7 @@ export default class Timeline extends events.EventEmitter {
   set state(state) {
     if (this._state) { this._state.exit(); }
     this._state = state;
-    this._state.enter();
+    if (this._state) { this._state.enter(); }
   }
 
   get state() {

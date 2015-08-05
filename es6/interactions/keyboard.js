@@ -3,7 +3,7 @@ import WaveEvent from './wave-event';
 
 
 const body = window.document.body;
-
+const singleton = null;
 /**
  * http://javascript.info/tutorial/keyboard-events
  */

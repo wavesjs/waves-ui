@@ -620,7 +620,7 @@ export default class Layer extends events.EventEmitter {
     // d3 update - entity or collection shapes
     items.each(function(datum, index) {
       const shape = that._$itemShapeMap.get(this);
-      shape.update(renderingContext, datum, index);
+      shape.update(renderingContext, datum);
     });
   }
 }
