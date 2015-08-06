@@ -2,11 +2,6 @@ import EventSource from './event-source';
 import WaveEvent from './wave-event';
 
 
-const body = window.document.body;
-const singleton = null;
-/**
- * http://javascript.info/tutorial/keyboard-events
- */
 export default class Keyboard extends EventSource {
   constructor(el) {
     // kind of singleton
@@ -41,7 +36,7 @@ export default class Keyboard extends EventSource {
       this.emit('event', event);
     };
 
-    this.el.onkeydown = onKeyDown;
-    this.el.onkeyup = onKeyUp;
+    this.el.addEventListener('keydown', onKeyDown, false);
+    this.el.addEventListener('keyup', onKeyUp, false);
   }
 }

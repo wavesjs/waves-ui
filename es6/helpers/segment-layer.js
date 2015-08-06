@@ -8,11 +8,13 @@ export default class SegmentLayer extends Layer {
     super('collection', data, options);
 
     options = Object.assign({
-      displayHandlers: true
+      displayHandlers: true,
+      opacity: 0.6
     }, options);
 
     this.configureShape(Segment, accessors, {
-      displayHandlers: options.displayHandlers
+      displayHandlers: options.displayHandlers,
+      opacity: options.opacity,
     });
 
     this.setBehavior(new SegmentBehavior());

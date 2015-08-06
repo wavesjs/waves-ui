@@ -32,7 +32,7 @@ export default class Timeline extends events.EventEmitter {
     this._surfaceCtor = Surface;
 
     if (registerKeyboard) {
-      this.createInteraction(Keyboard, document.body);
+      this.createInteraction(Keyboard, document);
     }
 
     // stores

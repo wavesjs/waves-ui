@@ -380,6 +380,12 @@ export default class Layer extends events.EventEmitter {
     return this._$itemDataMap.get($item);
   }
 
+  getDatumFromDOMElement($el) {
+    var $item = this.getItemFromDOMElement($el);
+    if ($item === null) { return null; }
+    return this.getDatumFromItem($item);
+  }
+
   /**
    *  Defines if the given DOMElement is an item of the layer
    *  @param {DOMElement} $item
