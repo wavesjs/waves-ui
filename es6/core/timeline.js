@@ -14,10 +14,20 @@ import TrackCollection from './track-collection';
  * - get or set the view window overs its `tracks` through `offset`, `zoom`,  * `pixelsPerSecond`, `visibleWidth`,
  * - is the central hub for all user interaction events (keyboard, mouse),
  * - holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to user interactions.
+ *
+ * @example
+ * ```
+ * const with = 500; // default with for all created `Track`
+ * const duration = 10; // the timeline should dislay 10 second of data
+ * const pixelsPerSeconds = width / duration;
+ * const timeline = new ui.core.Timeline(pixelsPerSecond, width);
+ * ```
  */
 export default class Timeline extends events.EventEmitter {
   /**
    * Creates a new `Timeline` instance
+   * @param {Number} [pixelsPerSecond=100] - the number of pixels per seconds the timeline should display
+   * @param {Number} [visibleWidth=1000] - the default visible width for all the tracks
    */
   constructor(pixelsPerSecond = 100, visibleWidth = 1000, {
     registerKeyboard = true
@@ -43,7 +53,7 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  TimeContext accessors
+   * TimeContext accessors
    */
   get offset() {
     return this.timeContext.offset;
@@ -285,7 +295,7 @@ export default class Timeline extends events.EventEmitter {
   /**
    *  Returns the track containing a given DOM Element, if no match found return null
    *  @param {DOMElement} $el
-   *  @return {Track|null}
+   *  @return {Track}
    */
   getTrackFromDOMElement($el) {
     let $svg = null;

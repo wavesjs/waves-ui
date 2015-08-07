@@ -12,6 +12,7 @@ import ns from './namespace';
 *
 * A timeline with 3 tracks:
 *
+* ```
 * +-----------------+-------------------------------+-- - -  -  -   -
 * |track 1          |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|
 * +-----------------+-------------------------------+-- - -  -  -   -
@@ -28,6 +29,7 @@ import ns from './namespace';
 *                   with a default pixelsPerSecond of 100px/s.
 *                   and a default `stretchRatio = 1`
 *                   track1 shows 10 seconds of the timeline
+* ``
 *
 * Layers inside a track
 *
@@ -40,6 +42,8 @@ import ns from './namespace';
 * - timeline.renderingContext.stretchRatio modify timeline's zoom
 * Each time you set new value of offset or stretchRatio, you need to do `timeline.update()` to update the values.
 * Track SVG structure
+*
+* ```
 * <svg class="track" xmlns:xhtml="http://www.w3.org/1999/xhtml" height="100" shape-rendering="optimizeSpeed">
 *  <defs></defs> Unused for the moment, could be used to define custom shapes for use with layers
 *  <rect style="fill-opacity:0" width="100%" height="100%"></rect>
@@ -48,6 +52,7 @@ import ns from './namespace';
 *  </g>
 *  <g class="interactions"></g> Placeholder to visualize interactions (eg. brush)
 * </svg>
+* ```
 */
 
 export default class Track {
