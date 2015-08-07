@@ -22,7 +22,7 @@ test('MarkerBehavior', (assert) => {
   timeline.addLayer(layer, track);
   timeline.tracks.render();
   timeline.tracks.update();
-  const item = layer.d3items.nodes()[0];
+  const item = layer.items[0];
   layer.edit(item, 10, 0, undefined);
 
   assert.equal(layer.data[0].x, 3.1);

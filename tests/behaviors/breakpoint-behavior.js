@@ -36,7 +36,7 @@ test("Edit Breakpoint Behavior", (assert) => {
   timeline.addLayer(layer, track);
   timeline.tracks.render();
   timeline.tracks.update();
-  const item = layer.d3items.nodes()[0];
+  const item = layer.items[0];
   layer.edit(item, 10, -10, undefined);
 
   // y -10 => +0.1 due to horizontal flip

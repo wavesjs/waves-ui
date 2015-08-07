@@ -69,6 +69,19 @@ export default class Layer extends events.EventEmitter {
     }
   }
 
+  destroy() {
+    this.timeContext = null;
+    this.data = null;
+    this.params = null;
+    this._behavior = null;
+
+    this._$itemShapeMap.clear();
+    this._$itemDataMap.clear();
+    this._$itemCommonShapeMap.clear();
+
+    this.removeAllListeners();
+  }
+
   /**
    *  allows to override default the TimeContextBehavior
    */
@@ -125,17 +138,18 @@ export default class Layer extends events.EventEmitter {
     return this.params.opacity;
   }
 
-  // destroy() {
-  //   this.timeContext = null;
-  //   this.data = null;
-  //   this.params = null;
-  //   this._behavior = null;
-  //
-  //   // @TODO
-  //      - clean Maps
-  //      - clean listeners
-  //      - clean behavior (behavior._layer)
-  // }
+  /**
+   *  @return {Array} - an array containins all the DOMElement items
+   */
+  get items() {
+    var items = [];
+
+    for (let item of this._$itemDataMap.keys()) {
+      items.push(item);
+    }
+
+    return items;
+  }
 
   /**
    * @mandatory define the context in which the layer is drawn

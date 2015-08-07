@@ -35,8 +35,8 @@ test('Dot', (assert) => {
   timeline.addLayer(layer, track);
   timeline.tracks.render();
   timeline.tracks.update();
-  const item0 = layer.d3items.nodes()[0].getBoundingClientRect()
-  const item1 = layer.d3items.nodes()[6].getBoundingClientRect()
+  const item0 = layer.items[0].getBoundingClientRect()
+  const item1 = layer.items[6].getBoundingClientRect()
   const bodyClientRect = document.body.getBoundingClientRect();
 
   assert.equal(item0.left+item0.width/2 - bodyClientRect.left, 0, "Dot is well positioned 1");

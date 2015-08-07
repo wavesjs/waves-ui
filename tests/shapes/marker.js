@@ -22,11 +22,11 @@ test('Marker', (assert) => {
   timeline.addLayer(layer, track);
   timeline.tracks.render();
   timeline.tracks.update();
-  const item0 = layer.d3items.nodes()[0].getBoundingClientRect()
-  const item1 = layer.d3items.nodes()[1].getBoundingClientRect()
+  const item0 = layer.items[0].getBoundingClientRect()
+  const item1 = layer.items[1].getBoundingClientRect()
   const bodyClientRect = document.body.getBoundingClientRect();
 
-  assert.equal(item0.left+item0.width/2 - bodyClientRect.left, 300);
-  assert.equal(item1.left+item0.width/2 - bodyClientRect.left, 600);
+  assert.equal(item0.left+item0.width/2 - bodyClientRect.left, 299.5);
+  assert.equal(item1.left+item0.width/2 - bodyClientRect.left, 599.5);
   assert.end();
 });

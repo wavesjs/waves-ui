@@ -25,8 +25,8 @@ test('Segment instanciation', (assert) => {
   timeline.addLayer(layer, track);
   timeline.tracks.render();
   timeline.tracks.update();
-  const item0 = layer.d3items.nodes()[0].getBoundingClientRect()
-  const item1 = layer.d3items.nodes()[1].getBoundingClientRect()
+  const item0 = layer.items[0].getBoundingClientRect()
+  const item1 = layer.items[1].getBoundingClientRect()
   const bodyClientRect = document.body.getBoundingClientRect();
 
   assert.equal(item0.left - bodyClientRect.left, 0);
@@ -58,8 +58,8 @@ test('Segment navigation zoom and move', (assert) => {
   timeline.timeContext.offset = 15; //
   timeline.tracks.render();
   timeline.tracks.update();
-  const item0 = layer.d3items.nodes()[0];
-  const item1 = layer.d3items.nodes()[1];
+  const item0 = layer.items[0];
+  const item1 = layer.items[1];
   const item0Width = item0.getBBox().width;
   const item1Width = item1.getBBox().width;
   let ctm = item1.getCTM()

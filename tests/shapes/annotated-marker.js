@@ -22,8 +22,8 @@ test('Annotated Marker', (assert) => {
   timeline.addLayer(layer, track);
   timeline.tracks.render();
   timeline.tracks.update();
-  const item0 = layer.d3items.nodes()[0]
-  const item1 = layer.d3items.nodes()[1]
+  const item0 = layer.items[0]
+  const item1 = layer.items[1]
   assert.equal(item0.childNodes[2].textContent, "foo", "should contain the right text");
   assert.equal(item1.childNodes[2].textContent, "bar", "should contain the right text");
   assert.end()

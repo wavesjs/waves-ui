@@ -36,10 +36,10 @@ test('TraceDots', (assert) => {
   timeline.addLayer(layer, track);
   timeline.tracks.render();
   timeline.tracks.update();
-  const item0 = layer.d3items.nodes()[3].getBoundingClientRect()
-  const item1 = layer.d3items.nodes()[4].getBoundingClientRect()
-  const item2 = layer.d3items.nodes()[6].getBoundingClientRect()
-  const item3 = layer.d3items.nodes()[7].getBoundingClientRect()
+  const item0 = layer.items[3].getBoundingClientRect()
+  const item1 = layer.items[4].getBoundingClientRect()
+  const item2 = layer.items[6].getBoundingClientRect()
+  const item3 = layer.items[7].getBoundingClientRect()
 
   // Due to judicious data selection (as usual ...)
   // We can compare top of item0 and item1 and bottom of item2 and item3
