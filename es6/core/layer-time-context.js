@@ -2,8 +2,6 @@ import scales from '../utils/scales';
 
 
 /**
- *  @class LayerTimeContext
- *
  *  A `LayerTimeContext` instance represent a time segment into a `TimelineTimeContext`. It must be attached to a `TimelineTimeContext` (the one of the timeline it belongs to). It relies on its parent's `timeToPixel` (time to pixel transfert function) to create the time to pixel representation of the Layer (the view) it is attached to.
  *
  *  The `layerTimeContext` has four important attributes
@@ -12,7 +10,8 @@ import scales from '../utils/scales';
  *  - `timeContext.duration` is the duration of the view on the data
  *  - `timeContext.stretchRatio` is the stretch applyed to the temporal data contained in the view (this value can be seen as a local zoom on the data, or as a stretch on the time components of the data). When applyed, the stretch ratio maintain the start position of the view in the timeline.
  *
- *
+ * @example
+ * ```
  * + timeline -----------------------------------------------------------------
  * 0         5         10          15          20        25          30 seconds
  * +---+*****************+------------------------------------------+*******+--
@@ -22,8 +21,8 @@ import scales from '../utils/scales';
  *     <---- offset ----><--------------- duration ----------------->
  * <-------- start ----->
  *
- *      The parts of the sound file represented with '*' are hidden from the view
- *
+ * The parts of the sound file represented with '*' are hidden from the view
+ * ```
  */
 export default class LayerTimeContext {
   constructor(parent) {

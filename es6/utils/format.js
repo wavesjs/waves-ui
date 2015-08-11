@@ -1,3 +1,4 @@
+
 export default {
   padLeft(input, sign, length) {
     input += '';

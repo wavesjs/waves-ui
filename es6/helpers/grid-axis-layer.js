@@ -13,7 +13,7 @@ export default class GridAxisLayer extends AxisLayer {
 
     super(gridAxisGenerator(options.bpm, options.signature), options);
 
-    this.configureShape(wavesUI.shapes.Ticks, {}, {
+    this.configureShape(Ticks, {}, {
       color: options.color
     });
   }

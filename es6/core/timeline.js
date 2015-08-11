@@ -10,13 +10,13 @@ import TrackCollection from './track-collection';
 
 /**
  * The `timeline` is the main entry point of a temporal visualization, it:
+ *
  * - contains factories to manage its `tracks` and `layers`,
- * - get or set the view window overs its `tracks` through `offset`, `zoom`,  * `pixelsPerSecond`, `visibleWidth`,
+ * - get or set the view window overs its `tracks` through `offset`, `zoom`, `pixelsPerSecond`, `visibleWidth`,
  * - is the central hub for all user interaction events (keyboard, mouse),
  * - holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to user interactions.
  *
- * @example
- * ```
+ * ```js
  * const with = 500; // default with for all created `Track`
  * const duration = 10; // the timeline should dislay 10 second of data
  * const pixelsPerSeconds = width / duration;
@@ -49,11 +49,16 @@ export default class Timeline extends events.EventEmitter {
     this._trackById = {};
     this._groupedLayers = {};
 
+    /**
+     * @this Timeline
+     * @attribute {TimelineTimeContext} - master time context of the graph
+     */
     this.timeContext = new TimelineTimeContext(pixelsPerSecond, visibleWidth);
   }
 
   /**
-   * TimeContext accessors
+   * updates `TimeContext`'s offset
+   * @attribute {Number} [offset=0]
    */
   get offset() {
     return this.timeContext.offset;

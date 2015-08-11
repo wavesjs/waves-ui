@@ -8,7 +8,7 @@ export default class TimeAxisLayer extends AxisLayer {
     options = Object.assign({ color: 'steelblue' }, options);
     super(timeAxisGenerator(), options);
 
-    this.configureShape(wavesUI.shapes.Ticks, {}, {
+    this.configureShape(Ticks, {}, {
       color: options.color
     });
   }

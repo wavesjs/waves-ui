@@ -66,6 +66,9 @@ export default class Waveform extends BaseShape {
     const duration = nbrSamples / this.params.sampleRate;
     const width = renderingContext.timeToPixel(duration);
     const samplesPerPixel = nbrSamples / width;
+
+    if (!samplesPerPixel || datum.length < samplesPerPixel) { return; }
+
     let minMax = [];
 
     // use timeline's TimeContext attributes to compute/draw visible area only
@@ -82,7 +85,7 @@ export default class Waveform extends BaseShape {
       let min = Infinity;
       let max = -Infinity;
 
-      for (let j = 0; j < extract.length; j++) {
+      for (let j = 0, length = extract.length; j < length; j++) {
         let sample = extract[j];
         if (sample < min) { min = sample; }
         if (sample > max) { max = sample; }
@@ -99,7 +102,9 @@ export default class Waveform extends BaseShape {
     const MIN = 0;
     const MAX = 1;
 
-    // rednering strategies
+    if (!minMax.length) { return; }
+
+    // rendering strategies
     if (this.params.renderingStrategy === 'svg') {
 
       let instructions = minMax.map((datum, index) => {
