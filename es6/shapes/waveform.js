@@ -82,35 +82,37 @@ export default class Waveform extends BaseShape {
 
       const extract = datum[sliceMethod](startSample, startSample + samplesPerPixel);
 
+      // could go to asm ?
       let min = Infinity;
       let max = -Infinity;
 
       for (let j = 0, length = extract.length; j < length; j++) {
-        let sample = extract[j];
+        let sample = this.y(extract[j]);
         if (sample < min) { min = sample; }
         if (sample > max) { max = sample; }
       }
       // disallow Infinity
-      min = (min === Infinity || min === -Infinity) ? 0 : min;
-      max = (max === Infinity || max === -Infinity) ? 0 : max;
+      min = !isFinite(min) ? 0 : min;
+      max = !isFinite(max) ? 0 : max;
 
       if (min === 0 && max === 0) { continue; }
 
-      minMax.push({ time: startTime, values: [min, max] });
+      minMax.push([px, min, max]);
     }
 
-    const MIN = 0;
-    const MAX = 1;
-
     if (!minMax.length) { return; }
+
+    const PIXEL = 0;
+    const MIN   = 1;
+    const MAX   = 2;
 
     // rendering strategies
     if (this.params.renderingStrategy === 'svg') {
 
       let instructions = minMax.map((datum, index) => {
-        const x  = Math.floor(renderingContext.timeToPixel(datum.time));
-        let y1 = Math.round(renderingContext.valueToPixel(this.y(datum.values[MIN])));
-        let y2 = Math.round(renderingContext.valueToPixel(this.y(datum.values[MAX])));
+        const x  = datum[PIXEL];
+        let y1 = Math.round(renderingContext.valueToPixel(datum[MIN]));
+        let y2 = Math.round(renderingContext.valueToPixel(datum[MAX]));
 
         return `${x},${y1}L${x},${y2}`;
       });
@@ -132,9 +134,9 @@ export default class Waveform extends BaseShape {
       this._ctx.moveTo(renderingContext.timeToPixel(0), renderingContext.valueToPixel(0));
 
       minMax.forEach((datum) => {
-        const x  = renderingContext.timeToPixel(datum.time);
-        const y1 = renderingContext.valueToPixel(this.y(datum.values[MIN]));
-        const y2 = renderingContext.valueToPixel(this.y(datum.values[MAX]));
+        const x  = datum[PIXEL];
+        let y1 = Math.round(renderingContext.valueToPixel(datum[MIN]));
+        let y2 = Math.round(renderingContext.valueToPixel(datum[MAX]));
 
         this._ctx.moveTo(x, y1);
         this._ctx.lineTo(x, y2);
