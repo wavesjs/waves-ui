@@ -135,9 +135,21 @@ export default class Surface extends EventSource {
       this.emit('event', event);
     };
 
+    const onMouseOver = (e) => {
+      let event = this._createEvent('mouseover', e);
+      this.emit('event', event);
+    };
+
+    const onMouseOut = (e) => {
+      let event = this._createEvent('mouseout', e);
+      this.emit('event', event);
+    };
+
     // Bind callbacks
     this.el.addEventListener('mousedown', onMouseDown, false);
     this.el.addEventListener('click', onClick, false);
     this.el.addEventListener('dblclick', onDblClick, false);
+    this.el.addEventListener('mouseover', onMouseOver, false);
+    this.el.addEventListener('mouseout', onMouseOut, false);
   }
 }

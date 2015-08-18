@@ -60,9 +60,9 @@
     var duration = 20;
 
     var data = [
-      { start: 2, duration: 4, color: 'steelblue' },
-      { start: 10, duration: 5, color: 'orange' },
-      { start: 14, duration: 3, color: 'green' },
+      { start: 2, duration: 4, color: 'steelblue', opacity: 0.8 },
+      { start: 10, duration: 5, color: 'orange', opacity: 0.8 },
+      { start: 14, duration: 3, color: 'green', opacity: 0.8 },
     ];
 
     var pixelsPerSecond = width / duration;
@@ -85,6 +85,10 @@
       width: function(d, v) {
         if (v !== undefined) { d.duration = v; }
         return d.duration;
+      },
+      opacity: function(d, v) {
+        if (v !== undefined) { d.opacity = v; }
+        return d.opacity;
       }
     });
 
@@ -97,6 +101,22 @@
 
     timeline.tracks.render();
     timeline.tracks.update();
+
+    timeline.on('event', function(e) {
+      var segment;
+      var eventType = e.type;
+
+      if (eventType !== 'mouseover' && eventType !== 'mouseout') {
+        return;
+      }
+
+      segment = segmentLayer.getItemFromDOMElement(e.target);
+      if (segment !== null) {
+        var datum = segmentLayer.getDatumFromItem(segment);
+        datum.opacity = eventType === 'mouseover' ? 1 : 0.8;
+        segmentLayer.updateShapes();
+      }
+    });
   </script>
 </body>
 </html>
