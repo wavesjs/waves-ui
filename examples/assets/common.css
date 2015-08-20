@@ -25,14 +25,18 @@ pre {
   margin: 2em 0 !important;
 }
 
-/*code { color: white; }*/
-:not(pre) > code[class*="language-"], pre[class*="language-"] {
-  background-color: #202020 !important;
-}
-
 .note {
   color: #efefef;
   font-size: 11px;
   font-family: monospace;
   font-style: italic;
+}
+
+/*code { color: white; }*/
+:not(pre) > code[class*="language-"], pre[class*="language-"] {
+  background-color: #202020 !important;
+}
+
+.waves-basic-controllers.title {
+  color: #f8f8f2 !important;
 }
