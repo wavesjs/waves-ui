@@ -15,7 +15,7 @@ export default class AnnotatedSegment extends Segment {
     const height = renderingContext.height;
 
     this.$label = document.createElementNS(this.ns, 'text');
-    this.$label.setAttributeNS(null, 'x', 1);
+    this.$label.setAttributeNS(null, 'x', 3);
     this.$label.setAttributeNS(null, 'y', 11);
     this.$label.setAttributeNS(null, 'transform', `matrix(1, 0, 0, -1, 0, ${height})`);
     this.$label.style.fontSize = '10px';

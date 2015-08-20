@@ -56,7 +56,12 @@
     var height = 200;
     var duration = 10;
 
-    var data = [{ time: 2 }, { time: 4 }, { time: 7 }, { time: 8 }];
+    var data = [
+      { time: 2, text: 'label 1' },
+      { time: 5, text: 'label 2' },
+      { time: 6, text: 'label 3' },
+      { time: 8, text: 'label 4' },
+    ];
 
     var pixelsPerSecond = width / duration;
 
@@ -70,13 +75,13 @@
     var timeContext = new wavesUI.core.LayerTimeContext(timeline.timeContext);
 
     markerLayer.setTimeContext(timeContext);
-    markerLayer.configureShape(wavesUI.shapes.Marker, {
+    markerLayer.configureShape(wavesUI.shapes.AnnotatedMarker, {
       x: function(d, v) {
         if (v !== undefined) { d.time = v; }
         return d.time;
       },
       color: function() {
-        return 'red';
+        return 'orange';
       }
     });
 

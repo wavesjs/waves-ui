@@ -45,7 +45,7 @@ export default class SimpleEditionState extends BaseState {
       if (item === null) { return; }
 
       this.currentEditedLayer = layer;
-      layer.select(item);
+      requestAnimationFrame(function() { layer.select(item); });
     });
   }
 
@@ -56,7 +56,7 @@ export default class SimpleEditionState extends BaseState {
     const items = layer.selectedItems;
 
     layer.edit(items, e.dx, e.dy, this.currentTarget);
-    layer.update(items);
+    requestAnimationFrame(function() { layer.update(items); });
   }
 
   onMouseUp(e) {

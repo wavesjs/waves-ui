@@ -20,6 +20,7 @@
 
   <div class="track" id="track-1"></div>
   <script class="example" rel="track-1">
+  (function() {
     var $track = document.querySelector('#track-1');
     var width = $track.getBoundingClientRect().width;
     var height = 200;
@@ -27,9 +28,9 @@
 
     // some data to visualize
     var data = [
-      { x: 2, width: 4, color: 'steelblue' },
-      { x: 10, width: 5, color: 'orange' },
-      { x: 14, width: 3, color: 'green' },
+      { x: 2, width: 4, color: 'steelblue', opacity: 0.8 },
+      { x: 10, width: 5, color: 'orange', opacity: 0.8 },
+      { x: 14, width: 3, color: 'green', opacity: 0.8 },
     ];
 
     // define the numbr of pixels per seconds the timeline should display
@@ -47,6 +48,23 @@
 
     // insert the layer inside the 'main' track
     timeline.addLayer(segmentLayer, 'main');
+
+    // add an hover effect on the segments
+    timeline.on('event', function(e) {
+      var segment;
+      var eventType = e.type;
+
+      if (eventType !== 'mouseover' && eventType !== 'mouseout') { return; }
+
+      segment = segmentLayer.getItemFromDOMElement(e.target);
+
+      if (segment !== null) {
+        var datum = segmentLayer.getDatumFromItem(segment);
+        datum.opacity = eventType === 'mouseover' ? 1 : 0.8;
+        segmentLayer.updateShapes();
+      }
+    });
+  }());
   </script>
 
   <!-- ADVANCED USAGE -->
@@ -54,15 +72,16 @@
 
   <div class="track" id="track-2"></div>
   <script class="example" rel="track-2">
+  (function() {
     var $track = document.querySelector('#track-2');
     var width = $track.getBoundingClientRect().width;
     var height = 200;
     var duration = 20;
 
     var data = [
-      { start: 2, duration: 4, color: 'steelblue', opacity: 0.8 },
-      { start: 10, duration: 5, color: 'orange', opacity: 0.8 },
-      { start: 14, duration: 3, color: 'green', opacity: 0.8 },
+      { start: 2, duration: 4, color: 'steelblue', text: 'label 1' },
+      { start: 10, duration: 5, color: 'orange', text: 'label 2' },
+      { start: 14, duration: 3, color: 'green', text: 'label 3' },
     ];
 
     var pixelsPerSecond = width / duration;
@@ -77,7 +96,7 @@
     var timeContext = new wavesUI.core.LayerTimeContext(timeline.timeContext);
 
     segmentLayer.setTimeContext(timeContext);
-    segmentLayer.configureShape(wavesUI.shapes.Segment, {
+    segmentLayer.configureShape(wavesUI.shapes.AnnotatedSegment, {
       x: function(d, v) {
         if (v !== undefined) { d.start = v; }
         return d.start;
@@ -85,10 +104,6 @@
       width: function(d, v) {
         if (v !== undefined) { d.duration = v; }
         return d.duration;
-      },
-      opacity: function(d, v) {
-        if (v !== undefined) { d.opacity = v; }
-        return d.opacity;
       }
     });
 
@@ -101,22 +116,7 @@
 
     timeline.tracks.render();
     timeline.tracks.update();
-
-    timeline.on('event', function(e) {
-      var segment;
-      var eventType = e.type;
-
-      if (eventType !== 'mouseover' && eventType !== 'mouseout') {
-        return;
-      }
-
-      segment = segmentLayer.getItemFromDOMElement(e.target);
-      if (segment !== null) {
-        var datum = segmentLayer.getDatumFromItem(segment);
-        datum.opacity = eventType === 'mouseover' ? 1 : 0.8;
-        segmentLayer.updateShapes();
-      }
-    });
+  }());
   </script>
 </body>
 </html>
