@@ -18,12 +18,11 @@
   <h1>TimeContexts Manipulations</h1>
 
   <!-- SIMPLE USAGE -->
-  <!-- <h2 id="simple-use">LayerTimeContext</h2> -->
-
   <div class="track" id="track-1">
     <div class="top"></div>
     <div class="bottom"></div>
   </div>
+
   <div id="controls"></div>
   <script class="example" rel="controls">
     var layerHeight = 120;
@@ -72,10 +71,20 @@
     });
 
     // control layer 0
-    new wavesBasicControllers.Title('Layers[0] Control', $controls);
+    new wavesBasicControllers.Title('Layers[0] TimeContext', $controls);
 
-    new wavesBasicControllers.Slider('offset', 0, 15, 0.1, 0, 's', '', $controls, function(value) {
-      layers[0].timeContext.offset = -value;
+    new wavesBasicControllers.Slider('start', 0, 15, 0.1, 0, 's', '', $controls, function(value) {
+      layers[0].timeContext.start = value;
+      layers[0].updateContainer();
+    });
+
+    new wavesBasicControllers.Slider('duration', 0, 20, 0.1, 20, 's', '', $controls, function(value) {
+      layers[0].timeContext.duration = value;
+      layers[0].updateContainer();
+    });
+
+    new wavesBasicControllers.Slider('offset', -15, 0, 0.1, 0, 's', '', $controls, function(value) {
+      layers[0].timeContext.offset = value;
       layers[0].updateContainer();
     });
 
@@ -85,7 +94,17 @@
     });
 
     // control layer 1
-    new wavesBasicControllers.Title('Layers[1] Control', $controls);
+    new wavesBasicControllers.Title('Layers[1] TimeContext', $controls);
+
+    new wavesBasicControllers.Slider('start', 0, 15, 0.1, 0, 's', '', $controls, function(value) {
+      layers[1].timeContext.start = value;
+      layers[1].updateContainer();
+    });
+
+    new wavesBasicControllers.Slider('duration', 0, 20, 0.1, 20, 's', '', $controls, function(value) {
+      layers[1].timeContext.duration = value;
+      layers[1].updateContainer();
+    });
 
     new wavesBasicControllers.Slider('offset', 0, 15, 0.1, 0, 's', '', $controls, function(value) {
       layers[1].timeContext.offset = -value;
@@ -98,7 +117,7 @@
     });
 
     // timeline
-    new wavesBasicControllers.Title('Controls', $controls);
+    new wavesBasicControllers.Title('Timeline TimeContext', $controls);
 
     new wavesBasicControllers.Slider('offset', 0, 10, 0.1, 0, 's', '', $controls, function(value) {
       timeline.offset = -value;
