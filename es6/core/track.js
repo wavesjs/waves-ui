@@ -174,6 +174,23 @@ export default class Track {
   }
 
   /**
+   *  Defines if a given element belongs to the track
+   *  @param {DOMElement} $el
+   *  @return {bool}
+   */
+  hasElement($el) {
+    do {
+      if ($el === this.$el) {
+        return true;
+      }
+
+      $el = $el.parentNode;
+    } while ($el !== null);
+
+    return false;
+  }
+
+  /**
    * Draw tracks, and the layers in cascade
    */
   render() {

@@ -96,12 +96,20 @@ export default class LayerTimeContext {
     this._stretchRatio = value;
   }
 
-  // read only
+  // scales helpers
   get timeToPixel() {
     if (!this._timeToPixel) {
       return this.parent.timeToPixel;
     }
 
     return this._timeToPixel;
+  }
+
+  pixelToTime(px) {
+    if (!this._timeToPixel) {
+      return this.parent.timeToPixel.invert(px);
+    }
+
+    return this._timeToPixel.invert(px);
   }
 }

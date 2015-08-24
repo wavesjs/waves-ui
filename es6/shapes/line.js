@@ -38,7 +38,7 @@ export default class Line extends BaseShape {
     // sort data
     let instructions = data.map((datum, index) => {
       const x = renderingContext.timeToPixel(this.cx(datum));
-      const y = renderingContext.valueToPixel(this.cy(datum));
+      const y = renderingContext.valueToPixel(this.cy(datum)) - 0.5;
       return `${x},${y}`;
     });
 

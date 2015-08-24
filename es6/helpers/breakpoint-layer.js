@@ -9,12 +9,14 @@ export default class BreakpointLayer extends Layer {
     super('collection', data, options);
 
     const color = options.color;
+    let commonShapeOptions = {};
 
     if (color) {
       accessors.color = function() { return color; };
+      commonShapeOptions.color = color;
     }
 
-    this.configureCommonShape(Line, accessors, { color });
+    this.configureCommonShape(Line, accessors, commonShapeOptions);
     this.configureShape(Dot, accessors, {});
     this.setBehavior(new BreakpointBehavior());
   }

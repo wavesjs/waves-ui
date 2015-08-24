@@ -71,10 +71,22 @@ export default class Waveform extends BaseShape {
 
     let minMax = [];
 
+    console.clear();
     // use timeline's TimeContext attributes to compute/draw visible area only
-    const minX = -renderingContext.trackOffsetX;
-    const maxX = renderingContext.visibleWidth + minX;
+    // const minX = Math.max(-Math.abs(renderingContext.trackOffsetX), 0);
+    let minX = Math.max(-renderingContext.offsetX, 0);
+    let trackDecay = renderingContext.trackOffsetX + renderingContext.startX;
 
+    if (trackDecay < 0) {
+      minX = -trackDecay;
+    }
+
+    let maxX = minX; // Math.min(renderingContext.width, renderingContext.visibleWidth);
+    maxX += (renderingContext.width - minX < renderingContext.visibleWidth) ?
+      renderingContext.width : renderingContext.visibleWidth;
+
+    // console.log(renderingContext.trackOffsetX, renderingContext.startX);
+    console.log(minX, maxX, renderingContext.width);
     // get min/max per pixels
     for (let px = minX; px <= maxX; px++) {
       const startTime = renderingContext.timeToPixel.invert(px);
@@ -116,6 +128,8 @@ export default class Waveform extends BaseShape {
 
         return `${x},${y1}L${x},${y2}`;
       });
+
+      console.log(instructions.length);
 
       const d = 'M' + instructions.join('L');
       this.$el.setAttributeNS(null, 'd', d);
