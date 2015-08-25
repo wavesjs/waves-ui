@@ -295,10 +295,12 @@ export default class Layer extends events.EventEmitter {
     this._renderingContext.width  = this.timeContext.timeToPixel(this.timeContext.duration);
     // for foreign object issue in chrome
     this._renderingContext.offsetX = this.timeContext.timeToPixel(this.timeContext.offset);
-    this._renderingContext.startX = this.timeContext.timeToPixel(this.timeContext.start);
+    this._renderingContext.startX = this.timeContext.parent.timeToPixel(this.timeContext.start);
 
-    this._renderingContext.stretchRatio = this.timeContext.stretchRatio;
-    // expose some timeline attributes - allow to improve perf in some cases - cf. Waveform
+    // @TODO replace with `minX` and `maxX` representing the visible pixels in which
+    // the shapes should be rendered, could allow to not update the DOM of shapes
+    // who are not in this area.
+    // in between: expose some timeline attributes -> improves Waveform perfs
     this._renderingContext.trackOffsetX = this.timeContext.parent.timeToPixel(this.timeContext.parent.offset);
     this._renderingContext.visibleWidth = this.timeContext.parent.visibleWidth;
   }
@@ -456,7 +458,7 @@ export default class Layer extends events.EventEmitter {
    *  @return {Array} - list of the DOM elements in the given area
    */
   getItemsInArea(area) {
-    const start    = this.timeContext.timeToPixel(this.timeContext.start);
+    const start    = this.timeContext.parent.timeToPixel(this.timeContext.start);
     const duration = this.timeContext.timeToPixel(this.timeContext.duration);
     const offset   = this.timeContext.timeToPixel(this.timeContext.offset);
     const top      = this.params.top;

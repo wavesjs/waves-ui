@@ -70,15 +70,13 @@ export default class Waveform extends BaseShape {
     if (!samplesPerPixel || datum.length < samplesPerPixel) { return; }
 
     let minMax = [];
-
-    // this is a f****** mess...
-    // @FIXME problem when stretched
+    // @TODO refactor this ununderstandable mess
     // compute/draw visible area only
     let minX = Math.max(-renderingContext.offsetX, 0);
     let trackDecay = renderingContext.trackOffsetX + renderingContext.startX;
     if (trackDecay < 0) { minX = -trackDecay; }
 
-    let maxX = minX; // Math.min(renderingContext.width, renderingContext.visibleWidth);
+    let maxX = minX;
     maxX += (renderingContext.width - minX < renderingContext.visibleWidth) ?
       renderingContext.width : renderingContext.visibleWidth;
 
@@ -89,7 +87,6 @@ export default class Waveform extends BaseShape {
 
       const extract = datum[sliceMethod](startSample, startSample + samplesPerPixel);
 
-      // could go to asm ?
       let min = Infinity;
       let max = -Infinity;
 
