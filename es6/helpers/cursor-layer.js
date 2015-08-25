@@ -4,9 +4,14 @@ import Cursor from '../shapes/cursor';
 
 export default class CursorLayer extends Layer {
   constructor(options = {}) {
-    const data = { currentPosition: 0 };
-    options = Object.assign({ color: 'red' }, options);
+    const defaults = {
+      color: 'red',
+      hittable: false, // kind of pass through layer
+    }
 
+    const data = { currentPosition: 0 };
+
+    options = Object.assign(defaults, options);
     super('entity', data, options);
 
     this.configureShape(Cursor, { x: (d) => d.currentPosition }, {

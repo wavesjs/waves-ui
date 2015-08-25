@@ -36,9 +36,9 @@ module.exports = {
     Surface              : require('./dist/interactions/surface'),
     WaveEvent            : require('./dist/interactions/wave-event'),
   },
-  // rename folder ?
   states: {
     BaseState            : require('./dist/states/base-state'),
+    BreakpointState      : require('./dist/states/breakpoint-state'),
     BrushZoomState       : require('./dist/states/brush-zoom-state'),
     CenteredZoomState    : require('./dist/states/centered-zoom-state'),
     ContextEditionState  : require('./dist/states/context-edition-state'),

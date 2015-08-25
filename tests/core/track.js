@@ -22,7 +22,7 @@ test('Track - instanciation', (assert) => {
   assert.equal(tg.length, 4);
   assert.equal(tg[0].nodeName, "defs");
   assert.equal(tg[1].nodeName, "rect");
-  assert.equal(tg[1].getAttribute('style'), "fill-opacity:0");
+  assert.equal(tg[1].getAttribute('style'), "fill-opacity: 0;");
   assert.equal(tg[1].getAttribute('width'), "100%");
   assert.equal(tg[1].getAttribute('height'), "100%");
   assert.equal(tg[2].nodeName, "g");

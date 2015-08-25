@@ -37,7 +37,10 @@ export default class Layer extends events.EventEmitter {
       yDomain: [0, 1],
       opacity: 1,
       contextHandlerWidth: 2,
-      className: null
+      className: null,
+      // when false the layer is not returned by `BaseState.getHitLayers`
+      hittable: true,
+      overflow: 'hidden',
     };
 
     this.params = Object.assign({}, defaults, options);
@@ -143,6 +146,15 @@ export default class Layer extends events.EventEmitter {
     return this.params.opacity;
   }
 
+  // expose scale
+  get timeToPixel() {
+    return this.timeContext.timeToPixel;
+  }
+
+  get valueToPixel() {
+    return this._valueToPixel;
+  }
+
   /**
    *  @return {Array} - an array containins all the DOMElement items
    */
@@ -197,12 +209,14 @@ export default class Layer extends events.EventEmitter {
   _renderContainer() {
     // wrapper group for `start, top and context flip matrix
     this.$el = document.createElementNS(ns, 'g');
+    this.$el.classList.add('layer');
     if (this.params.className !== null) {
-      this.$el.classList.add('layer', this.params.className);
+      this.$el.classList.add(this.params.className);
     }
     // clip the context with a `svg` element
     this.$boundingBox = document.createElementNS(ns, 'svg');
     this.$boundingBox.classList.add('bounding-box');
+    this.$boundingBox.style.overflow = this.params.overflow;
     // group to apply offset
     this.$offset = document.createElementNS(ns, 'g');
     this.$offset.classList.add('offset', 'items');
@@ -283,6 +297,7 @@ export default class Layer extends events.EventEmitter {
     this._renderingContext.offsetX = this.timeContext.timeToPixel(this.timeContext.offset);
     this._renderingContext.startX = this.timeContext.timeToPixel(this.timeContext.start);
 
+    this._renderingContext.stretchRatio = this.timeContext.stretchRatio;
     // expose some timeline attributes - allow to improve perf in some cases - cf. Waveform
     this._renderingContext.trackOffsetX = this.timeContext.parent.timeToPixel(this.timeContext.parent.offset);
     this._renderingContext.visibleWidth = this.timeContext.parent.visibleWidth;

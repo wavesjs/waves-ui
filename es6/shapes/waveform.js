@@ -71,6 +71,8 @@ export default class Waveform extends BaseShape {
 
     let minMax = [];
 
+    // this is a f****** mess...
+    // @FIXME problem when stretched
     // compute/draw visible area only
     let minX = Math.max(-renderingContext.offsetX, 0);
     let trackDecay = renderingContext.trackOffsetX + renderingContext.startX;

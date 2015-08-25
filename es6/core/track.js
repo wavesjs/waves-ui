@@ -123,7 +123,8 @@ export default class Track {
     const $background = document.createElementNS(ns, 'rect');
     $background.setAttributeNS(null, 'height', '100%');
     $background.setAttributeNS(null, 'width', '100%');
-    $background.setAttributeNS(null, 'style', 'fill-opacity:0');
+    $background.style.fillOpacity = 0;
+    // $background.style.pointerEvents = 'none';
 
     const $defs = document.createElementNS(ns, 'defs');
 

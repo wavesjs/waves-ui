@@ -23,6 +23,32 @@ export default class BaseState {
   }
 
   /**
+   * returns an array of the layers which positions
+   * and sizes matches a pointer Event
+   * @param {WavesEvent} e - the event from the Surface
+   * @return {Array} - matched layers
+   */
+  getHitLayers(e) {
+    const clientX = e.originalEvent.clientX;
+    const clientY = e.originalEvent.clientY;
+    let layers = [];
+
+    this.layers.forEach((layer) => {
+      if (!layer.params.hittable) { return; }
+      const br = layer.$el.getBoundingClientRect();
+
+      if (
+        clientX > br.left && clientX < br.right &&
+        clientY > br.top && clientY < br.bottom
+      ) {
+        layers.push(layer);
+      }
+    });
+
+    return layers;
+  }
+
+  /**
    * Called when the timeline is entering the state
    */
   enter() {}

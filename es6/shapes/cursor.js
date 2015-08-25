@@ -30,7 +30,7 @@ export default class Cursor extends BaseShape {
   }
 
   update(renderingContext, datum) {
-    const x = renderingContext.timeToPixel(this.x(datum));
+    const x = Math.round(renderingContext.timeToPixel(this.x(datum))) + 0.5;
     this.$el.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
   }
 
