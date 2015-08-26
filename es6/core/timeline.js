@@ -150,10 +150,9 @@ export default class Timeline extends events.EventEmitter {
     this._state.handleEvent(e);
   }
 
-
   /**
    * Changes the state of the timeline
-   * @param {BaseState} state - the state in which the timeline must be setted
+   * @param {BaseState} - the state in which the timeline must be setted
    */
   set state(state) {
     if (this._state) { this._state.exit(); }

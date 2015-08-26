@@ -1,7 +1,7 @@
 import BaseShape from './base-shape';
 
 
-export default class Axis extends BaseShape {
+export default class Ticks extends BaseShape {
   _getClassName() {
     return 'tick';
   }
