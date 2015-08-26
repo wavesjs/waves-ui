@@ -104,6 +104,7 @@
     breakpointLayer.setBehavior(new wavesUI.behaviors.BreakpointBehavior());
 
     timeline.state = new wavesUI.states.BreakpointState(timeline, function(x, y) {
+      // this callback allow to create a datum from values represented by the new dot
       return { x: x, y: y };
     });
 
