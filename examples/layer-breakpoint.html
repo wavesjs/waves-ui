@@ -56,6 +56,7 @@
   <!-- ADVANCED USAGE -->
   <h2 id="advanced-use">Advanced Usage</h2>
 
+  <p class="note"><em>click</em> to add dots - <em>shift + click</em> to remove</p>
   <div class="track" id="track-2"></div>
   <script class="example" rel="track-2">
     var $track = document.querySelector('#track-2');
@@ -102,7 +103,9 @@
     breakpointLayer.configureShape(wavesUI.shapes.Dot, accessors);
     breakpointLayer.setBehavior(new wavesUI.behaviors.BreakpointBehavior());
 
-    timeline.state = new wavesUI.states.SimpleEditionState(timeline);
+    timeline.state = new wavesUI.states.BreakpointState(timeline, function(x, y) {
+      return { x: x, y: y };
+    });
 
     track.add(breakpointLayer);
     timeline.add(track);

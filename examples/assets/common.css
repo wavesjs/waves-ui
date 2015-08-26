@@ -32,6 +32,11 @@ pre {
   font-style: italic;
 }
 
+.note em {
+  font-style: normal;
+  font-weight: bold;
+}
+
 /*code { color: white; }*/
 :not(pre) > code[class*="language-"], pre[class*="language-"] {
   background-color: #202020 !important;
