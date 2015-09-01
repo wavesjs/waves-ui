@@ -20,7 +20,7 @@ export default class AnnotatedMarker extends Marker {
     this.$label.setAttributeNS(null, 'transform', `matrix(1, 0, 0, -1, 0, ${height})`);
     this.$label.style.fontSize = '10px';
     this.$label.style.fontFamily = 'monospace';
-    this.$label.style.color = '#676767';
+    this.$label.style.color = '#242424';
     this.$label.style.mozUserSelect = 'none';
     this.$label.style.webkitUserSelect = 'none';
     this.$label.style.userSelect = 'none';

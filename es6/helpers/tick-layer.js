@@ -3,7 +3,7 @@ import Ticks from '../shapes/ticks';
 
 
 export default class TickLayer extends Layer {
-  constructor(data, options) {
+  constructor(data, options, accessors) {
     options = Object.assign({
 
     }, options);
@@ -11,6 +11,6 @@ export default class TickLayer extends Layer {
     super('entity', data, options);
 
     const config = options.color ? { color: options.color } : undefined;
-    this.configureShape(Ticks, options, config);
+    this.configureShape(Ticks, accessors, config);
   }
 }
