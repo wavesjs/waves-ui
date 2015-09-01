@@ -6,6 +6,14 @@ export default class Ticks extends BaseShape {
     return 'tick';
   }
 
+  _getAccessorList() {
+    return {
+      time: 0,
+      focused: true,
+      label: '',
+    }
+  }
+
   _getDefaults() {
     return {
       color: 'steelblue',
@@ -28,8 +36,8 @@ export default class Ticks extends BaseShape {
     const layerHeight = renderingContext.height; // valueToPixel(1);
 
     data.forEach((datum) => {
-      const x = renderingContext.timeToPixel(datum.time);
-      const opacity = datum.focused ?
+      const x = renderingContext.timeToPixel(this.time(datum));
+      const opacity = this.focused(datum) ?
         this.params.focusedOpacity : this.params.defaultOpacity;
 
       const height = layerHeight;
@@ -50,21 +58,22 @@ export default class Ticks extends BaseShape {
 
       this.$el.appendChild(tick);
 
-      if (datum.label) {
-        const label = document.createElementNS(this.ns, 'text');
-        label.classList.add('label');
+      const label = this.label(datum);
+      if (label) {
+        const $label = document.createElementNS(this.ns, 'text');
+        $label.classList.add('label');
 
-        label.innerHTML = datum.label;
-        label.setAttributeNS(null, 'transform', `matrix(1, 0, 0, -1, ${x + 2}, ${height + 2})`);
-        label.setAttributeNS(null, 'alignment-baseline', 'text-before-edge');
-        label.style.fontSize = '10px';
-        label.style.lineHeight = '10px';
-        label.style.fontFamily = 'monospace';
-        label.style.color = '#676767';
-        label.style.opacity = 0.9;
-        label.style.mozUserSelect = 'none';
-        label.style.webkitUserSelect = 'none';
-        label.style.userSelect = 'none';
+        $label.innerHTML = label;
+        $label.setAttributeNS(null, 'transform', `matrix(1, 0, 0, -1, ${x + 2}, ${height + 2})`);
+        $label.setAttributeNS(null, 'alignment-baseline', 'text-before-edge');
+        $label.style.fontSize = '10px';
+        $label.style.lineHeight = '10px';
+        $label.style.fontFamily = 'monospace';
+        $label.style.color = '#676767';
+        $label.style.opacity = 0.9;
+        $label.style.mozUserSelect = 'none';
+        $label.style.webkitUserSelect = 'none';
+        $label.style.userSelect = 'none';
 
         // const bg = document.createElementNS(this.ns, 'rect');
         // bg.setAttributeNS(null, 'width', '100%');
@@ -72,7 +81,7 @@ export default class Ticks extends BaseShape {
         // bg.setAttributeNS(null, 'fill', '#ffffff');
         // label.appendChild(bg);
 
-        this.$el.appendChild(label);
+        this.$el.appendChild($label);
       }
     });
 
