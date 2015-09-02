@@ -13,27 +13,27 @@ export default class BreakpointState extends BaseState {
   enter() {}
   exit() {}
 
-  handleEvent(e) {
+  handleEvent(e, hitLayers) {
     switch (e.type) {
       case 'mousedown':
-        this.onMouseDown(e);
+        this.onMouseDown(e, hitLayers);
         break;
       case 'mousemove':
-        this.onMouseMove(e);
+        this.onMouseMove(e, hitLayers);
         break;
       case 'mouseup':
-        this.onMouseUp(e);
+        this.onMouseUp(e, hitLayers);
         break;
     }
   }
 
-  onMouseDown(e) {
+  onMouseDown(e, hitLayers) {
     this.mouseDown = true;
     // keep target consistent with mouse down
     this.currentTarget = e.target;
     let updatedLayer = null;
 
-    const layers = this.getHitLayers(e);
+    const layers = hitLayers;
 
     layers.forEach((layer) => {
       layer.unselect();
