@@ -7,11 +7,7 @@ export default class Ticks extends BaseShape {
   }
 
   _getAccessorList() {
-    return {
-      time: 0,
-      focused: true,
-      label: '',
-    }
+    return { time: 0, focused: true, label: '' };
   }
 
   _getDefaults() {

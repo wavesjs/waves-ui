@@ -7,7 +7,7 @@ export default class CursorLayer extends Layer {
     const defaults = {
       color: 'red',
       hittable: false, // kind of pass through layer
-    }
+    };
 
     const data = { currentPosition: 0 };
 
