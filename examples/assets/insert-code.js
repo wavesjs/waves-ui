@@ -9,12 +9,12 @@ window.addEventListener('DOMContentLoaded', function() {
 
   tags.forEach(function(tag) {
     var relId = tag.getAttribute('rel');
-    var rel = document.querySelector(`#${relId}`);
+    var rel = document.querySelector('#' + relId);
     // create code block
     var pre = document.createElement('pre');
     var code = document.createElement('code');
 
-    code.innerHTML = tag.innerText.replace(/\n(\s)*$/, '');
+    code.innerHTML = tag.textContent.replace(/\n(\s)*$/, '');
     code.classList.add('language-javascript');
 
     pre.appendChild(code);

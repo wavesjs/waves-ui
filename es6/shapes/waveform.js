@@ -69,9 +69,8 @@ export default class Waveform extends BaseShape {
 
     if (!samplesPerPixel || datum.length < samplesPerPixel) { return; }
 
-    let minMax = [];
-    // @TODO refactor this ununderstandable mess
     // compute/draw visible area only
+    // @TODO refactor this ununderstandable mess
     let minX = Math.max(-renderingContext.offsetX, 0);
     let trackDecay = renderingContext.trackOffsetX + renderingContext.startX;
     if (trackDecay < 0) { minX = -trackDecay; }
@@ -81,17 +80,30 @@ export default class Waveform extends BaseShape {
       renderingContext.width : renderingContext.visibleWidth;
 
     // get min/max per pixels, clamped to the visible area
-    for (let px = minX; px < maxX; px++) {
-      const startTime = renderingContext.timeToPixel.invert(px);
-      const startSample = startTime * this.params.sampleRate;
+    // console.time('whole-minMax');
+    const yAccessor = this.y;
+    const invert = renderingContext.timeToPixel.invert;
+    const sampleRate = this.params.sampleRate;
 
-      const extract = datum[sliceMethod](startSample, startSample + samplesPerPixel);
+    if (this.minMax) {
+      this.minMax.length = 0;
+    } else {
+      this.minMax = [];
+    }
+
+    const minMax = this.minMax;
+
+    for (let px = minX; px < maxX; px++) {
+      const startTime = invert(px);
+      const startSample = startTime * sampleRate;
+
+      let extract = datum[sliceMethod](startSample, startSample + samplesPerPixel);
 
       let min = Infinity;
       let max = -Infinity;
 
       for (let j = 0, length = extract.length; j < length; j++) {
-        let sample = this.y(extract[j]);
+        let sample = yAccessor(extract[j]);
         if (sample < min) { min = sample; }
         if (sample > max) { max = sample; }
       }
@@ -103,6 +115,7 @@ export default class Waveform extends BaseShape {
 
       minMax.push([px, min, max]);
     }
+    // console.timeEnd('whole-minMax');
 
     if (!minMax.length) { return; }
 

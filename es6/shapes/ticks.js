@@ -62,10 +62,13 @@ export default class Ticks extends BaseShape {
       if (label) {
         const $label = document.createElementNS(this.ns, 'text');
         $label.classList.add('label');
-
-        $label.innerHTML = label;
+        const $text = document.createTextNode(label);
+        $label.appendChild($text);
         $label.setAttributeNS(null, 'transform', `matrix(1, 0, 0, -1, ${x + 2}, ${height + 2})`);
-        $label.setAttributeNS(null, 'alignment-baseline', 'text-before-edge');
+        // firefox problem here
+        // $label.setAttributeNS(null, 'alignment-baseline', 'text-before-edge');
+        $label.setAttributeNS(null, 'y', '10');
+
         $label.style.fontSize = '10px';
         $label.style.lineHeight = '10px';
         $label.style.fontFamily = 'monospace';
