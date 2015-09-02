@@ -5,7 +5,7 @@ export default class Marker extends BaseShape {
   getClassName() { return 'marker'; }
 
   _getAccessorList() {
-    return { x: 0, color: '#000000' };
+    return { x: 0, color: '#ff0000' };
   }
 
   _getDefaults() {
@@ -13,7 +13,8 @@ export default class Marker extends BaseShape {
       handlerWidth: 7,
       handlerHeight: 10,
       displayHandlers: true,
-      opacity: 1
+      opacity: 1,
+      color: 'red',
     };
   }
 

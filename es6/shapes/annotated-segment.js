@@ -33,6 +33,7 @@ export default class AnnotatedSegment extends Segment {
   update(renderingContext, datum) {
     super.update(renderingContext, datum);
 
-    this.$label.innerHTML = this.text(datum);
+    const $text = document.createTextNode(this.text(datum));
+    this.$label.appendChild($text);
   }
 }

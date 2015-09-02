@@ -15,8 +15,8 @@ export default class AnnotatedMarker extends Marker {
     const height = renderingContext.height;
 
     this.$label = document.createElementNS(this.ns, 'text');
-    this.$label.setAttributeNS(null, 'x', 10);
-    this.$label.setAttributeNS(null, 'y', 10);
+    this.$label.setAttributeNS(null, 'x', 8);
+    this.$label.setAttributeNS(null, 'y', 8);
     this.$label.setAttributeNS(null, 'transform', `matrix(1, 0, 0, -1, 0, ${height})`);
     this.$label.style.fontSize = '10px';
     this.$label.style.fontFamily = 'monospace';
@@ -33,6 +33,7 @@ export default class AnnotatedMarker extends Marker {
   update(renderingContext, datum) {
     super.update(renderingContext, datum);
 
-    this.$label.innerHTML = this.text(datum);
+    const $text = document.createTextNode(this.text(datum));
+    this.$label.appendChild($text);
   }
 }
