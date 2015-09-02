@@ -33,6 +33,10 @@ export default class AnnotatedMarker extends Marker {
   update(renderingContext, datum) {
     super.update(renderingContext, datum);
 
+    if (this.$label.firstChild) {
+      this.$label.removeChild(this.$label.firstChild);
+    }
+
     const $text = document.createTextNode(this.text(datum));
     this.$label.appendChild($text);
   }

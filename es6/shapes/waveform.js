@@ -18,7 +18,8 @@ export default class Waveform extends BaseShape {
   getClassName() { return 'waveform'; }
 
   _getAccessorList() {
-    return { y: 0 };
+    // return { y: 0 };
+    return {};
   }
 
   _getDefaults() {
@@ -80,42 +81,31 @@ export default class Waveform extends BaseShape {
       renderingContext.width : renderingContext.visibleWidth;
 
     // get min/max per pixels, clamped to the visible area
-    // console.time('whole-minMax');
-    const yAccessor = this.y;
     const invert = renderingContext.timeToPixel.invert;
     const sampleRate = this.params.sampleRate;
-
-    if (this.minMax) {
-      this.minMax.length = 0;
-    } else {
-      this.minMax = [];
-    }
-
-    const minMax = this.minMax;
+    const minMax = [];
 
     for (let px = minX; px < maxX; px++) {
       const startTime = invert(px);
-      const startSample = startTime * sampleRate;
-
-      let extract = datum[sliceMethod](startSample, startSample + samplesPerPixel);
+      const startSample = Math.floor(startTime * sampleRate);
+      const endSample = Math.ceil(startSample + samplesPerPixel);
 
       let min = Infinity;
       let max = -Infinity;
 
-      for (let j = 0, length = extract.length; j < length; j++) {
-        let sample = yAccessor(extract[j]);
+      for (let j = startSample; j < endSample; j++) {
+        // let sample = yAccessor(datum[j]);
+        let sample = datum[j];
         if (sample < min) { min = sample; }
         if (sample > max) { max = sample; }
       }
       // disallow Infinity
       min = !isFinite(min) ? 0 : min;
       max = !isFinite(max) ? 0 : max;
-
       if (min === 0 && max === 0) { continue; }
 
       minMax.push([px, min, max]);
     }
-    // console.timeEnd('whole-minMax');
 
     if (!minMax.length) { return; }
 
