@@ -15,12 +15,7 @@ export default class WaveformLayer extends Layer {
 
     super('entity', buffer.getChannelData(options.channel), options);
 
-    this.configureShape(Waveform, {
-      y: function(d, v = null) {
-        if (v !== null) { d = v; }
-        return d;
-      }
-    }, {
+    this.configureShape(Waveform, {}, {
       sampleRate: buffer.sampleRate,
       color: options.color,
       renderingStrategy: options.renderingStrategy
