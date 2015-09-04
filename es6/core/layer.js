@@ -535,11 +535,15 @@ export default class Layer extends events.EventEmitter {
     for (let [$item, datum] of this._$itemDataMap.entries()) {
       if (this.data.indexOf(datum) !== -1) { continue; }
 
-      this.$offset.removeChild($item);
       const shape = this._$itemShapeMap.get($item);
+
+      this.$offset.removeChild($item);
       shape.destroy();
       // a removed item cannot be selected
-      this._behavior.unselect($item, datum);
+      if (this._behavior) {
+        this._behavior.unselect($item, datum);
+      }
+
       this._$itemDataMap.delete($item);
       this._$itemShapeMap.delete($item);
     }

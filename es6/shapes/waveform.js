@@ -87,14 +87,14 @@ export default class Waveform extends BaseShape {
 
     for (let px = minX; px < maxX; px++) {
       const startTime = invert(px);
-      const startSample = Math.floor(startTime * sampleRate);
-      const endSample = Math.ceil(startSample + samplesPerPixel);
+      const startSample = startTime * sampleRate;
+      const extract = datum[sliceMethod](startSample, startSample + samplesPerPixel);
 
       let min = Infinity;
       let max = -Infinity;
 
-      for (let j = startSample; j < endSample; j++) {
-        let sample = datum[j];
+      for (let j = 0, l = extract.length; j < l; j++) {
+        let sample = extract[j];
         if (sample < min) { min = sample; }
         if (sample > max) { max = sample; }
       }
@@ -111,7 +111,7 @@ export default class Waveform extends BaseShape {
     const PIXEL = 0;
     const MIN   = 1;
     const MAX   = 2;
-
+    const ZERO  = renderingContext.valueToPixel(0);
     // rendering strategies
     // if (this.params.renderingStrategy === 'svg') {
 
@@ -119,7 +119,7 @@ export default class Waveform extends BaseShape {
         const x  = datum[PIXEL];
         let y1 = Math.round(renderingContext.valueToPixel(datum[MIN]));
         let y2 = Math.round(renderingContext.valueToPixel(datum[MAX]));
-
+        // return `${x},${ZERO}L${x},${y1}L${x},${y2}L${x},${ZERO}`;
         return `${x},${y1}L${x},${y2}`;
       });
 
