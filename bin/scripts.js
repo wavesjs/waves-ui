@@ -1,12 +1,16 @@
-var pkg = require('../package.json');
-var childProcess = require('child_process');
-var util = require('util');
-// devDependencies
 var babel = require('babel');
 var browserify = require('browserify');
+var childProcess = require('child_process');
+var clc = require('cli-color');
+var fs = require("fs");
 var fse = require('fs-extra');
+var minimist = require('minimist');
 var nodeWatch = require('node-watch');
+var pad = require('node-string-pad');
+var pkg = require('../package.json');
 var uglifyJS = require('uglify-js');
+var util = require('util');
+
 
 // CONFIG
 // -----------------------------------------------
@@ -48,6 +52,9 @@ switch (command) {
     break;
   case '--transpile':
     transpileAll();
+    break;
+  case '--cover-report':
+    coverReport();
     break;
 }
 
@@ -113,29 +120,79 @@ function uglify() {
 
 // transpile all files in `srcDir`
 function transpileAll() {
-  var cmd = 'find '+ srcDir +' -type f';
+  var cmd = 'find ' + srcDir + ' -type f';
 
   childProcess.exec(cmd , function(err, stdout, stderr) {
+    if (err) { console.error(err); }
     var fileList = stdout.split('\n');
 
-    fileList.forEach(function(file) {
-      if (!file) { return; }
-      transpile(file);
-    });
+    var stack = [];
+
+    for (var i = 0; i < fileList.length; i++) {
+      var file = fileList[i];
+      if (!file) { continue; }
+
+      stack.push(file);
+    }
+
+    transpile(stack.shift(), stack);
   });
 }
 
-// transpile one file
-function transpile(src) {
+// transpile one file or several files in serial
+// @param `stack` is a workaround for babel which has some kind of leak and
+// cannot transpile several files in parallel without being messy with sourceMaps.
+// Using the Sync method crash the entire script each time there is an error in
+// the code which is really boring when watching...
+function transpile(src, stack) {
   var target = createTargetName(src);
 
-  babel.transformFile(src, babelOptions, function(err, res) {
-    if (err) { return console.log(err.message); }
+  babel.transformFile(src, babelOptions, function (err, result) {
+    if (err) { return console.log(err.codeFrame); }
 
-    fse.outputFile(target, res.code, function(err, res) {
-      if (err) { return console.log(err.message); }
+    fse.outputFile(target, result.code, function(err) {
+      if (err) { return console.error(err.message); }
 
       console.log(util.format(green + '=> "%s" successfully transpiled to "%s"' + NC, src, target));
+
+      // next
+      if (stack && stack.length) {
+        transpile(stack.shift(), stack);
+      }
     });
   });
 }
+
+// Cover report
+function coverReport() {
+  'use strict';
+
+  var argv = minimist(process.argv.slice(3));
+  var chunks = [];
+  var uncovered = clc.red.bold;
+  var covered = clc.green;
+  var f = fs.readFileSync(argv['i']);
+  var json = JSON.parse(f);
+  Object.keys(json).forEach(function(key){
+    if(json[key].length > 0){
+      console.log(key);
+      var notCovered = {};
+      for(var i=0; i<json[key].length;i++ ){
+        var line = json[key][i]['lineNum'];
+        var range = json[key][i].lines[0].range;
+        notCovered[line] = range;
+      }
+      var file = fs.readFileSync(key, 'utf8')
+      file = file.split('\n');
+      for(var i=0; i<file.length; i++){
+        var line = file[i];
+        if(notCovered[i]){
+          console.log(pad((i+1).toString(), 6)+' '+uncovered(line));
+        }else{
+          console.log(pad((i+1).toString(), 6)+' '+covered(line));
+        }
+      };
+    }
+  });
+}
+

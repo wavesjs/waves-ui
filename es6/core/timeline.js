@@ -1,397 +1,362 @@
-'use strict';
+import events from 'events';
 
-var d3            = require('d3');
-var EventEmitter  = require('events').EventEmitter;
-var shortId       = require('shortid');
-var { accessors, uniqueId, UILoop, throttle } = require('../helpers/utils');
+import Keyboard from '../interactions/keyboard';
+import LayerTimeContext from './layer-time-context';
+import Surface from '../interactions/surface';
+import TimelineTimeContext from './timeline-time-context';
+import Track from './track';
+import TrackCollection from './track-collection';
 
-class Timeline extends EventEmitter {
-  constructor(options = {}) {
+
+/**
+ * The `timeline` is the main entry point of a temporal visualization, it:
+ *
+ * - contains factories to manage its `tracks` and `layers`,
+ * - get or set the view window overs its `tracks` through `offset`, `zoom`, `pixelsPerSecond`, `visibleWidth`,
+ * - is the central hub for all user interaction events (keyboard, mouse),
+ * - holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to user interactions.
+ *
+ * ```js
+ * const with = 500; // default with for all created `Track`
+ * const duration = 10; // the timeline should dislay 10 second of data
+ * const pixelsPerSeconds = width / duration;
+ * const timeline = new ui.core.Timeline(pixelsPerSecond, width);
+ * ```
+ */
+export default class Timeline extends events.EventEmitter {
+  /**
+   * Creates a new `Timeline` instance
+   * @param {Number} [pixelsPerSecond=100] - the number of pixels per seconds the timeline should display
+   * @param {Number} [visibleWidth=1000] - the default visible width for all the tracks
+   */
+  constructor(pixelsPerSecond = 100, visibleWidth = 1000, {
+    registerKeyboard = true
+  } = {}) {
+
     super();
-    this.name(options.name || shortId.generate());
-    this.cname(uniqueId(this.name()));
-    // options
-    // from: https://github.com/wavesjs/ui/issues/1
-    this.lockZoomOutOnInitialDomain = options.lockZoomOutOnInitialDomain || false;
 
-    // defaults
-    this.margin({ top: 0, right: 0, bottom: 0, left: 0 });
-    this.xDomain([0, 0]);
-    this.yDomain([0, 1]);
-    // initialize
-    this.layers = {};
-    this.xScale = d3.scale.linear();
-    this.yScale = d3.scale.linear();
-    // alias `EventEmitter.emit`
-    this.trigger = this.emit;
-    // keep track of scales initialization
-    this.__scalesInitialized = false;
-    // @TODO define if it should be a getter
-    this.fps = 60;
-    this.throttleRate = 1000 / 50;
-    this.uiLoop = new UILoop(this.fps);
-    // bind draw method for call from d3
-    this.draw = this.draw.bind(this);
+    this._tracks = new TrackCollection(this);
+    this._state = null;
 
-    this.DOMReady = false;
+    // default interactions
+    this._surfaceCtor = Surface;
 
-    // add d3 as an instance member
-    // this.d3 = d3;
-  }
-
-  // initialize the scales of the timeline
-  // is called the first time a layer is added
-  initScales() {
-    var xRange = [0, this.width()];
-    if (this.swapX) { xRange.reverse(); } // used ?
-
-    var yRange = [this.height(), 0];
-    if (this.swapY) { yRange.reverse(); } // used ?
-
-    this.xScale
-      .domain(this.xDomain())
-      .range(xRange);
-
-    this.yScale
-      .domain(this.yDomain())
-      .range(yRange);
-
-    // keep a reference unmodified scale range for use in the layers when zooming
-    this.originalXscale = this.xScale.copy();
-    this.__scalesInitialized = true;
-  }
-
-  // --------------------------------------------------
-  // layers initialization related methods
-  // --------------------------------------------------
-
-  // alias for layer - symetry with remove
-  add(layer) {
-    if (this.__scalesInitialized === false) {
-      this.initScales();
+    if (registerKeyboard) {
+      this.createInteraction(Keyboard, document);
     }
 
-    layer.load(this, d3);
-    layer.setScales();
-    layer.delegateEvents();
-    layer.init();
+    // stores
+    this._trackById = {};
+    this._groupedLayers = {};
 
-    // allow to dynamically add a layer after after the timeline has been drawn
-    if (!!this.boundingBox) {
-      layer.createGroup(this.boundingBox);
-    }
-
-    // add the layer to the stack
-    this.layers[layer.param('cname')] = layer;
-
-    return this;
+    /**
+     * @this Timeline
+     * @attribute {TimelineTimeContext} - master time context of the graph
+     */
+    this.timeContext = new TimelineTimeContext(pixelsPerSecond, visibleWidth);
   }
 
-  // remove a layer
-  remove(layer) {
-    if (layer.param('isEditable') && layer.undelegateEvents) {
-      layer.undelegateEvents();
-    }
-
-    layer.g.remove();
-    delete this.layers[layer.param('cname')];
-
-    return this;
+  /**
+   * updates `TimeContext`'s offset
+   * @attribute {Number} [offset=0]
+   */
+  get offset() {
+    return this.timeContext.offset;
   }
 
-  // --------------------------------------------------
-  // events
-  // --------------------------------------------------
-
-  delegateEvents() {
-    // !!! remember to unbind when deleting element !!!
-    var body = document.body;
-    var target;
-    // is actually not listened in make editable
-    this.svg.on('mousedown', () => {
-      target = d3.event.target;
-      this.trigger('mousedown', d3.event);
-    });
-
-    this.svg.on('mouseup', () => {
-      this.trigger('mouseup', d3.event);
-    });
-
-    this.svg.on('mousemove', throttle(() => {
-      this.trigger('mousemove', d3.event);
-    }, this.throttleRate, { leading: false }));
-
-    // this.svg.on('mousemove', () => {
-    //   console.log('mousemove');
-    //   this.trigger('mousemove', d3.event);
-    // });
-
-    // choose which one we really want
-    // or use two different names
-    this.svg.on('mouseleave', () => {
-      // this.xZoomSet(); // was in makeEditable - check if really needed
-      this.trigger('mouseleave', d3.event);
-    });
-
-    body.addEventListener('mouseleave', (e) => {
-      if (e.fromElement !== body) { return; }
-      this.trigger('mouseleave', e);
-    });
-
-    var that = this;
-    // @NOTE: how removeListeners for drag behavior
-    var dragBehavior = d3.behavior.drag();
-    // dragBehavior.on('dragstart', function() {
-    //   console.log(d3.event);
-    // });
-
-    // @NOTE throttle doesn't work here
-    // for unknown reason d3.event is null most of the time
-    dragBehavior.on('drag', () => {
-    // dragBehavior.on('drag', throttle(() => {
-      // we drag only selected items
-      var originalEvent = d3.event;
-      // @NOTE shouldn't rely on `selected` class here
-      this.selection.selectAll('.selected').each(function(datum) {
-        var e = {
-          // group - allow to redraw only the current dragged item
-          currentTarget: this,
-          // element (which part of the element is actually dragged,
-          // ex. line or rect in a segment)
-          target: target,
-          d: datum,
-          originalEvent: originalEvent
-        };
-
-        that.trigger('drag', e);
-      });
-    });
-    // }, this.throttleRate));
-
-    this.svg.call(dragBehavior);
-
-    // var brush = d3.svg.brush()
-    //   .x(this.xScale)
-    //   .y(this.yScale);
-
-    // brush.on('brushstart', function() {
-    //   console.log('brushstart', d3.event);
-    // });
-
-    // brush.on('brush', function() {
-    //   console.log('brush', d3.event);
-    // });
-
-    // brush.on('brushend', function() {
-    //   console.log('brushend', d3.event);
-    // });
-
-    // this.boundingBox.call(brush);
+  set offset(value) {
+    this.timeContext.offset = value;
   }
 
-  // should clean event delegation, in conjonction with a `remove` method
-  undelegateEvents() {
-    //
+  get zoom() {
+    return this.timeContext.zoom;
   }
 
-  // sets the brushing state for interaction and a css class for styles
-  // @TODO define how the brush should work
-  // brushing(state = null) {
-  //   if (state === null) { return this._brushing; }
-
-  //   this._brushing = state;
-  //   d3.select(document.body).classed('brushing', state);
-  // }
-
-  xZoom(zoom) {
-    // in px to domain
-    zoom.anchor = this.originalXscale.invert(zoom.anchor);
-    // this.zoomFactor = zoom.factor;
-    this.xZoomCompute(zoom, this);
-
-    if (this.lockZoomOutOnInitialDomain) {
-      this.lockZoomOut();
-    }
-
-    // redraw layers
-    for (var key in this.layers) {
-      var layer = this.layers[key];
-      if ('xScale' in layer) { this.xZoomCompute(zoom, layer); }
-      if ('xZoom' in layer) { layer.xZoom(zoom); }
-    }
+  set zoom(value) {
+    this.timeContext.zoom = value;
   }
 
-  // don't allow to zoom out of the initial domain
-  // see: https://github.com/wavesjs/ui/issues/1
-  lockZoomOut() {
-    var xScaleDomain = this.xScale.domain();
-    var xDomain = this.xDomain();
-
-    if (xScaleDomain[0] < xDomain[0] || xScaleDomain[1] > xDomain[1]) {
-      var min = Math.max(xDomain[0], xScaleDomain[0]);
-      var max = Math.min(xDomain[1], xScaleDomain[1]);
-
-      this.xScale.domain([min, max]);
-    }
+  get pixelsPerSecond() {
+    return this.timeContext.pixelsPerSecond;
   }
 
-  xZoomCompute(zoom, layer) {
-    var deltaY = zoom.delta.y;
-    var deltaX = zoom.delta.x;
-    var anchor = zoom.anchor;
-    var factor = zoom.factor;
-
-    // start and length (instead of end)
-    var targetStart = layer.originalXscale.domain()[0];
-    var currentLength = layer.originalXscale.domain()[1] - targetStart;
-
-    // length after scaling
-    var targetLength = currentLength * factor;
-    // unchanged length in px
-    var rangeLength = layer.originalXscale.range()[1] - layer.originalXscale.range()[0];
-
-    // zoom
-    if (deltaY) {
-      var offsetOrigin = ( (anchor - targetStart) / currentLength ) * rangeLength;
-      var offsetFinal = ( (anchor - targetStart) / targetLength ) * rangeLength;
-      targetStart += ( (offsetFinal - offsetOrigin) / rangeLength ) * targetLength;
-    }
-
-    // translate x
-    if (deltaX) {
-      var translation = (deltaX / rangeLength) * targetLength;
-      targetStart += translation;
-    }
-    // updating the scale
-    layer.xScale.domain([targetStart, targetStart + targetLength]);
+  set pixelsPerSecond(value) {
+    this.timeContext.pixelsPerSecond = value;
   }
 
-  // @NOTE - used ? - is called from make editable
-  xZoomSet() {
-    // saves new scale reference
-    this.originalXscale = this.xScale.copy();
-
-    for (var key in this.layers) {
-      var layer = this.layers[key];
-      if ('xScale' in layer) { layer.originalXscale = layer.xScale.copy(); }
-      if ('zoomEnd' in layer) { layer.zoomEnd(); }
-    }
+  get visibleWidth() {
+    return this.timeContext.visibleWidth;
   }
 
-  // --------------------------------------------------
-  // main interface methods
-  // --------------------------------------------------
-
-  draw(sel) {
-    // draw should be called only once
-    if (this.svg) { return this.update(); }
-
-    // assume a timeline is unique and can be bound only to one element
-    this.selection = sel || this.selection;
-    let el = d3.select(this.selection[0][0]);
-    // normalize dimensions based on the margins
-    this.width(this.width() - this.margin().left - this.margin().right);
-    this.height(this.height() - this.margin().top - this.margin().bottom);
-
-    // 1. create svg element
-    // @NOTE viewbox: do we really want this behavior ?
-    //       doesn't work well with foreignobject canvas
-    // cf. http://stackoverflow.com/questions/3120739/resizing-svg-in-html
-    var margin = this.margin();
-    var outerWidth  = this.width() + margin.left + margin.right;
-    var outerHeight = this.height() + margin.top + margin.bottom;
-    var viewBox = '0 0 ' + outerWidth + ' ' + outerHeight;
-
-    this.svg = el.append('svg')
-      .attr('width', outerWidth)
-      .attr('height', outerHeight)
-      // .attr('width', '100%')
-      // .attr('height', '100%')
-      // .attr('viewBox', viewBox)
-      .attr('data-cname', this.cname())
-      .attr('data-name', this.name())
-      .style('display', 'block');
-
-    // 2. create layout group and clip path
-    var clipPathId = 'bouding-box-clip-' + this.cname();
-
-    this.svg
-      .append('defs')
-      .append('clipPath')
-      .attr('id', clipPathId)
-      .append('rect')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', outerWidth)
-        .attr('height', outerHeight);
-
-    this.boundingBox = this.svg.append('g')
-      .attr('class', 'bounding-box')
-      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-      .attr('clip-path', 'url(#' + clipPathId + ')');
-
-
-    // 3. delegate events
-    this.delegateEvents();
-
-    // 4. create layers groups
-    for (var key in this.layers) {
-      this.layers[key].createGroup(this.boundingBox);
-    }
-
-    // 5. update view
-    this.update();
-
-    return this;
+  set visibleWidth(value) {
+    this.timeContext.visibleWidth = value;
   }
 
-  // update layers
-  // @param layerIds <string|object|array> optionnal
-  //      layers to update or instance(s)
-  update(...layers) {
-    var toUpdate = {};
+  get timeToPixel() {
+    return this.timeContext.timeToPixel;
+  }
 
-    if (layers.length === 0) {
-      toUpdate = this.layers;
-    } else {
-      layers.forEach((layer) => {
-        toUpdate[layer.param('cname')] = layer;
-      });
-    }
+  /**
+   *  @readonly
+   */
+  get visibleDuration() {
+    return this.timeContext.visibleDuration;
+  }
 
-    // update selected layers
-    for (let key in toUpdate) { toUpdate[key].update(); }
-    for (let key in toUpdate) { toUpdate[key].draw(); }
+  // @NOTE maybe expose as public instead of get/set for nothing...
+  set maintainVisibleDuration(bool) {
+    this.timeContext.maintainVisibleDuration = bool;
+  }
 
-    var hasQueue = this.uiLoop.hasRegisteredCallbacks();
-    // start rAF
-    this.uiLoop.start();
+  get maintainVisibleDuration() {
+    return this.timeContext.maintainVisibleDuration;
+  }
 
-    requestAnimationFrame(() => {
-      if (hasQueue && !this.uiLoop.hasRegisteredCallbacks()) {
-        var eventName = this.DOMReady ? 'DOMUpdate' : 'DOMReady';
-        this.emit(eventName);
-        this.DOMReady = true;
+  // @readonly - used in track collection
+  get groupedLayers() {
+    return this._groupedLayers;
+  }
+
+  /**
+   *  Override the default Surface that is instanciated on each
+   *  @param {EventSource} ctor - the constructor to use to build surfaces
+   */
+  configureSurface(ctor) {
+    this._surfaceCtor = ctor;
+  }
+
+  /**
+   * Factory method to add interaction modules the timeline should listen to.
+   * By default, the timeline listen to Keyboard, and instanciate a `Surface` on each container.
+   * Can be used to install any interaction implementing the `EventSource` interface
+   * @param {EventSource} ctor - the contructor of the interaction module to instanciate
+   * @param el {DOMElement} the DOM element to bind to the EventSource module
+   * @param options {Object} options to be applied to the ctor (defaults to `{}`)
+   */
+  createInteraction(ctor, el, options = {}) {
+    const interaction = new ctor(el, options);
+    interaction.on('event', (e) => this._handleEvent(e));
+  }
+
+  /**
+   * returns an array of the layers which positions
+   * and sizes matches a pointer Event
+   * @param {WavesEvent} e - the event from the Surface
+   * @return {Array} - matched layers
+   */
+  getHitLayers(e) {
+    const clientX = e.originalEvent.clientX;
+    const clientY = e.originalEvent.clientY;
+    let layers = [];
+
+    this.layers.forEach((layer) => {
+      if (!layer.params.hittable) { return; }
+      const br = layer.$el.getBoundingClientRect();
+
+      if (
+        clientX > br.left && clientX < br.right &&
+        clientY > br.top && clientY < br.bottom
+      ) {
+        layers.push(layer);
       }
     });
+
+    return layers;
   }
 
-  // destroy the timeline
-  destroy() {
-    // this.layers.forEach((layer) => this.remove(layer));
-    // this.undelegateEvents();
-    // this.svg.remove();
+  /**
+   * The callback that is used to listen to interactions modules
+   * @params {Event} e - a custom event generated by interaction modules
+   */
+  _handleEvent(e) {
+    const hitLayers = (e.source === 'surface') ?
+      this.getHitLayers(e) : null;
+    // emit event as a middleware
+    this.emit('event', e, hitLayers);
+    // propagate to the state
+    if (!this._state) { return; }
+    this._state.handleEvent(e, hitLayers);
+  }
+
+  /**
+   * Changes the state of the timeline
+   * @param {BaseState} - the state in which the timeline must be setted
+   */
+  set state(state) {
+    if (this._state) { this._state.exit(); }
+    this._state = state;
+    if (this._state) { this._state.enter(); }
+  }
+
+  get state() {
+    return this._state;
+  }
+
+  /**
+   *  Shortcut to access the Track collection
+   *  @return {TrackCollection}
+   */
+  get tracks() {
+    return this._tracks;
+  }
+
+  /**
+   * Shortcut to access the Layer list
+   * @return {Array}
+   */
+  get layers() {
+    return this._tracks.layers;
+  }
+
+  /**
+   * Adds a track to the timeline
+   * Tracks display a view window on the timeline in theirs own SVG element.
+   * @param {Track} track
+   */
+  add(track) {
+    if (this.tracks.indexOf(track) !== -1) {
+      throw new Error('track already added to the timeline');
+    }
+
+    track.configure(this.timeContext);
+
+    this.tracks.push(track);
+    this.createInteraction(this._surfaceCtor, track.$el);
+  }
+
+  /**
+   *  Removes a track from the timeline
+   *  @TODO
+   */
+  remove(track) {
+    // should destroy interaction too, avoid ghost eventListeners
+  }
+
+  /**
+   *  Creates a new track from the configuration define in `configureTracks`
+   *  @param {DOMElement} $el - the element to insert the track inside
+   *  @param {Object} options - override the defaults options if necessary
+   *  @param {String} [trackId=null] - optionnal id to give to the track, only exists in timeline's context
+   *  @return {Track}
+   */
+  createTrack($el, trackHeight = 100, trackId = null) {
+    const track = new Track($el, trackHeight);
+
+    if (trackId !== null) {
+      if (this._trackById[trackId] !== undefined) {
+        throw new Error(`trackId: "${trackId}" is already used`);
+      }
+
+      this._trackById[trackId] = track;
+    }
+
+    // Add track to the timeline
+    this.add(track);
+    track.render();
+    track.update();
+
+    return track;
+  }
+
+  /**
+   *  Adds a layer to a track, allow to group track arbitrarily inside groups. Basically a wrapper for `track.add(layer)`
+   *  @param {Layer} layer - the layer to add
+   *  @param {Track} track - the track to the insert the layer in
+   *  @param {String} [groupId='default'] - the group in which associate the layer
+   */
+  addLayer(layer, trackOrTrackId, groupId = 'default', isAxis = false) {
+    let track = trackOrTrackId;
+
+    if (typeof trackOrTrackId === 'string') {
+      track = this.getTrackById(trackOrTrackId);
+    }
+
+    // creates the `LayerTimeContext` if not present
+    if (!layer.timeContext) {
+      const timeContext = isAxis ?
+        this.timeContext : new LayerTimeContext(this.timeContext);
+
+      layer.setTimeContext(timeContext);
+    }
+
+    // we should have a Track instance at this point
+    track.add(layer);
+
+    if (!this._groupedLayers[groupId]) {
+      this._groupedLayers[groupId] = [];
+    }
+
+    this._groupedLayers[groupId].push(layer);
+
+    layer.render();
+    layer.update();
+  }
+
+  /**
+   *  Removes a layer from its track (the layer is detatched from the DOM but can still be reused)
+   *  @param {Layer} layer - the layer to remove
+   */
+  removeLayer(layer) {
+    this.tracks.forEach(function(track) {
+      const index = track.layers.indexOf(layer);
+      if (index !== -1) { track.remove(layer); }
+    });
+
+    // clean references in helpers
+    for (let groupId in this._groupedLayers) {
+      const group = this._groupedLayers[groupId];
+      const index = group.indexOf(layer);
+
+      if (index !== -1) { group.splice(layer, 1); }
+
+      if (!group.length) {
+        delete this._groupedLayers[groupId];
+      }
+    }
+  }
+
+  /**
+   *  Returns a track from it's id
+   *  @param {String} trackId
+   *  @return {Track}
+   */
+  getTrackById(trackId) {
+    return this._trackById[trackId];
+  }
+
+  /**
+   *  Returns the track containing a given DOM Element, if no match found return null
+   *  @param {DOMElement} $el
+   *  @return {Track}
+   */
+  getTrackFromDOMElement($el) {
+    let $svg = null;
+    let track = null;
+    // find the closest `.track` element
+    do {
+      if ($el.classList.contains('track')) {
+        $svg = $el;
+      }
+      $el = $el.parentNode;
+    } while ($svg === null);
+    // find the related `Track`
+    this.tracks.forEach(function(_track) {
+      if (_track.$svg === $svg) { track = _track; }
+    });
+
+    return track;
+  }
+
+  /**
+   * Returns an array of layers from their group Id
+   * @param {String} groupId
+   * @return {Array}
+   */
+  getLayersByGroup(groupId) {
+    return this._groupedLayers[groupId];
+  }
+
+  *[Symbol.iterator]() {
+    yield* this.tracks[Symbol.iterator]();
   }
 }
-
-// generic getters(setters) accessors and defaults
-// accessors.getFunction(Timeline.prototype, [ ]);
-accessors.getValue(Timeline.prototype, [
-  'name', 'cname', 'xDomain', 'yDomain', 'height', 'width', 'margin'
-]);
-
-function factory(options) { return new Timeline(options); }
-factory.d3 = d3; // make d3 available though the factory
-factory.Timeline = Timeline;
-
-module.exports = factory;

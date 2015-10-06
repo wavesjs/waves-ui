@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Segment Layer</title>
+
+  <link rel="stylesheet" type="text/css" href="./assets/common.css" />
+  <link rel="stylesheet" type="text/css" href="./assets/prism.css" />
+
+  <script src="../waves-ui.umd.js"></script>
+  <script src="./assets/prism.js"></script>
+  <script src="./assets/insert-code.js"></script>
+</head>
+<body>
+
+  <h1>Segment Layer</h1>
+
+  <!-- SIMPLE USAGE -->
+  <h2 id="simple-use">Simple Usage</h2>
+
+  <div class="track" id="track-1"></div>
+  <script class="example" rel="track-1">
+  (function() {
+    var $track = document.querySelector('#track-1');
+    var width = $track.getBoundingClientRect().width;
+    var height = 200;
+    var duration = 20;
+
+    // some data to visualize
+    var data = [
+      { x: 2, width: 4, color: 'steelblue', opacity: 0.8 },
+      { x: 10, width: 5, color: 'orange', opacity: 0.8 },
+      { x: 14, width: 3, color: 'green', opacity: 0.8 },
+    ];
+
+    // define the numbr of pixels per seconds the timeline should display
+    var pixelsPerSecond = width / duration;
+    // create a timeline
+    var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
+    // create a new track into the `track-1` element and give it a id ('main')
+    timeline.createTrack($track, height, 'main');
+
+    // create the layer
+    var segmentLayer = new wavesUI.helpers.SegmentLayer(data, {
+      height: height,
+      displayHandlers: false,
+    });
+
+    // insert the layer inside the 'main' track
+    timeline.addLayer(segmentLayer, 'main');
+
+    // add an hover effect on the segments
+    timeline.on('event', function(e) {
+      var segment;
+      var eventType = e.type;
+
+      if (eventType !== 'mouseover' && eventType !== 'mouseout') { return; }
+
+      segment = segmentLayer.getItemFromDOMElement(e.target);
+
+      if (segment !== null) {
+        var datum = segmentLayer.getDatumFromItem(segment);
+        datum.opacity = eventType === 'mouseover' ? 1 : 0.8;
+        segmentLayer.updateShapes();
+      }
+    });
+  }());
+  </script>
+
+  <div class="track" id="track-2"></div>
+  <script class="example" rel="track-2">
+  (function() {
+    var $track = document.querySelector('#track-2');
+    var width = $track.getBoundingClientRect().width;
+    var height = 200;
+    var duration = 20;
+    var yDomain = [0, 10];
+
+    // some data to visualize
+    var data = [
+      { x: 2, width: 4, y: 0, height: 6, color: 'steelblue', opacity: 0.8 },
+      { x: 10, width: 5, y: 2, height: 8, color: 'orange', opacity: 0.8 },
+      { x: 14, width: 3, y: 3, height: 4, color: 'green', opacity: 0.8 },
+    ];
+
+    // define the numbr of pixels per seconds the timeline should display
+    var pixelsPerSecond = width / duration;
+    // create a timeline
+    var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
+    // create a new track into the `track-1` element and give it a id ('main')
+    timeline.createTrack($track, height, 'main');
+
+    // create the layer
+    var segmentLayer = new wavesUI.helpers.SegmentLayer(data, {
+      height: height,
+      displayHandlers: false,
+      yDomain: yDomain,
+    });
+
+    // insert the layer inside the 'main' track
+    timeline.addLayer(segmentLayer, 'main');
+
+    // add an hover effect on the segments
+    timeline.on('event', function(e) {
+      var segment;
+      var eventType = e.type;
+
+      if (eventType !== 'mouseover' && eventType !== 'mouseout') { return; }
+
+      segment = segmentLayer.getItemFromDOMElement(e.target);
+
+      if (segment !== null) {
+        var datum = segmentLayer.getDatumFromItem(segment);
+        datum.opacity = eventType === 'mouseover' ? 1 : 0.8;
+        segmentLayer.updateShapes();
+      }
+    });
+  }());
+  </script>
+
+  <!-- ADVANCED USAGE -->
+  <h2 id="advanced-use">Advanced Usage</h2>
+
+  <div class="track" id="track-3"></div>
+  <script class="example" rel="track-3">
+  (function() {
+    var $track = document.querySelector('#track-3');
+    var width = $track.getBoundingClientRect().width;
+    var height = 200;
+    var duration = 20;
+
+    var data = [
+      { start: 2, duration: 4, color: 'steelblue', text: 'label 1' },
+      { start: 10, duration: 5, color: 'orange', text: 'label 2' },
+      { start: 14, duration: 3, color: 'green', text: 'label 3' },
+    ];
+
+    var pixelsPerSecond = width / duration;
+
+    var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
+    var track = new wavesUI.core.Track($track, height);
+
+    var segmentLayer = new wavesUI.core.Layer('collection', data, {
+      height: height
+    });
+
+    var timeContext = new wavesUI.core.LayerTimeContext(timeline.timeContext);
+
+    segmentLayer.setTimeContext(timeContext);
+    segmentLayer.configureShape(wavesUI.shapes.AnnotatedSegment, {
+      x: function(d, v) {
+        if (v !== undefined) { d.start = v; }
+        return d.start;
+      },
+      width: function(d, v) {
+        if (v !== undefined) { d.duration = v; }
+        return d.duration;
+      }
+    });
+
+    segmentLayer.setBehavior(new wavesUI.behaviors.SegmentBehavior());
+
+    timeline.state = new wavesUI.states.SimpleEditionState(timeline);
+
+    track.add(segmentLayer);
+    timeline.add(track);
+
+    timeline.tracks.render();
+    timeline.tracks.update();
+  }());
+  </script>
+</body>
+</html>

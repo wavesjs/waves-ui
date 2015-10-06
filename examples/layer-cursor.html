@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Cursor Layer</title>
+
+  <link rel="stylesheet" type="text/css" href="./assets/common.css" />
+  <link rel="stylesheet" type="text/css" href="./assets/prism.css" />
+
+  <script src="../waves-ui.umd.js"></script>
+  <script src="./assets/prism.js"></script>
+  <script src="./assets/insert-code.js"></script>
+</head>
+<body>
+
+  <h1>Cursor Layer</h1>
+
+  <!-- SIMPLE USAGE -->
+  <h2 id="simple-use">Simple Usage</h2>
+
+  <div class="track" id="track-1"></div>
+  <script class="example" rel="track-1">
+  (function() {
+    var $track = document.querySelector('#track-1');
+    var width = $track.getBoundingClientRect().width;
+    var height = 200;
+    var duration = 10;
+
+    // define the numbr of pixels per seconds the timeline should display
+    var pixelsPerSecond = width / duration;
+    // create a timeline
+    var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
+    // create a new track into the `track-1` element and give it a id ('main')
+    timeline.createTrack($track, height, 'main');
+
+    var cursorLayer = new wavesUI.helpers.CursorLayer({
+      height: height
+    });
+
+    timeline.addLayer(cursorLayer, 'main');
+
+    // listen for time passing...
+    (function loop() {
+      var currentTime = new Date().getTime() / 1000;
+      cursorLayer.currentPosition = currentTime % duration;
+      cursorLayer.update();
+
+      requestAnimationFrame(loop);
+    }());
+  }());
+  </script>
+
+  <!-- ADVANCED USAGE -->
+  <h2 id="advanced-use">Advanced Usage</h2>
+
+  <div class="track" id="track-2"></div>
+  <script class="example" rel="track-2">
+  (function() {
+    var $track = document.querySelector('#track-2');
+    var width = $track.getBoundingClientRect().width;
+    var height = 200;
+    var duration = 5;
+
+    var pixelsPerSecond = width / duration;
+
+    var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
+    var track = new wavesUI.core.Track($track, height);
+
+    var data = { currentPosition: 0 };
+
+    var cursorLayer = new wavesUI.core.Layer('entity', data, {
+      height: height
+    });
+
+    var timeContext = new wavesUI.core.LayerTimeContext(timeline.timeContext);
+
+    cursorLayer.setTimeContext(timeContext);
+    cursorLayer.configureShape(wavesUI.shapes.Cursor, {
+      x: function(d) { return d.currentPosition; }
+    }, {
+      color: 'red'
+    });
+
+    track.add(cursorLayer);
+    timeline.add(track);
+
+    timeline.tracks.render();
+    timeline.tracks.update();
+
+    // listen for time passing...
+    (function loop() {
+      var currentTime = new Date().getTime() / 1000;
+      data.currentPosition = currentTime % duration;
+      timeline.tracks.update(cursorLayer);
+
+      requestAnimationFrame(loop);
+    }());
+  }());
+  </script>
+</body>
+</html>
