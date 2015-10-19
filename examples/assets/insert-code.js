@@ -14,7 +14,7 @@ window.addEventListener('DOMContentLoaded', function() {
     var pre = document.createElement('pre');
     var code = document.createElement('code');
 
-    code.innerHTML = tag.textContent.replace(/\n(\s)*$/, '');
+    code.textContent = tag.textContent.replace(/\n(\s)*$/, '');
     code.classList.add('language-javascript');
 
     pre.appendChild(code);

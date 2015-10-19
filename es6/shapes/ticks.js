@@ -1,6 +1,9 @@
 import BaseShape from './base-shape';
 
-
+/**
+ * King of Marker for entity oriented data
+ * Usefull to display ticks in axis
+ */
 export default class Ticks extends BaseShape {
   _getClassName() {
     return 'tick';
