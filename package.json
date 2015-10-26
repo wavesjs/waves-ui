@@ -40,15 +40,15 @@
     "babel-runtime": "^5.8.12"
   },
   "devDependencies": {
-    "babel": "^5.8.29",
-    "browserify": "^11.2.0",
     "fs-extra": "^0.16.3",
     "jshint": "^2.6.0",
     "node-watch": "^0.3.4",
     "tape": "^4.0.1",
     "uglify-js": "^2.4.16"
   },
-  "globalDependencies_nonStandard": {
-    "esdoc": "0.4.1"
+  "globalDependencies[nonStandard]": {
+    "esdoc": "0.4.1",
+    "babel": "^5.8.29",
+    "browserify": "^11.2.0"
   }
 }
