@@ -12,16 +12,24 @@
   "main": "waves-ui.js",
   "standalone": "wavesUI",
   "scripts": {
-    "transpile": "node ./bin/scripts.js --transpile",
+    "doc": "node ./bin/scripts --doc",
+
+    "transpile": "node ./bin/scripts --transpile",
+
     "prebundle": "npm run hint && npm run transpile",
-    "bundle": "node ./bin/scripts.js --bundle",
+    "bundle": "node ./bin/scripts --bundle",
     "postbundle": "npm run uglify",
-    "uglify": "node ./bin/scripts.js --uglify",
-    "watch": "node ./bin/scripts.js --watch",
-    "test": "browserify -t [ babelify --blacklist regenerator ] tests/*/*.js |  testling -u --no-show",
+
+    "uglify": "node ./bin/scripts --uglify",
+
+    "watch": "node ./bin/scripts --watch",
+
     "pretest": "npm run hint",
+    "test": "browserify -t [ babelify --blacklist regenerator ] tests/*/*.js |  testling -u --no-show",
+
     "hint": "jshint ./es6; true",
-    "coverage": "browserify -t [ babelify --blacklist regenerator ] -t coverify tests/*/*.js | testling -u --no-show | coverify --json -o coverage.json && node ./bin/scripts.js --cover-report -i coverage.json"
+
+    "coverage": "browserify -t [ babelify --blacklist regenerator ] -t coverify tests/*/*.js | testling -u --no-show | coverify --json -o coverage.json && node ./bin/scripts --cover-report -i coverage.json"
   },
   "license": "BSD-3",
   "repository": {
@@ -38,15 +46,18 @@
     "babel-runtime": "^5.8.12"
   },
   "devDependencies": {
-    "cli-color": "^1.0.0",
     "docchi": "^0.10.3",
     "docchidown": "git://github.com/ouhouhsami/docchidown",
     "fs-extra": "^0.16.3",
     "jshint": "^2.6.0",
-    "minimist": "^1.1.2",
     "node-string-pad": "0.0.4",
     "node-watch": "^0.3.4",
     "tape": "^4.0.1",
     "uglify-js": "^2.4.16"
+  },
+  "globalDependencies_nonStandard": {
+    "babel": "5.8.29",
+    "browserify": "11.2.0",
+    "esdoc": "0.4.1"
   }
 }

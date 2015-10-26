@@ -1,16 +1,14 @@
+#!/usr/bin/env node
 var babel = require('babel');
 var browserify = require('browserify');
 var childProcess = require('child_process');
-var clc = require('cli-color');
-var fs = require("fs");
 var fse = require('fs-extra');
-var minimist = require('minimist');
 var nodeWatch = require('node-watch');
-var pad = require('node-string-pad');
 var pkg = require('../package.json');
 var uglifyJS = require('uglify-js');
 var util = require('util');
 
+'use strict';
 
 // CONFIG
 // -----------------------------------------------
@@ -39,6 +37,14 @@ var NC    = '\033[0m'; // No Color
 // COMMAND INTERPRETER
 // -----------------------------------------------
 var command = process.argv[2];
+
+// arguments - create a key value object with next arguments
+var args = process.argv.slice(3);
+var argv = {};
+for (var i = 0; i < args.length; i += 2) {
+  argv[args[i]] = args[i + 1];
+}
+
 // execute the correct function given the script
 switch (command) {
   case '--watch':
@@ -54,7 +60,7 @@ switch (command) {
     transpileAll();
     break;
   case '--cover-report':
-    coverReport();
+    coverReport(argv['-i']);
     break;
 }
 
@@ -75,6 +81,15 @@ function getUmdName() {
 // create filename from `umd` to `min` version
 function getMinName() {
   return getUmdName().replace('.umd.js', '.min.js');
+}
+
+function padRight(input, size, str) {
+  str = str || ' ';
+
+  while (input.toString().length < size) {
+    input = input + ' ';
+  }
+  return input;
 }
 
 // SCRIPTS
@@ -139,7 +154,7 @@ function transpileAll() {
   });
 }
 
-// transpile one file or several files in serial
+// transpile one file or several files sequencially
 // @param `stack` is a workaround for babel which has some kind of leak and
 // cannot transpile several files in parallel without being messy with sourceMaps.
 // Using the Sync method crash the entire script each time there is an error in
@@ -163,36 +178,36 @@ function transpile(src, stack) {
   });
 }
 
-// Cover report
-function coverReport() {
-  'use strict';
-
-  var argv = minimist(process.argv.slice(3));
+// cover report
+function coverReport(input) {
   var chunks = [];
-  var uncovered = clc.red.bold;
-  var covered = clc.green;
-  var f = fs.readFileSync(argv['i']);
-  var json = JSON.parse(f);
-  Object.keys(json).forEach(function(key){
-    if(json[key].length > 0){
-      console.log(key);
-      var notCovered = {};
-      for(var i=0; i<json[key].length;i++ ){
-        var line = json[key][i]['lineNum'];
-        var range = json[key][i].lines[0].range;
-        notCovered[line] = range;
+  var coverageFile = fse.readFileSync(input);
+  var coverageJson = JSON.parse(coverageFile);
+
+  Object.keys(coverageJson).forEach(function(filename, index) {
+    if (coverageJson[filename].length === 0) { return; }
+    console.log('\n> coverage of: ' + filename + '\n');
+
+    var notCovered = {};
+    var file = fse.readFileSync(filename, 'utf8').split('\n');
+
+    // trace reported lines
+    coverageJson[filename].forEach(function(currentFileCoverage) {
+      var line = currentFileCoverage['lineNum'];
+      var range = currentFileCoverage.lines[0].range;
+      notCovered[line] = range;
+    });
+
+    // log the whole file with colors according to reporting
+    file.forEach(function(line, index) {
+      var prefix = padRight(index + 1, 6);
+
+      if (notCovered[index + 1]) {
+        console.log(prefix + ' ' + red + line + NC);
+      } else {
+        console.log(prefix + ' ' + green + line + NC);
       }
-      var file = fs.readFileSync(key, 'utf8')
-      file = file.split('\n');
-      for(var i=0; i<file.length; i++){
-        var line = file[i];
-        if(notCovered[i]){
-          console.log(pad((i+1).toString(), 6)+' '+uncovered(line));
-        }else{
-          console.log(pad((i+1).toString(), 6)+' '+covered(line));
-        }
-      };
-    }
+    });
   });
 }
 
