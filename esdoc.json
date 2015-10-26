@@ -3,6 +3,6 @@
   "destination": "./doc",
   "title": "WavesJS UI",
   "manual": {
-    "example": ["./manual/examples.md"]
+    "example": ["./examples/examples.md"]
   }
 }
