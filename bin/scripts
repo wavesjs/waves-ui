@@ -117,7 +117,7 @@ function generateDoc() {
   // }
   var execSync = childProcess.execSync;
   // delete current gh-pages branch if exists
-  try { execSync('git branch -d gh-pages'); } catch (err) {}
+  try { execSync('git branch -D gh-pages'); } catch (err) {}
   // create gh-pages branch
   execSync('git checkout -b gh-pages');
   // run esdoc
@@ -148,9 +148,9 @@ function generateDoc() {
 
   execSync('git add -A');
   execSync('git commit -am "updated documentation"');
-  execSync('git push origin gh-pages');
+  execSync('git push origin gh-pages --force');
   execSync('git checkout master');
-  execSync('git branch -d gh-pages');
+  execSync('git branch -D gh-pages');
 }
 
 // watch source dir
