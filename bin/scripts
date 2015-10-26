@@ -1,13 +1,14 @@
 #!/usr/bin/env node
-var babel = require('babel');
-var browserify = require('browserify');
-var childProcess = require('child_process');
-var fse = require('fs-extra');
-var nodeWatch = require('node-watch');
 var pkg = require('../package.json');
-var uglifyJS = require('uglify-js');
+var childProcess = require('child_process');
 var util = require('util');
 var path = require('path');
+
+var babel = require('babel');
+var browserify = require('browserify');
+var fse = require('fs-extra');
+var nodeWatch = require('node-watch');
+var uglifyJS = require('uglify-js');
 
 'use strict';
 
