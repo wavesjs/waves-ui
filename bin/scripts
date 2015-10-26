@@ -126,14 +126,18 @@ function generateDoc() {
   // rm * but doc/ examples/ README.md
   var files = fse.readdirSync(cwd);
   var toKeep = [
+    '.git',
+    '.gitignore',
+    'bin',
     'doc',
     'manual',
     'examples',
-    '.git',
-    'bin',
     'README.md',
     'esdoc.json'
   ];
+
+  toKeep.push(getUmdName());
+  toKeep.push(getMinName());
 
   files.forEach(function(file) {
     if (toKeep.indexOf(file) !== -1) { return; }
