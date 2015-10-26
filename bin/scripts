@@ -7,6 +7,7 @@ var nodeWatch = require('node-watch');
 var pkg = require('../package.json');
 var uglifyJS = require('uglify-js');
 var util = require('util');
+var path = require('path');
 
 'use strict';
 
@@ -14,6 +15,7 @@ var util = require('util');
 // -----------------------------------------------
 var srcDir = 'es6';
 var distDir = 'dist';
+var cwd = process.cwd();
 
 // options for babel
 var babelOptions = {
@@ -106,21 +108,38 @@ function isGitMasterBranch() {
 // SCRIPTS
 // -----------------------------------------------
 
-// generate doc
 function generateDoc() {
   // check if in master
-  if (!isGitMasterBranch()) {
-    var msg = red + '=> you must be in master branch to run doc command' + NC;
-    return console.log(msg);
-  }
+  // if (!isGitMasterBranch()) {
+  //   var msg = red + '=> you must be in master branch to run doc command' + NC;
+  //   return console.log(msg);
+  // }
   var execSync = childProcess.execSync;
   // delete current gh-pages branch
-  execSync('git branch -d gh-pages');
+  try {
+    console.log('try ??');
+    execSync('git branch -d gh-pages');
+  } catch (err) {}
   // create gh-pages branch
   execSync('git checkout -b gh-pages');
   // run esdoc
-  execSync('esdoc -d esdoc.json');
+  execSync('esdoc -c ' + path.join(cwd, 'esdoc.json'));
+  console.log('Created documentation');
   // rm * but doc/ examples/ README.md
+  var files = fse.readdirSync(cwd);
+  var toKeep = ['doc', 'manual', 'examples', 'README.md', '.git', 'bin'];
+
+  files.forEach(function(file) {
+    if (toKeep.indexOf(file) !== -1) { return; }
+    fse.removeSync(file);
+    console.log('delete ' + file);
+  });
+
+  fse.copySync('doc', '.');
+  console.log('copy doc into ' + cwd);
+
+  fse.removeSync('doc');
+
   // cp -R doc/* ./*
   // push on gh-pages branch
   // checkout master
