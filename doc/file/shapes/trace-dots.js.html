@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">shapes/trace-dots.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/wavesjs/ui" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/shapes/annotated-marker.js~AnnotatedMarker.html">AnnotatedMarker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/shapes/annotated-segment.js~AnnotatedSegment.html">AnnotatedSegment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/shapes/base-shape.js~BaseShape.html">BaseShape</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/shapes/cursor.js~Cursor.html">Cursor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/shapes/dot.js~Dot.html">Dot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/shapes/line.js~Line.html">Line</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/shapes/marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/shapes/segment.js~Segment.html">Segment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/shapes/ticks.js~Ticks.html">Ticks</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/shapes/trace-dots.js~TraceDots.html">TraceDots</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/shapes/trace-path.js~TracePath.html">TracePath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/shapes/waveform.js~Waveform.html">Waveform</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">shapes/trace-dots.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import BaseShape from &apos;./base-shape&apos;;
+
+
+export default class TraceDots extends BaseShape {
+  getClassName() { return &apos;trace-dots&apos;; }
+
+  _getAccessorList() {
+    return { x: 0, mean: 0, range: 0 };
+  }
+
+  _getDefaults() {
+    return {
+      meanRadius: 3,
+      rangeRadius: 3,
+      meanColor: &apos;#232323&apos;,
+      rangeColor: &apos;steelblue&apos;
+    };
+  }
+
+  render(renderingContext) {
+    if (this.$el) { return this.$el; }
+    // container
+    this.$el = document.createElementNS(this.ns, &apos;g&apos;);
+    // draw mean dot
+    this.$mean = document.createElementNS(this.ns, &apos;circle&apos;);
+    this.$mean.setAttributeNS(null, &apos;r&apos;, this.params.meanRadius);
+    this.$mean.setAttributeNS(null, &apos;stroke&apos;, this.params.meanColor);
+    this.$mean.setAttributeNS(null, &apos;fill&apos;, &apos;transparent&apos;);
+    this.$mean.classList.add(&apos;mean&apos;);
+    // range dots (0 =&gt; top, 1 =&gt; bottom)
+    this.$max = document.createElementNS(this.ns, &apos;circle&apos;);
+    this.$max.setAttributeNS(null, &apos;r&apos;, this.params.meanRadius);
+    this.$max.setAttributeNS(null, &apos;stroke&apos;, this.params.rangeColor);
+    this.$max.setAttributeNS(null, &apos;fill&apos;, &apos;transparent&apos;);
+    this.$max.classList.add(&apos;max&apos;);
+
+    this.$min = document.createElementNS(this.ns, &apos;circle&apos;);
+    this.$min.setAttributeNS(null, &apos;r&apos;, this.params.meanRadius);
+    this.$min.setAttributeNS(null, &apos;stroke&apos;, this.params.rangeColor);
+    this.$min.setAttributeNS(null, &apos;fill&apos;, &apos;transparent&apos;);
+    this.$min.classList.add(&apos;min&apos;);
+
+    this.$el.appendChild(this.$mean);
+    this.$el.appendChild(this.$max);
+    this.$el.appendChild(this.$min);
+
+    return this.$el;
+  }
+
+  // @TODO use accessors
+  update(renderingContext, datum) {
+    const mean = this.mean(datum);
+    const range = this.range(datum);
+    const x = this.x(datum);
+    // y positions
+    const meanPos = `${renderingContext.valueToPixel(mean)}`;
+    this.$mean.setAttributeNS(null, &apos;transform&apos;, `translate(0, ${meanPos})`);
+
+    const halfRange = range / 2;
+    const max = renderingContext.valueToPixel(mean + halfRange);
+    const min = renderingContext.valueToPixel(mean - halfRange);
+    const xPos = renderingContext.timeToPixel(x);
+
+    this.$max.setAttributeNS(null, &apos;transform&apos;, `translate(0, ${max})`);
+    this.$min.setAttributeNS(null, &apos;transform&apos;, `translate(0, ${min})`);
+    this.$el.setAttributeNS(null, &apos;transform&apos;, `translate(${xPos}, 0)`);
+  }
+
+  inArea(renderingContext, datum, x1, y1, x2, y2) {
+    const x = renderingContext.timeToPixel(this.x(datum));
+    const mean = renderingContext.valueToPixel(this.mean(datum));
+    const range = renderingContext.valueToPixel(this.range(datum));
+    const min = mean - (range / 2);
+    const max = mean + (range / 2);
+
+    if (x &gt; x1 &amp;&amp; x &lt; x2 &amp;&amp; (min &gt; y1 || max &lt; y2)) {
+      return true;
+    }
+
+    return false;
+  }
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.1)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

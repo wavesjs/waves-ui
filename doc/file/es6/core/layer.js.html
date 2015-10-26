@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">es6/core/layer.js | My Software Name API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/wavesjs/ui" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">axis</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/axis/axis-layer.js~AxisLayer.html">AxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-gridAxisGenerator">gridAxisGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-timeAxisGenerator">timeAxisGenerator</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">behaviors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/behaviors/base-behavior.js~BaseBehavior.html">BaseBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/behaviors/breakpoint-behavior.js~BreakpointBehavior.html">BreakpointBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/behaviors/marker-behavior.js~MarkerBehavior.html">MarkerBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/behaviors/segment-behavior.js~SegmentBehavior.html">SegmentBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/behaviors/time-context-behavior.js~TimeContextBehavior.html">TimeContextBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/behaviors/trace-behavior.js~TraceBehavior.html">TraceBehavior</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/core/layer-time-context.js~LayerTimeContext.html">LayerTimeContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/core/layer.js~Layer.html">Layer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/core/timeline-time-context.js~TimelineTimeContext.html">TimelineTimeContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/core/timeline.js~Timeline.html">Timeline</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/core/track-collection.js~TrackCollection.html">TrackCollection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/core/track.js~Track.html">Track</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">helpers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/annotated-marker-layer.js~AnnotatedMarkerLayer.html">AnnotatedMarkerLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/annotated-segment-layer.js~AnnotatedSegmentLayer.html">AnnotatedSegmentLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/breakpoint-layer.js~BreakpointLayer.html">BreakpointLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/cursor-layer.js~CursorLayer.html">CursorLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/grid-axis-layer.js~GridAxisLayer.html">GridAxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/marker-layer.js~MarkerLayer.html">MarkerLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/segment-layer.js~SegmentLayer.html">SegmentLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/tick-layer.js~TickLayer.html">TickLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/time-axis-layer.js~TimeAxisLayer.html">TimeAxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/trace-layer.js~TraceLayer.html">TraceLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/waveform-layer.js~WaveformLayer.html">WaveformLayer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interactions</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/interactions/event-source.js~EventSource.html">EventSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/interactions/keyboard.js~Keyboard.html">Keyboard</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/interactions/surface.js~Surface.html">Surface</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/interactions/wave-event.js~WaveEvent.html">WaveEvent</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">shapes</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/annotated-marker.js~AnnotatedMarker.html">AnnotatedMarker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/annotated-segment.js~AnnotatedSegment.html">AnnotatedSegment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/base-shape.js~BaseShape.html">BaseShape</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/cursor.js~Cursor.html">Cursor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/dot.js~Dot.html">Dot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/line.js~Line.html">Line</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/segment.js~Segment.html">Segment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/ticks.js~Ticks.html">Ticks</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/trace-dots.js~TraceDots.html">TraceDots</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/trace-path.js~TracePath.html">TracePath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/waveform.js~Waveform.html">Waveform</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">states</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/base-state.js~BaseState.html">BaseState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/breakpoint-state.js~BreakpointState.html">BreakpointState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/brush-zoom-state.js~BrushZoomState.html">BrushZoomState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/centered-zoom-state.js~CenteredZoomState.html">CenteredZoomState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/context-edition-state.js~ContextEditionState.html">ContextEditionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/edition-state.js~EditionState.html">EditionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/selection-state.js~SelectionState.html">SelectionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/simple-edition-state.js~SimpleEditionState.html">SimpleEditionState</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">utils</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/utils/orthogonal-data.js~OrthogonalData.html">OrthogonalData</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">es6/core/layer.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import scales from &apos;../utils/scales&apos;;
+import events from &apos;events&apos;;
+
+import ns from &apos;./namespace&apos;;
+import Segment from &apos;../shapes/segment&apos;;
+import TimeContextBehavior from &apos;../behaviors/time-context-behavior&apos;;
+
+// time context bahevior
+let timeContextBehavior = null;
+let timeContextBehaviorCtor = TimeContextBehavior;
+
+/**
+ *  The layer class is the main visualization class
+ */
+export default class Layer extends events.EventEmitter {
+  /**
+   * Structure of the DOM view of a Layer
+   *
+   * ```
+   * &lt;g class=&quot;layer&quot;&gt; Flip y axis, timeContext.start and top position from params are applied on this $elmt
+   *   &lt;svg class=&quot;bounding-box&quot;&gt; timeContext.duration is applied on this $elmt
+   *    &lt;g class=&quot;layer-interactions&quot;&gt; Contains the timeContext edition elements (a segment) &lt;/g&gt;
+   *    &lt;g class=&quot;offset items&quot;&gt; The shapes are inserted here, and we apply timeContext.offset on this $elmt &lt;/g&gt;
+   *   &lt;/svg&gt;
+   * &lt;/g&gt;
+   * ```
+   */
+  constructor(dataType, data, options = {}) {
+    super();
+    this.dataType = dataType; // &apos;entity&apos; || &apos;collection&apos;;
+    this.data = data;
+
+    const defaults = {
+      height: 100,
+      top: 0,
+      id: &apos;&apos;,
+      yDomain: [0, 1],
+      opacity: 1,
+      contextHandlerWidth: 2,
+      className: null,
+      // when false the layer is not returned by `BaseState.getHitLayers`
+      hittable: true,
+      overflow: &apos;hidden&apos;,
+    };
+
+    this.params = Object.assign({}, defaults, options);
+    this.timeContext = null;
+
+    // container elements
+    this.$el = null; // offset group of the parent context
+    this.$boundingBox = null;
+    this.$offset = null;
+    this.$interactions = null;
+
+    this._shapeConfiguration = null; // { ctor, accessors, options }
+    this._commonShapeConfiguration = null; // { ctor, accessors, options }
+    // map to associate datums, $items, and shapes
+    this._$itemShapeMap = new Map(); // item group &lt;DOMElement&gt; =&gt; shape
+    this._$itemDataMap = new Map();
+    this._$itemCommonShapeMap = new Map(); // one entry max in this map
+
+    this._isContextEditable = false;
+    this._behavior = null;
+
+    this._valueToPixel = scales.linear()
+      .domain(this.params.yDomain)
+      .range([0, this.params.height]);
+
+    this.contextBehavior = &apos;&apos;;
+
+    // initialize timeContext layout
+    this._renderContainer();
+
+    // creates the timeContextBehavior for all layer, lazy instanciation
+    if (timeContextBehavior === null) {
+      timeContextBehavior = new timeContextBehaviorCtor();
+    }
+  }
+
+  destroy() {
+    this.timeContext = null;
+    this.data = null;
+    this.params = null;
+    this._behavior = null;
+
+    this._$itemShapeMap.clear();
+    this._$itemDataMap.clear();
+    this._$itemCommonShapeMap.clear();
+
+    this.removeAllListeners();
+  }
+
+  /**
+   *  allows to override default the TimeContextBehavior
+   */
+  static configureTimeContextBehavior(ctor) {
+    timeContextBehaviorCtor = ctor;
+  }
+
+  get start() {
+    return this.timeContext.start;
+  }
+
+  set start(value) {
+    this.timeContext.start = value;
+  }
+
+  get offset() {
+    return this.timeContext.offset;
+  }
+
+  set offset(value) {
+    this.timeContext.offset = value;
+  }
+
+  get duration() {
+    return this.timeContext.duration;
+  }
+
+  set duration(value) {
+    this.timeContext.duration = value;
+  }
+
+  get stretchRatio() {
+    return this.timeContext.stretchRatio;
+  }
+
+  set stretchRatio(value) {
+    this.timeContext.stretchRatio = value;
+  }
+
+  set yDomain(domain) {
+    this.params.yDomain = domain;
+    this._valueToPixel.domain(domain);
+  }
+
+  get yDomain() {
+    return this.params.yDomain;
+  }
+
+  set opacity(value) {
+    this.params.opacity = value;
+  }
+
+  get opacity() {
+    return this.params.opacity;
+  }
+
+  // expose scale
+  get timeToPixel() {
+    return this.timeContext.timeToPixel;
+  }
+
+  get valueToPixel() {
+    return this._valueToPixel;
+  }
+
+  /**
+   *  @return {Array} - an array containins all the DOMElement items
+   */
+  get items() {
+    var items = [];
+
+    for (let item of this._$itemDataMap.keys()) {
+      items.push(item);
+    }
+
+    return items;
+  }
+
+  /**
+   * @mandatory define the context in which the layer is drawn
+   * @param context {TimeContext} the timeContext in which the layer is displayed
+   */
+  setTimeContext(timeContext) {
+    this.timeContext = timeContext;
+    // create a mixin to pass to the shapes
+    this._renderingContext = {};
+    this._updateRenderingContext();
+  }
+
+  // --------------------------------------
+  // Data
+  // --------------------------------------
+
+  get data() { return this._data; }
+
+  set data(data) {
+    switch (this.dataType) {
+      case &apos;entity&apos;:
+        if (this._data) {  // if data already exists, reuse the reference
+          this._data[0] = data;
+        } else {
+          this._data = [data];
+        }
+        break;
+      case &apos;collection&apos;:
+        this._data = data;
+        break;
+    }
+  }
+
+  // Initialization
+
+  /**
+   *  render the DOM in memory on layer creation to be able to use it before
+   *  the layer is actually inserted in the DOM
+   */
+  _renderContainer() {
+    // wrapper group for `start, top and context flip matrix
+    this.$el = document.createElementNS(ns, &apos;g&apos;);
+    this.$el.classList.add(&apos;layer&apos;);
+    if (this.params.className !== null) {
+      this.$el.classList.add(this.params.className);
+    }
+    // clip the context with a `svg` element
+    this.$boundingBox = document.createElementNS(ns, &apos;svg&apos;);
+    this.$boundingBox.classList.add(&apos;bounding-box&apos;);
+    this.$boundingBox.style.overflow = this.params.overflow;
+    // group to apply offset
+    this.$offset = document.createElementNS(ns, &apos;g&apos;);
+    this.$offset.classList.add(&apos;offset&apos;, &apos;items&apos;);
+    // layer background
+    this.$background = document.createElementNS(ns, &apos;rect&apos;);
+    this.$background.setAttributeNS(null, &apos;height&apos;, &apos;100%&apos;);
+    this.$background.setAttributeNS(null, &apos;width&apos;, &apos;100%&apos;);
+    this.$background.classList.add(&apos;background&apos;);
+    this.$background.style.fillOpacity = 0;
+    this.$background.style.pointerEvents = &apos;none&apos;;
+    // context interactions
+    this.$interactions = document.createElementNS(ns, &apos;g&apos;);
+    this.$interactions.classList.add(&apos;interactions&apos;);
+    this.$interactions.style.display = &apos;none&apos;;
+    // @NOTE: works but king of ugly... should be cleaned
+    this.contextShape = new Segment();
+    this.contextShape.install({
+      opacity: () =&gt; 0.1,
+      color  : () =&gt; &apos;#787878&apos;,
+      width  : () =&gt; this.timeContext.duration,
+      height : () =&gt; this._renderingContext.valueToPixel.domain()[1],
+      y      : () =&gt; this._renderingContext.valueToPixel.domain()[0]
+    });
+
+    this.$interactions.appendChild(this.contextShape.render());
+    // create the DOM tree
+    this.$el.appendChild(this.$boundingBox);
+    this.$boundingBox.appendChild(this.$offset);
+    this.$offset.appendChild(this.$background);
+    this.$boundingBox.appendChild(this.$interactions);
+  }
+
+  // --------------------------------------
+  // Component Configuration
+  // --------------------------------------
+
+  /**
+   *  Register the shape and its accessors to use in order to render
+   *  the entity or collection
+   *  @param ctor &lt;Function:BaseShape&gt; the constructor of the shape to be used
+   *  @param accessors &lt;Object&gt; accessors to use in order to map the data structure
+   */
+  configureShape(ctor, accessors = {}, options = {}) {
+    this._shapeConfiguration = { ctor, accessors, options };
+  }
+
+  /**
+   *  Register the shape to use with the entire collection
+   *  example: the line in a beakpoint function
+   *  @param ctor {BaseShape} the constructor of the shape to use to render data
+   *  @param accessors {Object} accessors to use in order to map the data structure
+   */
+  configureCommonShape(ctor, accessors = {}, options = {}) {
+    this._commonShapeConfiguration = { ctor, accessors, options };
+  }
+
+  /**
+   *  Register the behavior to use when interacting with the shape
+   *  @param behavior {BaseBehavior}
+   */
+  setBehavior(behavior) {
+    behavior.initialize(this);
+    this._behavior = behavior;
+  }
+
+  /**
+   *  update the values in `_renderingContext`
+   *  is particulary needed when updating `stretchRatio` as the pointer
+   *  to the `timeToPixel` scale may change
+   */
+  _updateRenderingContext() {
+    this._renderingContext.timeToPixel = this.timeContext.timeToPixel;
+    this._renderingContext.valueToPixel = this._valueToPixel;
+
+    this._renderingContext.height = this.params.height;
+    this._renderingContext.width  = this.timeContext.timeToPixel(this.timeContext.duration);
+    // for foreign object issue in chrome
+    this._renderingContext.offsetX = this.timeContext.timeToPixel(this.timeContext.offset);
+    this._renderingContext.startX = this.timeContext.parent.timeToPixel(this.timeContext.start);
+
+    // @TODO replace with `minX` and `maxX` representing the visible pixels in which
+    // the shapes should be rendered, could allow to not update the DOM of shapes
+    // who are not in this area.
+    // in between: expose some timeline attributes -&gt; improves Waveform perfs
+    this._renderingContext.trackOffsetX = this.timeContext.parent.timeToPixel(this.timeContext.parent.offset);
+    this._renderingContext.visibleWidth = this.timeContext.parent.visibleWidth;
+  }
+
+  // --------------------------------------
+  // Behavior Accessors
+  // --------------------------------------
+
+  get selectedItems() {
+    return this._behavior ? this._behavior.selectedItems : [];
+  }
+
+  select(...$items) {
+    if (!this._behavior) { return; }
+    if (!$items.length) { $items = this._$itemDataMap.keys(); }
+    if (Array.isArray($items[0])) { $items = $items[0]; }
+
+    for (let $item of $items) {
+      const datum = this._$itemDataMap.get($item);
+      this._behavior.select($item, datum);
+      this._toFront($item);
+    }
+  }
+
+  unselect(...$items) {
+    if (!this._behavior) { return; }
+    if (!$items.length) { $items = this._$itemDataMap.keys(); }
+    if (Array.isArray($items[0])) { $items = $items[0]; }
+
+    for (let $item of $items) {
+      const datum = this._$itemDataMap.get($item);
+      this._behavior.unselect($item, datum);
+    }
+  }
+
+  toggleSelection(...$items) {
+    if (!this._behavior) { return; }
+    if (!$items.length) { $items = this._$itemDataMap.keys(); }
+    if (Array.isArray($items[0])) { $items = $items[0]; }
+
+    for (let $item of $items) {
+      const datum = this._$itemDataMap.get($item);
+      this._behavior.toggleSelection($item, datum);
+    }
+  }
+
+  edit($items, dx, dy, target) {
+    if (!this._behavior) { return; }
+    $items = !Array.isArray($items) ? [$items] : $items;
+
+    for (let $item of $items) {
+      const shape = this._$itemShapeMap.get($item);
+      const datum = this._$itemDataMap.get($item);
+
+      this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);
+      this.emit(&apos;edit&apos;, shape, datum);
+    }
+  }
+
+  /**
+   *  draws the shape to interact with the context
+   *  @params {Boolean} [bool=true] - defines if the layer&apos;s context is editable or not
+   */
+  setContextEditable(bool = true) {
+    const display = bool ? &apos;block&apos; : &apos;none&apos;;
+    this.$interactions.style.display = display;
+    this._isContextEditable = bool;
+  }
+
+  editContext(dx, dy, target) {
+    timeContextBehavior.edit(this, dx, dy, target);
+  }
+
+  stretchContext(dx, dy, target) {
+    timeContextBehavior.stretch(this, dx, dy, target);
+  }
+
+  // --------------------------------------
+  // Helpers
+  // --------------------------------------
+
+  /**
+   *  Moves an `$el`&apos;s group to the end of the layer (svg z-index...)
+   *  @param `$el` {DOMElement} the DOMElement to be moved
+   */
+  _toFront($item) {
+    this.$offset.appendChild($item);
+  }
+
+  /**
+   *  Returns the $item to which the given DOMElement belongs
+   *  @param {DOMElement} $el the element to be tested
+   *  @return {DOMElement|null} item group containing the `$el` if belongs to this layer, null otherwise
+   */
+  getItemFromDOMElement($el) {
+    let $item;
+
+    do {
+      if ($el.classList &amp;&amp; $el.classList.contains(&apos;item&apos;)) {
+        $item = $el;
+        break;
+      }
+
+      $el = $el.parentNode;
+    } while ($el !== null);
+
+    return this.hasItem($item) ? $item :&#xA0;null;
+  }
+
+  /**
+   *  Returns the datum associated to a specific item DOMElement
+   *  @param {DOMElement} $item
+   *  @return {Object|Array|null} depending on the user data structure
+   */
+  getDatumFromItem($item) {
+    return this._$itemDataMap.get($item);
+  }
+
+  getDatumFromDOMElement($el) {
+    var $item = this.getItemFromDOMElement($el);
+    if ($item === null) { return null; }
+    return this.getDatumFromItem($item);
+  }
+
+  /**
+   *  Defines if the given DOMElement is an item of the layer
+   *  @param {DOMElement} $item
+   *  @return {bool}
+   */
+  hasItem($item) {
+    return this._$itemDataMap.has($item);
+  }
+
+  /**
+   *  Defines if a given element belongs to the layer
+   *  is more general than `hasItem`, can be used to check interactions elements too
+   *  @param {DOMElement} $el
+   *  @return {bool}
+   */
+  hasElement($el) {
+    do {
+      if ($el === this.$el) {
+        return true;
+      }
+
+      $el = $el.parentNode;
+    } while ($el !== null);
+
+    return false;
+  }
+
+  /**
+   *  retrieve all the $items in a given area
+   *  @param {Object} area - The area in which to find the elements
+   *  @return {Array} - list of the DOM elements in the given area
+   */
+  getItemsInArea(area) {
+    const start    = this.timeContext.parent.timeToPixel(this.timeContext.start);
+    const duration = this.timeContext.timeToPixel(this.timeContext.duration);
+    const offset   = this.timeContext.timeToPixel(this.timeContext.offset);
+    const top      = this.params.top;
+    // be aware af context&apos;s translations - constrain in working view
+    let x1 = Math.max(area.left, start);
+    let x2 = Math.min(area.left + area.width, start + duration);
+    x1 -= (start + offset);
+    x2 -= (start + offset);
+    // keep consistent with context y coordinates system
+    let y1 = this.params.height - (area.top + area.height);
+    let y2 = this.params.height - area.top;
+
+    y1 += this.params.top;
+    y2 += this.params.top;
+
+    const $filteredItems = [];
+
+    for (let [$item, datum] of this._$itemDataMap.entries()) {
+      const shape = this._$itemShapeMap.get($item);
+      const inArea = shape.inArea(this._renderingContext, datum, x1, y1, x2, y2);
+
+      if (inArea) { $filteredItems.push($item); }
+    }
+
+    return $filteredItems;
+  }
+
+  // --------------------------------------
+  // Rendering / Display methods
+  // --------------------------------------
+
+  render() {
+    // render `commonShape` only once
+    if (
+      this._commonShapeConfiguration !== null &amp;&amp;
+      this._$itemCommonShapeMap.size === 0
+    ) {
+      const { ctor, accessors, options } = this._commonShapeConfiguration;
+      const $group = document.createElementNS(ns, &apos;g&apos;);
+      const shape = new ctor(options);
+
+      shape.install(accessors);
+      $group.appendChild(shape.render());
+      $group.classList.add(&apos;item&apos;, &apos;common&apos;, shape.getClassName());
+
+      this._$itemCommonShapeMap.set($group, shape);
+      this.$offset.appendChild($group);
+    }
+
+    // append elements all at once
+    const fragment = document.createDocumentFragment();
+    const values = this._$itemDataMap.values(); // iterator
+
+    // enter
+    this.data.forEach((datum) =&gt; {
+      for (let value of values) { if (value === datum) { return; } }
+
+      const { ctor, accessors, options } = this._shapeConfiguration;
+      const shape = new ctor(options);
+      shape.install(accessors);
+
+      const $el = shape.render(this._renderingContext);
+      $el.classList.add(&apos;item&apos;, shape.getClassName());
+
+      this._$itemShapeMap.set($el, shape);
+      this._$itemDataMap.set($el, datum);
+
+      fragment.appendChild($el);
+    });
+
+    this.$offset.appendChild(fragment);
+
+    // remove
+    for (let [$item, datum] of this._$itemDataMap.entries()) {
+      if (this.data.indexOf(datum) !== -1) { continue; }
+
+      const shape = this._$itemShapeMap.get($item);
+
+      this.$offset.removeChild($item);
+      shape.destroy();
+      // a removed item cannot be selected
+      if (this._behavior) {
+        this._behavior.unselect($item, datum);
+      }
+
+      this._$itemDataMap.delete($item);
+      this._$itemShapeMap.delete($item);
+    }
+  }
+
+  /**
+   *  updates Context and Shapes
+   */
+  update() {
+    this.updateContainer();
+    this.updateShapes();
+  }
+
+  /**
+   *  updates the layer&apos;s container
+   */
+  updateContainer() {
+    this._updateRenderingContext();
+
+    const timeContext = this.timeContext;
+    const width  = timeContext.timeToPixel(timeContext.duration);
+    // x is relative to timeline&apos;s timeContext
+    const x      = timeContext.parent.timeToPixel(timeContext.start);
+    const offset = timeContext.timeToPixel(timeContext.offset);
+    const top    = this.params.top;
+    const height = this.params.height;
+    // matrix to invert the coordinate system
+    const translateMatrix = `matrix(1, 0, 0, -1, ${x}, ${top + height})`;
+
+    this.$el.setAttributeNS(null, &apos;transform&apos;, translateMatrix);
+
+    this.$boundingBox.setAttributeNS(null, &apos;width&apos;, width);
+    this.$boundingBox.setAttributeNS(null, &apos;height&apos;, height);
+    this.$boundingBox.style.opacity = this.params.opacity;
+
+    this.$offset.setAttributeNS(null, &apos;transform&apos;, `translate(${offset}, 0)`);
+    // maintain context shape
+    this.contextShape.update(this._renderingContext, this.timeContext, 0);
+  }
+
+  /**
+   *  updates the Shapes which belongs to the layer
+   *  @param {DOMElement} $el - Not implemented
+   */
+  updateShapes($el = null) {
+    this._updateRenderingContext();
+    // update common shapes
+    this._$itemCommonShapeMap.forEach((shape, $item) =&gt; {
+      shape.update(this._renderingContext, this.data);
+    });
+
+    for (let [$item, datum] of this._$itemDataMap.entries()) {
+      const shape = this._$itemShapeMap.get($item);
+      shape.update(this._renderingContext, datum);
+    }
+  }
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.1)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

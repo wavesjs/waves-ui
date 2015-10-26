@@ -2,7 +2,7 @@ import { padLeft } from '../utils/format';
 /**
  * maybe create a factory to give some parameters
  * create time serie data, to visualize a time scale
- * @return {Array} - An array of { label, focused [, time (should be time, works in time domain]) }
+ * @return {Array} - An array of objects `label, focused [, time]
  */
 export default function timeAxisGenerator() {
   // add factory to share API with bpmGenerator

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">es6/core/timeline.js | My Software Name API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/wavesjs/ui" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">axis</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/axis/axis-layer.js~AxisLayer.html">AxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-gridAxisGenerator">gridAxisGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-timeAxisGenerator">timeAxisGenerator</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">behaviors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/behaviors/base-behavior.js~BaseBehavior.html">BaseBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/behaviors/breakpoint-behavior.js~BreakpointBehavior.html">BreakpointBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/behaviors/marker-behavior.js~MarkerBehavior.html">MarkerBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/behaviors/segment-behavior.js~SegmentBehavior.html">SegmentBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/behaviors/time-context-behavior.js~TimeContextBehavior.html">TimeContextBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/behaviors/trace-behavior.js~TraceBehavior.html">TraceBehavior</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/core/layer-time-context.js~LayerTimeContext.html">LayerTimeContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/core/layer.js~Layer.html">Layer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/core/timeline-time-context.js~TimelineTimeContext.html">TimelineTimeContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/core/timeline.js~Timeline.html">Timeline</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/core/track-collection.js~TrackCollection.html">TrackCollection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/core/track.js~Track.html">Track</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">helpers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/annotated-marker-layer.js~AnnotatedMarkerLayer.html">AnnotatedMarkerLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/annotated-segment-layer.js~AnnotatedSegmentLayer.html">AnnotatedSegmentLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/breakpoint-layer.js~BreakpointLayer.html">BreakpointLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/cursor-layer.js~CursorLayer.html">CursorLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/grid-axis-layer.js~GridAxisLayer.html">GridAxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/marker-layer.js~MarkerLayer.html">MarkerLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/segment-layer.js~SegmentLayer.html">SegmentLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/tick-layer.js~TickLayer.html">TickLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/time-axis-layer.js~TimeAxisLayer.html">TimeAxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/trace-layer.js~TraceLayer.html">TraceLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/helpers/waveform-layer.js~WaveformLayer.html">WaveformLayer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interactions</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/interactions/event-source.js~EventSource.html">EventSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/interactions/keyboard.js~Keyboard.html">Keyboard</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/interactions/surface.js~Surface.html">Surface</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/interactions/wave-event.js~WaveEvent.html">WaveEvent</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">shapes</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/annotated-marker.js~AnnotatedMarker.html">AnnotatedMarker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/annotated-segment.js~AnnotatedSegment.html">AnnotatedSegment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/base-shape.js~BaseShape.html">BaseShape</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/cursor.js~Cursor.html">Cursor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/dot.js~Dot.html">Dot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/line.js~Line.html">Line</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/segment.js~Segment.html">Segment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/ticks.js~Ticks.html">Ticks</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/trace-dots.js~TraceDots.html">TraceDots</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/trace-path.js~TracePath.html">TracePath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/shapes/waveform.js~Waveform.html">Waveform</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">states</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/base-state.js~BaseState.html">BaseState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/breakpoint-state.js~BreakpointState.html">BreakpointState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/brush-zoom-state.js~BrushZoomState.html">BrushZoomState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/centered-zoom-state.js~CenteredZoomState.html">CenteredZoomState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/context-edition-state.js~ContextEditionState.html">ContextEditionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/edition-state.js~EditionState.html">EditionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/selection-state.js~SelectionState.html">SelectionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/states/simple-edition-state.js~SimpleEditionState.html">SimpleEditionState</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">utils</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/es6/utils/orthogonal-data.js~OrthogonalData.html">OrthogonalData</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">es6/core/timeline.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import events from &apos;events&apos;;
+
+import Keyboard from &apos;../interactions/keyboard&apos;;
+import LayerTimeContext from &apos;./layer-time-context&apos;;
+import Surface from &apos;../interactions/surface&apos;;
+import TimelineTimeContext from &apos;./timeline-time-context&apos;;
+import Track from &apos;./track&apos;;
+import TrackCollection from &apos;./track-collection&apos;;
+
+
+/**
+ * The `timeline` is the main entry point of a temporal visualization, it:
+ *
+ * - contains factories to manage its `tracks` and `layers`,
+ * - get or set the view window overs its `tracks` through `offset`, `zoom`, `pixelsPerSecond`, `visibleWidth`,
+ * - is the central hub for all user interaction events (keyboard, mouse),
+ * - holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to user interactions.
+ *
+ * ```js
+ * const with = 500; // default with for all created `Track`
+ * const duration = 10; // the timeline should dislay 10 second of data
+ * const pixelsPerSeconds = width / duration;
+ * const timeline = new ui.core.Timeline(pixelsPerSecond, width);
+ * ```
+ */
+export default class Timeline extends events.EventEmitter {
+  /**
+   * Creates a new `Timeline` instance
+   * @param {Number} [pixelsPerSecond=100] - the number of pixels per seconds the timeline should display
+   * @param {Number} [visibleWidth=1000] - the default visible width for all the tracks
+   */
+  constructor(pixelsPerSecond = 100, visibleWidth = 1000, {
+    registerKeyboard = true
+  } = {}) {
+
+    super();
+
+    this._tracks = new TrackCollection(this);
+    this._state = null;
+
+    // default interactions
+    this._surfaceCtor = Surface;
+
+    if (registerKeyboard) {
+      this.createInteraction(Keyboard, document);
+    }
+
+    // stores
+    this._trackById = {};
+    this._groupedLayers = {};
+
+    /**
+     * @this Timeline
+     * @attribute {TimelineTimeContext} - master time context of the graph
+     */
+    this.timeContext = new TimelineTimeContext(pixelsPerSecond, visibleWidth);
+  }
+
+  /**
+   * updates `TimeContext`&apos;s offset
+   * @attribute {Number} [offset=0]
+   */
+  get offset() {
+    return this.timeContext.offset;
+  }
+
+  set offset(value) {
+    this.timeContext.offset = value;
+  }
+
+  get zoom() {
+    return this.timeContext.zoom;
+  }
+
+  set zoom(value) {
+    this.timeContext.zoom = value;
+  }
+
+  get pixelsPerSecond() {
+    return this.timeContext.pixelsPerSecond;
+  }
+
+  set pixelsPerSecond(value) {
+    this.timeContext.pixelsPerSecond = value;
+  }
+
+  get visibleWidth() {
+    return this.timeContext.visibleWidth;
+  }
+
+  set visibleWidth(value) {
+    this.timeContext.visibleWidth = value;
+  }
+
+  get timeToPixel() {
+    return this.timeContext.timeToPixel;
+  }
+
+  /**
+   *  @readonly
+   */
+  get visibleDuration() {
+    return this.timeContext.visibleDuration;
+  }
+
+  // @NOTE maybe expose as public instead of get/set for nothing...
+  set maintainVisibleDuration(bool) {
+    this.timeContext.maintainVisibleDuration = bool;
+  }
+
+  get maintainVisibleDuration() {
+    return this.timeContext.maintainVisibleDuration;
+  }
+
+  // @readonly - used in track collection
+  get groupedLayers() {
+    return this._groupedLayers;
+  }
+
+  /**
+   *  Override the default Surface that is instanciated on each
+   *  @param {EventSource} ctor - the constructor to use to build surfaces
+   */
+  configureSurface(ctor) {
+    this._surfaceCtor = ctor;
+  }
+
+  /**
+   * Factory method to add interaction modules the timeline should listen to.
+   * By default, the timeline listen to Keyboard, and instanciate a `Surface` on each container.
+   * Can be used to install any interaction implementing the `EventSource` interface
+   * @param {EventSource} ctor - the contructor of the interaction module to instanciate
+   * @param el {DOMElement} the DOM element to bind to the EventSource module
+   * @param options {Object} options to be applied to the ctor (defaults to `{}`)
+   */
+  createInteraction(ctor, el, options = {}) {
+    const interaction = new ctor(el, options);
+    interaction.on(&apos;event&apos;, (e) =&gt; this._handleEvent(e));
+  }
+
+  /**
+   * returns an array of the layers which positions
+   * and sizes matches a pointer Event
+   * @param {WavesEvent} e - the event from the Surface
+   * @return {Array} - matched layers
+   */
+  getHitLayers(e) {
+    const clientX = e.originalEvent.clientX;
+    const clientY = e.originalEvent.clientY;
+    let layers = [];
+
+    this.layers.forEach((layer) =&gt; {
+      if (!layer.params.hittable) { return; }
+      const br = layer.$el.getBoundingClientRect();
+
+      if (
+        clientX &gt; br.left &amp;&amp; clientX &lt; br.right &amp;&amp;
+        clientY &gt; br.top &amp;&amp; clientY &lt; br.bottom
+      ) {
+        layers.push(layer);
+      }
+    });
+
+    return layers;
+  }
+
+  /**
+   * The callback that is used to listen to interactions modules
+   * @params {Event} e - a custom event generated by interaction modules
+   */
+  _handleEvent(e) {
+    const hitLayers = (e.source === &apos;surface&apos;) ?
+      this.getHitLayers(e) : null;
+    // emit event as a middleware
+    this.emit(&apos;event&apos;, e, hitLayers);
+    // propagate to the state
+    if (!this._state) { return; }
+    this._state.handleEvent(e, hitLayers);
+  }
+
+  /**
+   * Changes the state of the timeline
+   * @param {BaseState} - the state in which the timeline must be setted
+   */
+  set state(state) {
+    if (this._state) { this._state.exit(); }
+    this._state = state;
+    if (this._state) { this._state.enter(); }
+  }
+
+  get state() {
+    return this._state;
+  }
+
+  /**
+   *  Shortcut to access the Track collection
+   *  @return {TrackCollection}
+   */
+  get tracks() {
+    return this._tracks;
+  }
+
+  /**
+   * Shortcut to access the Layer list
+   * @return {Array}
+   */
+  get layers() {
+    return this._tracks.layers;
+  }
+
+  /**
+   * Adds a track to the timeline
+   * Tracks display a view window on the timeline in theirs own SVG element.
+   * @param {Track} track
+   */
+  add(track) {
+    if (this.tracks.indexOf(track) !== -1) {
+      throw new Error(&apos;track already added to the timeline&apos;);
+    }
+
+    track.configure(this.timeContext);
+
+    this.tracks.push(track);
+    this.createInteraction(this._surfaceCtor, track.$el);
+  }
+
+  /**
+   *  Removes a track from the timeline
+   *  @TODO
+   */
+  remove(track) {
+    // should destroy interaction too, avoid ghost eventListeners
+  }
+
+  /**
+   *  Creates a new track from the configuration define in `configureTracks`
+   *  @param {DOMElement} $el - the element to insert the track inside
+   *  @param {Object} options - override the defaults options if necessary
+   *  @param {String} [trackId=null] - optionnal id to give to the track, only exists in timeline&apos;s context
+   *  @return {Track}
+   */
+  createTrack($el, trackHeight = 100, trackId = null) {
+    const track = new Track($el, trackHeight);
+
+    if (trackId !== null) {
+      if (this._trackById[trackId] !== undefined) {
+        throw new Error(`trackId: &quot;${trackId}&quot; is already used`);
+      }
+
+      this._trackById[trackId] = track;
+    }
+
+    // Add track to the timeline
+    this.add(track);
+    track.render();
+    track.update();
+
+    return track;
+  }
+
+  /**
+   *  Adds a layer to a track, allow to group track arbitrarily inside groups. Basically a wrapper for `track.add(layer)`
+   *  @param {Layer} layer - the layer to add
+   *  @param {Track} track - the track to the insert the layer in
+   *  @param {String} [groupId=&apos;default&apos;] - the group in which associate the layer
+   */
+  addLayer(layer, trackOrTrackId, groupId = &apos;default&apos;, isAxis = false) {
+    let track = trackOrTrackId;
+
+    if (typeof trackOrTrackId === &apos;string&apos;) {
+      track = this.getTrackById(trackOrTrackId);
+    }
+
+    // creates the `LayerTimeContext` if not present
+    if (!layer.timeContext) {
+      const timeContext = isAxis ?
+        this.timeContext : new LayerTimeContext(this.timeContext);
+
+      layer.setTimeContext(timeContext);
+    }
+
+    // we should have a Track instance at this point
+    track.add(layer);
+
+    if (!this._groupedLayers[groupId]) {
+      this._groupedLayers[groupId] = [];
+    }
+
+    this._groupedLayers[groupId].push(layer);
+
+    layer.render();
+    layer.update();
+  }
+
+  /**
+   *  Removes a layer from its track (the layer is detatched from the DOM but can still be reused)
+   *  @param {Layer} layer - the layer to remove
+   */
+  removeLayer(layer) {
+    this.tracks.forEach(function(track) {
+      const index = track.layers.indexOf(layer);
+      if (index !== -1) { track.remove(layer); }
+    });
+
+    // clean references in helpers
+    for (let groupId in this._groupedLayers) {
+      const group = this._groupedLayers[groupId];
+      const index = group.indexOf(layer);
+
+      if (index !== -1) { group.splice(layer, 1); }
+
+      if (!group.length) {
+        delete this._groupedLayers[groupId];
+      }
+    }
+  }
+
+  /**
+   *  Returns a track from it&apos;s id
+   *  @param {String} trackId
+   *  @return {Track}
+   */
+  getTrackById(trackId) {
+    return this._trackById[trackId];
+  }
+
+  /**
+   *  Returns the track containing a given DOM Element, if no match found return null
+   *  @param {DOMElement} $el
+   *  @return {Track}
+   */
+  getTrackFromDOMElement($el) {
+    let $svg = null;
+    let track = null;
+    // find the closest `.track` element
+    do {
+      if ($el.classList.contains(&apos;track&apos;)) {
+        $svg = $el;
+      }
+      $el = $el.parentNode;
+    } while ($svg === null);
+    // find the related `Track`
+    this.tracks.forEach(function(_track) {
+      if (_track.$svg === $svg) { track = _track; }
+    });
+
+    return track;
+  }
+
+  /**
+   * Returns an array of layers from their group Id
+   * @param {String} groupId
+   * @return {Array}
+   */
+  getLayersByGroup(groupId) {
+    return this._groupedLayers[groupId];
+  }
+
+  *[Symbol.iterator]() {
+    yield* this.tracks[Symbol.iterator]();
+  }
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.1)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

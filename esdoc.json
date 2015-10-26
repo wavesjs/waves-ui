@@ -1,0 +1,8 @@
+{
+  "source": "./es6/core",
+  "destination": "./doc",
+  "title": "WavesJS UI",
+  "manual": {
+    "example": ["./manual/examples.md"]
+  }
+}

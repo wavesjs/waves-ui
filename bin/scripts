@@ -62,6 +62,13 @@ switch (command) {
   case '--cover-report':
     coverReport(argv['-i']);
     break;
+  case '--doc':
+    generateDoc();
+    break;
+  case '--dev-test':
+    var result = testGitMasterBranch();
+    console.log(result);
+    break;
 }
 
 // HELPERS
@@ -85,15 +92,40 @@ function getMinName() {
 
 function padRight(input, size, str) {
   str = str || ' ';
-
   while (input.toString().length < size) {
     input = input + ' ';
   }
   return input;
 }
 
+function isGitMasterBranch() {
+  var branch = childProcess.execSync('git symbolic-ref HEAD');
+  return branch.toString().search('refs/heads/master') !== -1;
+}
+
 // SCRIPTS
 // -----------------------------------------------
+
+// generate doc
+function generateDoc() {
+  // check if in master
+  if (!isGitMasterBranch()) {
+    var msg = red + '=> you must be in master branch to run doc command' + NC;
+    return console.log(msg);
+  }
+  var execSync = childProcess.execSync;
+  // delete current gh-pages branch
+  execSync('git branch -d gh-pages');
+  // create gh-pages branch
+  execSync('git checkout -b gh-pages');
+  // run esdoc
+  execSync('esdoc -d esdoc.json');
+  // rm * but doc/ examples/ README.md
+  // cp -R doc/* ./*
+  // push on gh-pages branch
+  // checkout master
+  // delete gh-branch
+}
 
 // watch source dir
 function watch() {
@@ -111,7 +143,8 @@ function bundle() {
   try {
     b.bundle().pipe(fse.createWriteStream(target));
     // is not called at the right place - streams are async
-    console.log(util.format(green + '=> "%s" successfully created' + NC, target));
+    var msg = green + '=> "%s" successfully created' + NC;
+    console.log(util.format(msg, target));
   } catch(e) {
     return console.log(err.message);
   }
@@ -127,9 +160,12 @@ function uglify() {
   fse.outputFile(target, res.code, function(err, res) {
     if (err) { return console.log(err.message); }
 
-    console.log(util.format(green + '=> "%s" successfully created' + NC, target));
+    var msg = green + '=> "%s" successfully created' + NC;
+    console.log(util.format(msg, target));
     // reminder
-    console.log(util.format(red + '==> THINK ABOUT UPDATING VERSION [npm --help version] <==' + NC));
+
+    // ask
+    console.log(red + '==> THINK ABOUT UPDATING VERSION [npm --help version] <==' + NC);
   });
 }
 
@@ -168,7 +204,8 @@ function transpile(src, stack) {
     fse.outputFile(target, result.code, function(err) {
       if (err) { return console.error(err.message); }
 
-      console.log(util.format(green + '=> "%s" successfully transpiled to "%s"' + NC, src, target));
+      var msg = green + '=> "%s" successfully transpiled to "%s"' + NC;
+      console.log(util.format(msg, src, target));
 
       // next
       if (stack && stack.length) {
@@ -210,4 +247,5 @@ function coverReport(input) {
     });
   });
 }
+
 

@@ -1,0 +1,5397 @@
+[
+  {
+    "__docId__": 0,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "core/layer-time-context.js",
+    "memberof": null,
+    "longname": "core/layer-time-context.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import scales from '../utils/scales';\n\n\n/**\n *  A `LayerTimeContext` instance represent a time segment into a `TimelineTimeContext`. It must be attached to a `TimelineTimeContext` (the one of the timeline it belongs to). It relies on its parent's `timeToPixel` (time to pixel transfert function) to create the time to pixel representation of the Layer (the view) it is attached to.\n *\n *  The `layerTimeContext` has four important attributes\n *  - `timeContext.start` represent the time at which temporal data must be represented in the timeline (for instance the begining of a soundfile in a DAW)\n *  - `timeContext.offset` represents offset time of the data in the context of a Layer. (@TODO give a use case example here \"crop ?\", and/or explain that it's not a common use case)\n *  - `timeContext.duration` is the duration of the view on the data\n *  - `timeContext.stretchRatio` is the stretch applyed to the temporal data contained in the view (this value can be seen as a local zoom on the data, or as a stretch on the time components of the data). When applyed, the stretch ratio maintain the start position of the view in the timeline.\n *\n * @example\n * ```\n * + timeline -----------------------------------------------------------------\n * 0         5         10          15          20        25          30 seconds\n * +---+*****************+------------------------------------------+*******+--\n *     |*** soundfile ***|Layer (view on the sound file)            |*******|\n *     +*****************+------------------------------------------+*******+\n *\n *     <---- offset ----><--------------- duration ----------------->\n * <-------- start ----->\n *\n * The parts of the sound file represented with '*' are hidden from the view\n * ```\n */\nexport default class LayerTimeContext {\n  constructor(parent) {\n    if (!parent) { throw new Error('LayerTimeContext must have a parent'); }\n\n    this.parent = parent;\n\n    this._timeToPixel = null;\n\n    this._start = 0;\n    this._duration = parent.visibleDuration;\n    this._offset = 0;\n    this._stretchRatio = 1;\n    // register into the timeline's TimeContext\n    this.parent._children.push(this);\n  }\n\n  clone() {\n    const ctx = new this();\n\n    ctx.parent = this.parent;\n    ctx.start = this.start;\n    ctx.duration = this.duration;\n    ctx.offset = this.offset;\n    ctx.stretchRatio = this.stretchRatio; // creates the local scale if needed\n\n    return ctx;\n  }\n\n  get start() {\n    return this._start;\n  }\n\n  set start(value) {\n    this._start = value;\n  }\n\n  get duration() {\n    return this._duration;\n  }\n\n  set duration(value) {\n    this._duration = value;\n  }\n\n  get offset() {\n    return this._offset;\n  }\n\n  set offset(value) {\n    this._offset = value;\n  }\n\n  get stretchRatio() {\n    return this._stretchRatio;\n  }\n\n  set stretchRatio(value) {\n    // remove local scale if ratio = 1\n    if (value ===  1) {\n      this._timeToPixel = null;\n      return;\n    }\n    // reuse previsously created local scale if exists\n    const timeToPixel = this._timeToPixel ?\n      this._timeToPixel : scales.linear().domain([0, 1]);\n\n    timeToPixel.range([0, this.parent.computedPixelsPerSecond * value]);\n\n    this._timeToPixel = timeToPixel;\n    this._stretchRatio = value;\n  }\n\n  // scales helpers\n  get timeToPixel() {\n    if (!this._timeToPixel) {\n      return this.parent.timeToPixel;\n    }\n\n    return this._timeToPixel;\n  }\n\n  pixelToTime(px) {\n    if (!this._timeToPixel) {\n      return this.parent.timeToPixel.invert(px);\n    }\n\n    return this._timeToPixel.invert(px);\n  }\n}\n"
+  },
+  {
+    "__docId__": 1,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "LayerTimeContext",
+    "memberof": "core/layer-time-context.js",
+    "longname": "core/layer-time-context.js~LayerTimeContext",
+    "access": null,
+    "export": true,
+    "importPath": "waves-ui/core/layer-time-context.js",
+    "importStyle": "LayerTimeContext",
+    "description": " A `LayerTimeContext` instance represent a time segment into a `TimelineTimeContext`. It must be attached to a `TimelineTimeContext` (the one of the timeline it belongs to). It relies on its parent's `timeToPixel` (time to pixel transfert function) to create the time to pixel representation of the Layer (the view) it is attached to.\n\n The `layerTimeContext` has four important attributes\n - `timeContext.start` represent the time at which temporal data must be represented in the timeline (for instance the begining of a soundfile in a DAW)\n - `timeContext.offset` represents offset time of the data in the context of a Layer. (@TODO give a use case example here \"crop ?\", and/or explain that it's not a common use case)\n - `timeContext.duration` is the duration of the view on the data\n - `timeContext.stretchRatio` is the stretch applyed to the temporal data contained in the view (this value can be seen as a local zoom on the data, or as a stretch on the time components of the data). When applyed, the stretch ratio maintain the start position of the view in the timeline.",
+    "examples": [
+      "```\n+ timeline -----------------------------------------------------------------\n0         5         10          15          20        25          30 seconds\n+---+*****************+------------------------------------------+*******+--\n    |*** soundfile ***|Layer (view on the sound file)            |*******|\n    +*****************+------------------------------------------+*******+\n\n    <---- offset ----><--------------- duration ----------------->\n<-------- start ----->\n\nThe parts of the sound file represented with '*' are hidden from the view\n```"
+    ],
+    "lineNumber": 27,
+    "interface": false
+  },
+  {
+    "__docId__": 2,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 28,
+    "undocument": true,
+    "params": [
+      {
+        "name": "parent",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 3,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "parent",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#parent",
+    "access": null,
+    "description": null,
+    "lineNumber": 31,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 4,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_timeToPixel",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#_timeToPixel",
+    "access": null,
+    "description": null,
+    "lineNumber": 33,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 5,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_start",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#_start",
+    "access": null,
+    "description": null,
+    "lineNumber": 35,
+    "undocument": true,
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "__docId__": 6,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_duration",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#_duration",
+    "access": null,
+    "description": null,
+    "lineNumber": 36,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 7,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_offset",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#_offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 37,
+    "undocument": true,
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "__docId__": 8,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_stretchRatio",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#_stretchRatio",
+    "access": null,
+    "description": null,
+    "lineNumber": 38,
+    "undocument": true,
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "__docId__": 9,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "clone",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#clone",
+    "access": null,
+    "description": null,
+    "lineNumber": 43,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 10,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "start",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#start",
+    "access": null,
+    "description": null,
+    "lineNumber": 55,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 11,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "start",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#start",
+    "access": null,
+    "description": null,
+    "lineNumber": 59,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 12,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_start",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#_start",
+    "access": null,
+    "description": null,
+    "lineNumber": 60,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 13,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "duration",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#duration",
+    "access": null,
+    "description": null,
+    "lineNumber": 63,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 14,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "duration",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#duration",
+    "access": null,
+    "description": null,
+    "lineNumber": 67,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 15,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_duration",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#_duration",
+    "access": null,
+    "description": null,
+    "lineNumber": 68,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 16,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "offset",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 71,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 17,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "offset",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 75,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 18,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_offset",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#_offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 76,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 19,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "stretchRatio",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#stretchRatio",
+    "access": null,
+    "description": null,
+    "lineNumber": 79,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 20,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "stretchRatio",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#stretchRatio",
+    "access": null,
+    "description": null,
+    "lineNumber": 83,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 21,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_timeToPixel",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#_timeToPixel",
+    "access": null,
+    "description": null,
+    "lineNumber": 86,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 22,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_timeToPixel",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#_timeToPixel",
+    "access": null,
+    "description": null,
+    "lineNumber": 95,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 23,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_stretchRatio",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#_stretchRatio",
+    "access": null,
+    "description": null,
+    "lineNumber": 96,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 24,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "timeToPixel",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#timeToPixel",
+    "access": null,
+    "description": null,
+    "lineNumber": 100,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 25,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "pixelToTime",
+    "memberof": "core/layer-time-context.js~LayerTimeContext",
+    "longname": "core/layer-time-context.js~LayerTimeContext#pixelToTime",
+    "access": null,
+    "description": null,
+    "lineNumber": 108,
+    "undocument": true,
+    "params": [
+      {
+        "name": "px",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 26,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "core/layer.js",
+    "memberof": null,
+    "longname": "core/layer.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import scales from '../utils/scales';\nimport events from 'events';\n\nimport ns from './namespace';\nimport Segment from '../shapes/segment';\nimport TimeContextBehavior from '../behaviors/time-context-behavior';\n\n// time context bahevior\nlet timeContextBehavior = null;\nlet timeContextBehaviorCtor = TimeContextBehavior;\n\n/**\n *  The layer class is the main visualization class\n */\nexport default class Layer extends events.EventEmitter {\n  /**\n   * Structure of the DOM view of a Layer\n   *\n   * ```\n   * <g class=\"layer\"> Flip y axis, timeContext.start and top position from params are applied on this $elmt\n   *   <svg class=\"bounding-box\"> timeContext.duration is applied on this $elmt\n   *    <g class=\"layer-interactions\"> Contains the timeContext edition elements (a segment) </g>\n   *    <g class=\"offset items\"> The shapes are inserted here, and we apply timeContext.offset on this $elmt </g>\n   *   </svg>\n   * </g>\n   * ```\n   */\n  constructor(dataType, data, options = {}) {\n    super();\n    this.dataType = dataType; // 'entity' || 'collection';\n    this.data = data;\n\n    const defaults = {\n      height: 100,\n      top: 0,\n      id: '',\n      yDomain: [0, 1],\n      opacity: 1,\n      contextHandlerWidth: 2,\n      className: null,\n      // when false the layer is not returned by `BaseState.getHitLayers`\n      hittable: true,\n      overflow: 'hidden',\n    };\n\n    this.params = Object.assign({}, defaults, options);\n    this.timeContext = null;\n\n    // container elements\n    this.$el = null; // offset group of the parent context\n    this.$boundingBox = null;\n    this.$offset = null;\n    this.$interactions = null;\n\n    this._shapeConfiguration = null; // { ctor, accessors, options }\n    this._commonShapeConfiguration = null; // { ctor, accessors, options }\n    // map to associate datums, $items, and shapes\n    this._$itemShapeMap = new Map(); // item group <DOMElement> => shape\n    this._$itemDataMap = new Map();\n    this._$itemCommonShapeMap = new Map(); // one entry max in this map\n\n    this._isContextEditable = false;\n    this._behavior = null;\n\n    this._valueToPixel = scales.linear()\n      .domain(this.params.yDomain)\n      .range([0, this.params.height]);\n\n    this.contextBehavior = '';\n\n    // initialize timeContext layout\n    this._renderContainer();\n\n    // creates the timeContextBehavior for all layer, lazy instanciation\n    if (timeContextBehavior === null) {\n      timeContextBehavior = new timeContextBehaviorCtor();\n    }\n  }\n\n  destroy() {\n    this.timeContext = null;\n    this.data = null;\n    this.params = null;\n    this._behavior = null;\n\n    this._$itemShapeMap.clear();\n    this._$itemDataMap.clear();\n    this._$itemCommonShapeMap.clear();\n\n    this.removeAllListeners();\n  }\n\n  /**\n   *  allows to override default the TimeContextBehavior\n   */\n  static configureTimeContextBehavior(ctor) {\n    timeContextBehaviorCtor = ctor;\n  }\n\n  get start() {\n    return this.timeContext.start;\n  }\n\n  set start(value) {\n    this.timeContext.start = value;\n  }\n\n  get offset() {\n    return this.timeContext.offset;\n  }\n\n  set offset(value) {\n    this.timeContext.offset = value;\n  }\n\n  get duration() {\n    return this.timeContext.duration;\n  }\n\n  set duration(value) {\n    this.timeContext.duration = value;\n  }\n\n  get stretchRatio() {\n    return this.timeContext.stretchRatio;\n  }\n\n  set stretchRatio(value) {\n    this.timeContext.stretchRatio = value;\n  }\n\n  set yDomain(domain) {\n    this.params.yDomain = domain;\n    this._valueToPixel.domain(domain);\n  }\n\n  get yDomain() {\n    return this.params.yDomain;\n  }\n\n  set opacity(value) {\n    this.params.opacity = value;\n  }\n\n  get opacity() {\n    return this.params.opacity;\n  }\n\n  // expose scale\n  get timeToPixel() {\n    return this.timeContext.timeToPixel;\n  }\n\n  get valueToPixel() {\n    return this._valueToPixel;\n  }\n\n  /**\n   *  @return {Array} - an array containins all the DOMElement items\n   */\n  get items() {\n    var items = [];\n\n    for (let item of this._$itemDataMap.keys()) {\n      items.push(item);\n    }\n\n    return items;\n  }\n\n  /**\n   * @mandatory define the context in which the layer is drawn\n   * @param context {TimeContext} the timeContext in which the layer is displayed\n   */\n  setTimeContext(timeContext) {\n    this.timeContext = timeContext;\n    // create a mixin to pass to the shapes\n    this._renderingContext = {};\n    this._updateRenderingContext();\n  }\n\n  // --------------------------------------\n  // Data\n  // --------------------------------------\n\n  get data() { return this._data; }\n\n  set data(data) {\n    switch (this.dataType) {\n      case 'entity':\n        if (this._data) {  // if data already exists, reuse the reference\n          this._data[0] = data;\n        } else {\n          this._data = [data];\n        }\n        break;\n      case 'collection':\n        this._data = data;\n        break;\n    }\n  }\n\n  // Initialization\n\n  /**\n   *  render the DOM in memory on layer creation to be able to use it before\n   *  the layer is actually inserted in the DOM\n   */\n  _renderContainer() {\n    // wrapper group for `start, top and context flip matrix\n    this.$el = document.createElementNS(ns, 'g');\n    this.$el.classList.add('layer');\n    if (this.params.className !== null) {\n      this.$el.classList.add(this.params.className);\n    }\n    // clip the context with a `svg` element\n    this.$boundingBox = document.createElementNS(ns, 'svg');\n    this.$boundingBox.classList.add('bounding-box');\n    this.$boundingBox.style.overflow = this.params.overflow;\n    // group to apply offset\n    this.$offset = document.createElementNS(ns, 'g');\n    this.$offset.classList.add('offset', 'items');\n    // layer background\n    this.$background = document.createElementNS(ns, 'rect');\n    this.$background.setAttributeNS(null, 'height', '100%');\n    this.$background.setAttributeNS(null, 'width', '100%');\n    this.$background.classList.add('background');\n    this.$background.style.fillOpacity = 0;\n    this.$background.style.pointerEvents = 'none';\n    // context interactions\n    this.$interactions = document.createElementNS(ns, 'g');\n    this.$interactions.classList.add('interactions');\n    this.$interactions.style.display = 'none';\n    // @NOTE: works but king of ugly... should be cleaned\n    this.contextShape = new Segment();\n    this.contextShape.install({\n      opacity: () => 0.1,\n      color  : () => '#787878',\n      width  : () => this.timeContext.duration,\n      height : () => this._renderingContext.valueToPixel.domain()[1],\n      y      : () => this._renderingContext.valueToPixel.domain()[0]\n    });\n\n    this.$interactions.appendChild(this.contextShape.render());\n    // create the DOM tree\n    this.$el.appendChild(this.$boundingBox);\n    this.$boundingBox.appendChild(this.$offset);\n    this.$offset.appendChild(this.$background);\n    this.$boundingBox.appendChild(this.$interactions);\n  }\n\n  // --------------------------------------\n  // Component Configuration\n  // --------------------------------------\n\n  /**\n   *  Register the shape and its accessors to use in order to render\n   *  the entity or collection\n   *  @param ctor <Function:BaseShape> the constructor of the shape to be used\n   *  @param accessors <Object> accessors to use in order to map the data structure\n   */\n  configureShape(ctor, accessors = {}, options = {}) {\n    this._shapeConfiguration = { ctor, accessors, options };\n  }\n\n  /**\n   *  Register the shape to use with the entire collection\n   *  example: the line in a beakpoint function\n   *  @param ctor {BaseShape} the constructor of the shape to use to render data\n   *  @param accessors {Object} accessors to use in order to map the data structure\n   */\n  configureCommonShape(ctor, accessors = {}, options = {}) {\n    this._commonShapeConfiguration = { ctor, accessors, options };\n  }\n\n  /**\n   *  Register the behavior to use when interacting with the shape\n   *  @param behavior {BaseBehavior}\n   */\n  setBehavior(behavior) {\n    behavior.initialize(this);\n    this._behavior = behavior;\n  }\n\n  /**\n   *  update the values in `_renderingContext`\n   *  is particulary needed when updating `stretchRatio` as the pointer\n   *  to the `timeToPixel` scale may change\n   */\n  _updateRenderingContext() {\n    this._renderingContext.timeToPixel = this.timeContext.timeToPixel;\n    this._renderingContext.valueToPixel = this._valueToPixel;\n\n    this._renderingContext.height = this.params.height;\n    this._renderingContext.width  = this.timeContext.timeToPixel(this.timeContext.duration);\n    // for foreign object issue in chrome\n    this._renderingContext.offsetX = this.timeContext.timeToPixel(this.timeContext.offset);\n    this._renderingContext.startX = this.timeContext.parent.timeToPixel(this.timeContext.start);\n\n    // @TODO replace with `minX` and `maxX` representing the visible pixels in which\n    // the shapes should be rendered, could allow to not update the DOM of shapes\n    // who are not in this area.\n    // in between: expose some timeline attributes -> improves Waveform perfs\n    this._renderingContext.trackOffsetX = this.timeContext.parent.timeToPixel(this.timeContext.parent.offset);\n    this._renderingContext.visibleWidth = this.timeContext.parent.visibleWidth;\n  }\n\n  // --------------------------------------\n  // Behavior Accessors\n  // --------------------------------------\n\n  get selectedItems() {\n    return this._behavior ? this._behavior.selectedItems : [];\n  }\n\n  select(...$items) {\n    if (!this._behavior) { return; }\n    if (!$items.length) { $items = this._$itemDataMap.keys(); }\n    if (Array.isArray($items[0])) { $items = $items[0]; }\n\n    for (let $item of $items) {\n      const datum = this._$itemDataMap.get($item);\n      this._behavior.select($item, datum);\n      this._toFront($item);\n    }\n  }\n\n  unselect(...$items) {\n    if (!this._behavior) { return; }\n    if (!$items.length) { $items = this._$itemDataMap.keys(); }\n    if (Array.isArray($items[0])) { $items = $items[0]; }\n\n    for (let $item of $items) {\n      const datum = this._$itemDataMap.get($item);\n      this._behavior.unselect($item, datum);\n    }\n  }\n\n  toggleSelection(...$items) {\n    if (!this._behavior) { return; }\n    if (!$items.length) { $items = this._$itemDataMap.keys(); }\n    if (Array.isArray($items[0])) { $items = $items[0]; }\n\n    for (let $item of $items) {\n      const datum = this._$itemDataMap.get($item);\n      this._behavior.toggleSelection($item, datum);\n    }\n  }\n\n  edit($items, dx, dy, target) {\n    if (!this._behavior) { return; }\n    $items = !Array.isArray($items) ? [$items] : $items;\n\n    for (let $item of $items) {\n      const shape = this._$itemShapeMap.get($item);\n      const datum = this._$itemDataMap.get($item);\n\n      this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);\n      this.emit('edit', shape, datum);\n    }\n  }\n\n  /**\n   *  draws the shape to interact with the context\n   *  @params {Boolean} [bool=true] - defines if the layer's context is editable or not\n   */\n  setContextEditable(bool = true) {\n    const display = bool ? 'block' : 'none';\n    this.$interactions.style.display = display;\n    this._isContextEditable = bool;\n  }\n\n  editContext(dx, dy, target) {\n    timeContextBehavior.edit(this, dx, dy, target);\n  }\n\n  stretchContext(dx, dy, target) {\n    timeContextBehavior.stretch(this, dx, dy, target);\n  }\n\n  // --------------------------------------\n  // Helpers\n  // --------------------------------------\n\n  /**\n   *  Moves an `$el`'s group to the end of the layer (svg z-index...)\n   *  @param `$el` {DOMElement} the DOMElement to be moved\n   */\n  _toFront($item) {\n    this.$offset.appendChild($item);\n  }\n\n  /**\n   *  Returns the $item to which the given DOMElement belongs\n   *  @param {DOMElement} $el the element to be tested\n   *  @return {DOMElement|null} item group containing the `$el` if belongs to this layer, null otherwise\n   */\n  getItemFromDOMElement($el) {\n    let $item;\n\n    do {\n      if ($el.classList && $el.classList.contains('item')) {\n        $item = $el;\n        break;\n      }\n\n      $el = $el.parentNode;\n    } while ($el !== null);\n\n    return this.hasItem($item) ? $item : null;\n  }\n\n  /**\n   *  Returns the datum associated to a specific item DOMElement\n   *  @param {DOMElement} $item\n   *  @return {Object|Array|null} depending on the user data structure\n   */\n  getDatumFromItem($item) {\n    return this._$itemDataMap.get($item);\n  }\n\n  getDatumFromDOMElement($el) {\n    var $item = this.getItemFromDOMElement($el);\n    if ($item === null) { return null; }\n    return this.getDatumFromItem($item);\n  }\n\n  /**\n   *  Defines if the given DOMElement is an item of the layer\n   *  @param {DOMElement} $item\n   *  @return {bool}\n   */\n  hasItem($item) {\n    return this._$itemDataMap.has($item);\n  }\n\n  /**\n   *  Defines if a given element belongs to the layer\n   *  is more general than `hasItem`, can be used to check interactions elements too\n   *  @param {DOMElement} $el\n   *  @return {bool}\n   */\n  hasElement($el) {\n    do {\n      if ($el === this.$el) {\n        return true;\n      }\n\n      $el = $el.parentNode;\n    } while ($el !== null);\n\n    return false;\n  }\n\n  /**\n   *  retrieve all the $items in a given area\n   *  @param {Object} area - The area in which to find the elements\n   *  @return {Array} - list of the DOM elements in the given area\n   */\n  getItemsInArea(area) {\n    const start    = this.timeContext.parent.timeToPixel(this.timeContext.start);\n    const duration = this.timeContext.timeToPixel(this.timeContext.duration);\n    const offset   = this.timeContext.timeToPixel(this.timeContext.offset);\n    const top      = this.params.top;\n    // be aware af context's translations - constrain in working view\n    let x1 = Math.max(area.left, start);\n    let x2 = Math.min(area.left + area.width, start + duration);\n    x1 -= (start + offset);\n    x2 -= (start + offset);\n    // keep consistent with context y coordinates system\n    let y1 = this.params.height - (area.top + area.height);\n    let y2 = this.params.height - area.top;\n\n    y1 += this.params.top;\n    y2 += this.params.top;\n\n    const $filteredItems = [];\n\n    for (let [$item, datum] of this._$itemDataMap.entries()) {\n      const shape = this._$itemShapeMap.get($item);\n      const inArea = shape.inArea(this._renderingContext, datum, x1, y1, x2, y2);\n\n      if (inArea) { $filteredItems.push($item); }\n    }\n\n    return $filteredItems;\n  }\n\n  // --------------------------------------\n  // Rendering / Display methods\n  // --------------------------------------\n\n  render() {\n    // render `commonShape` only once\n    if (\n      this._commonShapeConfiguration !== null &&\n      this._$itemCommonShapeMap.size === 0\n    ) {\n      const { ctor, accessors, options } = this._commonShapeConfiguration;\n      const $group = document.createElementNS(ns, 'g');\n      const shape = new ctor(options);\n\n      shape.install(accessors);\n      $group.appendChild(shape.render());\n      $group.classList.add('item', 'common', shape.getClassName());\n\n      this._$itemCommonShapeMap.set($group, shape);\n      this.$offset.appendChild($group);\n    }\n\n    // append elements all at once\n    const fragment = document.createDocumentFragment();\n    const values = this._$itemDataMap.values(); // iterator\n\n    // enter\n    this.data.forEach((datum) => {\n      for (let value of values) { if (value === datum) { return; } }\n\n      const { ctor, accessors, options } = this._shapeConfiguration;\n      const shape = new ctor(options);\n      shape.install(accessors);\n\n      const $el = shape.render(this._renderingContext);\n      $el.classList.add('item', shape.getClassName());\n\n      this._$itemShapeMap.set($el, shape);\n      this._$itemDataMap.set($el, datum);\n\n      fragment.appendChild($el);\n    });\n\n    this.$offset.appendChild(fragment);\n\n    // remove\n    for (let [$item, datum] of this._$itemDataMap.entries()) {\n      if (this.data.indexOf(datum) !== -1) { continue; }\n\n      const shape = this._$itemShapeMap.get($item);\n\n      this.$offset.removeChild($item);\n      shape.destroy();\n      // a removed item cannot be selected\n      if (this._behavior) {\n        this._behavior.unselect($item, datum);\n      }\n\n      this._$itemDataMap.delete($item);\n      this._$itemShapeMap.delete($item);\n    }\n  }\n\n  /**\n   *  updates Context and Shapes\n   */\n  update() {\n    this.updateContainer();\n    this.updateShapes();\n  }\n\n  /**\n   *  updates the layer's container\n   */\n  updateContainer() {\n    this._updateRenderingContext();\n\n    const timeContext = this.timeContext;\n    const width  = timeContext.timeToPixel(timeContext.duration);\n    // x is relative to timeline's timeContext\n    const x      = timeContext.parent.timeToPixel(timeContext.start);\n    const offset = timeContext.timeToPixel(timeContext.offset);\n    const top    = this.params.top;\n    const height = this.params.height;\n    // matrix to invert the coordinate system\n    const translateMatrix = `matrix(1, 0, 0, -1, ${x}, ${top + height})`;\n\n    this.$el.setAttributeNS(null, 'transform', translateMatrix);\n\n    this.$boundingBox.setAttributeNS(null, 'width', width);\n    this.$boundingBox.setAttributeNS(null, 'height', height);\n    this.$boundingBox.style.opacity = this.params.opacity;\n\n    this.$offset.setAttributeNS(null, 'transform', `translate(${offset}, 0)`);\n    // maintain context shape\n    this.contextShape.update(this._renderingContext, this.timeContext, 0);\n  }\n\n  /**\n   *  updates the Shapes which belongs to the layer\n   *  @param {DOMElement} $el - Not implemented\n   */\n  updateShapes($el = null) {\n    this._updateRenderingContext();\n    // update common shapes\n    this._$itemCommonShapeMap.forEach((shape, $item) => {\n      shape.update(this._renderingContext, this.data);\n    });\n\n    for (let [$item, datum] of this._$itemDataMap.entries()) {\n      const shape = this._$itemShapeMap.get($item);\n      shape.update(this._renderingContext, datum);\n    }\n  }\n}\n"
+  },
+  {
+    "__docId__": 27,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "timeContextBehavior",
+    "memberof": "core/layer.js",
+    "longname": "core/layer.js~timeContextBehavior",
+    "access": null,
+    "export": false,
+    "importPath": "waves-ui/core/layer.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 9,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 28,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "timeContextBehaviorCtor",
+    "memberof": "core/layer.js",
+    "longname": "core/layer.js~timeContextBehaviorCtor",
+    "access": null,
+    "export": false,
+    "importPath": "waves-ui/core/layer.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 10,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 29,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "Layer",
+    "memberof": "core/layer.js",
+    "longname": "core/layer.js~Layer",
+    "access": null,
+    "export": true,
+    "importPath": "waves-ui/core/layer.js",
+    "importStyle": "Layer",
+    "description": " The layer class is the main visualization class",
+    "lineNumber": 15,
+    "interface": false,
+    "extends": [
+      "events~events.EventEmitter"
+    ]
+  },
+  {
+    "__docId__": 30,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#constructor",
+    "access": null,
+    "description": "Structure of the DOM view of a Layer\n\n```\n<g class=\"layer\"> Flip y axis, timeContext.start and top position from params are applied on this $elmt\n  <svg class=\"bounding-box\"> timeContext.duration is applied on this $elmt\n   <g class=\"layer-interactions\"> Contains the timeContext edition elements (a segment) </g>\n   <g class=\"offset items\"> The shapes are inserted here, and we apply timeContext.offset on this $elmt </g>\n  </svg>\n</g>\n```",
+    "lineNumber": 28,
+    "params": [
+      {
+        "name": "dataType",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "data",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "options",
+        "optional": true,
+        "types": [
+          "{}"
+        ],
+        "defaultRaw": {},
+        "defaultValue": "{}"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 31,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "dataType",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#dataType",
+    "access": null,
+    "description": null,
+    "lineNumber": 30,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 32,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "data",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#data",
+    "access": null,
+    "description": null,
+    "lineNumber": 31,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 33,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "params",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#params",
+    "access": null,
+    "description": null,
+    "lineNumber": 46,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 34,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "timeContext",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#timeContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 47,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 35,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$el",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#$el",
+    "access": null,
+    "description": null,
+    "lineNumber": 50,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 36,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$boundingBox",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#$boundingBox",
+    "access": null,
+    "description": null,
+    "lineNumber": 51,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 37,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$offset",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#$offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 52,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 38,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$interactions",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#$interactions",
+    "access": null,
+    "description": null,
+    "lineNumber": 53,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 39,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_shapeConfiguration",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_shapeConfiguration",
+    "access": null,
+    "description": null,
+    "lineNumber": 55,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 40,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_commonShapeConfiguration",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_commonShapeConfiguration",
+    "access": null,
+    "description": null,
+    "lineNumber": 56,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 41,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_$itemShapeMap",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_$itemShapeMap",
+    "access": null,
+    "description": null,
+    "lineNumber": 58,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 42,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_$itemDataMap",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_$itemDataMap",
+    "access": null,
+    "description": null,
+    "lineNumber": 59,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 43,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_$itemCommonShapeMap",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_$itemCommonShapeMap",
+    "access": null,
+    "description": null,
+    "lineNumber": 60,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 44,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_isContextEditable",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_isContextEditable",
+    "access": null,
+    "description": null,
+    "lineNumber": 62,
+    "undocument": true,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 45,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_behavior",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_behavior",
+    "access": null,
+    "description": null,
+    "lineNumber": 63,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 46,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_valueToPixel",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_valueToPixel",
+    "access": null,
+    "description": null,
+    "lineNumber": 65,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 47,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "contextBehavior",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#contextBehavior",
+    "access": null,
+    "description": null,
+    "lineNumber": 69,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 48,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "destroy",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#destroy",
+    "access": null,
+    "description": null,
+    "lineNumber": 80,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 49,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "timeContext",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#timeContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 81,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 50,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "data",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#data",
+    "access": null,
+    "description": null,
+    "lineNumber": 82,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 51,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "params",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#params",
+    "access": null,
+    "description": null,
+    "lineNumber": 83,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 52,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_behavior",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_behavior",
+    "access": null,
+    "description": null,
+    "lineNumber": 84,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 53,
+    "kind": "method",
+    "static": true,
+    "variation": null,
+    "name": "configureTimeContextBehavior",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer.configureTimeContextBehavior",
+    "access": null,
+    "description": " allows to override default the TimeContextBehavior",
+    "lineNumber": 96,
+    "params": [
+      {
+        "name": "ctor",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 54,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "start",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#start",
+    "access": null,
+    "description": null,
+    "lineNumber": 100,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 55,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "start",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#start",
+    "access": null,
+    "description": null,
+    "lineNumber": 104,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 56,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "offset",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 108,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 57,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "offset",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 112,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 58,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "duration",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#duration",
+    "access": null,
+    "description": null,
+    "lineNumber": 116,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 59,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "duration",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#duration",
+    "access": null,
+    "description": null,
+    "lineNumber": 120,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 60,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "stretchRatio",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#stretchRatio",
+    "access": null,
+    "description": null,
+    "lineNumber": 124,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 61,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "stretchRatio",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#stretchRatio",
+    "access": null,
+    "description": null,
+    "lineNumber": 128,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 62,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "yDomain",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#yDomain",
+    "access": null,
+    "description": null,
+    "lineNumber": 132,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 63,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "yDomain",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#yDomain",
+    "access": null,
+    "description": null,
+    "lineNumber": 137,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 64,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "opacity",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#opacity",
+    "access": null,
+    "description": null,
+    "lineNumber": 141,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 65,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "opacity",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#opacity",
+    "access": null,
+    "description": null,
+    "lineNumber": 145,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 66,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "timeToPixel",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#timeToPixel",
+    "access": null,
+    "description": null,
+    "lineNumber": 150,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 67,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "valueToPixel",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#valueToPixel",
+    "access": null,
+    "description": null,
+    "lineNumber": 154,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 68,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "items",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#items",
+    "access": null,
+    "description": " @return {Array} - an array containins all the DOMElement items",
+    "lineNumber": 161,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 69,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "setTimeContext",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#setTimeContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 175,
+    "unknown": [
+      {
+        "tagName": "@mandatory",
+        "tagValue": "define the context in which the layer is drawn"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "context",
+        "description": "{TimeContext} the timeContext in which the layer is displayed"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 70,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "timeContext",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#timeContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 176,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 71,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_renderingContext",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_renderingContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 178,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 72,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "data",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#data",
+    "access": null,
+    "description": null,
+    "lineNumber": 186,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 73,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "data",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#data",
+    "access": null,
+    "description": null,
+    "lineNumber": 188,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 74,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_data",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_data",
+    "access": null,
+    "description": null,
+    "lineNumber": 194,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 75,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_data",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_data",
+    "access": null,
+    "description": null,
+    "lineNumber": 198,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 76,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_renderContainer",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_renderContainer",
+    "access": null,
+    "description": " render the DOM in memory on layer creation to be able to use it before\n the layer is actually inserted in the DOM",
+    "lineNumber": 209,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 77,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$el",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#$el",
+    "access": null,
+    "description": null,
+    "lineNumber": 211,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 78,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$boundingBox",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#$boundingBox",
+    "access": null,
+    "description": null,
+    "lineNumber": 217,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 79,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$offset",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#$offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 221,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 80,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$background",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#$background",
+    "access": null,
+    "description": null,
+    "lineNumber": 224,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 81,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$interactions",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#$interactions",
+    "access": null,
+    "description": null,
+    "lineNumber": 231,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 82,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "contextShape",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#contextShape",
+    "access": null,
+    "description": null,
+    "lineNumber": 235,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 83,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "configureShape",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#configureShape",
+    "access": null,
+    "description": " Register the shape and its accessors to use in order to render\n the entity or collection\n @param ctor <Function:BaseShape> the constructor of the shape to be used\n @param accessors <Object> accessors to use in order to map the data structure",
+    "lineNumber": 262,
+    "params": [
+      {
+        "name": "ctor",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "accessors",
+        "optional": true,
+        "types": [
+          "{}"
+        ],
+        "defaultRaw": {},
+        "defaultValue": "{}"
+      },
+      {
+        "name": "options",
+        "optional": true,
+        "types": [
+          "{}"
+        ],
+        "defaultRaw": {},
+        "defaultValue": "{}"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 84,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_shapeConfiguration",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_shapeConfiguration",
+    "access": null,
+    "description": null,
+    "lineNumber": 263,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 85,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "configureCommonShape",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#configureCommonShape",
+    "access": null,
+    "description": " Register the shape to use with the entire collection\n example: the line in a beakpoint function\n @param ctor {BaseShape} the constructor of the shape to use to render data\n @param accessors {Object} accessors to use in order to map the data structure",
+    "lineNumber": 272,
+    "params": [
+      {
+        "name": "ctor",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "accessors",
+        "optional": true,
+        "types": [
+          "{}"
+        ],
+        "defaultRaw": {},
+        "defaultValue": "{}"
+      },
+      {
+        "name": "options",
+        "optional": true,
+        "types": [
+          "{}"
+        ],
+        "defaultRaw": {},
+        "defaultValue": "{}"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 86,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_commonShapeConfiguration",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_commonShapeConfiguration",
+    "access": null,
+    "description": null,
+    "lineNumber": 273,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 87,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "setBehavior",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#setBehavior",
+    "access": null,
+    "description": " Register the behavior to use when interacting with the shape\n @param behavior {BaseBehavior}",
+    "lineNumber": 280,
+    "params": [
+      {
+        "name": "behavior",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 88,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_behavior",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_behavior",
+    "access": null,
+    "description": null,
+    "lineNumber": 282,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 89,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_updateRenderingContext",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_updateRenderingContext",
+    "access": null,
+    "description": " update the values in `_renderingContext`\n is particulary needed when updating `stretchRatio` as the pointer\n to the `timeToPixel` scale may change",
+    "lineNumber": 290,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 90,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "selectedItems",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#selectedItems",
+    "access": null,
+    "description": null,
+    "lineNumber": 312,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 91,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "select",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#select",
+    "access": null,
+    "description": null,
+    "lineNumber": 316,
+    "undocument": true,
+    "params": [
+      {
+        "name": "$items",
+        "types": [
+          "...*"
+        ],
+        "spread": true
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 92,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "unselect",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#unselect",
+    "access": null,
+    "description": null,
+    "lineNumber": 328,
+    "undocument": true,
+    "params": [
+      {
+        "name": "$items",
+        "types": [
+          "...*"
+        ],
+        "spread": true
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 93,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "toggleSelection",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#toggleSelection",
+    "access": null,
+    "description": null,
+    "lineNumber": 339,
+    "undocument": true,
+    "params": [
+      {
+        "name": "$items",
+        "types": [
+          "...*"
+        ],
+        "spread": true
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 94,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "edit",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#edit",
+    "access": null,
+    "description": null,
+    "lineNumber": 350,
+    "undocument": true,
+    "params": [
+      {
+        "name": "$items",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "dx",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "dy",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "target",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 95,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "setContextEditable",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#setContextEditable",
+    "access": null,
+    "description": " draws the shape to interact with the context\n @params {Boolean} [bool=true] - defines if the layer's context is editable or not",
+    "lineNumber": 367,
+    "params": [
+      {
+        "name": "bool",
+        "optional": true,
+        "types": [
+          "boolean"
+        ],
+        "defaultRaw": true,
+        "defaultValue": "true"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 96,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_isContextEditable",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_isContextEditable",
+    "access": null,
+    "description": null,
+    "lineNumber": 370,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 97,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "editContext",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#editContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 373,
+    "undocument": true,
+    "params": [
+      {
+        "name": "dx",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "dy",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "target",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 98,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "stretchContext",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#stretchContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 377,
+    "undocument": true,
+    "params": [
+      {
+        "name": "dx",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "dy",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "target",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 99,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_toFront",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#_toFront",
+    "access": null,
+    "description": " Moves an `$el`'s group to the end of the layer (svg z-index...)\n @param `$el` {DOMElement} the DOMElement to be moved",
+    "lineNumber": 389,
+    "params": [
+      {
+        "name": "$item",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 100,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getItemFromDOMElement",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#getItemFromDOMElement",
+    "access": null,
+    "description": " Returns the $item to which the given DOMElement belongs\n @param {DOMElement} $el the element to be tested\n @return {DOMElement|null} item group containing the `$el` if belongs to this layer, null otherwise",
+    "lineNumber": 398,
+    "params": [
+      {
+        "name": "$el",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 101,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getDatumFromItem",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#getDatumFromItem",
+    "access": null,
+    "description": " Returns the datum associated to a specific item DOMElement\n @param {DOMElement} $item\n @return {Object|Array|null} depending on the user data structure",
+    "lineNumber": 418,
+    "params": [
+      {
+        "name": "$item",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 102,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getDatumFromDOMElement",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#getDatumFromDOMElement",
+    "access": null,
+    "description": null,
+    "lineNumber": 422,
+    "undocument": true,
+    "params": [
+      {
+        "name": "$el",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 103,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "hasItem",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#hasItem",
+    "access": null,
+    "description": " Defines if the given DOMElement is an item of the layer\n @param {DOMElement} $item\n @return {bool}",
+    "lineNumber": 433,
+    "params": [
+      {
+        "name": "$item",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 104,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "hasElement",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#hasElement",
+    "access": null,
+    "description": " Defines if a given element belongs to the layer\n is more general than `hasItem`, can be used to check interactions elements too\n @param {DOMElement} $el\n @return {bool}",
+    "lineNumber": 443,
+    "params": [
+      {
+        "name": "$el",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "boolean"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 105,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getItemsInArea",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#getItemsInArea",
+    "access": null,
+    "description": " retrieve all the $items in a given area\n @param {Object} area - The area in which to find the elements\n @return {Array} - list of the DOM elements in the given area",
+    "lineNumber": 460,
+    "params": [
+      {
+        "name": "area",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 106,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "render",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#render",
+    "access": null,
+    "description": null,
+    "lineNumber": 493,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 107,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "update",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#update",
+    "access": null,
+    "description": " updates Context and Shapes",
+    "lineNumber": 555,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 108,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "updateContainer",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#updateContainer",
+    "access": null,
+    "description": " updates the layer's container",
+    "lineNumber": 563,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 109,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "updateShapes",
+    "memberof": "core/layer.js~Layer",
+    "longname": "core/layer.js~Layer#updateShapes",
+    "access": null,
+    "description": " updates the Shapes which belongs to the layer\n @param {DOMElement} $el - Not implemented",
+    "lineNumber": 591,
+    "params": [
+      {
+        "name": "$el",
+        "optional": true,
+        "types": [
+          "*"
+        ],
+        "defaultRaw": null,
+        "defaultValue": "null"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 110,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "core/namespace.js",
+    "memberof": null,
+    "longname": "core/namespace.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "export default 'http://www.w3.org/2000/svg';\n"
+  },
+  {
+    "__docId__": 111,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "core/timeline-time-context.js",
+    "memberof": null,
+    "longname": "core/timeline-time-context.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import scales from '../utils/scales';\n\n\n/**\n *  @class ViewTimeContext\n *\n *  A ViewTimeContext instance represents the mapping between the time and the pixel domains\n *\n *  The `TimelineTimeContext` has 3 important attributes:\n *  - `timeContext.timeToPixel` which defines the time to pixel transfert function, itself defined by the `pixelsPerSecond` attribute of the timeline\n *  - `timeContext.offset` defines a decay (in time domain) applied to all the views on the timeline. This allow to navigate inside visibleDurations longer than what can be represented in Layers (views) containers (e.g. horizontal scroll)\n *  - `timeContext.zoom` defines the zoom factor applyed to the timeline\n *\n *  It also maintains an helper (`visibleDuration`) which represent how much time the `tracks` are displaying\n *\n *  It also maintain an array of references to all the LayerTimeContext attached to the timeline to propagate changes on the time to pixel representation\n */\nexport default class TimelineTimeContext {\n  constructor(pixelsPerSecond, visibleWidth) {\n    this._children = [];\n\n    // @rename to timeToPixel\n    this._timeToPixel = null;\n    // this._originalXScale = null;\n\n    this._offset = 0;\n    this._zoom = 1;\n    this._computedPixelsPerSecond = pixelsPerSecond;\n    // params\n    this._visibleWidth = visibleWidth;\n    this._visibleDuration = this.visibleWidth / this._computedPixelsPerSecond;\n    this._maintainVisibleDuration = false;\n\n    // create the timeToPixel scale\n    const scale = scales.linear()\n      .domain([0, 1])\n      .range([0, pixelsPerSecond]);\n\n    this.timeToPixel = scale;\n    // this.originalXScale = this.timeToPixel.copy();\n\n    this._originalPixelsPerSecond = this._computedPixelsPerSecond;\n  }\n\n  get pixelsPerSecond() {\n    return this._originalPixelsPerSecond;\n  }\n\n  set pixelsPerSecond(value) {\n    this._computedPixelsPerSecond = value * this.zoom;\n    this._originalPixelsPerSecond = value;\n    this._updateTimeToPixelRange();\n\n    // force children scale update\n    this._children.forEach(function(child) {\n      if (!child._timeToPixel) { return; }\n      child.stretchRatio = child.stretchRatio;\n    });\n  }\n\n  get computedPixelsPerSecond() {\n    return this._computedPixelsPerSecond;\n  }\n\n  get offset() {\n    return this._offset;\n  }\n\n  set offset(value) {\n    this._offset = value;\n  }\n\n  get zoom() {\n    return this._zoom;\n  }\n\n  set zoom(value) {\n    // Compute change to propagate to children who have their own timeToPixel\n    const ratioChange = value / this._zoom;\n    this._zoom = value;\n    this._computedPixelsPerSecond = this._originalPixelsPerSecond * value;\n    this._updateTimeToPixelRange();\n\n    this._children.forEach(function(child) {\n      if (!child._timeToPixel) { return; }\n      child.stretchRatio = child.stretchRatio * ratioChange;\n    });\n  }\n\n  get visibleWidth() {\n    return this._visibleWidth;\n  }\n\n  set visibleWidth(value) {\n    const widthRatio = value / this.visibleWidth;\n\n    this._visibleWidth = value;\n    this._visibleDuration = this.visibleWidth / this._computedPixelsPerSecond;\n\n    if (this.maintainVisibleDuration) {\n      this.pixelsPerSecond = this._computedPixelsPerSecond * widthRatio;\n    }\n  }\n\n  /** @readonly */\n  get visibleDuration() {\n    return this._visibleDuration;\n  }\n\n  get maintainVisibleDuration() {\n    return this._maintainVisibleDuration;\n  }\n\n  set maintainVisibleDuration(bool) {\n    this._maintainVisibleDuration = bool;\n  }\n\n  get timeToPixel() {\n    return this._timeToPixel;\n  }\n\n  set timeToPixel(scale) {\n    this._timeToPixel = scale;\n  }\n\n  _updateTimeToPixelRange() {\n    this._visibleDuration = this.visibleWidth / this._computedPixelsPerSecond;\n    this.timeToPixel.range([0, this._computedPixelsPerSecond]);\n  }\n}\n"
+  },
+  {
+    "__docId__": 112,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "TimelineTimeContext",
+    "memberof": "core/timeline-time-context.js",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext",
+    "access": null,
+    "export": true,
+    "importPath": "waves-ui/core/timeline-time-context.js",
+    "importStyle": "TimelineTimeContext",
+    "description": " @class ViewTimeContext\n\n A ViewTimeContext instance represents the mapping between the time and the pixel domains\n\n The `TimelineTimeContext` has 3 important attributes:\n - `timeContext.timeToPixel` which defines the time to pixel transfert function, itself defined by the `pixelsPerSecond` attribute of the timeline\n - `timeContext.offset` defines a decay (in time domain) applied to all the views on the timeline. This allow to navigate inside visibleDurations longer than what can be represented in Layers (views) containers (e.g. horizontal scroll)\n - `timeContext.zoom` defines the zoom factor applyed to the timeline\n\n It also maintains an helper (`visibleDuration`) which represent how much time the `tracks` are displaying\n\n It also maintain an array of references to all the LayerTimeContext attached to the timeline to propagate changes on the time to pixel representation",
+    "lineNumber": 18,
+    "interface": false
+  },
+  {
+    "__docId__": 113,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 19,
+    "undocument": true,
+    "params": [
+      {
+        "name": "pixelsPerSecond",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "visibleWidth",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 114,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_children",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_children",
+    "access": null,
+    "description": null,
+    "lineNumber": 20,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 115,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_timeToPixel",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_timeToPixel",
+    "access": null,
+    "description": null,
+    "lineNumber": 23,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 116,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_offset",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 26,
+    "undocument": true,
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "__docId__": 117,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_zoom",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_zoom",
+    "access": null,
+    "description": null,
+    "lineNumber": 27,
+    "undocument": true,
+    "type": {
+      "types": [
+        "number"
+      ]
+    }
+  },
+  {
+    "__docId__": 118,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_computedPixelsPerSecond",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_computedPixelsPerSecond",
+    "access": null,
+    "description": null,
+    "lineNumber": 28,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 119,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_visibleWidth",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_visibleWidth",
+    "access": null,
+    "description": null,
+    "lineNumber": 30,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 120,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_visibleDuration",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_visibleDuration",
+    "access": null,
+    "description": null,
+    "lineNumber": 31,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 121,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_maintainVisibleDuration",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_maintainVisibleDuration",
+    "access": null,
+    "description": null,
+    "lineNumber": 32,
+    "undocument": true,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 122,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "timeToPixel",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#timeToPixel",
+    "access": null,
+    "description": null,
+    "lineNumber": 39,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 123,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_originalPixelsPerSecond",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_originalPixelsPerSecond",
+    "access": null,
+    "description": null,
+    "lineNumber": 42,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 124,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "pixelsPerSecond",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#pixelsPerSecond",
+    "access": null,
+    "description": null,
+    "lineNumber": 45,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 125,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "pixelsPerSecond",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#pixelsPerSecond",
+    "access": null,
+    "description": null,
+    "lineNumber": 49,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 126,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_computedPixelsPerSecond",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_computedPixelsPerSecond",
+    "access": null,
+    "description": null,
+    "lineNumber": 50,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 127,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_originalPixelsPerSecond",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_originalPixelsPerSecond",
+    "access": null,
+    "description": null,
+    "lineNumber": 51,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 128,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "computedPixelsPerSecond",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#computedPixelsPerSecond",
+    "access": null,
+    "description": null,
+    "lineNumber": 61,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 129,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "offset",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 65,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 130,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "offset",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 69,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 131,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_offset",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 70,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 132,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "zoom",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#zoom",
+    "access": null,
+    "description": null,
+    "lineNumber": 73,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 133,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "zoom",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#zoom",
+    "access": null,
+    "description": null,
+    "lineNumber": 77,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 134,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_zoom",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_zoom",
+    "access": null,
+    "description": null,
+    "lineNumber": 80,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 135,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_computedPixelsPerSecond",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_computedPixelsPerSecond",
+    "access": null,
+    "description": null,
+    "lineNumber": 81,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 136,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "visibleWidth",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#visibleWidth",
+    "access": null,
+    "description": null,
+    "lineNumber": 90,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 137,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "visibleWidth",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#visibleWidth",
+    "access": null,
+    "description": null,
+    "lineNumber": 94,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 138,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_visibleWidth",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_visibleWidth",
+    "access": null,
+    "description": null,
+    "lineNumber": 97,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 139,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_visibleDuration",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_visibleDuration",
+    "access": null,
+    "description": null,
+    "lineNumber": 98,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 140,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "pixelsPerSecond",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#pixelsPerSecond",
+    "access": null,
+    "description": null,
+    "lineNumber": 101,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 141,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "visibleDuration",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#visibleDuration",
+    "access": null,
+    "description": null,
+    "lineNumber": 106,
+    "unknown": [
+      {
+        "tagName": "@readonly",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 142,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "maintainVisibleDuration",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#maintainVisibleDuration",
+    "access": null,
+    "description": null,
+    "lineNumber": 110,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 143,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "maintainVisibleDuration",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#maintainVisibleDuration",
+    "access": null,
+    "description": null,
+    "lineNumber": 114,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 144,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_maintainVisibleDuration",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_maintainVisibleDuration",
+    "access": null,
+    "description": null,
+    "lineNumber": 115,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 145,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "timeToPixel",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#timeToPixel",
+    "access": null,
+    "description": null,
+    "lineNumber": 118,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 146,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "timeToPixel",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#timeToPixel",
+    "access": null,
+    "description": null,
+    "lineNumber": 122,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 147,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_timeToPixel",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_timeToPixel",
+    "access": null,
+    "description": null,
+    "lineNumber": 123,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 148,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_updateTimeToPixelRange",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_updateTimeToPixelRange",
+    "access": null,
+    "description": null,
+    "lineNumber": 126,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 149,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_visibleDuration",
+    "memberof": "core/timeline-time-context.js~TimelineTimeContext",
+    "longname": "core/timeline-time-context.js~TimelineTimeContext#_visibleDuration",
+    "access": null,
+    "description": null,
+    "lineNumber": 127,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 150,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "core/timeline.js",
+    "memberof": null,
+    "longname": "core/timeline.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import events from 'events';\n\nimport Keyboard from '../interactions/keyboard';\nimport LayerTimeContext from './layer-time-context';\nimport Surface from '../interactions/surface';\nimport TimelineTimeContext from './timeline-time-context';\nimport Track from './track';\nimport TrackCollection from './track-collection';\n\n\n/**\n * The `timeline` is the main entry point of a temporal visualization, it:\n *\n * - contains factories to manage its `tracks` and `layers`,\n * - get or set the view window overs its `tracks` through `offset`, `zoom`, `pixelsPerSecond`, `visibleWidth`,\n * - is the central hub for all user interaction events (keyboard, mouse),\n * - holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to user interactions.\n *\n * ```js\n * const with = 500; // default with for all created `Track`\n * const duration = 10; // the timeline should dislay 10 second of data\n * const pixelsPerSeconds = width / duration;\n * const timeline = new ui.core.Timeline(pixelsPerSecond, width);\n * ```\n */\nexport default class Timeline extends events.EventEmitter {\n  /**\n   * Creates a new `Timeline` instance\n   * @param {Number} [pixelsPerSecond=100] - the number of pixels per seconds the timeline should display\n   * @param {Number} [visibleWidth=1000] - the default visible width for all the tracks\n   */\n  constructor(pixelsPerSecond = 100, visibleWidth = 1000, {\n    registerKeyboard = true\n  } = {}) {\n\n    super();\n\n    this._tracks = new TrackCollection(this);\n    this._state = null;\n\n    // default interactions\n    this._surfaceCtor = Surface;\n\n    if (registerKeyboard) {\n      this.createInteraction(Keyboard, document);\n    }\n\n    // stores\n    this._trackById = {};\n    this._groupedLayers = {};\n\n    /**\n     * @this Timeline\n     * @attribute {TimelineTimeContext} - master time context of the graph\n     */\n    this.timeContext = new TimelineTimeContext(pixelsPerSecond, visibleWidth);\n  }\n\n  /**\n   * updates `TimeContext`'s offset\n   * @attribute {Number} [offset=0]\n   */\n  get offset() {\n    return this.timeContext.offset;\n  }\n\n  set offset(value) {\n    this.timeContext.offset = value;\n  }\n\n  get zoom() {\n    return this.timeContext.zoom;\n  }\n\n  set zoom(value) {\n    this.timeContext.zoom = value;\n  }\n\n  get pixelsPerSecond() {\n    return this.timeContext.pixelsPerSecond;\n  }\n\n  set pixelsPerSecond(value) {\n    this.timeContext.pixelsPerSecond = value;\n  }\n\n  get visibleWidth() {\n    return this.timeContext.visibleWidth;\n  }\n\n  set visibleWidth(value) {\n    this.timeContext.visibleWidth = value;\n  }\n\n  get timeToPixel() {\n    return this.timeContext.timeToPixel;\n  }\n\n  /**\n   *  @readonly\n   */\n  get visibleDuration() {\n    return this.timeContext.visibleDuration;\n  }\n\n  // @NOTE maybe expose as public instead of get/set for nothing...\n  set maintainVisibleDuration(bool) {\n    this.timeContext.maintainVisibleDuration = bool;\n  }\n\n  get maintainVisibleDuration() {\n    return this.timeContext.maintainVisibleDuration;\n  }\n\n  // @readonly - used in track collection\n  get groupedLayers() {\n    return this._groupedLayers;\n  }\n\n  /**\n   *  Override the default Surface that is instanciated on each\n   *  @param {EventSource} ctor - the constructor to use to build surfaces\n   */\n  configureSurface(ctor) {\n    this._surfaceCtor = ctor;\n  }\n\n  /**\n   * Factory method to add interaction modules the timeline should listen to.\n   * By default, the timeline listen to Keyboard, and instanciate a `Surface` on each container.\n   * Can be used to install any interaction implementing the `EventSource` interface\n   * @param {EventSource} ctor - the contructor of the interaction module to instanciate\n   * @param el {DOMElement} the DOM element to bind to the EventSource module\n   * @param options {Object} options to be applied to the ctor (defaults to `{}`)\n   */\n  createInteraction(ctor, el, options = {}) {\n    const interaction = new ctor(el, options);\n    interaction.on('event', (e) => this._handleEvent(e));\n  }\n\n  /**\n   * returns an array of the layers which positions\n   * and sizes matches a pointer Event\n   * @param {WavesEvent} e - the event from the Surface\n   * @return {Array} - matched layers\n   */\n  getHitLayers(e) {\n    const clientX = e.originalEvent.clientX;\n    const clientY = e.originalEvent.clientY;\n    let layers = [];\n\n    this.layers.forEach((layer) => {\n      if (!layer.params.hittable) { return; }\n      const br = layer.$el.getBoundingClientRect();\n\n      if (\n        clientX > br.left && clientX < br.right &&\n        clientY > br.top && clientY < br.bottom\n      ) {\n        layers.push(layer);\n      }\n    });\n\n    return layers;\n  }\n\n  /**\n   * The callback that is used to listen to interactions modules\n   * @params {Event} e - a custom event generated by interaction modules\n   */\n  _handleEvent(e) {\n    const hitLayers = (e.source === 'surface') ?\n      this.getHitLayers(e) : null;\n    // emit event as a middleware\n    this.emit('event', e, hitLayers);\n    // propagate to the state\n    if (!this._state) { return; }\n    this._state.handleEvent(e, hitLayers);\n  }\n\n  /**\n   * Changes the state of the timeline\n   * @param {BaseState} - the state in which the timeline must be setted\n   */\n  set state(state) {\n    if (this._state) { this._state.exit(); }\n    this._state = state;\n    if (this._state) { this._state.enter(); }\n  }\n\n  get state() {\n    return this._state;\n  }\n\n  /**\n   *  Shortcut to access the Track collection\n   *  @return {TrackCollection}\n   */\n  get tracks() {\n    return this._tracks;\n  }\n\n  /**\n   * Shortcut to access the Layer list\n   * @return {Array}\n   */\n  get layers() {\n    return this._tracks.layers;\n  }\n\n  /**\n   * Adds a track to the timeline\n   * Tracks display a view window on the timeline in theirs own SVG element.\n   * @param {Track} track\n   */\n  add(track) {\n    if (this.tracks.indexOf(track) !== -1) {\n      throw new Error('track already added to the timeline');\n    }\n\n    track.configure(this.timeContext);\n\n    this.tracks.push(track);\n    this.createInteraction(this._surfaceCtor, track.$el);\n  }\n\n  /**\n   *  Removes a track from the timeline\n   *  @TODO\n   */\n  remove(track) {\n    // should destroy interaction too, avoid ghost eventListeners\n  }\n\n  /**\n   *  Creates a new track from the configuration define in `configureTracks`\n   *  @param {DOMElement} $el - the element to insert the track inside\n   *  @param {Object} options - override the defaults options if necessary\n   *  @param {String} [trackId=null] - optionnal id to give to the track, only exists in timeline's context\n   *  @return {Track}\n   */\n  createTrack($el, trackHeight = 100, trackId = null) {\n    const track = new Track($el, trackHeight);\n\n    if (trackId !== null) {\n      if (this._trackById[trackId] !== undefined) {\n        throw new Error(`trackId: \"${trackId}\" is already used`);\n      }\n\n      this._trackById[trackId] = track;\n    }\n\n    // Add track to the timeline\n    this.add(track);\n    track.render();\n    track.update();\n\n    return track;\n  }\n\n  /**\n   *  Adds a layer to a track, allow to group track arbitrarily inside groups. Basically a wrapper for `track.add(layer)`\n   *  @param {Layer} layer - the layer to add\n   *  @param {Track} track - the track to the insert the layer in\n   *  @param {String} [groupId='default'] - the group in which associate the layer\n   */\n  addLayer(layer, trackOrTrackId, groupId = 'default', isAxis = false) {\n    let track = trackOrTrackId;\n\n    if (typeof trackOrTrackId === 'string') {\n      track = this.getTrackById(trackOrTrackId);\n    }\n\n    // creates the `LayerTimeContext` if not present\n    if (!layer.timeContext) {\n      const timeContext = isAxis ?\n        this.timeContext : new LayerTimeContext(this.timeContext);\n\n      layer.setTimeContext(timeContext);\n    }\n\n    // we should have a Track instance at this point\n    track.add(layer);\n\n    if (!this._groupedLayers[groupId]) {\n      this._groupedLayers[groupId] = [];\n    }\n\n    this._groupedLayers[groupId].push(layer);\n\n    layer.render();\n    layer.update();\n  }\n\n  /**\n   *  Removes a layer from its track (the layer is detatched from the DOM but can still be reused)\n   *  @param {Layer} layer - the layer to remove\n   */\n  removeLayer(layer) {\n    this.tracks.forEach(function(track) {\n      const index = track.layers.indexOf(layer);\n      if (index !== -1) { track.remove(layer); }\n    });\n\n    // clean references in helpers\n    for (let groupId in this._groupedLayers) {\n      const group = this._groupedLayers[groupId];\n      const index = group.indexOf(layer);\n\n      if (index !== -1) { group.splice(layer, 1); }\n\n      if (!group.length) {\n        delete this._groupedLayers[groupId];\n      }\n    }\n  }\n\n  /**\n   *  Returns a track from it's id\n   *  @param {String} trackId\n   *  @return {Track}\n   */\n  getTrackById(trackId) {\n    return this._trackById[trackId];\n  }\n\n  /**\n   *  Returns the track containing a given DOM Element, if no match found return null\n   *  @param {DOMElement} $el\n   *  @return {Track}\n   */\n  getTrackFromDOMElement($el) {\n    let $svg = null;\n    let track = null;\n    // find the closest `.track` element\n    do {\n      if ($el.classList.contains('track')) {\n        $svg = $el;\n      }\n      $el = $el.parentNode;\n    } while ($svg === null);\n    // find the related `Track`\n    this.tracks.forEach(function(_track) {\n      if (_track.$svg === $svg) { track = _track; }\n    });\n\n    return track;\n  }\n\n  /**\n   * Returns an array of layers from their group Id\n   * @param {String} groupId\n   * @return {Array}\n   */\n  getLayersByGroup(groupId) {\n    return this._groupedLayers[groupId];\n  }\n\n  *[Symbol.iterator]() {\n    yield* this.tracks[Symbol.iterator]();\n  }\n}\n"
+  },
+  {
+    "__docId__": 151,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "Timeline",
+    "memberof": "core/timeline.js",
+    "longname": "core/timeline.js~Timeline",
+    "access": null,
+    "export": true,
+    "importPath": "waves-ui/core/timeline.js",
+    "importStyle": "Timeline",
+    "description": "The `timeline` is the main entry point of a temporal visualization, it:\n\n- contains factories to manage its `tracks` and `layers`,\n- get or set the view window overs its `tracks` through `offset`, `zoom`, `pixelsPerSecond`, `visibleWidth`,\n- is the central hub for all user interaction events (keyboard, mouse),\n- holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to user interactions.\n\n```js\nconst with = 500; // default with for all created `Track`\nconst duration = 10; // the timeline should dislay 10 second of data\nconst pixelsPerSeconds = width / duration;\nconst timeline = new ui.core.Timeline(pixelsPerSecond, width);\n```",
+    "lineNumber": 26,
+    "interface": false,
+    "extends": [
+      "events~events.EventEmitter"
+    ]
+  },
+  {
+    "__docId__": 152,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#constructor",
+    "access": null,
+    "description": "Creates a new `Timeline` instance",
+    "lineNumber": 32,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "100",
+        "defaultRaw": 100,
+        "name": "pixelsPerSecond",
+        "description": "the number of pixels per seconds the timeline should display"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "1000",
+        "defaultRaw": 1000,
+        "name": "visibleWidth",
+        "description": "the default visible width for all the tracks"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 153,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_tracks",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#_tracks",
+    "access": null,
+    "description": null,
+    "lineNumber": 38,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 154,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_state",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#_state",
+    "access": null,
+    "description": null,
+    "lineNumber": 39,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 155,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_surfaceCtor",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#_surfaceCtor",
+    "access": null,
+    "description": null,
+    "lineNumber": 42,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 156,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_trackById",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#_trackById",
+    "access": null,
+    "description": null,
+    "lineNumber": 49,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 157,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_groupedLayers",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#_groupedLayers",
+    "access": null,
+    "description": null,
+    "lineNumber": 50,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 158,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "timeContext",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#timeContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 56,
+    "unknown": [
+      {
+        "tagName": "@this",
+        "tagValue": "Timeline"
+      },
+      {
+        "tagName": "@attribute",
+        "tagValue": "{TimelineTimeContext} - master time context of the graph"
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 159,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "offset",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#offset",
+    "access": null,
+    "description": "updates `TimeContext`'s offset",
+    "lineNumber": 63,
+    "unknown": [
+      {
+        "tagName": "@attribute",
+        "tagValue": "{Number} [offset=0]"
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 160,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "offset",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 67,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 161,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "zoom",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#zoom",
+    "access": null,
+    "description": null,
+    "lineNumber": 71,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 162,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "zoom",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#zoom",
+    "access": null,
+    "description": null,
+    "lineNumber": 75,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 163,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "pixelsPerSecond",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#pixelsPerSecond",
+    "access": null,
+    "description": null,
+    "lineNumber": 79,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 164,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "pixelsPerSecond",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#pixelsPerSecond",
+    "access": null,
+    "description": null,
+    "lineNumber": 83,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 165,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "visibleWidth",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#visibleWidth",
+    "access": null,
+    "description": null,
+    "lineNumber": 87,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 166,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "visibleWidth",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#visibleWidth",
+    "access": null,
+    "description": null,
+    "lineNumber": 91,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 167,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "timeToPixel",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#timeToPixel",
+    "access": null,
+    "description": null,
+    "lineNumber": 95,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 168,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "visibleDuration",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#visibleDuration",
+    "access": null,
+    "description": " @readonly",
+    "lineNumber": 102,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 169,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "maintainVisibleDuration",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#maintainVisibleDuration",
+    "access": null,
+    "description": null,
+    "lineNumber": 107,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 170,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "maintainVisibleDuration",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#maintainVisibleDuration",
+    "access": null,
+    "description": null,
+    "lineNumber": 111,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 171,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "groupedLayers",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#groupedLayers",
+    "access": null,
+    "description": null,
+    "lineNumber": 116,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 172,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "configureSurface",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#configureSurface",
+    "access": null,
+    "description": " Override the default Surface that is instanciated on each\n @param {EventSource} ctor - the constructor to use to build surfaces",
+    "lineNumber": 124,
+    "params": [
+      {
+        "name": "ctor",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 173,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_surfaceCtor",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#_surfaceCtor",
+    "access": null,
+    "description": null,
+    "lineNumber": 125,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 174,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "createInteraction",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#createInteraction",
+    "access": null,
+    "description": "Factory method to add interaction modules the timeline should listen to.\nBy default, the timeline listen to Keyboard, and instanciate a `Surface` on each container.\nCan be used to install any interaction implementing the `EventSource` interface",
+    "lineNumber": 136,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "EventSource"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "ctor",
+        "description": "the contructor of the interaction module to instanciate"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "el",
+        "description": "{DOMElement} the DOM element to bind to the EventSource module"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "options",
+        "description": "{Object} options to be applied to the ctor (defaults to `{}`)"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 175,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getHitLayers",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#getHitLayers",
+    "access": null,
+    "description": "returns an array of the layers which positions\nand sizes matches a pointer Event",
+    "lineNumber": 147,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "WavesEvent"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "e",
+        "description": "the event from the Surface"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Array"
+      ],
+      "spread": false,
+      "description": "matched layers"
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 176,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_handleEvent",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#_handleEvent",
+    "access": null,
+    "description": "The callback that is used to listen to interactions modules",
+    "lineNumber": 171,
+    "unknown": [
+      {
+        "tagName": "@params",
+        "tagValue": "{Event} e - a custom event generated by interaction modules"
+      }
+    ],
+    "params": [
+      {
+        "name": "e",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 177,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "state",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#state",
+    "access": null,
+    "description": "Changes the state of the timeline",
+    "lineNumber": 185,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "BaseState"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "-",
+        "description": "the state in which the timeline must be setted"
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 178,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_state",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#_state",
+    "access": null,
+    "description": null,
+    "lineNumber": 187,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 179,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "state",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#state",
+    "access": null,
+    "description": null,
+    "lineNumber": 191,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 180,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "tracks",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#tracks",
+    "access": null,
+    "description": " Shortcut to access the Track collection\n @return {TrackCollection}",
+    "lineNumber": 199,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 181,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "layers",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#layers",
+    "access": null,
+    "description": "Shortcut to access the Layer list",
+    "lineNumber": 207,
+    "return": {
+      "nullable": null,
+      "types": [
+        "Array"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 182,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "add",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#add",
+    "access": null,
+    "description": "Adds a track to the timeline\nTracks display a view window on the timeline in theirs own SVG element.",
+    "lineNumber": 216,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Track"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "track",
+        "description": ""
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 183,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "remove",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#remove",
+    "access": null,
+    "description": " Removes a track from the timeline\n @TODO",
+    "lineNumber": 231,
+    "params": [
+      {
+        "name": "track",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 184,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "createTrack",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#createTrack",
+    "access": null,
+    "description": " Creates a new track from the configuration define in `configureTracks`\n @param {DOMElement} $el - the element to insert the track inside\n @param {Object} options - override the defaults options if necessary\n @param {String} [trackId=null] - optionnal id to give to the track, only exists in timeline's context\n @return {Track}",
+    "lineNumber": 242,
+    "params": [
+      {
+        "name": "$el",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "trackHeight",
+        "optional": true,
+        "types": [
+          "number"
+        ],
+        "defaultRaw": 100,
+        "defaultValue": "100"
+      },
+      {
+        "name": "trackId",
+        "optional": true,
+        "types": [
+          "*"
+        ],
+        "defaultRaw": null,
+        "defaultValue": "null"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 185,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "addLayer",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#addLayer",
+    "access": null,
+    "description": " Adds a layer to a track, allow to group track arbitrarily inside groups. Basically a wrapper for `track.add(layer)`\n @param {Layer} layer - the layer to add\n @param {Track} track - the track to the insert the layer in\n @param {String} [groupId='default'] - the group in which associate the layer",
+    "lineNumber": 267,
+    "params": [
+      {
+        "name": "layer",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "trackOrTrackId",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "groupId",
+        "optional": true,
+        "types": [
+          "string"
+        ],
+        "defaultRaw": "default",
+        "defaultValue": "default"
+      },
+      {
+        "name": "isAxis",
+        "optional": true,
+        "types": [
+          "boolean"
+        ],
+        "defaultRaw": false,
+        "defaultValue": "false"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 186,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "removeLayer",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#removeLayer",
+    "access": null,
+    "description": " Removes a layer from its track (the layer is detatched from the DOM but can still be reused)\n @param {Layer} layer - the layer to remove",
+    "lineNumber": 299,
+    "params": [
+      {
+        "name": "layer",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 187,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getTrackById",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#getTrackById",
+    "access": null,
+    "description": " Returns a track from it's id\n @param {String} trackId\n @return {Track}",
+    "lineNumber": 323,
+    "params": [
+      {
+        "name": "trackId",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 188,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getTrackFromDOMElement",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#getTrackFromDOMElement",
+    "access": null,
+    "description": " Returns the track containing a given DOM Element, if no match found return null\n @param {DOMElement} $el\n @return {Track}",
+    "lineNumber": 332,
+    "params": [
+      {
+        "name": "$el",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 189,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getLayersByGroup",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#getLayersByGroup",
+    "access": null,
+    "description": "Returns an array of layers from their group Id",
+    "lineNumber": 355,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "groupId",
+        "description": ""
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Array"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 190,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "[Symbol.iterator]",
+    "memberof": "core/timeline.js~Timeline",
+    "longname": "core/timeline.js~Timeline#[Symbol.iterator]",
+    "access": null,
+    "description": null,
+    "lineNumber": 359,
+    "undocument": true,
+    "params": [],
+    "generator": true
+  },
+  {
+    "__docId__": 191,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "core/track-collection.js",
+    "memberof": null,
+    "longname": "core/track-collection.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import Layer from './layer';\n\n\n/**\n * The `TrackCollection` class allow to update all timeline's tracks at once\n */\nexport default class TrackCollection extends Array {\n  constructor(timeline) {\n    super();\n\n    this._timeline = timeline;\n  }\n\n  // @TODO\n  // this should be in the timeline\n  _getLayersOrGroups(layerOrGroup = null) {\n    let layers = null;\n\n    if (typeof layerOrGroup === 'string') {\n      layers = this._timeline.groupedLayers[layerOrGroup];\n    } else if (layerOrGroup instanceof Layer) {\n      layers = [layerOrGroup];\n    } else {\n      layers = this.layers;\n    }\n\n    return layers;\n  }\n\n  // @NOTE keep this ?\n  // could prepare some vertical resizing ability\n  // this should be able to modify the layers yScale to be really usefull\n\n  set height(value) {\n    this.forEach((track) => track.height = value);\n  }\n\n  // access layers\n  get layers() {\n    let layers = [];\n    this.forEach((track) => layers = layers.concat(track.layers));\n\n    return layers;\n  }\n\n  render() {\n    this.forEach((track) => track.render());\n    this._timeline.emit('render');\n  }\n\n  // should be update(...layersOrGroups)\n  update(layerOrGroup) {\n    const layers = this._getLayersOrGroups(layerOrGroup);\n    this.forEach((track) => track.update(layers));\n    this._timeline.emit('update', layers);\n  }\n\n  updateContainer(trackOrTrackIds) {\n    this.forEach((track) => track.updateContainer());\n    this._timeline.emit('update:containers');\n  }\n\n  updateLayers(layerOrGroup) {\n    const layers = this._getLayersOrGroups(layerOrGroup);\n    this.forEach((track) => track.updateLayers(layers));\n    this._timeline.emit('update:layers', layers);\n  }\n}\n"
+  },
+  {
+    "__docId__": 192,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "TrackCollection",
+    "memberof": "core/track-collection.js",
+    "longname": "core/track-collection.js~TrackCollection",
+    "access": null,
+    "export": true,
+    "importPath": "waves-ui/core/track-collection.js",
+    "importStyle": "TrackCollection",
+    "description": "The `TrackCollection` class allow to update all timeline's tracks at once",
+    "lineNumber": 7,
+    "interface": false,
+    "extends": [
+      "Array"
+    ]
+  },
+  {
+    "__docId__": 193,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "core/track-collection.js~TrackCollection",
+    "longname": "core/track-collection.js~TrackCollection#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 8,
+    "undocument": true,
+    "params": [
+      {
+        "name": "timeline",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 194,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_timeline",
+    "memberof": "core/track-collection.js~TrackCollection",
+    "longname": "core/track-collection.js~TrackCollection#_timeline",
+    "access": null,
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 195,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_getLayersOrGroups",
+    "memberof": "core/track-collection.js~TrackCollection",
+    "longname": "core/track-collection.js~TrackCollection#_getLayersOrGroups",
+    "access": null,
+    "description": null,
+    "lineNumber": 16,
+    "undocument": true,
+    "params": [
+      {
+        "name": "layerOrGroup",
+        "optional": true,
+        "types": [
+          "*"
+        ],
+        "defaultRaw": null,
+        "defaultValue": "null"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 196,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "height",
+    "memberof": "core/track-collection.js~TrackCollection",
+    "longname": "core/track-collection.js~TrackCollection#height",
+    "access": null,
+    "description": null,
+    "lineNumber": 34,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 197,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "layers",
+    "memberof": "core/track-collection.js~TrackCollection",
+    "longname": "core/track-collection.js~TrackCollection#layers",
+    "access": null,
+    "description": null,
+    "lineNumber": 39,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 198,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "render",
+    "memberof": "core/track-collection.js~TrackCollection",
+    "longname": "core/track-collection.js~TrackCollection#render",
+    "access": null,
+    "description": null,
+    "lineNumber": 46,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 199,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "update",
+    "memberof": "core/track-collection.js~TrackCollection",
+    "longname": "core/track-collection.js~TrackCollection#update",
+    "access": null,
+    "description": null,
+    "lineNumber": 52,
+    "undocument": true,
+    "params": [
+      {
+        "name": "layerOrGroup",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 200,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "updateContainer",
+    "memberof": "core/track-collection.js~TrackCollection",
+    "longname": "core/track-collection.js~TrackCollection#updateContainer",
+    "access": null,
+    "description": null,
+    "lineNumber": 58,
+    "undocument": true,
+    "params": [
+      {
+        "name": "trackOrTrackIds",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 201,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "updateLayers",
+    "memberof": "core/track-collection.js~TrackCollection",
+    "longname": "core/track-collection.js~TrackCollection#updateLayers",
+    "access": null,
+    "description": null,
+    "lineNumber": 63,
+    "undocument": true,
+    "params": [
+      {
+        "name": "layerOrGroup",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 202,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "core/track.js",
+    "memberof": null,
+    "longname": "core/track.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import ns from './namespace';\n\n\n/**\n * As a temporal representation, a track establishes a relation between *time* in seconds and *space* in pixels.\n *\n * A `Track` instance can have multiple `Layer` instances.\n *\n * ### Tracks inside a timeline\n *\n * A temporal representation can be rendered upon multiple DOM elements, the tracks (eg multiple `<li>` for a DAW like representation) that belong to the same timeline using the `add` method. These tracks are like windows on the overall and basically unending timeline.\n *\n * ### A timeline with 3 tracks:\n *\n * ```\n * +-----------------+-------------------------------+-- - -  -  -   -\n * |track 1          |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|\n * +-----------------+-------------------------------+-- - -  -  -   -\n * |track 2          |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|\n * +-----------------+-------------------------------+-- - -  -  -   -\n * |track 3          |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|\n * +-------------------------------------------------+-- - -  -  -   -\n *\n * +----------------->\n * timeline.timeContext.timeToPixel(timeline.timeContext.offset)\n *\n *                   <------------------------------->\n *                   timeline's tracks defaults to 1000px\n *                   with a default pixelsPerSecond of 100px/s.\n *                   and a default `stretchRatio = 1`\n *                   track1 shows 10 seconds of the timeline\n * ```\n *\n * ### Layers inside a track\n *\n * Within a track, a `Layer` keeps up-to-date and renders the data. The track's `add` method adds a `Layer` instance to a track.\n *\n * ### The track renderingContext\n *\n * When one modify the timeline renderingContext:\n *\n * - timeline.renderingContext.offset (in seconds) modify the containers track x position\n * - timeline.renderingContext.stretchRatio modify timeline's zoom\n * Each time you set new value of offset or stretchRatio, you need to do `timeline.update()` to update the values.\n *\n * ### Track SVG structure\n *\n * ```html\n * <svg class=\"track\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" height=\"100\" shape-rendering=\"optimizeSpeed\">\n *   <defs></defs> Unused for the moment, could be used to define custom shapes for use with layers\n *   <rect style=\"fill-opacity:0\" width=\"100%\" height=\"100%\"></rect>\n *   <g class=\"offset\">\n *     <g class=\"layout\"></g> The layers are inserted here\n *   </g>\n *   <g class=\"interactions\"></g> Placeholder to visualize interactions (eg. brush)\n * </svg>\n * ```\n */\nconst round = Math.round;\n\nexport default class Track {\n  /**\n   * Create the track of the given `height` in the given `$el`\n   * @param {DOMElement} $el\n   * @param {Number} [height = 100]\n   */\n  constructor($el, height = 100) {\n    this.$el = $el;\n    this.layers = [];\n    this._height = height;\n\n    // are set when added to the timeline\n    this.renderingContext = null;\n\n    this._createContainer();\n  }\n\n  /**\n   * @type Number\n   * @default 100\n   */\n  get height() {\n    return this._height;\n  }\n\n  set height(value) {\n    this._height = value;\n    // @NOTE: propagate to layers, keeping ratio ? could be handy for vertical resize\n  }\n\n  /**\n   * This method is called when the track is added to the timeline.\n   * The track cannot be updated without being added to a timeline.\n   * @param {TimelineTimeContext} renderingContext\n   * @semi-private\n   */\n  configure(renderingContext) {\n    this.renderingContext = renderingContext;\n  }\n\n  /**\n   * Destroy a track\n   * The layers from this track can still be reused elsewhere\n   */\n  destroy() {\n    // Detach everything from the DOM\n    this.$el.removeChild(this.$svg);\n    this.layers.forEach((layer) => this.$layout.removeChild(layer.$el));\n    // clean references\n    this.$el = null;\n    this.renderingContext = null;\n    this.layers.length = 0;\n  }\n\n  /**\n   * Creates the container for the track\n   */\n  _createContainer() {\n    const $svg = document.createElementNS(ns, 'svg');\n    $svg.setAttributeNS(null, 'shape-rendering', 'optimizeSpeed');\n    $svg.setAttributeNS(null, 'height', this.height);\n    $svg.setAttribute('xmlns:xhtml', 'http://www.w3.org/1999/xhtml');\n    $svg.classList.add('track');\n\n    const $background = document.createElementNS(ns, 'rect');\n    $background.setAttributeNS(null, 'height', '100%');\n    $background.setAttributeNS(null, 'width', '100%');\n    $background.style.fillOpacity = 0;\n    // $background.style.pointerEvents = 'none';\n\n    const $defs = document.createElementNS(ns, 'defs');\n\n    const $offsetGroup = document.createElementNS(ns, 'g');\n    $offsetGroup.classList.add('offset');\n\n    const $layoutGroup = document.createElementNS(ns, 'g');\n    $layoutGroup.classList.add('layout');\n\n    const $interactionsGroup = document.createElementNS(ns, 'g');\n    $interactionsGroup.classList.add('interactions');\n\n    $svg.appendChild($defs);\n    $svg.appendChild($background);\n    $offsetGroup.appendChild($layoutGroup);\n    $svg.appendChild($offsetGroup);\n    $svg.appendChild($interactionsGroup);\n\n    this.$el.appendChild($svg);\n    // removes additionnal height added who knows why...\n    this.$el.style.fontSize = 0;\n    // fixes one of the (many ?) weird canvas rendering bugs in Chrome\n    this.$el.style.transform = 'translateZ(0)';\n\n    this.$layout = $layoutGroup;\n    this.$offset = $offsetGroup;\n    this.$interactions = $interactionsGroup;\n    this.$svg = $svg;\n    this.$background = $background;\n  }\n\n  /**\n   * Adds a layer to the track\n   */\n  add(layer) {\n    this.layers.push(layer);\n    // Create a default renderingContext for the layer if missing\n    this.$layout.appendChild(layer.$el);\n  }\n\n  /**\n   * Removes a layer\n   */\n  remove(layer) {\n    this.layers.splice(this.layers.indexOf(layer), 1);\n    // Removes layer from its container\n    this.$layout.removeChild(layer.$el);\n  }\n\n  /**\n   *  Defines if a given element belongs to the track\n   *  @param {DOMElement} $el\n   *  @return {bool}\n   */\n  hasElement($el) {\n    do {\n      if ($el === this.$el) {\n        return true;\n      }\n\n      $el = $el.parentNode;\n    } while ($el !== null);\n\n    return false;\n  }\n\n  /**\n   * Draw tracks, and the layers in cascade\n   */\n  render() {\n    for (let layer of this) { layer.render(); }\n  }\n\n  /**\n   * Update the layers\n   */\n  update(layers = null) {\n    this.updateContainer();\n    this.updateLayers(layers);\n  }\n\n  updateContainer() {\n    const $svg = this.$svg;\n    const $offset = this.$offset;\n    // Should be in some update layout\n    const renderingContext = this.renderingContext;\n    const height = this.height;\n    const width = round(renderingContext.visibleWidth);\n    const offsetX = round(renderingContext.timeToPixel(renderingContext.offset));\n    const translate = `translate(${offsetX}, 0)`;\n\n    $svg.setAttributeNS(null, 'height', height);\n    $svg.setAttributeNS(null, 'width', width);\n    $svg.setAttributeNS(null, 'viewbox', `0 0 ${width} ${height}`);\n\n    $offset.setAttributeNS(null, 'transform', translate);\n  }\n\n  updateLayers(layers = null) {\n    layers = (layers === null) ? this.layers : layers;\n\n    layers.forEach((layer) => {\n      if (this.layers.indexOf(layer) === -1) { return; }\n      layer.update();\n    });\n  }\n\n  *[Symbol.iterator]() {\n    yield* this.layers[Symbol.iterator]();\n  }\n}\n"
+  },
+  {
+    "__docId__": 203,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "round",
+    "memberof": "core/track.js",
+    "longname": "core/track.js~round",
+    "access": null,
+    "export": false,
+    "importPath": "waves-ui/core/track.js",
+    "importStyle": null,
+    "description": "As a temporal representation, a track establishes a relation between *time* in seconds and *space* in pixels.\n\nA `Track` instance can have multiple `Layer` instances.\n\n### Tracks inside a timeline\n\nA temporal representation can be rendered upon multiple DOM elements, the tracks (eg multiple `<li>` for a DAW like representation) that belong to the same timeline using the `add` method. These tracks are like windows on the overall and basically unending timeline.\n\n### A timeline with 3 tracks:\n\n```\n+-----------------+-------------------------------+-- - -  -  -   -\n|track 1          |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|\n+-----------------+-------------------------------+-- - -  -  -   -\n|track 2          |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|\n+-----------------+-------------------------------+-- - -  -  -   -\n|track 3          |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|\n+-------------------------------------------------+-- - -  -  -   -\n\n+----------------->\ntimeline.timeContext.timeToPixel(timeline.timeContext.offset)\n\n                  <------------------------------->\n                  timeline's tracks defaults to 1000px\n                  with a default pixelsPerSecond of 100px/s.\n                  and a default `stretchRatio = 1`\n                  track1 shows 10 seconds of the timeline\n```\n\n### Layers inside a track\n\nWithin a track, a `Layer` keeps up-to-date and renders the data. The track's `add` method adds a `Layer` instance to a track.\n\n### The track renderingContext\n\nWhen one modify the timeline renderingContext:\n\n- timeline.renderingContext.offset (in seconds) modify the containers track x position\n- timeline.renderingContext.stretchRatio modify timeline's zoom\nEach time you set new value of offset or stretchRatio, you need to do `timeline.update()` to update the values.\n\n### Track SVG structure\n\n```html\n<svg class=\"track\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\" height=\"100\" shape-rendering=\"optimizeSpeed\">\n  <defs></defs> Unused for the moment, could be used to define custom shapes for use with layers\n  <rect style=\"fill-opacity:0\" width=\"100%\" height=\"100%\"></rect>\n  <g class=\"offset\">\n    <g class=\"layout\"></g> The layers are inserted here\n  </g>\n  <g class=\"interactions\"></g> Placeholder to visualize interactions (eg. brush)\n</svg>\n```",
+    "lineNumber": 59,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 204,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "Track",
+    "memberof": "core/track.js",
+    "longname": "core/track.js~Track",
+    "access": null,
+    "export": true,
+    "importPath": "waves-ui/core/track.js",
+    "importStyle": "Track",
+    "description": null,
+    "lineNumber": 61,
+    "undocument": true,
+    "interface": false
+  },
+  {
+    "__docId__": 205,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#constructor",
+    "access": null,
+    "description": "Create the track of the given `height` in the given `$el`",
+    "lineNumber": 67,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "DOMElement"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "$el",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "height",
+        "description": "= 100]"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 206,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$el",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#$el",
+    "access": null,
+    "description": null,
+    "lineNumber": 68,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 207,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "layers",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#layers",
+    "access": null,
+    "description": null,
+    "lineNumber": 69,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 208,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_height",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#_height",
+    "access": null,
+    "description": null,
+    "lineNumber": 70,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 209,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "renderingContext",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#renderingContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 73,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 210,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "height",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#height",
+    "access": null,
+    "description": null,
+    "lineNumber": 82,
+    "unknown": [
+      {
+        "tagName": "@default",
+        "tagValue": "100"
+      }
+    ],
+    "type": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 211,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "height",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#height",
+    "access": null,
+    "description": null,
+    "lineNumber": 86,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 212,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_height",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#_height",
+    "access": null,
+    "description": null,
+    "lineNumber": 87,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 213,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "configure",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#configure",
+    "access": null,
+    "description": "This method is called when the track is added to the timeline.\nThe track cannot be updated without being added to a timeline.",
+    "lineNumber": 97,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "TimelineTimeContext"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "renderingContext",
+        "description": "@semi-private"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 214,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "renderingContext",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#renderingContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 98,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 215,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "destroy",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#destroy",
+    "access": null,
+    "description": "Destroy a track\nThe layers from this track can still be reused elsewhere",
+    "lineNumber": 105,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 216,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$el",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#$el",
+    "access": null,
+    "description": null,
+    "lineNumber": 110,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 217,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "renderingContext",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#renderingContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 111,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 218,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_createContainer",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#_createContainer",
+    "access": null,
+    "description": "Creates the container for the track",
+    "lineNumber": 118,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 219,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$layout",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#$layout",
+    "access": null,
+    "description": null,
+    "lineNumber": 154,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 220,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$offset",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#$offset",
+    "access": null,
+    "description": null,
+    "lineNumber": 155,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 221,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$interactions",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#$interactions",
+    "access": null,
+    "description": null,
+    "lineNumber": 156,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 222,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$svg",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#$svg",
+    "access": null,
+    "description": null,
+    "lineNumber": 157,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 223,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$background",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#$background",
+    "access": null,
+    "description": null,
+    "lineNumber": 158,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 224,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "add",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#add",
+    "access": null,
+    "description": "Adds a layer to the track",
+    "lineNumber": 164,
+    "params": [
+      {
+        "name": "layer",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 225,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "remove",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#remove",
+    "access": null,
+    "description": "Removes a layer",
+    "lineNumber": 173,
+    "params": [
+      {
+        "name": "layer",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 226,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "hasElement",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#hasElement",
+    "access": null,
+    "description": " Defines if a given element belongs to the track\n @param {DOMElement} $el\n @return {bool}",
+    "lineNumber": 184,
+    "params": [
+      {
+        "name": "$el",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "boolean"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 227,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "render",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#render",
+    "access": null,
+    "description": "Draw tracks, and the layers in cascade",
+    "lineNumber": 199,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 228,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "update",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#update",
+    "access": null,
+    "description": "Update the layers",
+    "lineNumber": 206,
+    "params": [
+      {
+        "name": "layers",
+        "optional": true,
+        "types": [
+          "*"
+        ],
+        "defaultRaw": null,
+        "defaultValue": "null"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 229,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "updateContainer",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#updateContainer",
+    "access": null,
+    "description": null,
+    "lineNumber": 211,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 230,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "updateLayers",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#updateLayers",
+    "access": null,
+    "description": null,
+    "lineNumber": 228,
+    "undocument": true,
+    "params": [
+      {
+        "name": "layers",
+        "optional": true,
+        "types": [
+          "*"
+        ],
+        "defaultRaw": null,
+        "defaultValue": "null"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 231,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "[Symbol.iterator]",
+    "memberof": "core/track.js~Track",
+    "longname": "core/track.js~Track#[Symbol.iterator]",
+    "access": null,
+    "description": null,
+    "lineNumber": 237,
+    "undocument": true,
+    "params": [],
+    "generator": true
+  },
+  {
+    "__docId__": 233,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Infinity",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Infinity",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 234,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NaN",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~NaN",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 235,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "undefined",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~undefined",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 236,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "null",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~null",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 237,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Object",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 238,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~object",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 239,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Function",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 240,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~function",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 241,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Boolean",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 242,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~boolean",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 243,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Symbol",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Symbol",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 244,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Error",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Error",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 245,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "EvalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~EvalError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 246,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "InternalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~InternalError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 247,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RangeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RangeError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 248,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ReferenceError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ReferenceError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 249,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "SyntaxError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~SyntaxError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 250,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "TypeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~TypeError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 251,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "URIError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~URIError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 252,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Number",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 253,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~number",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 254,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Date",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Date",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 255,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "String",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~String",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 256,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "string",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~string",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 257,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RegExp",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RegExp",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 258,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 259,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int8Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 260,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 261,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8ClampedArray",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8ClampedArray",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 262,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int16Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 263,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint16Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 264,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int32Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 265,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint32Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 266,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float32Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 267,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float64Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float64Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 268,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Map",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Map",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 269,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Set",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Set",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 270,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakMap",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakMap",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 271,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakSet",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakSet",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 272,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ArrayBuffer",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ArrayBuffer",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 273,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DataView",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~DataView",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 274,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "JSON",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~JSON",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 275,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Promise",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Promise",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 276,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Generator",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Generator",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 277,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "GeneratorFunction",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~GeneratorFunction",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 278,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Reflect",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Reflect",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 279,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Proxy",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Proxy",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 281,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "CanvasRenderingContext2D",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~CanvasRenderingContext2D",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 282,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DocumentFragment",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~DocumentFragment",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 283,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Element",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Element",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 284,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Event",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Event",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 285,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Node",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Node",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 286,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NodeList",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~NodeList",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 287,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "XMLHttpRequest",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~XMLHttpRequest",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  }
+]
