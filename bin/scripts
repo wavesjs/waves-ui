@@ -130,7 +130,6 @@ function generateDoc() {
     '.gitignore',
     'bin',
     'doc',
-    'manual',
     'examples',
     'README.md',
     'esdoc.json'
