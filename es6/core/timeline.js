@@ -9,16 +9,17 @@ import TrackCollection from './track-collection';
 
 
 /**
- * The `timeline` is the main entry point of a temporal visualization, it:
+ * The `timeline` is the main entry point of a temporal visualization.
  *
+ * it:
  * - contains factories to manage its `tracks` and `layers`,
  * - get or set the view window overs its `tracks` through `offset`, `zoom`, `pixelsPerSecond`, `visibleWidth`,
  * - is the central hub for all user interaction events (keyboard, mouse),
  * - holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to user interactions.
  *
  * ```js
- * const with = 500; // default with for all created `Track`
- * const duration = 10; // the timeline should dislay 10 second of data
+ * const visibleWidth = 500;  // default width for all created `Track`
+ * const duration = 10;       // the timeline should dislay 10 seconds of data
  * const pixelsPerSeconds = width / duration;
  * const timeline = new ui.core.Timeline(pixelsPerSecond, width);
  * ```
@@ -259,10 +260,10 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  Adds a layer to a track, allow to group track arbitrarily inside groups. Basically a wrapper for `track.add(layer)`
-   *  @param {Layer} layer - the layer to add
-   *  @param {Track} track - the track to the insert the layer in
-   *  @param {String} [groupId='default'] - the group in which associate the layer
+   * Adds a layer to a track, allow to group track arbitrarily inside groups. Basically a wrapper for `track.add(layer)`
+   * @param {Layer} layer - the layer to add
+   * @param {Track} track - the track to the insert the layer in
+   * @param {String} [groupId='default'] - the group in which associate the layer
    */
   addLayer(layer, trackOrTrackId, groupId = 'default', isAxis = false) {
     let track = trackOrTrackId;
