@@ -116,11 +116,8 @@ function generateDoc() {
   //   return console.log(msg);
   // }
   var execSync = childProcess.execSync;
-  // delete current gh-pages branch
-  try {
-    console.log('try ??');
-    execSync('git branch -d gh-pages');
-  } catch (err) {}
+  // delete current gh-pages branch if exists
+  try { execSync('git branch -d gh-pages'); } catch (err) {}
   // create gh-pages branch
   execSync('git checkout -b gh-pages');
   // run esdoc
@@ -128,7 +125,15 @@ function generateDoc() {
   console.log('Created documentation');
   // rm * but doc/ examples/ README.md
   var files = fse.readdirSync(cwd);
-  var toKeep = ['doc', 'manual', 'examples', 'README.md', '.git', 'bin'];
+  var toKeep = [
+    'doc',
+    'manual',
+    'examples',
+    '.git',
+    'bin',
+    'README.md',
+    'esdoc.json'
+  ];
 
   files.forEach(function(file) {
     if (toKeep.indexOf(file) !== -1) { return; }
@@ -141,10 +146,11 @@ function generateDoc() {
 
   fse.removeSync('doc');
 
-  // cp -R doc/* ./*
-  // push on gh-pages branch
-  // checkout master
-  // delete gh-branch
+  execSync('git add -A');
+  execSync('git commit -am "updated documentation"');
+  execSync('git push origin gh-pages');
+  execSync('git checkout master');
+  execSync('git branch -d gh-pages');
 }
 
 // watch source dir
