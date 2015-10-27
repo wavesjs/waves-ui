@@ -1,23 +1,22 @@
 # waves - ui
 
-> A library to display and edit audio and timeseries data in the browser.
+> A library to display and edit audio data and timeseries data in the browser.
 
-## Basic Example
+![waves-ui screenshot](https://raw.githubusercontent.com/wavesjs/ui/master/examples/assets/waves-ui-screenshot.png)
 
-A timeline that displays a waveform and a segmentation over it.
-
-```
-```
+[Basic examples](http://wavesjs.github.io/ui/manual/example.html#examples) and 
+[Full documentation](http://wavesjs.github.io/ui/)
 
 ## Goals and Features
 
-*waves - ui* proposes primitives to build interactive temporal visualizations of audio and timeseries data for in-browser rendering. It has been designed by abstracting common features required in both music production environments and analysis authoring tools. 
+*waves - ui* proposes primitives to build interactive temporal visualizations of audio and timeseries data for in-browser rendering. 
+It has been designed by abstracting common features required in both music production environments and analysis authoring tools. 
 Its main goal is to ease the development of audio-based web applications requiring interactive temporal visualizations. 
 Its components have been designed to easily create aligned superposed and/or juxtaposed representations of audio signals and related data streams such as audio descriptors, motion capture signals and descriptors as well as event or segmentation markers and annotations.
 
 ## Library Overview
 
-Here is a synthetic view of the library components, and their interconnections:
+Synthetic view of the library components and their interconnections:
 
 `Timeline` 1⬄n `Track` 1⬄n `Layer` and its associated `Shape`: `Waveform`, `Marker`, `Segment` ...
 
@@ -25,7 +24,7 @@ Here is a synthetic view of the library components, and their interconnections:
 
 The `timeline` is the main entry point of a temporal representation, it:
 - contains factories to manage its `tracks` and `layers`,
-- gets or sets the view window overs its `tracks` through `offset`, `zoom`, `pixelsPerSecond`, `visibleWidth`,
+- provides the context for any visualization of temporal data, gets or sets the view overs its `tracks` through `offset`, `zoom`, `pixelsPerSecond`, `visibleWidth`,
 - is the central hub for all user interaction events (keyboard, mouse),
 - holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to those events.
 
@@ -52,11 +51,11 @@ The library comes with usual shapes to display audio data and timeseries:
 - `waveform`
 - `segment` and `annotated-segment`
 - `marker` and `annotated-marker` 
-- `dot` and `line`, for break point functions (aka automation curves)
+- `dot` and `line`, for break point functions (used for automation curves)
 - `trace`
 - `cursor` 
 
-The library also provides a template (`BaseShape`) to create new kind of shapes.
+The library also provides a template (`BaseShape`) to create custom shapes to display the data.
 
 ### Interactions - states
 
@@ -70,35 +69,17 @@ A `state` of the timeline sorts these events and call the appropriate methods to
 - modify layers data (`EditionState`)
 - select layers time characteristics, data (`SelectionState`)
 
-`BaseState` is the base class to implement a specific `state`.
+`BaseState` is the base class to implement a specific `state` thus defining a custom event handlers for the `Timeline`.
 
 ### Behavior
 
 The `behaviors` give an entry point to modify a shape or a layer directly from its rendering. It allows you to programmatically move DOM elements associated to a shape or a layer and modify accordingly the data associated to it. 
 
+The `BaseBehavior` is the base class to define custom interaction with a shape.
+
 ### Utils
 
 Traditionally, timeseries data can be formated like an array of object or multiple arrays. An `OrthogonalData` instance can format the datas in one or another formats.
-
-## Examples
-
-- Waveform
-- Segments
-- Markers
-- Annotated Markers
-- BreakPointFunction
-- Trace
-- Cursor
-- Zoom
-- Scales
-- Edition
-- Live input
-- With Audio engine
-- With Analysis engine (LFO)
-
-## Full Documentation
-
-[http://wavesjs.github.io/ui/](http://wavesjs.github.io/ui/)
 
 ## Use
 
@@ -161,12 +142,12 @@ _`core/timeline`, `core/layer`, and `helpers/utils` are mandatory_
 
 ## Pull-Request, Tests and Coverage
 
-To work with us (!), you need to install dependencies explained in "globalDependencies[nonStandard]" key of package.json so that `npm run test`, `npm run coverage` will correctly run. (We didn't put this dependencies in the package.json because you have probably already installed these ones globally and because they are huge.)
+To collaborate, you need to install dependencies referenced in "globalDependencies[nonStandard]" key of package.json so that `npm run test`, `npm run coverage` will correctly run. (We didn't put this dependencies in the package.json because you have probably already installed these ones globally and because they are huge.)
 
-PR are reviewed as long as they: 
+Pull-Request are reviewed as long as they: 
 * provide test 
 * keep a good code coverage
-* fill an established use-case
+* fill an explained use-case regarding the library goals
 
 ## License
 
