@@ -1,6 +1,6 @@
-# waves.js - ui
+# waves - ui
 
-> Library to display and edit audio and timeseries data in the browser.
+> A library to display and edit audio and timeseries data in the browser.
 
 ## Basic Example
 
@@ -9,20 +9,17 @@ A timeline that displays a waveform and a segmentation over it.
 ```
 ```
 
-
 ## Goals and Features
 
-*waves.js - ui* is a library that proposes primitives to build interactive temporal visualizations of audio and timeseries data for in-browser rendering. It has been designed by abstracting common features required in both music production environments and analysis authoring tools. 
-Its main goal is to ease the development of audio-based web applications requiring interactive temporal visualizations.
-
-*ui* is part of the [waves.js](https://github.com/wavesjs/waves) library.
-
+*waves - ui* proposes primitives to build interactive temporal visualizations of audio and timeseries data for in-browser rendering. It has been designed by abstracting common features required in both music production environments and analysis authoring tools. 
+Its main goal is to ease the development of audio-based web applications requiring interactive temporal visualizations. 
+Its components have been designed to easily create aligned superposed and/or juxtaposed representations of audio signals and related data streams such as audio descriptors, motion capture signals and descriptors as well as event or segmentation markers and annotations.
 
 ## Library Overview
 
-Here is a synthetic view of objects that compose the library, and their interconnections:
+Here is a synthetic view of the library components, and their interconnections:
 
-`Timeline` 1..n `Track` 1..n `Layer` and its associated `Shape`: `Waveform`, `Marker`, `Segment` ...
+`Timeline` 1⬄n `Track` 1⬄n `Layer` and its associated `Shape`: `Waveform`, `Marker`, `Segment` ...
 
 ### Timeline
 
@@ -164,23 +161,17 @@ _`core/timeline`, `core/layer`, and `helpers/utils` are mandatory_
 
 ## Pull-Request, Tests and Coverage
 
-To work with us (!), you need to install the following dependencies:
+To work with us (!), you need to install dependencies explained in "globalDependencies[nonStandard]" key of package.json so that `npm run test`, `npm run coverage` will correctly run. (We didn't put this dependencies in the package.json because you have probably already installed these ones globally and because they are huge.)
 
-- "babel": "^4.5.0"
-- "babelify": "^6.1.3"
-- "browserify": "^9.0.3"
-- "testling": "^1.7.1"
-- "coverify": "^1.4.0"
-
-so that `npm run test`, `npm run coverage` will correctly run.
-We didn't put this dependencies in the package.json because you have probably already installed these ones globally and because they are huge.
-
-PR are reviewed as long as they provide test and keep a good code coverage.
+PR are reviewed as long as they: 
+* provide test 
+* keep a good code coverage
+* fill an established use-case
 
 ## License
 
 This module is released under the BSD-3-Clause license.
 
-Acknowledgments
+## Acknowledgments
 
-This code is part of the WAVE project, funded by ANR (The French National Research Agency).
+This code is part of the [WAVE](http://wave.ircam.fr) project, funded by ANR (The French National Research Agency).
