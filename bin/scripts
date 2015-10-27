@@ -133,6 +133,7 @@ function generateDoc() {
     'bin',
     'doc',
     'examples',
+    'node_modules',
     'README.md',
     'esdoc.json'
   ];
