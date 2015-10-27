@@ -9,7 +9,7 @@
     "Norbert Schnell",
     "Karim Barkati"
   ],
-  "main": "waves-ui.js",
+  "main": "dist/waves-ui.js",
   "standalone": "wavesUI",
   "scripts": {
     "doc": "node ./bin/scripts --doc",
@@ -40,7 +40,6 @@
     "babel-runtime": "^5.8.12"
   },
   "devDependencies": {
-    "babelify": "^6.4.0",
     "fs-extra": "^0.16.3",
     "jshint": "^2.6.0",
     "node-watch": "^0.3.4",

@@ -85,7 +85,8 @@ function createTargetName(filename) {
 
 // create filename from `pck.main` to `umd` version
 function getUmdName() {
-  return pkg.main.replace('.js', '.umd.js');
+  var filename = path.basename(pkg.main);
+  return filename.replace('.js', '.umd.js');
 }
 
 // create filename from `umd` to `min` version
