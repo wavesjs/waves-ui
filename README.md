@@ -4,7 +4,7 @@
 
 ![waves-ui screenshot](https://raw.githubusercontent.com/wavesjs/ui/master/examples/assets/waves-ui-screenshot.png)
 
-[Basic examples](http://wavesjs.github.io/ui/manual/example.html#examples)
+[Basic examples](http://wavesjs.github.io/ui/manual/example.html#examples) and 
 [Full documentation](http://wavesjs.github.io/ui/)
 
 ## Goals and Features
