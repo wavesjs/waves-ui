@@ -1,8 +1,8 @@
 const test = require('tape');
 
-import Layer from '../../es6/core/layer';
-import TrackCollection from '../../es6/core/track-collection';
-import Timeline from '../../es6/core/timeline';
+import Layer from '../../src/core/layer';
+import TrackCollection from '../../src/core/track-collection';
+import Timeline from '../../src/core/timeline';
 
 
 test('TrackCollection methods', (assert) => {

@@ -1,5 +1,5 @@
 {
-  "source": "./es6",
+  "source": "./src",
   "destination": "./doc",
   "title": "WavesJS UI",
   "manual": {

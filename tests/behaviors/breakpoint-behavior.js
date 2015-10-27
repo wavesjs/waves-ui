@@ -1,10 +1,10 @@
 const test = require('tape');
 
-import Layer from '../../es6/core/layer';
-import Dot from '../../es6/shapes/dot';
-import LayerTimeContext from '../../es6/core/layer-time-context';
-import BreakpointBehavior from '../../es6/behaviors/breakpoint-behavior';
-import Timeline from '../../es6/core/timeline';
+import Layer from '../../src/core/layer';
+import Dot from '../../src/shapes/dot';
+import LayerTimeContext from '../../src/core/layer-time-context';
+import BreakpointBehavior from '../../src/behaviors/breakpoint-behavior';
+import Timeline from '../../src/core/timeline';
 
 
 test("Edit Breakpoint Behavior", (assert) => {

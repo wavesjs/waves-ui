@@ -1,10 +1,10 @@
 const test = require('tape');
 
-import Layer from '../../es6/core/layer';
-import LayerTimeContext from '../../es6/core/layer-time-context';
-import AnnotatedMarker from '../../es6/shapes/annotated-marker';
-import MarkerBehavior from '../../es6/behaviors/marker-behavior';
-import Timeline from '../../es6/core/timeline';
+import Layer from '../../src/core/layer';
+import LayerTimeContext from '../../src/core/layer-time-context';
+import AnnotatedMarker from '../../src/shapes/annotated-marker';
+import MarkerBehavior from '../../src/behaviors/marker-behavior';
+import Timeline from '../../src/core/timeline';
 
 
 test('Annotated Marker', (assert) => {

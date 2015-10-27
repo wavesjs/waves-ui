@@ -1,8 +1,8 @@
 const test = require('tape');
 
-import Layer from '../../es6/core/layer';
-import LayerTimeContext from '../../es6/core/layer-time-context';
-import Timeline from '../../es6/core/timeline';
+import Layer from '../../src/core/layer';
+import LayerTimeContext from '../../src/core/layer-time-context';
+import Timeline from '../../src/core/timeline';
 
 
 test('Layer with default params', (assert) => {

@@ -1,10 +1,10 @@
 const test = require('tape');
 
-import Layer from '../../es6/core/layer';
-import LayerTimeContext from '../../es6/core/layer-time-context';
-import Segment from '../../es6/shapes/segment';
-import SegmentBehavior from '../../es6/behaviors/segment-behavior';
-import Timeline from '../../es6/core/timeline';
+import Layer from '../../src/core/layer';
+import LayerTimeContext from '../../src/core/layer-time-context';
+import Segment from '../../src/shapes/segment';
+import SegmentBehavior from '../../src/behaviors/segment-behavior';
+import Timeline from '../../src/core/timeline';
 
 
 test('Segment instanciation', (assert) => {

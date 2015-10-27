@@ -1,6 +1,6 @@
 const test = require('tape');
 
-import Surface from '../../es6/interactions/surface';
+import Surface from '../../src/interactions/surface';
 
 
 const body = window.document.body;

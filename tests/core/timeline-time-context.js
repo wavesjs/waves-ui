@@ -1,6 +1,6 @@
 const test = require('tape');
 
-import TimelineTimeContext from '../../es6/core/timeline-time-context';
+import TimelineTimeContext from '../../src/core/timeline-time-context';
 
 
 test("TimelineTimeContext get default values", (assert) => {

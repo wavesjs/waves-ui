@@ -1,7 +1,7 @@
 const test = require('tape');
 
-import LayerTimeContext from '../../es6/core/layer-time-context';
-import TimelineTimeContext from '../../es6/core/timeline-time-context';
+import LayerTimeContext from '../../src/core/layer-time-context';
+import TimelineTimeContext from '../../src/core/timeline-time-context';
 
 
 test("LayerTimeContext get default values", (assert) => {
