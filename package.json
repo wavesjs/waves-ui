@@ -9,7 +9,7 @@
     "Norbert Schnell",
     "Karim Barkati"
   ],
-  "main": "waves-ui.js",
+  "main": "dist/waves-ui.js",
   "standalone": "wavesUI",
   "scripts": {
     "doc": "node ./bin/scripts --doc",
