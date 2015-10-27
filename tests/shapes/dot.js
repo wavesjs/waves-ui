@@ -1,10 +1,10 @@
 const test = require('tape');
 
-import Layer from '../../es6/core/layer';
-import LayerTimeContext from '../../es6/core/layer-time-context';
-import Dot from '../../es6/shapes/dot';
-import BreakpointBehavior from '../../es6/behaviors/breakpoint-behavior';
-import Timeline from '../../es6/core/timeline';
+import Layer from '../../src/core/layer';
+import LayerTimeContext from '../../src/core/layer-time-context';
+import Dot from '../../src/shapes/dot';
+import BreakpointBehavior from '../../src/behaviors/breakpoint-behavior';
+import Timeline from '../../src/core/timeline';
 
 test('Dot', (assert) => {
   const trackDiv = document.createElement("div");

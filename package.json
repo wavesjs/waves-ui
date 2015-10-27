@@ -22,7 +22,7 @@
     "dev-test": "node ./bin/scripts --dev-test",
     "pretest": "npm run hint",
     "test": "browserify -t [ babelify --blacklist regenerator ] tests/*/*.js |  testling -u --no-show",
-    "hint": "jshint ./es6; true",
+    "hint": "jshint ./src; true",
     "coverage": "browserify -t [ babelify --blacklist regenerator ] -t coverify tests/*/*.js | testling -u --no-show | coverify --json -o coverage.json && node ./bin/scripts --cover-report -i coverage.json"
   },
   "license": "BSD-3",
@@ -40,6 +40,7 @@
     "babel-runtime": "^5.8.12"
   },
   "devDependencies": {
+    "babelify": "^6.4.0",
     "fs-extra": "^0.16.3",
     "jshint": "^2.6.0",
     "node-watch": "^0.3.4",

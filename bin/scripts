@@ -14,7 +14,7 @@ var uglifyJS = require('uglify-js');
 
 // CONFIG
 // -----------------------------------------------
-var srcDir = 'es6';
+var srcDir = 'src';
 var distDir = 'dist';
 var cwd = process.cwd();
 
@@ -79,8 +79,8 @@ switch (command) {
 
 // create filename from src to dist
 function createTargetName(filename) {
-  // replace source dir with target dir and '.es6.js' to '.js'
-  return filename.replace(new RegExp('^' + srcDir), distDir).replace('.es6.js', '.js');
+  // replace source dir with target dir
+  return filename.replace(new RegExp('^' + srcDir), distDir);
 }
 
 // create filename from `pck.main` to `umd` version
@@ -111,10 +111,11 @@ function isGitMasterBranch() {
 
 function generateDoc() {
   // check if in master
-  // if (!isGitMasterBranch()) {
-  //   var msg = red + '=> you must be in master branch to run doc command' + NC;
-  //   return console.log(msg);
-  // }
+  if (!isGitMasterBranch()) {
+    var msg = red + '=> you must be in master branch to run the `doc` command' + NC;
+    return console.log(msg);
+  }
+
   var execSync = childProcess.execSync;
   // delete current gh-pages branch if exists
   try { execSync('git branch -D gh-pages'); } catch (err) {}
@@ -191,8 +192,6 @@ function uglify() {
 
     var msg = green + '=> "%s" successfully created' + NC;
     console.log(util.format(msg, target));
-    // reminder
-
     // ask
     console.log(red + '==> THINK ABOUT UPDATING VERSION [npm --help version] <==' + NC);
   });

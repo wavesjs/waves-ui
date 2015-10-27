@@ -1,6 +1,6 @@
 const test = require('tape');
 
-import OrthogonalData from '../../es6/utils/orthogonal-data';
+import OrthogonalData from '../../src/utils/orthogonal-data';
 
 
 test('OrthogonalData', (assert) => {

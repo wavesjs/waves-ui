@@ -1,6 +1,6 @@
 const test = require('tape');
 
-import KeyBoard from '../../es6/interactions/keyboard';
+import KeyBoard from '../../src/interactions/keyboard';
 
 
 const body = window.document.body;

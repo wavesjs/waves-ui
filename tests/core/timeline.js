@@ -1,8 +1,8 @@
 const test = require('tape');
 
-import Layer from '../../es6/core/layer';
-import Timeline from '../../es6/core/timeline';
-import Track from '../../es6/core/track';
+import Layer from '../../src/core/layer';
+import Timeline from '../../src/core/timeline';
+import Track from '../../src/core/track';
 
 
 test('Timeline get default window view values over tracks', (assert) => {
