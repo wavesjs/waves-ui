@@ -9,26 +9,30 @@ import TrackCollection from './track-collection';
 
 
 /**
- * The `timeline` is the main entry point of a temporal visualization.
+ * Is the main entry point to create a temporal visualization.
  *
- * it:
- * - contains factories to manage its `tracks` and `layers`,
- * - get or set the view window overs its `tracks` through `offset`, `zoom`, `pixelsPerSecond`, `visibleWidth`,
- * - is the central hub for all user interaction events (keyboard, mouse),
- * - holds the current interaction `state` which defines how the different timeline elements (tracks, layers, shapes) respond to user interactions.
+ * A `timeline` instance mainly provides the context for any visualization of temporal data and maintains the hierarchy of `Track`, `Layer` and `Shape` over the entiere visualisation.
+ * Its main responsabilites are:
+ * - maintaining the temporal consistency accross the visualisation through its `timeContext` property (instance of `TimelineTimeContext`).
+ * - handling interactions to its current state (acting here as a simple state machine).
+ *
+ * @TODO insert figure
+ *
+ * It also contains a reference to all the register track allowing to `render` or `update` all the layer from a single entry point.
+ *
+ * ## Example Usage
  *
  * ```js
- * const visibleWidth = 500;  // default width for all created `Track`
- * const duration = 10;       // the timeline should dislay 10 seconds of data
- * const pixelsPerSeconds = width / duration;
+ * const visibleWidth = 500; // default width in pixels for all created `Track`
+ * const duration = 10; // the visible area represents 10 seconds
+ * const pixelsPerSeconds = visibleWidth / duration;
  * const timeline = new ui.core.Timeline(pixelsPerSecond, width);
  * ```
  */
 export default class Timeline extends events.EventEmitter {
   /**
-   * Creates a new `Timeline` instance
-   * @param {Number} [pixelsPerSecond=100] - the number of pixels per seconds the timeline should display
-   * @param {Number} [visibleWidth=1000] - the default visible width for all the tracks
+   * @param {Number} [pixelsPerSecond=100] - the default scaling between time and pixels.
+   * @param {Number} [visibleWidth=1000] - the default visible area for all registered tracks.
    */
   constructor(pixelsPerSecond = 100, visibleWidth = 1000, {
     registerKeyboard = true
@@ -50,77 +54,119 @@ export default class Timeline extends events.EventEmitter {
     this._trackById = {};
     this._groupedLayers = {};
 
-    /**
-     * @this Timeline
-     * @attribute {TimelineTimeContext} - master time context of the graph
-     */
+    /** @type {TimelineTimeContext} - master time context for the visualization. */
     this.timeContext = new TimelineTimeContext(pixelsPerSecond, visibleWidth);
   }
 
   /**
-   * updates `TimeContext`'s offset
-   * @attribute {Number} [offset=0]
+   * Returns `TimelineTimeContext`'s `offset` time domain value.
+   * @type {Number} [offset=0]
    */
   get offset() {
     return this.timeContext.offset;
   }
 
+  /**
+   * Updates `TimelineTimeContext`'s `offset` time domain value.
+   * @type {Number} [offset=0]
+   */
   set offset(value) {
     this.timeContext.offset = value;
   }
 
+  /**
+   * Returns the `TimelineTimeContext`'s `zoom` value.
+   * @type {Number} [offset=0]
+   */
   get zoom() {
     return this.timeContext.zoom;
   }
 
+  /**
+   * Updates the `TimelineTimeContext`'s `zoom` value.
+   * @type {Number} [offset=0]
+   */
   set zoom(value) {
     this.timeContext.zoom = value;
   }
 
+  /**
+   * Returns the `TimelineTimeContext`'s `pixelsPerSecond` ratio.
+   * @type {Number} [offset=0]
+   */
   get pixelsPerSecond() {
     return this.timeContext.pixelsPerSecond;
   }
 
+  /**
+   * Updates the `TimelineTimeContext`'s `pixelsPerSecond` ratio.
+   * @type {Number} [offset=0]
+   */
   set pixelsPerSecond(value) {
     this.timeContext.pixelsPerSecond = value;
   }
 
+  /**
+   * Returns the `TimelineTimeContext`'s `visibleWidth` pixel domain value.
+   * @type {Number} [offset=0]
+   */
   get visibleWidth() {
     return this.timeContext.visibleWidth;
   }
 
+  /**
+   * Updates the `TimelineTimeContext`'s `visibleWidth` pixel domain value.
+   * @type {Number} [offset=0]
+   */
   set visibleWidth(value) {
     this.timeContext.visibleWidth = value;
   }
 
+  /**
+   * Returns `TimelineTimeContext`'s `timeToPixel` transfert function.
+   * @type {Function}
+   */
   get timeToPixel() {
     return this.timeContext.timeToPixel;
   }
 
   /**
-   *  @readonly
+   * Returns `TimelineTimeContext`'s `visibleDuration` helper value.
+   * @type {Number}
    */
   get visibleDuration() {
     return this.timeContext.visibleDuration;
   }
 
-  // @NOTE maybe expose as public instead of get/set for nothing...
+  /**
+   * Updates the `TimelineTimeContext`'s `maintainVisibleDuration` value.
+   * Defines if the duration of the visible area should be maintain when the `visibleWidth` attribute is updated.
+   * @type {Boolean}
+   */
   set maintainVisibleDuration(bool) {
     this.timeContext.maintainVisibleDuration = bool;
   }
 
+  /**
+   * Returns `TimelineTimeContext`'s `maintainVisibleDuration` current value.
+   * @type {Boolean}
+   */
   get maintainVisibleDuration() {
     return this.timeContext.maintainVisibleDuration;
   }
 
-  // @readonly - used in track collection
+  /**
+   * Object maintaining arrays of `Layer` instances ordered by their `groupId`. Is used internally by the `TrackCollection` instance.
+   * @type {Object}
+   */
   get groupedLayers() {
     return this._groupedLayers;
   }
 
   /**
-   *  Override the default Surface that is instanciated on each
-   *  @param {EventSource} ctor - the constructor to use to build surfaces
+   * Overrides the default `Surface` that is instanciated on each `Track` instance. This methos should be called before adding any `Track` instance to the current `timeline`.
+   *
+   * @param {EventSource} ctor - The constructor to use in order to catch mouse events on each `Track` instances.
    */
   configureSurface(ctor) {
     this._surfaceCtor = ctor;
@@ -128,22 +174,23 @@ export default class Timeline extends events.EventEmitter {
 
   /**
    * Factory method to add interaction modules the timeline should listen to.
-   * By default, the timeline listen to Keyboard, and instanciate a `Surface` on each container.
-   * Can be used to install any interaction implementing the `EventSource` interface
-   * @param {EventSource} ctor - the contructor of the interaction module to instanciate
-   * @param el {DOMElement} the DOM element to bind to the EventSource module
-   * @param options {Object} options to be applied to the ctor (defaults to `{}`)
+   * By default, the timeline instanciate a global `Keyboard` instance and a `Surface` instance on each container.
+   * Should be used to install new interactions implementing the `EventSource` interface.
+   *
+   * @param {EventSource} ctor - The contructor of the interaction module to instanciate.
+   * @param {DOMElement} $el - The DOM element which will be binded to the `EventSource` module.
+   * @param {Object} [options={}] - Options to be applied to the `ctor`.
    */
-  createInteraction(ctor, el, options = {}) {
-    const interaction = new ctor(el, options);
+  createInteraction(ctor, $el, options = {}) {
+    const interaction = new ctor($el, options);
     interaction.on('event', (e) => this._handleEvent(e));
   }
 
   /**
-   * returns an array of the layers which positions
-   * and sizes matches a pointer Event
-   * @param {WavesEvent} e - the event from the Surface
-   * @return {Array} - matched layers
+   * Returns a list of the layers situated under the position of a `WaveEvent`.
+   *
+   * @param {WavesEvent} e - An event triggered by a `WaveEvent`
+   * @return {Array} - Matched layers
    */
   getHitLayers(e) {
     const clientX = e.originalEvent.clientX;
@@ -166,8 +213,9 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   * The callback that is used to listen to interactions modules
-   * @params {Event} e - a custom event generated by interaction modules
+   * The callback that is used to listen to interactions modules.
+   *
+   * @param {WaveEvent} e - An event generated by an interaction modules (`EventSource`).
    */
   _handleEvent(e) {
     const hitLayers = (e.source === 'surface') ?
@@ -180,8 +228,8 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   * Changes the state of the timeline
-   * @param {BaseState} - the state in which the timeline must be setted
+   * Updates the state of the timeline.
+   * @type {BaseState}
    */
   set state(state) {
     if (this._state) { this._state.exit(); }
@@ -189,30 +237,34 @@ export default class Timeline extends events.EventEmitter {
     if (this._state) { this._state.enter(); }
   }
 
+  /**
+   * Returns the current state of the timeline.
+   * @type {BaseState}
+   */
   get state() {
     return this._state;
   }
 
   /**
-   *  Shortcut to access the Track collection
-   *  @return {TrackCollection}
+   * Returns the `TrackCollection` instance
+   * @type {TrackCollection}
    */
   get tracks() {
     return this._tracks;
   }
 
   /**
-   * Shortcut to access the Layer list
-   * @return {Array}
+   * Returns the list of all registered layers.
+   * @type {Array}
    */
   get layers() {
     return this._tracks.layers;
   }
 
   /**
-   * Adds a track to the timeline
-   * Tracks display a view window on the timeline in theirs own SVG element.
-   * @param {Track} track
+   * Adds a new track to the timeline.
+   * @todo add the `trackId` parameter.
+   * @param {Track} track - The new track to be registered in the timeline.
    */
   add(track) {
     if (this.tracks.indexOf(track) !== -1) {
@@ -226,19 +278,20 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  Removes a track from the timeline
-   *  @TODO
+   * @todo must be implemented.
+   * Removes a track from the timeline.
    */
   remove(track) {
     // should destroy interaction too, avoid ghost eventListeners
   }
 
   /**
-   *  Creates a new track from the configuration define in `configureTracks`
-   *  @param {DOMElement} $el - the element to insert the track inside
-   *  @param {Object} options - override the defaults options if necessary
-   *  @param {String} [trackId=null] - optionnal id to give to the track, only exists in timeline's context
-   *  @return {Track}
+   * Helper to create a new `Track` instance. The `track` is added, rendered and updated before being returned.
+   *
+   * @param {DOMElement} $el - The DOM element where the track should be inserted.
+   * @param {Number} trackHeight - The height of the newly created track.
+   * @param {String} [trackId=null] - Optionnal unique id to associate with the track, this id only exists in timeline's context and should be used in conjonction with `addLayer` method.
+   * @return {Track}
    */
   createTrack($el, trackHeight = 100, trackId = null) {
     const track = new Track($el, trackHeight);
@@ -260,10 +313,12 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   * Adds a layer to a track, allow to group track arbitrarily inside groups. Basically a wrapper for `track.add(layer)`
-   * @param {Layer} layer - the layer to add
-   * @param {Track} track - the track to the insert the layer in
-   * @param {String} [groupId='default'] - the group in which associate the layer
+   * Helper to add a `Layer` instance into a given `Track`. Is designed to used in conjonction with the `Timeline~getLayersByGroup` method. The layer is internally rendered and updated.
+   *
+   * @param {Layer} layer - The `Layer` instance to add into the visualization.
+   * @param {(Track|String)} trackOrTrackId - The `Track` instance (or its `id` as defined in the `createTrack` method) where the `Layer` instance should be inserted.
+   * @param {String} [groupId='default'] - An optionnal group id in which the `Layer` should be inserted.
+   * @param {Boolean} [isAxis] - Set to `true` if the added `layer` is an instance of `AxisLayer` (these layers shares the `TimlineTimeContext` instance of the timeline).
    */
   addLayer(layer, trackOrTrackId, groupId = 'default', isAxis = false) {
     let track = trackOrTrackId;
@@ -294,8 +349,9 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  Removes a layer from its track (the layer is detatched from the DOM but can still be reused)
-   *  @param {Layer} layer - the layer to remove
+   * Removes a layer from its track. The layer is detatched from the DOM but can still be reused later.
+   *
+   * @param {Layer} layer - The layer to remove.
    */
   removeLayer(layer) {
     this.tracks.forEach(function(track) {
@@ -317,18 +373,20 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   *  Returns a track from it's id
-   *  @param {String} trackId
-   *  @return {Track}
+   * Returns a `Track` instance from it's given id.
+   *
+   * @param {String} trackId
+   * @return {Track}
    */
   getTrackById(trackId) {
     return this._trackById[trackId];
   }
 
   /**
-   *  Returns the track containing a given DOM Element, if no match found return null
-   *  @param {DOMElement} $el
-   *  @return {Track}
+   * Returns the track containing a given DOM Element, returns null if no match found.
+   *
+   * @param {DOMElement} $el - The DOM Element to be tested.
+   * @return {Track}
    */
   getTrackFromDOMElement($el) {
     let $svg = null;
@@ -349,14 +407,16 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   * Returns an array of layers from their group Id
-   * @param {String} groupId
-   * @return {Array}
+   * Returns an array of layers from their given group id.
+   *
+   * @param {String} groupId - The id of the group as defined in `addLayer`.
+   * @return {(Array|undefined)}
    */
   getLayersByGroup(groupId) {
     return this._groupedLayers[groupId];
   }
 
+  /** @private */
   *[Symbol.iterator]() {
     yield* this.tracks[Symbol.iterator]();
   }
