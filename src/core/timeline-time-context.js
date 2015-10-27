@@ -2,33 +2,26 @@ import scales from '../utils/scales';
 
 
 /**
- *  @class ViewTimeContext
+ * Defines and maintains global aspects of the visualization concerning the relations between time and pixels.
  *
- *  A ViewTimeContext instance represents the mapping between the time and the pixel domains
+ * The `TimelineTimeContext` instance (unique across a visualization) keeps the main reference on how many pixels should be used to represent one second though its `timeToPixel` method. The attributes `zoom`, `offset` (i.e. from origin) and `visibleWidth` allow for navigating in time and for maintaining view consistency upon the DOM structure (`<svg>` and `<g>` tags) created by the registered tracks.
  *
- *  The `TimelineTimeContext` has 3 important attributes:
- *  - `timeContext.timeToPixel` which defines the time to pixel transfert function, itself defined by the `pixelsPerSecond` attribute of the timeline
- *  - `timeContext.offset` defines a decay (in time domain) applied to all the views on the timeline. This allow to navigate inside visibleDurations longer than what can be represented in Layers (views) containers (e.g. horizontal scroll)
- *  - `timeContext.zoom` defines the zoom factor applyed to the timeline
- *
- *  It also maintains an helper (`visibleDuration`) which represent how much time the `tracks` are displaying
- *
- *  It also maintain an array of references to all the LayerTimeContext attached to the timeline to propagate changes on the time to pixel representation
+ * It also maintain an array of all references to `LayerTimeContext` instances to propagate to `layers`, changes made on the time to pixel representation.
  */
 export default class TimelineTimeContext {
+  /**
+   * @param {Number} pixelsPerSecond - The number of pixels that should be used to display one second.
+   * @param {Number} visibleWidth - The default with of the visible area displayed in `tracks` (in pixels).
+   */
   constructor(pixelsPerSecond, visibleWidth) {
     this._children = [];
 
-    // @rename to timeToPixel
     this._timeToPixel = null;
-    // this._originalXScale = null;
-
     this._offset = 0;
     this._zoom = 1;
     this._computedPixelsPerSecond = pixelsPerSecond;
     // params
     this._visibleWidth = visibleWidth;
-    this._visibleDuration = this.visibleWidth / this._computedPixelsPerSecond;
     this._maintainVisibleDuration = false;
 
     // create the timeToPixel scale
@@ -37,15 +30,22 @@ export default class TimelineTimeContext {
       .range([0, pixelsPerSecond]);
 
     this.timeToPixel = scale;
-    // this.originalXScale = this.timeToPixel.copy();
 
     this._originalPixelsPerSecond = this._computedPixelsPerSecond;
   }
 
+  /**
+   * Returns the number of pixels per seconds ignoring the current zoom value.
+   * @type {Number}
+   */
   get pixelsPerSecond() {
     return this._originalPixelsPerSecond;
   }
 
+  /**
+   * Updates all the caracteristics of this object according to the new given value of pixels per seconds. Propagates the changes to the `LayerTimeContext` children.
+   * @type {Number}
+   */
   set pixelsPerSecond(value) {
     this._computedPixelsPerSecond = value * this.zoom;
     this._originalPixelsPerSecond = value;
@@ -58,22 +58,42 @@ export default class TimelineTimeContext {
     });
   }
 
+  /**
+   * Returns the number of pixels per seconds including the current zoom value.
+   * @type {Number}
+   */
   get computedPixelsPerSecond() {
     return this._computedPixelsPerSecond;
   }
 
+  /**
+   * Returns the current offset applied to the registered `Track` instances from origin (in seconds).
+   * @type {Number}
+   */
   get offset() {
     return this._offset;
   }
 
+  /**
+   * Sets the offset to apply to the registered `Track` instances from origin (in seconds).
+   * @type {Number}
+   */
   set offset(value) {
     this._offset = value;
   }
 
+  /**
+   * Returns the current zoom level applied to the whole visualization.
+   * @type {Number}
+   */
   get zoom() {
     return this._zoom;
   }
 
+  /**
+   * Sets the zoom ratio for the whole visualization.
+   * @type {Number}
+   */
   set zoom(value) {
     // Compute change to propagate to children who have their own timeToPixel
     const ratioChange = value / this._zoom;
@@ -87,44 +107,69 @@ export default class TimelineTimeContext {
     });
   }
 
+  /**
+   * Returns the visible width of the `Track` instances.
+   * @type {Number}
+   */
   get visibleWidth() {
     return this._visibleWidth;
   }
 
+  /**
+   * Sets the visible width of the `Track` instances.
+   * @type {Number}
+   */
   set visibleWidth(value) {
     const widthRatio = value / this.visibleWidth;
-
     this._visibleWidth = value;
-    this._visibleDuration = this.visibleWidth / this._computedPixelsPerSecond;
 
     if (this.maintainVisibleDuration) {
       this.pixelsPerSecond = this._computedPixelsPerSecond * widthRatio;
     }
   }
 
-  /** @readonly */
+  /**
+   * Returns the duration displayed by `Track` instances.
+   * @type {Number}
+   */
   get visibleDuration() {
-    return this._visibleDuration;
+    return this.visibleWidth / this._computedPixelsPerSecond;
   }
 
+  /**
+   * Returns if the duration displayed by tracks should be maintained when their width is updated.
+   * @type {Number}
+   */
   get maintainVisibleDuration() {
     return this._maintainVisibleDuration;
   }
 
+  /**
+   * Defines if the duration displayed by tracks should be maintained when their width is updated.
+   * @type {Boolean}
+   */
   set maintainVisibleDuration(bool) {
     this._maintainVisibleDuration = bool;
   }
 
+  /**
+   * Returns the time to pixel trasfert function.
+   * @type {Function}
+   */
   get timeToPixel() {
     return this._timeToPixel;
   }
 
+  /**
+   * Sets the time to pixel trasfert function.
+   * @todo remove should be a read-only value
+   * @type {Scale.linear}
+   */
   set timeToPixel(scale) {
     this._timeToPixel = scale;
   }
 
   _updateTimeToPixelRange() {
-    this._visibleDuration = this.visibleWidth / this._computedPixelsPerSecond;
     this.timeToPixel.range([0, this._computedPixelsPerSecond]);
   }
 }
