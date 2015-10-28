@@ -118,6 +118,8 @@ function generateDoc() {
   }
 
   var execSync = childProcess.execSync;
+
+  execSync('git stash save');
   // delete current gh-pages branch if exists
   try { execSync('git branch -D gh-pages'); } catch (err) {}
   // create gh-pages branch
@@ -157,6 +159,7 @@ function generateDoc() {
   execSync('git push origin gh-pages --force');
   execSync('git checkout master');
   execSync('git branch -D gh-pages');
+  execSync('git stash pop');
 }
 
 // watch source dir
