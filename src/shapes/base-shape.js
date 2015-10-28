@@ -6,7 +6,7 @@ import ns from '../core/namespace';
 
 export default class BaseShape {
   /**
-   *  @param options {Object} override default configuration
+   * @param {Object} options - override default configuration
    */
   constructor(options = {}) {
     this.$el = null;
@@ -23,7 +23,7 @@ export default class BaseShape {
   }
 
   /**
-   *  clean references, is called from the `layer`
+   * Destroy the shape and clean references. Interface method called from the `layer`.
    */
   destroy() {
     // this.group = null;
@@ -31,7 +31,9 @@ export default class BaseShape {
   }
 
   /**
-   * @return {String} the name of the shape, used as a class in the element group
+   * Interface method to override when extending this base class. The method is called by the `Layer~render` method. Returns the name of the shape, used as a class in the element group (defaults to `'shape'`).
+   * @semi-private
+   * @return {String}
    */
   getClassName() { return 'shape'; }
 
@@ -39,24 +41,24 @@ export default class BaseShape {
   // setSvgDefinition(defs) {}
 
   /**
-   * @TODO rename
+   * Returns an object where keys are the accessors methods names to create and values are the default values for each given accessor.
+   *
+   * @protected
+   * @todo rename ?
    * @return {Object}
-   *    keys are the accessors methods names to create
-   *    values are the default values for each given accessor
    */
   _getAccessorList() { return {}; }
 
 
   /**
-   *  install the given accessors on the shape
+   * Install the given accessors on the shape, overriding the default accessors.
    */
   install(accessors) {
     for (let key in accessors) { this[key] = accessors[key]; }
   }
 
   /**
-   * generic method to create accessors
-   * adds accessor to the prototype if not already present
+   * Generic method to create accessors. Adds accessor to the prototype if not already present.
    */
   _createAccessors(accessors) {
     this._accessors = {};
@@ -78,8 +80,7 @@ export default class BaseShape {
   }
 
   /**
-   * create a function to be used as a default
-   * accessor for each accesors
+   * Create a function to be used as a default accessor for each accesors
    */
   _setDefaultAccessors(accessors) {
     Object.keys(accessors).forEach((name) => {
@@ -94,25 +95,23 @@ export default class BaseShape {
   }
 
   /**
-   * @param  renderingContext {Context} the renderingContext the layer which owns this item
-   * @return  {DOMElement} the DOM element to insert in the item's group
+   * Interface method called by `Layer~render`. Creates the DOM structure of the shape.
+   * @param {Context} renderingContext - the renderingContext of the layer which owns this shape.
+   * @return {Element} - the DOM element to insert in the item's group.
    */
   render(renderingContext) {}
 
   /**
-   * @param  group {DOMElement} group of the item in which the shape is drawn
-   * @param  renderingContext {Context} the renderingContext the layer which owns this item
-   * @param
-   *    simpleShape : datum {Object} the datum related to this item's group
-   *    commonShape : datum {Array} the associated to the Layer
-   * @return  void
+   * Interface method called by `Layer~update`. Updates the DOM structure of the shape.
+   * @param {Context} renderingContext - The `renderingContext` of the layer which owns this shape.
+   * @param {Object|Array} - The datum associted to the shape.
    */
   update(renderingContext, datum) {}
 
   /**
-   *  define if the shape is considered to be the given area
-   *  arguments are passed in domain unit (time, whatever)
-   *  @return {Boolean}
+   * Interface method to override called by `Layer~getItemsInArea`. Defines if the shape is considered to be the given area
+   * arguments are passed in domain unit (time, whatever)
+   * @return {Boolean}
    */
   inArea(renderingContext, datum, x1, y1, x2, y2) {}
 }

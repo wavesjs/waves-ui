@@ -278,8 +278,9 @@ export default class Timeline extends events.EventEmitter {
   }
 
   /**
-   * @todo must be implemented.
    * Removes a track from the timeline.
+   * @todo must be implemented.
+   * @param {Track} track - the track to remove from the timeline.
    */
   remove(track) {
     // should destroy interaction too, avoid ghost eventListeners

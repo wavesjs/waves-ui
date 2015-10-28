@@ -16,8 +16,8 @@ let timeContextBehaviorCtor = TimeContextBehavior;
  * data associated to the layer. Each created layer must be inserted into a
  * `Track` instance in order to be displayed.
  *
- * _Note: in the context of the layer, an __item__ is the `<g>` element
- * containing a given shape and associated with a particular __datum__._
+ * _Note: in the context of the layer, an __item__ is the SVG element
+ * returned by a `Shape` instance and associated with a particular __datum__._
  *
  * ### Layer DOM structure
  * ```
