@@ -45,6 +45,9 @@ export default class LayerTimeContext {
     this.parent._children.push(this);
   }
 
+  /**
+   * Creates a clone of the current time context.
+   */
   clone() {
     const ctx = new this();
 
@@ -57,34 +60,66 @@ export default class LayerTimeContext {
     return ctx;
   }
 
+  /**
+   * Returns the start position of the time context (in seconds).
+   * @type {Number}
+   */
   get start() {
     return this._start;
   }
 
+  /**
+   * Sets the start position of the time context (in seconds).
+   * @type {Number}
+   */
   set start(value) {
     this._start = value;
   }
 
+  /**
+   * Returns the duration of the time context (in seconds).
+   * @type {Number}
+   */
   get duration() {
     return this._duration;
   }
 
+  /**
+   * Sets the duration of the time context (in seconds).
+   * @type {Number}
+   */
   set duration(value) {
     this._duration = value;
   }
 
+  /**
+   * Returns the offset of the time context (in seconds).
+   * @type {Number}
+   */
   get offset() {
     return this._offset;
   }
 
+  /**
+   * Sets the offset of the time context (in seconds).
+   * @type {Number}
+   */
   set offset(value) {
     this._offset = value;
   }
 
+  /**
+   * Returns the stretch ratio of the time context.
+   * @type {Number}
+   */
   get stretchRatio() {
     return this._stretchRatio;
   }
 
+  /**
+   * Sets the stretch ratio of the time context.
+   * @type {Number}
+   */
   set stretchRatio(value) {
     // remove local scale if ratio = 1
     if (value ===  1) {
@@ -101,7 +136,9 @@ export default class LayerTimeContext {
     this._stretchRatio = value;
   }
 
-  // scales helpers
+  /**
+   * Returns the time to pixel transfert function of the time context. If the `stretchRatio` attribute is equal to 1, this function is the global one from the `TimelineTimeContext` instance.
+   */
   get timeToPixel() {
     if (!this._timeToPixel) {
       return this.parent.timeToPixel;
@@ -110,6 +147,11 @@ export default class LayerTimeContext {
     return this._timeToPixel;
   }
 
+  /**
+   * Helper function to convert pixel to time.
+   * @param {Number} px
+   * @return {Number}
+   */
   pixelToTime(px) {
     if (!this._timeToPixel) {
       return this.parent.timeToPixel.invert(px);
