@@ -56,8 +56,6 @@ import ns from './namespace';
  * </svg>
  * ```
  */
-const round = Math.round;
-
 export default class Track {
   /**
    * Create the track of the given `height` in the given `$el`
@@ -214,8 +212,8 @@ export default class Track {
     // Should be in some update layout
     const renderingContext = this.renderingContext;
     const height = this.height;
-    const width = round(renderingContext.visibleWidth);
-    const offsetX = round(renderingContext.timeToPixel(renderingContext.offset));
+    const width = Math.round(renderingContext.visibleWidth);
+    const offsetX = Math.round(renderingContext.timeToPixel(renderingContext.offset));
     const translate = `translate(${offsetX}, 0)`;
 
     $svg.setAttributeNS(null, 'height', height);

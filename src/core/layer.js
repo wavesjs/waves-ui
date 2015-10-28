@@ -743,7 +743,7 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Updates the attributes of all the `Shape` instances rendered into the layer.
-   * @todo allow to filter which shape should be updated.
+   * @todo allow to filter which shape(s) should be updated.
    */
   updateShapes() {
     this._updateRenderingContext();
