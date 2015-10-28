@@ -47,6 +47,7 @@ export default class LayerTimeContext {
 
   /**
    * Creates a clone of the current time context.
+   * @return {LayerTimeContext}
    */
   clone() {
     const ctx = new this();
@@ -138,6 +139,7 @@ export default class LayerTimeContext {
 
   /**
    * Returns the time to pixel transfert function of the time context. If the `stretchRatio` attribute is equal to 1, this function is the global one from the `TimelineTimeContext` instance.
+   * @type {Function}
    */
   get timeToPixel() {
     if (!this._timeToPixel) {

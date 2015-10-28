@@ -416,7 +416,9 @@ export default class Timeline extends events.EventEmitter {
     return this._groupedLayers[groupId];
   }
 
-  /** @private */
+  /**
+   * Iterates through the added tracks.
+   */
   *[Symbol.iterator]() {
     yield* this.tracks[Symbol.iterator]();
   }

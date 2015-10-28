@@ -2,25 +2,21 @@ import ns from './namespace';
 
 
 /**
- * As a temporal representation, a track establishes a relation between *time* in seconds and *space* in pixels.
+ * Acts as a placeholder to organize the vertical layout of the visualization and the horizontal alignement to an abscissa that correspond to a common time reference. It basically offer a view on the overall timeline.
  *
- * A `Track` instance can have multiple `Layer` instances.
- *
- * ### Tracks inside a timeline
- *
- * A temporal representation can be rendered upon multiple DOM elements, the tracks (eg multiple `<li>` for a DAW like representation) that belong to the same timeline using the `add` method. These tracks are like windows on the overall and basically unending timeline.
+ * Tracks are inserted into a given DOM element, allowing to create DAW like representations. Each `Track` instance can host multiple `Layer` instances. A track must be added to a timeline before being updated.
  *
  * ### A timeline with 3 tracks:
  *
  * ```
- * +-----------------+-------------------------------+-- - -  -  -   -
- * |track 1          |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|
- * +-----------------+-------------------------------+-- - -  -  -   -
- * |track 2          |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|
- * +-----------------+-------------------------------+-- - -  -  -   -
- * |track 3          |xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|
- * +-------------------------------------------------+-- - -  -  -   -
- *
+ * 0                 6                               16
+ * +- - - - - - - - -+-------------------------------+- - - - - - -
+ * |                 |x track 1 xxxxxxxxxxxxxxxxxxxxx|
+ * +- - - - - - - - -+-------------------------------+- - - - - - -
+ * |                 |x track 2 xxxxxxxxxxxxxxxxxxxxx|
+ * +- - - - - - - - -+-------------------------------+- - - - - - -
+ * |                 |x track 3 xxxxxxxxxxxxxxxxxxxxx|
+ * +- - - - - - - - ---------------------------------+- - - - - - -
  * +----------------->
  * timeline.timeContext.timeToPixel(timeline.timeContext.offset)
  *
@@ -31,28 +27,19 @@ import ns from './namespace';
  *                   track1 shows 10 seconds of the timeline
  * ```
  *
- * ### Layers inside a track
- *
- * Within a track, a `Layer` keeps up-to-date and renders the data. The track's `add` method adds a `Layer` instance to a track.
- *
- * ### The track renderingContext
- *
- * When one modify the timeline renderingContext:
- *
- * - timeline.renderingContext.offset (in seconds) modify the containers track x position
- * - timeline.renderingContext.stretchRatio modify timeline's zoom
- * Each time you set new value of offset or stretchRatio, you need to do `timeline.update()` to update the values.
- *
- * ### Track SVG structure
+ * ### Track DOM structure
  *
  * ```html
- * <svg class="track" xmlns:xhtml="http://www.w3.org/1999/xhtml" height="100" shape-rendering="optimizeSpeed">
- *   <defs></defs> Unused for the moment, could be used to define custom shapes for use with layers
- *   <rect style="fill-opacity:0" width="100%" height="100%"></rect>
- *   <g class="offset">
- *     <g class="layout"></g> The layers are inserted here
+ * <svg width="${visibleWidth}">
+ *   <!-- background -->
+ *   <rect><rect>
+ *   <!-- main view -->
+ *   <g class="offset" transform="translate(${offset}, 0)">
+ *     <g class="layout">
+ *       <!-- layers -->
+ *     </g>
  *   </g>
- *   <g class="interactions"></g> Placeholder to visualize interactions (eg. brush)
+ *   <g class="interactions"><!-- for feedback --></g>
  * </svg>
  * ```
  */
@@ -63,42 +50,69 @@ export default class Track {
    * @param {Number} [height = 100]
    */
   constructor($el, height = 100) {
-    this.$el = $el;
-    this.layers = [];
     this._height = height;
 
-    // are set when added to the timeline
+    /**
+     * The DOM element in which the track is created.
+     * @type {Element}
+     */
+    this.$el = $el;
+    /**
+     * A placeholder to add shapes for interactions feedback.
+     * @type {Element}
+     */
+    this.$interactions = null;
+    /** @type {Element} */
+    this.$layout = null;
+    /** @type {Element} */
+    this.$offset = null;
+    /** @type {Element} */
+    this.$svg = null;
+    /** @type {Element} */
+    this.$background = null;
+
+    /**
+     * An array of all the layers belonging to the track.
+     * @type {Array<Layer>}
+     */
+    this.layers = [];
+    /**
+     * The context used to maintain the DOM structure of the track.
+     * @type {TimelineTimeContext}
+     */
     this.renderingContext = null;
 
     this._createContainer();
   }
 
   /**
-   * @type Number
-   * @default 100
+   * Returns the height of the track.
+   * @type {Number}
    */
   get height() {
     return this._height;
   }
 
+  /**
+   * Sets the height of the track.
+   * @todo propagate to layers, keeping ratio? could be handy for vertical resize. This is why a set/get is implemented here.
+   * @type {Number}
+   */
   set height(value) {
     this._height = value;
-    // @NOTE: propagate to layers, keeping ratio ? could be handy for vertical resize
   }
 
   /**
-   * This method is called when the track is added to the timeline.
-   * The track cannot be updated without being added to a timeline.
+   * This method is called when the track is added to the timeline. The track cannot be updated without being added to a timeline.
+   * @private
    * @param {TimelineTimeContext} renderingContext
-   * @semi-private
    */
   configure(renderingContext) {
     this.renderingContext = renderingContext;
   }
 
   /**
-   * Destroy a track
-   * The layers from this track can still be reused elsewhere
+   * Destroy the track. The layers from this track can still be reused elsewhere.
    */
   destroy() {
     // Detach everything from the DOM
@@ -111,7 +125,7 @@ export default class Track {
   }
 
   /**
-   * Creates the container for the track
+   * Creates the DOM structure of the track.
    */
   _createContainer() {
     const $svg = document.createElementNS(ns, 'svg');
@@ -137,12 +151,11 @@ export default class Track {
     const $interactionsGroup = document.createElementNS(ns, 'g');
     $interactionsGroup.classList.add('interactions');
 
+    $offsetGroup.appendChild($layoutGroup);
     $svg.appendChild($defs);
     $svg.appendChild($background);
-    $offsetGroup.appendChild($layoutGroup);
     $svg.appendChild($offsetGroup);
     $svg.appendChild($interactionsGroup);
-
     this.$el.appendChild($svg);
     // removes additionnal height added who knows why...
     this.$el.style.fontSize = 0;
@@ -157,7 +170,9 @@ export default class Track {
   }
 
   /**
-   * Adds a layer to the track
+   * Adds a layer to the track.
+   *
+   * @param {Layer} layer - the layer to add to the track.
    */
   add(layer) {
     this.layers.push(layer);
@@ -166,7 +181,9 @@ export default class Track {
   }
 
   /**
-   * Removes a layer
+   * Removes a layer from the track. The layer can be reused elsewhere.
+   *
+   * @param {Layer} layer - the layer to remove from the track.
    */
   remove(layer) {
     this.layers.splice(this.layers.indexOf(layer), 1);
@@ -175,9 +192,10 @@ export default class Track {
   }
 
   /**
-   *  Defines if a given element belongs to the track
-   *  @param {DOMElement} $el
-   *  @return {bool}
+   * Tests if a given element belongs to the track.
+   *
+   * @param {Element} $el
+   * @return {bool}
    */
   hasElement($el) {
     do {
@@ -192,20 +210,25 @@ export default class Track {
   }
 
   /**
-   * Draw tracks, and the layers in cascade
+   * Render all the layers added to the track.
    */
   render() {
     for (let layer of this) { layer.render(); }
   }
 
   /**
-   * Update the layers
+   * Updates the track DOM structure and updates the layers.
+   *
+   * @param {Array<Layer>} [layers=null] - if not null, a subset of the layers to update.
    */
   update(layers = null) {
     this.updateContainer();
     this.updateLayers(layers);
   }
 
+  /**
+   * Updates the track DOM structure.
+   */
   updateContainer() {
     const $svg = this.$svg;
     const $offset = this.$offset;
@@ -223,6 +246,11 @@ export default class Track {
     $offset.setAttributeNS(null, 'transform', translate);
   }
 
+  /**
+   * Updates the layers.
+   *
+   * @param {Array<Layer>} [layers=null] - if not null, a subset of the layers to update.
+   */
   updateLayers(layers = null) {
     layers = (layers === null) ? this.layers : layers;
 
@@ -232,6 +260,9 @@ export default class Track {
     });
   }
 
+  /**
+   * Iterates through the added layers.
+   */
   *[Symbol.iterator]() {
     yield* this.layers[Symbol.iterator]();
   }

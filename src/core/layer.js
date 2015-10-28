@@ -19,7 +19,7 @@ let timeContextBehaviorCtor = TimeContextBehavior;
  * _Note: in the context of the layer, an __item__ is the `<g>` element
  * containing a given shape and associated with a particular __datum__._
  *
- * The DOM structure of each created layer is as follow:
+ * ### Layer DOM structure
  * ```
  * <g class="layer" transform="translate(${start}, 0)">
  *   <svg class="bounding-box" width="${duration}">
