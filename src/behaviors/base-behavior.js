@@ -62,7 +62,7 @@ export default class BaseBehavior {
   /**
    *  Edition behavior
    */
-  edit(renderingContext, shape, datum, dx, dy, target) {
+  edit(renderingContext, shape, datum, dx, dy, $target) {
     // must be implemented in children
   }
 }

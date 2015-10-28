@@ -118,7 +118,7 @@ function generateDoc() {
   }
 
   var execSync = childProcess.execSync;
-
+  // prevent loosing non-comitted work
   execSync('git stash save');
   // delete current gh-pages branch if exists
   try { execSync('git branch -D gh-pages'); } catch (err) {}

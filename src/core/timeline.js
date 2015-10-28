@@ -178,7 +178,7 @@ export default class Timeline extends events.EventEmitter {
    * Should be used to install new interactions implementing the `EventSource` interface.
    *
    * @param {EventSource} ctor - The contructor of the interaction module to instanciate.
-   * @param {DOMElement} $el - The DOM element which will be binded to the `EventSource` module.
+   * @param {Element} $el - The DOM element which will be binded to the `EventSource` module.
    * @param {Object} [options={}] - Options to be applied to the `ctor`.
    */
   createInteraction(ctor, $el, options = {}) {
@@ -288,7 +288,7 @@ export default class Timeline extends events.EventEmitter {
   /**
    * Helper to create a new `Track` instance. The `track` is added, rendered and updated before being returned.
    *
-   * @param {DOMElement} $el - The DOM element where the track should be inserted.
+   * @param {Element} $el - The DOM element where the track should be inserted.
    * @param {Number} trackHeight - The height of the newly created track.
    * @param {String} [trackId=null] - Optionnal unique id to associate with the track, this id only exists in timeline's context and should be used in conjonction with `addLayer` method.
    * @return {Track}
@@ -385,7 +385,7 @@ export default class Timeline extends events.EventEmitter {
   /**
    * Returns the track containing a given DOM Element, returns null if no match found.
    *
-   * @param {DOMElement} $el - The DOM Element to be tested.
+   * @param {Element} $el - The DOM Element to be tested.
    * @return {Track}
    */
   getTrackFromDOMElement($el) {

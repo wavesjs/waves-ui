@@ -1,7 +1,6 @@
-import scales from '../utils/scales';
 import events from 'events';
-
 import ns from './namespace';
+import scales from '../utils/scales';
 import Segment from '../shapes/segment';
 import TimeContextBehavior from '../behaviors/time-context-behavior';
 
@@ -10,73 +9,111 @@ let timeContextBehavior = null;
 let timeContextBehaviorCtor = TimeContextBehavior;
 
 /**
- *  The layer class is the main visualization class
+ * The layer class is the main visualization class. It is mainly defines by its
+ * related `LayerTimeContext` which determines its position in the overall
+ * timeline (through the `start`, `duration`, `offset` and `stretchRatio`
+ * attributes) and by it's registered Shape which defines how to display the
+ * data associated to the layer. Each created layer must be inserted into a
+ * `Track` instance in order to be displayed.
+ *
+ * _Note: in the context of the layer, an __item__ is the `<g>` element
+ * containing a given shape and associated with a particular __datum__._
+ *
+ * The DOM structure of each created layer is as follow:
+ * ```
+ * <g class="layer" transform="translate(${start}, 0)">
+ *   <svg class="bounding-box" width="${duration}">
+ *     <g class="offset" transform="translate(${offset, 0})">
+ *       <!-- background -->
+ *       <rect class="background"></rect>
+ *       <!-- shapes and common shapes are inserted here -->
+ *     </g>
+ *     <g class="interactions"><!-- for feedback --></g>
+ *   </svg>
+ * </g>
+ * ```
  */
 export default class Layer extends events.EventEmitter {
   /**
-   * Structure of the DOM view of a Layer
-   *
-   * ```
-   * <g class="layer"> Flip y axis, timeContext.start and top position from params are applied on this $elmt
-   *   <svg class="bounding-box"> timeContext.duration is applied on this $elmt
-   *    <g class="layer-interactions"> Contains the timeContext edition elements (a segment) </g>
-   *    <g class="offset items"> The shapes are inserted here, and we apply timeContext.offset on this $elmt </g>
-   *   </svg>
-   * </g>
-   * ```
+   * @param {String} dataType - Defines how the layer should look at the data. Can be 'entity' or 'collection'.
+   * @param {(Array|Object)} data - The data associated to the layer.
+   * @param {Object} options - Configures the layer.
+   * @param {Number} [options.height=100] - Defines the height of the layer.
+   * @param {Number} [options.top=0] - Defines the top position of the layer.
+   * @param {Number} [options.opacity=1] - Defines the opacity of the layer.
+   * @param {Number} [options.yDomain=[0,1]] - Defines boundaries of the data values in y axis (for exemple to display an audio buffer, this attribute should be set to [-1, 1].
+   * @param {Number} [options.contextHandlerWidth=2] - The width of the handlers displayed to edit the layer.
+   * @param {Number} [options.hittable=false] - Defines if the layer can be interacted with. Basically, the layer is not returned by `BaseState.getHitLayers` when set to false (a common use case is a layer that contains a cursor)
    */
   constructor(dataType, data, options = {}) {
     super();
-    this.dataType = dataType; // 'entity' || 'collection';
-    this.data = data;
 
     const defaults = {
       height: 100,
       top: 0,
-      id: '',
-      yDomain: [0, 1],
       opacity: 1,
-      contextHandlerWidth: 2,
+      yDomain: [0, 1],
       className: null,
-      // when false the layer is not returned by `BaseState.getHitLayers`
-      hittable: true,
-      overflow: 'hidden',
+      contextHandlerWidth: 2,
+      hittable: true, // when false the layer is not returned by `BaseState.getHitLayers`
+      id: '', // used ?
+      overflow: 'hidden', // usefull ?
     };
 
+    /**
+     * Parameters of the layers, `defaults` overrided with options.
+     * @type {Object}
+     */
     this.params = Object.assign({}, defaults, options);
+    /**
+     * Defines how the layer should look at the data (`'entity'` or `'collection'`).
+     * @type {String}
+     */
+    this.dataType = dataType; // 'entity' || 'collection';
+    /** @type {LayerTimeContext} */
     this.timeContext = null;
-
-    // container elements
-    this.$el = null; // offset group of the parent context
+    /** @type {Element} */
+    this.$el = null;
+    /** @type {Element} */
+    this.$background = null;
+    /** @type {Element} */
     this.$boundingBox = null;
+    /** @type {Element} */
     this.$offset = null;
+    /** @type {Element} */
     this.$interactions = null;
+    /**
+     * A Segment instanciated to interact with the Layer itself.
+     * @type {Segment}
+     */
+    this.contextShape = null;
 
-    this._shapeConfiguration = null; // { ctor, accessors, options }
+    this._shapeConfiguration = null;       // { ctor, accessors, options }
     this._commonShapeConfiguration = null; // { ctor, accessors, options }
-    // map to associate datums, $items, and shapes
-    this._$itemShapeMap = new Map(); // item group <DOMElement> => shape
+    this._$itemShapeMap = new Map();
     this._$itemDataMap = new Map();
-    this._$itemCommonShapeMap = new Map(); // one entry max in this map
+    this._$itemCommonShapeMap = new Map();
 
     this._isContextEditable = false;
     this._behavior = null;
+
+    this.data = data;
 
     this._valueToPixel = scales.linear()
       .domain(this.params.yDomain)
       .range([0, this.params.height]);
 
-    this.contextBehavior = '';
-
     // initialize timeContext layout
     this._renderContainer();
-
-    // creates the timeContextBehavior for all layer, lazy instanciation
+    // creates the timeContextBehavior for all layers
     if (timeContextBehavior === null) {
       timeContextBehavior = new timeContextBehaviorCtor();
     }
   }
 
+  /**
+   * Destroy the layer, clear all references.
+   */
   destroy() {
     this.timeContext = null;
     this.data = null;
@@ -91,100 +128,145 @@ export default class Layer extends events.EventEmitter {
   }
 
   /**
-   *  allows to override default the TimeContextBehavior
+   * Allows to override default the `TimeContextBehavior` used to edit the layer.
+   *
+   * @param {Object} ctor
    */
   static configureTimeContextBehavior(ctor) {
     timeContextBehaviorCtor = ctor;
   }
 
+  /**
+   * Returns `LayerTimeContext`'s `start` time domain value.
+   * @type {Number}
+   */
   get start() {
     return this.timeContext.start;
   }
 
+  /**
+   * Sets `LayerTimeContext`'s `start` time domain value.
+   * @type {Number}
+   */
   set start(value) {
     this.timeContext.start = value;
   }
 
+  /**
+   * Returns `LayerTimeContext`'s `offset` time domain value.
+   * @type {Number}
+   */
   get offset() {
     return this.timeContext.offset;
   }
 
+  /**
+   * Sets `LayerTimeContext`'s `offset` time domain value.
+   * @type {Number}
+   */
   set offset(value) {
     this.timeContext.offset = value;
   }
 
+  /**
+   * Returns `LayerTimeContext`'s `duration` time domain value.
+   * @type {Number}
+   */
   get duration() {
     return this.timeContext.duration;
   }
 
+  /**
+   * Sets `LayerTimeContext`'s `duration` time domain value.
+   * @type {Number}
+   */
   set duration(value) {
     this.timeContext.duration = value;
   }
 
+  /**
+   * Returns `LayerTimeContext`'s `stretchRatio` time domain value.
+   * @type {Number}
+   */
   get stretchRatio() {
     return this.timeContext.stretchRatio;
   }
 
+  /**
+   * Sets `LayerTimeContext`'s `stretchRatio` time domain value.
+   * @type {Number}
+   */
   set stretchRatio(value) {
     this.timeContext.stretchRatio = value;
   }
 
+  /**
+   * Set the domain boundaries of the data for the y axis.
+   * @type {Array}
+   */
   set yDomain(domain) {
     this.params.yDomain = domain;
     this._valueToPixel.domain(domain);
   }
 
+  /**
+   * Returns the domain boundaries of the data for the y axis.
+   * @type {Array}
+   */
   get yDomain() {
     return this.params.yDomain;
   }
 
+  /**
+   * Sets the opacity of the whole layer.
+   * @type {Number}
+   */
   set opacity(value) {
     this.params.opacity = value;
   }
 
+  /**
+   * Returns the opacity of the whole layer.
+   * @type {Number}
+   */
   get opacity() {
     return this.params.opacity;
   }
 
-  // expose scale
+  /**
+   * Returns the transfert function used to display the data in the x axis.
+   * @type {Number}
+   */
   get timeToPixel() {
     return this.timeContext.timeToPixel;
   }
 
+  /**
+   * Returns the transfert function used to display the data in the y axis.
+   * @type {Number}
+   */
   get valueToPixel() {
     return this._valueToPixel;
   }
 
   /**
-   *  @return {Array} - an array containins all the DOMElement items
+   * Returns an array containing all the displayed items.
+   * @type {Array<Element>}
    */
   get items() {
-    var items = [];
-
-    for (let item of this._$itemDataMap.keys()) {
-      items.push(item);
-    }
-
-    return items;
+    return Array.from(this._$itemDataMap.keys());
   }
 
   /**
-   * @mandatory define the context in which the layer is drawn
-   * @param context {TimeContext} the timeContext in which the layer is displayed
+   * Returns the data associated to the layer.
+   * @type {Object[]}
    */
-  setTimeContext(timeContext) {
-    this.timeContext = timeContext;
-    // create a mixin to pass to the shapes
-    this._renderingContext = {};
-    this._updateRenderingContext();
-  }
-
-  // --------------------------------------
-  // Data
-  // --------------------------------------
-
   get data() { return this._data; }
 
+  /**
+   * Sets the data associated with the layer.
+   * @type {Object|Object[]}
+   */
   set data(data) {
     switch (this.dataType) {
       case 'entity':
@@ -200,11 +282,13 @@ export default class Layer extends events.EventEmitter {
     }
   }
 
+  // --------------------------------------
   // Initialization
+  // --------------------------------------
 
   /**
-   *  render the DOM in memory on layer creation to be able to use it before
-   *  the layer is actually inserted in the DOM
+   * Renders the DOM in memory on layer creation to be able to use it before
+   * the layer is actually inserted in the DOM.
    */
   _renderContainer() {
     // wrapper group for `start, top and context flip matrix
@@ -254,28 +338,43 @@ export default class Layer extends events.EventEmitter {
   // --------------------------------------
 
   /**
-   *  Register the shape and its accessors to use in order to render
-   *  the entity or collection
-   *  @param ctor <Function:BaseShape> the constructor of the shape to be used
-   *  @param accessors <Object> accessors to use in order to map the data structure
+   * Sets the context of the layer, thus defining its `start`, `duration`, `offset` and `stretchRatio`.
+   *
+   * @param {TimeContext} timeContext - The timeContext in which the layer is displayed.
+   */
+  setTimeContext(timeContext) {
+    this.timeContext = timeContext;
+    // create a mixin to pass to the shapes
+    this._renderingContext = {};
+    this._updateRenderingContext();
+  }
+
+  /**
+   * Register a shape and its configuration to use in order to render the data.
+   *
+   * @param {BaseShape} ctor - The constructor of the shape to be used.
+   * @param {Object} [accessors={}] - Defines how the shape should adapt to a particular data struture.
+   * @param {Object} [options={}] - Global configuration for the shapes, is specific to each `Shape`.
    */
   configureShape(ctor, accessors = {}, options = {}) {
     this._shapeConfiguration = { ctor, accessors, options };
   }
 
   /**
-   *  Register the shape to use with the entire collection
-   *  example: the line in a beakpoint function
-   *  @param ctor {BaseShape} the constructor of the shape to use to render data
-   *  @param accessors {Object} accessors to use in order to map the data structure
+   * Optionnaly register a shape to be used accros the entire collection.
+   *
+   * @param {BaseShape} ctor - The constructor of the shape to be used.
+   * @param {Object} [accessors={}] - Defines how the shape should adapt to a particular data struture.
+   * @param {Object} [options={}] - Global configuration for the shapes, is specific to each `Shape`.
    */
   configureCommonShape(ctor, accessors = {}, options = {}) {
     this._commonShapeConfiguration = { ctor, accessors, options };
   }
 
   /**
-   *  Register the behavior to use when interacting with the shape
-   *  @param behavior {BaseBehavior}
+   * Register the behavior to use when interacting with a shape.
+   *
+   * @param {BaseBehavior} behavior
    */
   setBehavior(behavior) {
     behavior.initialize(this);
@@ -283,9 +382,7 @@ export default class Layer extends events.EventEmitter {
   }
 
   /**
-   *  update the values in `_renderingContext`
-   *  is particulary needed when updating `stretchRatio` as the pointer
-   *  to the `timeToPixel` scale may change
+   * Updates the values stored int the `_renderingContext` passed  to shapes for rendering and updating.
    */
   _updateRenderingContext() {
     this._renderingContext.timeToPixel = this.timeContext.timeToPixel;
@@ -297,10 +394,9 @@ export default class Layer extends events.EventEmitter {
     this._renderingContext.offsetX = this.timeContext.timeToPixel(this.timeContext.offset);
     this._renderingContext.startX = this.timeContext.parent.timeToPixel(this.timeContext.start);
 
-    // @TODO replace with `minX` and `maxX` representing the visible pixels in which
+    // @todo replace with `minX` and `maxX` representing the visible pixels in which
     // the shapes should be rendered, could allow to not update the DOM of shapes
     // who are not in this area.
-    // in between: expose some timeline attributes -> improves Waveform perfs
     this._renderingContext.trackOffsetX = this.timeContext.parent.timeToPixel(this.timeContext.parent.offset);
     this._renderingContext.visibleWidth = this.timeContext.parent.visibleWidth;
   }
@@ -309,10 +405,19 @@ export default class Layer extends events.EventEmitter {
   // Behavior Accessors
   // --------------------------------------
 
+  /**
+   * Returns the items marked as selected.
+   * @type {Array<Element>}
+   */
   get selectedItems() {
     return this._behavior ? this._behavior.selectedItems : [];
   }
 
+  /**
+   * Mark item(s) as selected.
+   *
+   * @param {Element|Element[]} $items
+   */
   select(...$items) {
     if (!this._behavior) { return; }
     if (!$items.length) { $items = this._$itemDataMap.keys(); }
@@ -325,6 +430,11 @@ export default class Layer extends events.EventEmitter {
     }
   }
 
+  /**
+   * Removes item(s) from selected items.
+   *
+   * @param {Element|Element[]} $items
+   */
   unselect(...$items) {
     if (!this._behavior) { return; }
     if (!$items.length) { $items = this._$itemDataMap.keys(); }
@@ -336,6 +446,11 @@ export default class Layer extends events.EventEmitter {
     }
   }
 
+  /**
+   * Toggle item(s) selection state according to their current state.
+   *
+   * @param {Element|Element[]} $items
+   */
   toggleSelection(...$items) {
     if (!this._behavior) { return; }
     if (!$items.length) { $items = this._$itemDataMap.keys(); }
@@ -347,7 +462,15 @@ export default class Layer extends events.EventEmitter {
     }
   }
 
-  edit($items, dx, dy, target) {
+  /**
+   * Edit item(s) according to the `edit` defined in the registered `Behavior`.
+   *
+   * @param {Element|Element[]} $items - The item(s) to edit.
+   * @param {Number} dx - The modification to apply in the x axis (in pixels).
+   * @param {Number} dy - The modification to apply in the y axis (in pixels).
+   * @param {Element} $target - The target of the interaction (for example, left handler DOM element in a segment).
+   */
+  edit($items, dx, dy, $target) {
     if (!this._behavior) { return; }
     $items = !Array.isArray($items) ? [$items] : $items;
 
@@ -355,14 +478,15 @@ export default class Layer extends events.EventEmitter {
       const shape = this._$itemShapeMap.get($item);
       const datum = this._$itemDataMap.get($item);
 
-      this._behavior.edit(this._renderingContext, shape, datum, dx, dy, target);
+      this._behavior.edit(this._renderingContext, shape, datum, dx, dy, $target);
       this.emit('edit', shape, datum);
     }
   }
 
   /**
-   *  draws the shape to interact with the context
-   *  @params {Boolean} [bool=true] - defines if the layer's context is editable or not
+   * Defines if the `Layer`, and thus the `LayerTimeContext` is editable or not.
+   *
+   * @params {Boolean} [bool=true]
    */
   setContextEditable(bool = true) {
     const display = bool ? 'block' : 'none';
@@ -370,12 +494,26 @@ export default class Layer extends events.EventEmitter {
     this._isContextEditable = bool;
   }
 
-  editContext(dx, dy, target) {
-    timeContextBehavior.edit(this, dx, dy, target);
+  /**
+   * Edit the layer and thus its related `LayerTimeContext` attributes.
+   *
+   * @param {Number} dx - The modification to apply in the x axis (in pixels).
+   * @param {Number} dy - The modification to apply in the y axis (in pixels).
+   * @param {Element} $target - The target of the event of the interaction.
+   */
+  editContext(dx, dy, $target) {
+    timeContextBehavior.edit(this, dx, dy, $target);
   }
 
-  stretchContext(dx, dy, target) {
-    timeContextBehavior.stretch(this, dx, dy, target);
+  /**
+   * Stretch the layer and thus its related `LayerTimeContext` attributes.
+   *
+   * @param {Number} dx - The modification to apply in the x axis (in pixels).
+   * @param {Number} dy - The modification to apply in the y axis (in pixels).
+   * @param {Element} $target - The target of the event of the interaction.
+   */
+  stretchContext(dx, dy, $target) {
+    timeContextBehavior.stretch(this, dx, dy, $target);
   }
 
   // --------------------------------------
@@ -383,17 +521,10 @@ export default class Layer extends events.EventEmitter {
   // --------------------------------------
 
   /**
-   *  Moves an `$el`'s group to the end of the layer (svg z-index...)
-   *  @param `$el` {DOMElement} the DOMElement to be moved
-   */
-  _toFront($item) {
-    this.$offset.appendChild($item);
-  }
-
-  /**
-   *  Returns the $item to which the given DOMElement belongs
-   *  @param {DOMElement} $el the element to be tested
-   *  @return {DOMElement|null} item group containing the `$el` if belongs to this layer, null otherwise
+   * Returns an item from a DOM element related to the shape, null otherwise.
+   *
+   * @param {Element} $el - the element to be tested
+   * @return {Element|null}
    */
   getItemFromDOMElement($el) {
     let $item;
@@ -411,14 +542,22 @@ export default class Layer extends events.EventEmitter {
   }
 
   /**
-   *  Returns the datum associated to a specific item DOMElement
-   *  @param {DOMElement} $item
-   *  @return {Object|Array|null} depending on the user data structure
+   * Returns the datum associated to a specific item.
+   *
+   * @param {Element} $item
+   * @return {Object|Array|null}
    */
   getDatumFromItem($item) {
-    return this._$itemDataMap.get($item);
+    const datum = this._$itemDataMap.get($item);
+    return datum ? datum : null;
   }
 
+  /**
+   * Returns the datum associated to a specific item from any DOM element composing the shape. Basically a shortcut for `getItemFromDOMElement` and `getDatumFromItem` methods.
+   *
+   * @param {Element} $el
+   * @return {Object|Array|null}
+   */
   getDatumFromDOMElement($el) {
     var $item = this.getItemFromDOMElement($el);
     if ($item === null) { return null; }
@@ -426,19 +565,20 @@ export default class Layer extends events.EventEmitter {
   }
 
   /**
-   *  Defines if the given DOMElement is an item of the layer
-   *  @param {DOMElement} $item
-   *  @return {bool}
+   * Tests if the given DOM element is an item of the layer.
+   *
+   * @param {Element} $item - The item to be tested.
+   * @return {Boolean}
    */
   hasItem($item) {
     return this._$itemDataMap.has($item);
   }
 
   /**
-   *  Defines if a given element belongs to the layer
-   *  is more general than `hasItem`, can be used to check interactions elements too
-   *  @param {DOMElement} $el
-   *  @return {bool}
+   * Defines if a given element belongs to the layer. Is more general than `hasItem`, can mostly used to check interactions elements.
+   *
+   * @param {Element} $el - The DOM element to be tested.
+   * @return {bool}
    */
   hasElement($el) {
     do {
@@ -453,9 +593,14 @@ export default class Layer extends events.EventEmitter {
   }
 
   /**
-   *  retrieve all the $items in a given area
-   *  @param {Object} area - The area in which to find the elements
-   *  @return {Array} - list of the DOM elements in the given area
+   * Retrieve all the items in a given area as defined in the registered `Shape~inArea` method
+   *
+   * @param {Object} area - The area in which to find the elements
+   * @param {Number} area.top
+   * @param {Number} area.left
+   * @param {Number} area.width
+   * @param {Number} area.height
+   * @return {Array} - list of the items presents in the area
    */
   getItemsInArea(area) {
     const start    = this.timeContext.parent.timeToPixel(this.timeContext.start);
@@ -490,6 +635,18 @@ export default class Layer extends events.EventEmitter {
   // Rendering / Display methods
   // --------------------------------------
 
+  /**
+   * Moves an item to the end of the layer to display it front of its siblings (svg z-index...)
+   *
+   * @param {Element} $item - The item to be moved.
+   */
+  _toFront($item) {
+    this.$offset.appendChild($item);
+  }
+
+  /**
+   * Create the DOM structure of the shapes according to the given data. Inspired from the `enter` and `exit` d3.js paradigm, this method should be called each time a datum is added or removed from the data. While the DOM is created the `update` method must be called in order to update the shapes attributes and thus place them where they should.
+   */
   render() {
     // render `commonShape` only once
     if (
@@ -550,7 +707,7 @@ export default class Layer extends events.EventEmitter {
   }
 
   /**
-   *  updates Context and Shapes
+   * Updates the container of the layer and the attributes of the existing shapes.
    */
   update() {
     this.updateContainer();
@@ -558,7 +715,7 @@ export default class Layer extends events.EventEmitter {
   }
 
   /**
-   *  updates the layer's container
+   * Updates the container of the layer.
    */
   updateContainer() {
     this._updateRenderingContext();
@@ -585,10 +742,10 @@ export default class Layer extends events.EventEmitter {
   }
 
   /**
-   *  updates the Shapes which belongs to the layer
-   *  @param {DOMElement} $el - Not implemented
+   * Updates the attributes of all the `Shape` instances rendered into the layer.
+   * @todo allow to filter which shape should be updated.
    */
-  updateShapes($el = null) {
+  updateShapes() {
     this._updateRenderingContext();
     // update common shapes
     this._$itemCommonShapeMap.forEach((shape, $item) => {
