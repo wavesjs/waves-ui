@@ -14,6 +14,10 @@ const xhtmlNS = 'http://www.w3.org/1999/xhtml';
 //   update() {}
 // };
 
+
+/**
+ * A shape to display a waveform. (for entity data)
+ */
 export default class Waveform extends BaseShape {
   getClassName() { return 'waveform'; }
 

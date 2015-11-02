@@ -263,14 +263,16 @@ export default class Timeline extends events.EventEmitter {
 
   /**
    * Adds a new track to the timeline.
-   * @todo add the `trackId` parameter.
+   *
    * @param {Track} track - The new track to be registered in the timeline.
+   * @param {String} [trackId=null] - Optionnal unique id to associate with the track, this id only exists in timeline's context and should be used in conjonction with `addLayer` method.
    */
-  add(track) {
+  add(track, trackId = null) {
     if (this.tracks.indexOf(track) !== -1) {
       throw new Error('track already added to the timeline');
     }
 
+    this._registerTrackId(track, trackId);
     track.configure(this.timeContext);
 
     this.tracks.push(track);
@@ -279,8 +281,9 @@ export default class Timeline extends events.EventEmitter {
 
   /**
    * Removes a track from the timeline.
-   * @todo must be implemented.
+   *
    * @param {Track} track - the track to remove from the timeline.
+   * @todo not implemented.
    */
   remove(track) {
     // should destroy interaction too, avoid ghost eventListeners
@@ -296,7 +299,18 @@ export default class Timeline extends events.EventEmitter {
    */
   createTrack($el, trackHeight = 100, trackId = null) {
     const track = new Track($el, trackHeight);
+    // Add track to the timeline
+    this.add(track, trackId);
+    track.render();
+    track.update();
 
+    return track;
+  }
+
+  /**
+   * If track id is defined, associate a track with a unique id.
+   */
+  _registerTrackId(track, trackId) {
     if (trackId !== null) {
       if (this._trackById[trackId] !== undefined) {
         throw new Error(`trackId: "${trackId}" is already used`);
@@ -304,13 +318,6 @@ export default class Timeline extends events.EventEmitter {
 
       this._trackById[trackId] = track;
     }
-
-    // Add track to the timeline
-    this.add(track);
-    track.render();
-    track.update();
-
-    return track;
   }
 
   /**

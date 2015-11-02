@@ -2,6 +2,9 @@ import BaseShape from './base-shape';
 import ns from '../core/namespace';
 
 
+/**
+ * A shape to display a cursor.
+ */
 export default class Cursor extends BaseShape {
   getClassName() { return 'cursor'; }
 
@@ -34,6 +37,9 @@ export default class Cursor extends BaseShape {
     this.$el.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
   }
 
-  // not selectable with a drag
+  /**
+   * The cursor cannot be selected.
+   * @return {Boolean} false
+   */
   inArea() { return false; }
 }

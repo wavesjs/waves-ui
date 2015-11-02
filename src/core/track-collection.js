@@ -11,8 +11,7 @@ export default class TrackCollection extends Array {
     this._timeline = timeline;
   }
 
-  // @TODO
-  // this should be in the timeline
+  // @note - should be in the timeline ?
   _getLayersOrGroups(layerOrGroup = null) {
     let layers = null;
 

@@ -1,6 +1,9 @@
 import BaseShape from './base-shape';
 
 
+/**
+ * A shape to display a dot.
+ */
 export default class Dot extends BaseShape {
   getClassName() { return 'dot'; }
 

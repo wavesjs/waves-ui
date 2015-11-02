@@ -1,6 +1,9 @@
 import Marker from './marker';
 
 
+/**
+ * A shape to display a marker with annotation.
+ */
 export default class AnnotatedMarker extends Marker {
   getClassName() { return 'annotated-marker'; }
 

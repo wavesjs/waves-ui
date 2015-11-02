@@ -1,6 +1,9 @@
 import BaseShape from './base-shape';
 
 
+/**
+ * A shape to display dots in a trace visualization (mean / range).
+ */
 export default class TraceDots extends BaseShape {
   getClassName() { return 'trace-dots'; }
 

@@ -1,6 +1,9 @@
 import Segment from './segment';
 
 
+/**
+ * A shape to display a segment with annotation.
+ */
 export default class AnnotatedSegment extends Segment {
   getClassName() { return 'annotated-segment'; }
 

@@ -1,6 +1,9 @@
 import BaseShape from './base-shape';
 
 
+/**
+ * A shape to display a line. Its main use is as common shape to create a breakpoint visualization. (entity shape)
+ */
 export default class Line extends BaseShape {
   getClassName() { return 'line'; }
 

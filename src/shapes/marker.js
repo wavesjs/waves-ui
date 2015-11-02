@@ -1,6 +1,9 @@
 import BaseShape from './base-shape';
 
 
+/**
+ * A shape to display a marker.
+ */
 export default class Marker extends BaseShape {
   getClassName() { return 'marker'; }
 
