@@ -2,6 +2,9 @@ import BaseState from './base-state';
 import ns from '../core/namespace';
 
 
+/**
+ * A state to select shapes.
+ */
 export default class SelectionState extends BaseState {
   constructor(timeline /*, options = {} */) {
     super(timeline /*, options */);

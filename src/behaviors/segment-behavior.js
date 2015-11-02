@@ -1,6 +1,9 @@
 import BaseBehavior from './base-behavior';
 
 
+/**
+ * Defines the default behavior for a segment.
+ */
 export default class SegmentBehavior extends BaseBehavior {
   edit(renderingContext, shape, datum, dx, dy, target) {
     const classList = target.classList;

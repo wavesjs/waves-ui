@@ -42,6 +42,8 @@ export default class Layer extends events.EventEmitter {
    * @param {Number} [options.top=0] - Defines the top position of the layer.
    * @param {Number} [options.opacity=1] - Defines the opacity of the layer.
    * @param {Number} [options.yDomain=[0,1]] - Defines boundaries of the data values in y axis (for exemple to display an audio buffer, this attribute should be set to [-1, 1].
+   * @param {String} [options.className=null] - An optionnal class to add to each created shape.
+   * @param {String} [options.className='selected'] - The class to add to a shape when selected.
    * @param {Number} [options.contextHandlerWidth=2] - The width of the handlers displayed to edit the layer.
    * @param {Number} [options.hittable=false] - Defines if the layer can be interacted with. Basically, the layer is not returned by `BaseState.getHitLayers` when set to false (a common use case is a layer that contains a cursor)
    */
@@ -54,6 +56,7 @@ export default class Layer extends events.EventEmitter {
       opacity: 1,
       yDomain: [0, 1],
       className: null,
+      selectedClassName: 'selected',
       contextHandlerWidth: 2,
       hittable: true, // when false the layer is not returned by `BaseState.getHitLayers`
       id: '', // used ?
@@ -129,7 +132,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Allows to override default the `TimeContextBehavior` used to edit the layer.
-   *
    * @param {Object} ctor
    */
   static configureTimeContextBehavior(ctor) {
@@ -339,7 +341,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Sets the context of the layer, thus defining its `start`, `duration`, `offset` and `stretchRatio`.
-   *
    * @param {TimeContext} timeContext - The timeContext in which the layer is displayed.
    */
   setTimeContext(timeContext) {
@@ -351,7 +352,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Register a shape and its configuration to use in order to render the data.
-   *
    * @param {BaseShape} ctor - The constructor of the shape to be used.
    * @param {Object} [accessors={}] - Defines how the shape should adapt to a particular data struture.
    * @param {Object} [options={}] - Global configuration for the shapes, is specific to each `Shape`.
@@ -362,7 +362,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Optionnaly register a shape to be used accros the entire collection.
-   *
    * @param {BaseShape} ctor - The constructor of the shape to be used.
    * @param {Object} [accessors={}] - Defines how the shape should adapt to a particular data struture.
    * @param {Object} [options={}] - Global configuration for the shapes, is specific to each `Shape`.
@@ -373,7 +372,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Register the behavior to use when interacting with a shape.
-   *
    * @param {BaseBehavior} behavior
    */
   setBehavior(behavior) {
@@ -415,7 +413,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Mark item(s) as selected.
-   *
    * @param {Element|Element[]} $items
    */
   select(...$items) {
@@ -432,7 +429,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Removes item(s) from selected items.
-   *
    * @param {Element|Element[]} $items
    */
   unselect(...$items) {
@@ -448,7 +444,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Toggle item(s) selection state according to their current state.
-   *
    * @param {Element|Element[]} $items
    */
   toggleSelection(...$items) {
@@ -464,7 +459,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Edit item(s) according to the `edit` defined in the registered `Behavior`.
-   *
    * @param {Element|Element[]} $items - The item(s) to edit.
    * @param {Number} dx - The modification to apply in the x axis (in pixels).
    * @param {Number} dy - The modification to apply in the y axis (in pixels).
@@ -485,7 +479,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Defines if the `Layer`, and thus the `LayerTimeContext` is editable or not.
-   *
    * @params {Boolean} [bool=true]
    */
   setContextEditable(bool = true) {
@@ -496,7 +489,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Edit the layer and thus its related `LayerTimeContext` attributes.
-   *
    * @param {Number} dx - The modification to apply in the x axis (in pixels).
    * @param {Number} dy - The modification to apply in the y axis (in pixels).
    * @param {Element} $target - The target of the event of the interaction.
@@ -507,7 +499,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Stretch the layer and thus its related `LayerTimeContext` attributes.
-   *
    * @param {Number} dx - The modification to apply in the x axis (in pixels).
    * @param {Number} dy - The modification to apply in the y axis (in pixels).
    * @param {Element} $target - The target of the event of the interaction.
@@ -522,7 +513,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Returns an item from a DOM element related to the shape, null otherwise.
-   *
    * @param {Element} $el - the element to be tested
    * @return {Element|null}
    */
@@ -543,7 +533,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Returns the datum associated to a specific item.
-   *
    * @param {Element} $item
    * @return {Object|Array|null}
    */
@@ -554,7 +543,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Returns the datum associated to a specific item from any DOM element composing the shape. Basically a shortcut for `getItemFromDOMElement` and `getDatumFromItem` methods.
-   *
    * @param {Element} $el
    * @return {Object|Array|null}
    */
@@ -566,7 +554,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Tests if the given DOM element is an item of the layer.
-   *
    * @param {Element} $item - The item to be tested.
    * @return {Boolean}
    */
@@ -576,7 +563,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Defines if a given element belongs to the layer. Is more general than `hasItem`, can mostly used to check interactions elements.
-   *
    * @param {Element} $el - The DOM element to be tested.
    * @return {bool}
    */
@@ -594,7 +580,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Retrieve all the items in a given area as defined in the registered `Shape~inArea` method
-   *
    * @param {Object} area - The area in which to find the elements
    * @param {Number} area.top
    * @param {Number} area.left
@@ -637,7 +622,6 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Moves an item to the end of the layer to display it front of its siblings (svg z-index...)
-   *
    * @param {Element} $item - The item to be moved.
    */
   _toFront($item) {
@@ -743,7 +727,7 @@ export default class Layer extends events.EventEmitter {
 
   /**
    * Updates the attributes of all the `Shape` instances rendered into the layer.
-   * @todo allow to filter which shape(s) should be updated.
+   * @todo - allow to filter which shape(s) should be updated.
    */
   updateShapes() {
     this._updateRenderingContext();

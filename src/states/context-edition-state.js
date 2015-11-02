@@ -2,6 +2,9 @@ import BaseState from './base-state';
 import TimeContextBehavior from '../behaviors/time-context-behavior';
 
 
+/**
+ * A state to interact directly with layers time contexts.
+ */
 export default class ContextEditionState extends BaseState {
   constructor(timeline) {
     super(timeline);

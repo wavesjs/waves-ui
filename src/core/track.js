@@ -171,7 +171,6 @@ export default class Track {
 
   /**
    * Adds a layer to the track.
-   *
    * @param {Layer} layer - the layer to add to the track.
    */
   add(layer) {
@@ -182,7 +181,6 @@ export default class Track {
 
   /**
    * Removes a layer from the track. The layer can be reused elsewhere.
-   *
    * @param {Layer} layer - the layer to remove from the track.
    */
   remove(layer) {
@@ -193,7 +191,6 @@ export default class Track {
 
   /**
    * Tests if a given element belongs to the track.
-   *
    * @param {Element} $el
    * @return {bool}
    */
@@ -218,7 +215,6 @@ export default class Track {
 
   /**
    * Updates the track DOM structure and updates the layers.
-   *
    * @param {Array<Layer>} [layers=null] - if not null, a subset of the layers to update.
    */
   update(layers = null) {
@@ -248,7 +244,6 @@ export default class Track {
 
   /**
    * Updates the layers.
-   *
    * @param {Array<Layer>} [layers=null] - if not null, a subset of the layers to update.
    */
   updateLayers(layers = null) {

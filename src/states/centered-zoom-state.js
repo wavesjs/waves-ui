@@ -3,7 +3,7 @@ import BaseState from './base-state';
 
 
 /**
- * `CenteredZoomState` is a timeline state that allows the user to browse the timeline by clicking on a track, and then
+ * `CenteredZoomState` is a timeline state mimicing the `Live` zoom interaction. It allows the user to browse the timeline by clicking on a track, and then
  * - moving down to zoom in
  * - moving up to zoom out
  * - moving left to move in time, after

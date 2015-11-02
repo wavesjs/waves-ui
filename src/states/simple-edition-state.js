@@ -2,7 +2,7 @@ import BaseState from './base-state';
 
 
 /**
- *  a simple plug and play state - select and edit
+ * A state to select and edit shapes in a simple way. (kind of plug n play state)
  */
 export default class SimpleEditionState extends BaseState {
   constructor(timeline) {

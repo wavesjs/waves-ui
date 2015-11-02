@@ -2,8 +2,7 @@ import BaseState from './base-state';
 
 
 /**
- *  Does not handle selection, must be used in conjonction with a selectionState of some sort
- *  could maybe be merged with the SelectionState
+ * A state to edit shapes in the more general way. Interact only with selected shapes.
  */
 export default class EditionState extends BaseState {
   constructor(timeline) {

@@ -3,9 +3,8 @@ import BaseState from './base-state';
 
 
 /**
- * Protools like zoom with zone selection
- * Press space bar to reset zoom default (1)
- * @TODO could also handle 'g' and 'h' key to zoom, de-zoom
+ * Protools like zoom with zone selection. Press space bar to reset zoom.
+ * @todo - could also handle 'g' and 'h' keys to zoom-in, zoom-out.
  */
 export default class BrushZoomState extends BaseState {
   constructor(timeline) {

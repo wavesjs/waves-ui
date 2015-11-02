@@ -1,6 +1,9 @@
 import BaseBehavior from './base-behavior';
 
 
+/**
+ * Defines the default behavior for a marker.
+ */
 export default class MarkerBehavior extends BaseBehavior {
 
   edit(renderingContext, shape, datum, dx, dy, target) {

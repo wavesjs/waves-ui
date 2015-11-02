@@ -1,14 +1,13 @@
 /**
- * Is an abstract class or interface to be overriden in order to define the way a given shape should behave when edited by a user. Instances of `BaseBehavior` are internally used by `Layer` instances to modify the data according to a user interaction and a given shape.
+ * Is an abstract class or interface to be overriden in order to define the way a given shape should behave when selected or edited by a user. Instances of `BaseBehavior` are internally used by `Layer` instances to modify the data according to a user interaction and a given shape. A single instance of `Behavior` is created in one given shape.
  *
- * The only method to override to define a new behavior for a shape is the `edit` method.
+ * By default, the only method to override to define a new behavior for a shape is the `edit` method. However, if needed in special cases, all the selection handling can be overriden too.
  *
  * The flow is the following:
- * `Event`  - (forwarded to) -> `Layer` - (command) -> `Behavior` - (modify) -> data - (upates) -> Shape
+ * `Event`  - (forwarded to) -> `Layer` - (command) -> `Behavior` - (modify) -> `data` - (upates) -> `Shape`
  *
  * The behavior responsability is then to modify the data according to the user interactions, while shapes are always a view of the current state of the data.
  *
- * @todo move all selection logic to the layer.
  */
 'use strict';
 
@@ -25,45 +24,43 @@ Object.defineProperty(exports, '__esModule', {
 });
 
 var BaseBehavior = (function () {
-  /**
-   * @param {Object} options - Options to override the defaults.
-   * @param {String} options.selectedClass - The class to add to the shape when selected.
-   * @todo passing options to behaviors is not implemented in layer.
-   */
-
   function BaseBehavior() {
-    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
     _classCallCheck(this, BaseBehavior);
 
     this._selectedItems = new _Set(); // no duplicate in Set
-    this._selectedClass = options.selectedClass || 'selected';
+    this._selectedClass;
     this._layer = null;
-
-    // @note not used
-    // this._params = Object.assign({}, this.getDefaults(), options);
   }
 
   _createClass(BaseBehavior, [{
     key: 'initialize',
     value: function initialize(layer) {
       this._layer = layer;
+      this._selectedClass = layer.params.selectedClassName;
     }
+
+    /**
+     * Destroy the references to the selected items.
+     * @type {String}
+     * @todo - rename to `clearSelection` (removing the class) ?
+     */
   }, {
     key: 'destroy',
-    value: function destroy() {}
-    // clean all items in `this._selectedItems`
+    value: function destroy() {
+      this._selectedItems.clear();
+    }
 
-    // getDefaults() {
-    //   return {};
-    // }
-
+    /**
+     * The class to add to the shapes when selected.
+     * @type {String}
+     */
   }, {
     key: 'select',
 
     /**
-     *  @param item {DOMElement} the item to select
-     *  @param datum {Object} the related datum (@NOTE remove it ?)
+     * @param {Element} $item - The item to select.
+     * @param {Object} datum - Not used in this implementation. Could be used to mark the data as selected.
+     * @todo - Pass the shape object to get the accessors ?
      */
     value: function select($item, datum) {
       $item.classList.add(this.selectedClass);
@@ -71,8 +68,9 @@ var BaseBehavior = (function () {
     }
 
     /**
-     *  @param item {DOMElement} the item to select
-     *  @param datum {Object} the related datum (@NOTE remove it ?)
+     * @param {Element} $item - The item to unselect.
+     * @param {Object} datum - Not used in this implementation. Could be used to mark the data as selected.
+     * @todo - Pass the shape object to get the accessors ?
      */
   }, {
     key: 'unselect',
@@ -82,9 +80,9 @@ var BaseBehavior = (function () {
     }
 
     /**
-     *  @NOTE is this really usefull ?
-     *  @param item {DOMElement} the item to select
-     *  @param datum {Object} the related datum (@NOTE remove it ?)
+     * @param {Element} $item - The item to toggle selection.
+     * @param {Object} datum - Not used in this implementation. Could be used to mark the data as selected.
+     * @todo - Pass the shape object to get the accessors ?
      */
   }, {
     key: 'toggleSelection',
@@ -94,7 +92,13 @@ var BaseBehavior = (function () {
     }
 
     /**
-     *  Edition behavior
+     * Interface method to override in order to define its particular behavior when interacted with.
+     * @param {Object} renderingContext - The layer rendering context.
+     * @param {BaseShape} shape - The shape object to be edited.
+     * @param {Object|Array} datum - The related datum to modify.
+     * @param {Number} dx - The value of the interaction in the x axis (in pixels).
+     * @param {Number} dy - The value of the interaction in the y axis (in pixels).
+     * @param {Element} $target - The target DOM element of the interaction.
      */
   }, {
     key: 'edit',
@@ -106,9 +110,19 @@ var BaseBehavior = (function () {
     set: function set(value) {
       this._selectedClass = value;
     },
+
+    /**
+     * The class to add to the shapes when selected.
+     * @type {String}
+     */
     get: function get() {
       return this._selectedClass;
     }
+
+    /**
+     * An array containing all the selected items of the layer.
+     * @type {Array}
+     */
   }, {
     key: 'selectedItems',
     get: function get() {
@@ -121,4 +135,4 @@ var BaseBehavior = (function () {
 
 exports['default'] = BaseBehavior;
 module.exports = exports['default'];
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9iZWhhdmlvcnMvYmFzZS1iZWhhdmlvci5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztJQVlxQixZQUFZOzs7Ozs7O0FBTXBCLFdBTlEsWUFBWSxHQU1MO1FBQWQsT0FBTyx5REFBRyxFQUFFOzswQkFOTCxZQUFZOztBQU83QixRQUFJLENBQUMsY0FBYyxHQUFHLFVBQVMsQ0FBQztBQUNoQyxRQUFJLENBQUMsY0FBYyxHQUFHLE9BQU8sQ0FBQyxhQUFhLElBQUksVUFBVSxDQUFDO0FBQzFELFFBQUksQ0FBQyxNQUFNLEdBQUcsSUFBSSxDQUFDOzs7O0dBSXBCOztlQWJrQixZQUFZOztXQWVyQixvQkFBQyxLQUFLLEVBQUU7QUFDaEIsVUFBSSxDQUFDLE1BQU0sR0FBRyxLQUFLLENBQUM7S0FDckI7OztXQUVNLG1CQUFHLEVBRVQ7Ozs7Ozs7QUFBQTs7Ozs7OztXQXNCSyxnQkFBQyxLQUFLLEVBQUUsS0FBSyxFQUFFO0FBQ25CLFdBQUssQ0FBQyxTQUFTLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxhQUFhLENBQUMsQ0FBQztBQUN4QyxVQUFJLENBQUMsY0FBYyxDQUFDLEdBQUcsQ0FBQyxLQUFLLENBQUMsQ0FBQztLQUNoQzs7Ozs7Ozs7V0FNTyxrQkFBQyxLQUFLLEVBQUUsS0FBSyxFQUFFO0FBQ3JCLFdBQUssQ0FBQyxTQUFTLENBQUMsTUFBTSxDQUFDLElBQUksQ0FBQyxhQUFhLENBQUMsQ0FBQztBQUMzQyxVQUFJLENBQUMsY0FBYyxVQUFPLENBQUMsS0FBSyxDQUFDLENBQUM7S0FDbkM7Ozs7Ozs7OztXQU9jLHlCQUFDLEtBQUssRUFBRSxLQUFLLEVBQUU7QUFDNUIsVUFBTSxNQUFNLEdBQUcsSUFBSSxDQUFDLGNBQWMsQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLEdBQUcsVUFBVSxHQUFHLFFBQVEsQ0FBQztBQUN0RSxVQUFJLENBQUMsTUFBTSxDQUFDLENBQUMsS0FBSyxDQUFDLENBQUM7S0FDckI7Ozs7Ozs7V0FLRyxjQUFDLGdCQUFnQixFQUFFLEtBQUssRUFBRSxLQUFLLEVBQUUsRUFBRSxFQUFFLEVBQUUsRUFBRSxPQUFPLEVBQUU7O0tBRXJEOzs7U0E3Q2dCLGFBQUMsS0FBSyxFQUFFO0FBQ3ZCLFVBQUksQ0FBQyxjQUFjLEdBQUcsS0FBSyxDQUFDO0tBQzdCO1NBRWdCLGVBQUc7QUFDbEIsYUFBTyxJQUFJLENBQUMsY0FBYyxDQUFDO0tBQzVCOzs7U0FFZ0IsZUFBRztBQUNsQiwwQ0FBVyxJQUFJLENBQUMsY0FBYyxHQUFFO0tBQ2pDOzs7U0FyQ2tCLFlBQVk7OztxQkFBWixZQUFZIiwiZmlsZSI6InNyYy9iZWhhdmlvcnMvYmFzZS1iZWhhdmlvci5qcyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogSXMgYW4gYWJzdHJhY3QgY2xhc3Mgb3IgaW50ZXJmYWNlIHRvIGJlIG92ZXJyaWRlbiBpbiBvcmRlciB0byBkZWZpbmUgdGhlIHdheSBhIGdpdmVuIHNoYXBlIHNob3VsZCBiZWhhdmUgd2hlbiBlZGl0ZWQgYnkgYSB1c2VyLiBJbnN0YW5jZXMgb2YgYEJhc2VCZWhhdmlvcmAgYXJlIGludGVybmFsbHkgdXNlZCBieSBgTGF5ZXJgIGluc3RhbmNlcyB0byBtb2RpZnkgdGhlIGRhdGEgYWNjb3JkaW5nIHRvIGEgdXNlciBpbnRlcmFjdGlvbiBhbmQgYSBnaXZlbiBzaGFwZS5cbiAqXG4gKiBUaGUgb25seSBtZXRob2QgdG8gb3ZlcnJpZGUgdG8gZGVmaW5lIGEgbmV3IGJlaGF2aW9yIGZvciBhIHNoYXBlIGlzIHRoZSBgZWRpdGAgbWV0aG9kLlxuICpcbiAqIFRoZSBmbG93IGlzIHRoZSBmb2xsb3dpbmc6XG4gKiBgRXZlbnRgICAtIChmb3J3YXJkZWQgdG8pIC0+IGBMYXllcmAgLSAoY29tbWFuZCkgLT4gYEJlaGF2aW9yYCAtIChtb2RpZnkpIC0+IGRhdGEgLSAodXBhdGVzKSAtPiBTaGFwZVxuICpcbiAqIFRoZSBiZWhhdmlvciByZXNwb25zYWJpbGl0eSBpcyB0aGVuIHRvIG1vZGlmeSB0aGUgZGF0YSBhY2NvcmRpbmcgdG8gdGhlIHVzZXIgaW50ZXJhY3Rpb25zLCB3aGlsZSBzaGFwZXMgYXJlIGFsd2F5cyBhIHZpZXcgb2YgdGhlIGN1cnJlbnQgc3RhdGUgb2YgdGhlIGRhdGEuXG4gKlxuICogQHRvZG8gbW92ZSBhbGwgc2VsZWN0aW9uIGxvZ2ljIHRvIHRoZSBsYXllci5cbiAqL1xuZXhwb3J0IGRlZmF1bHQgY2xhc3MgQmFzZUJlaGF2aW9yIHtcbiAgLyoqXG4gICAqIEBwYXJhbSB7T2JqZWN0fSBvcHRpb25zIC0gT3B0aW9ucyB0byBvdmVycmlkZSB0aGUgZGVmYXVsdHMuXG4gICAqIEBwYXJhbSB7U3RyaW5nfSBvcHRpb25zLnNlbGVjdGVkQ2xhc3MgLSBUaGUgY2xhc3MgdG8gYWRkIHRvIHRoZSBzaGFwZSB3aGVuIHNlbGVjdGVkLlxuICAgKiBAdG9kbyBwYXNzaW5nIG9wdGlvbnMgdG8gYmVoYXZpb3JzIGlzIG5vdCBpbXBsZW1lbnRlZCBpbiBsYXllci5cbiAgICovXG4gIGNvbnN0cnVjdG9yKG9wdGlvbnMgPSB7fSkge1xuICAgIHRoaXMuX3NlbGVjdGVkSXRlbXMgPSBuZXcgU2V0KCk7IC8vIG5vIGR1cGxpY2F0ZSBpbiBTZXRcbiAgICB0aGlzLl9zZWxlY3RlZENsYXNzID0gb3B0aW9ucy5zZWxlY3RlZENsYXNzIHx8wqAnc2VsZWN0ZWQnO1xuICAgIHRoaXMuX2xheWVyID0gbnVsbDtcblxuICAgIC8vIEBub3RlIG5vdCB1c2VkXG4gICAgLy8gdGhpcy5fcGFyYW1zID0gT2JqZWN0LmFzc2lnbih7fSwgdGhpcy5nZXREZWZhdWx0cygpLCBvcHRpb25zKTtcbiAgfVxuXG4gIGluaXRpYWxpemUobGF5ZXIpIHtcbiAgICB0aGlzLl9sYXllciA9IGxheWVyO1xuICB9XG5cbiAgZGVzdHJveSgpIHtcbiAgICAvLyBjbGVhbiBhbGwgaXRlbXMgaW4gYHRoaXMuX3NlbGVjdGVkSXRlbXNgXG4gIH1cblxuICAvLyBnZXREZWZhdWx0cygpIHtcbiAgLy8gICByZXR1cm4ge307XG4gIC8vIH1cblxuICBzZXQgc2VsZWN0ZWRDbGFzcyh2YWx1ZSkge1xuICAgIHRoaXMuX3NlbGVjdGVkQ2xhc3MgPSB2YWx1ZTtcbiAgfVxuXG4gIGdldCBzZWxlY3RlZENsYXNzKCkge1xuICAgIHJldHVybiB0aGlzLl9zZWxlY3RlZENsYXNzO1xuICB9XG5cbiAgZ2V0IHNlbGVjdGVkSXRlbXMoKSB7XG4gICAgcmV0dXJuIFsuLi50aGlzLl9zZWxlY3RlZEl0ZW1zXTtcbiAgfVxuXG4gIC8qKlxuICAgKiAgQHBhcmFtIGl0ZW0ge0RPTUVsZW1lbnR9IHRoZSBpdGVtIHRvIHNlbGVjdFxuICAgKiAgQHBhcmFtIGRhdHVtIHtPYmplY3R9IHRoZSByZWxhdGVkIGRhdHVtIChATk9URSByZW1vdmUgaXQgPylcbiAgICovXG4gIHNlbGVjdCgkaXRlbSwgZGF0dW0pIHtcbiAgICAkaXRlbS5jbGFzc0xpc3QuYWRkKHRoaXMuc2VsZWN0ZWRDbGFzcyk7XG4gICAgdGhpcy5fc2VsZWN0ZWRJdGVtcy5hZGQoJGl0ZW0pO1xuICB9XG5cbiAgLyoqXG4gICAqICBAcGFyYW0gaXRlbSB7RE9NRWxlbWVudH0gdGhlIGl0ZW0gdG8gc2VsZWN0XG4gICAqICBAcGFyYW0gZGF0dW0ge09iamVjdH0gdGhlIHJlbGF0ZWQgZGF0dW0gKEBOT1RFIHJlbW92ZSBpdCA/KVxuICAgKi9cbiAgdW5zZWxlY3QoJGl0ZW0sIGRhdHVtKSB7XG4gICAgJGl0ZW0uY2xhc3NMaXN0LnJlbW92ZSh0aGlzLnNlbGVjdGVkQ2xhc3MpO1xuICAgIHRoaXMuX3NlbGVjdGVkSXRlbXMuZGVsZXRlKCRpdGVtKTtcbiAgfVxuXG4gIC8qKlxuICAgKiAgQE5PVEUgaXMgdGhpcyByZWFsbHkgdXNlZnVsbCA/XG4gICAqICBAcGFyYW0gaXRlbSB7RE9NRWxlbWVudH0gdGhlIGl0ZW0gdG8gc2VsZWN0XG4gICAqICBAcGFyYW0gZGF0dW0ge09iamVjdH0gdGhlIHJlbGF0ZWQgZGF0dW0gKEBOT1RFIHJlbW92ZSBpdCA/KVxuICAgKi9cbiAgdG9nZ2xlU2VsZWN0aW9uKCRpdGVtLCBkYXR1bSkge1xuICAgIGNvbnN0IG1ldGhvZCA9IHRoaXMuX3NlbGVjdGVkSXRlbXMuaGFzKCRpdGVtKSA/ICd1bnNlbGVjdCcgOiAnc2VsZWN0JztcbiAgICB0aGlzW21ldGhvZF0oJGl0ZW0pO1xuICB9XG5cbiAgLyoqXG4gICAqICBFZGl0aW9uIGJlaGF2aW9yXG4gICAqL1xuICBlZGl0KHJlbmRlcmluZ0NvbnRleHQsIHNoYXBlLCBkYXR1bSwgZHgsIGR5LCAkdGFyZ2V0KSB7XG4gICAgLy8gbXVzdCBiZSBpbXBsZW1lbnRlZCBpbiBjaGlsZHJlblxuICB9XG59XG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9iZWhhdmlvcnMvYmFzZS1iZWhhdmlvci5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0lBV3FCLFlBQVk7QUFDcEIsV0FEUSxZQUFZLEdBQ2pCOzBCQURLLFlBQVk7O0FBRTdCLFFBQUksQ0FBQyxjQUFjLEdBQUcsVUFBUyxDQUFDO0FBQ2hDLFFBQUksQ0FBQyxjQUFjLENBQUM7QUFDcEIsUUFBSSxDQUFDLE1BQU0sR0FBRyxJQUFJLENBQUM7R0FDcEI7O2VBTGtCLFlBQVk7O1dBT3JCLG9CQUFDLEtBQUssRUFBRTtBQUNoQixVQUFJLENBQUMsTUFBTSxHQUFHLEtBQUssQ0FBQztBQUNwQixVQUFJLENBQUMsY0FBYyxHQUFHLEtBQUssQ0FBQyxNQUFNLENBQUMsaUJBQWlCLENBQUM7S0FDdEQ7Ozs7Ozs7OztXQU9NLG1CQUFHO0FBQ1IsVUFBSSxDQUFDLGNBQWMsQ0FBQyxLQUFLLEVBQUUsQ0FBQztLQUM3Qjs7Ozs7Ozs7Ozs7Ozs7V0ErQkssZ0JBQUMsS0FBSyxFQUFFLEtBQUssRUFBRTtBQUNuQixXQUFLLENBQUMsU0FBUyxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsYUFBYSxDQUFDLENBQUM7QUFDeEMsVUFBSSxDQUFDLGNBQWMsQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLENBQUM7S0FDaEM7Ozs7Ozs7OztXQU9PLGtCQUFDLEtBQUssRUFBRSxLQUFLLEVBQUU7QUFDckIsV0FBSyxDQUFDLFNBQVMsQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFDLGFBQWEsQ0FBQyxDQUFDO0FBQzNDLFVBQUksQ0FBQyxjQUFjLFVBQU8sQ0FBQyxLQUFLLENBQUMsQ0FBQztLQUNuQzs7Ozs7Ozs7O1dBT2MseUJBQUMsS0FBSyxFQUFFLEtBQUssRUFBRTtBQUM1QixVQUFNLE1BQU0sR0FBRyxJQUFJLENBQUMsY0FBYyxDQUFDLEdBQUcsQ0FBQyxLQUFLLENBQUMsR0FBRyxVQUFVLEdBQUcsUUFBUSxDQUFDO0FBQ3RFLFVBQUksQ0FBQyxNQUFNLENBQUMsQ0FBQyxLQUFLLENBQUMsQ0FBQztLQUNyQjs7Ozs7Ozs7Ozs7OztXQVdHLGNBQUMsZ0JBQWdCLEVBQUUsS0FBSyxFQUFFLEtBQUssRUFBRSxFQUFFLEVBQUUsRUFBRSxFQUFFLE9BQU8sRUFBRTs7S0FFckQ7OztTQTdEZ0IsYUFBQyxLQUFLLEVBQUU7QUFDdkIsVUFBSSxDQUFDLGNBQWMsR0FBRyxLQUFLLENBQUM7S0FDN0I7Ozs7OztTQU1nQixlQUFHO0FBQ2xCLGFBQU8sSUFBSSxDQUFDLGNBQWMsQ0FBQztLQUM1Qjs7Ozs7Ozs7U0FNZ0IsZUFBRztBQUNsQiwwQ0FBVyxJQUFJLENBQUMsY0FBYyxHQUFFO0tBQ2pDOzs7U0EzQ2tCLFlBQVk7OztxQkFBWixZQUFZIiwiZmlsZSI6InNyYy9iZWhhdmlvcnMvYmFzZS1iZWhhdmlvci5qcyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogSXMgYW4gYWJzdHJhY3QgY2xhc3Mgb3IgaW50ZXJmYWNlIHRvIGJlIG92ZXJyaWRlbiBpbiBvcmRlciB0byBkZWZpbmUgdGhlIHdheSBhIGdpdmVuIHNoYXBlIHNob3VsZCBiZWhhdmUgd2hlbiBzZWxlY3RlZCBvciBlZGl0ZWQgYnkgYSB1c2VyLiBJbnN0YW5jZXMgb2YgYEJhc2VCZWhhdmlvcmAgYXJlIGludGVybmFsbHkgdXNlZCBieSBgTGF5ZXJgIGluc3RhbmNlcyB0byBtb2RpZnkgdGhlIGRhdGEgYWNjb3JkaW5nIHRvIGEgdXNlciBpbnRlcmFjdGlvbiBhbmQgYSBnaXZlbiBzaGFwZS4gQSBzaW5nbGUgaW5zdGFuY2Ugb2YgYEJlaGF2aW9yYCBpcyBjcmVhdGVkIGluIG9uZSBnaXZlbiBzaGFwZS5cbiAqXG4gKiBCeSBkZWZhdWx0LCB0aGUgb25seSBtZXRob2QgdG8gb3ZlcnJpZGUgdG8gZGVmaW5lIGEgbmV3IGJlaGF2aW9yIGZvciBhIHNoYXBlIGlzIHRoZSBgZWRpdGAgbWV0aG9kLiBIb3dldmVyLCBpZiBuZWVkZWQgaW4gc3BlY2lhbCBjYXNlcywgYWxsIHRoZSBzZWxlY3Rpb24gaGFuZGxpbmcgY2FuIGJlIG92ZXJyaWRlbiB0b28uXG4gKlxuICogVGhlIGZsb3cgaXMgdGhlIGZvbGxvd2luZzpcbiAqIGBFdmVudGAgIC0gKGZvcndhcmRlZCB0bykgLT4gYExheWVyYCAtIChjb21tYW5kKSAtPiBgQmVoYXZpb3JgIC0gKG1vZGlmeSkgLT4gYGRhdGFgIC0gKHVwYXRlcykgLT4gYFNoYXBlYFxuICpcbiAqIFRoZSBiZWhhdmlvciByZXNwb25zYWJpbGl0eSBpcyB0aGVuIHRvIG1vZGlmeSB0aGUgZGF0YSBhY2NvcmRpbmcgdG8gdGhlIHVzZXIgaW50ZXJhY3Rpb25zLCB3aGlsZSBzaGFwZXMgYXJlIGFsd2F5cyBhIHZpZXcgb2YgdGhlIGN1cnJlbnQgc3RhdGUgb2YgdGhlIGRhdGEuXG4gKlxuICovXG5leHBvcnQgZGVmYXVsdCBjbGFzcyBCYXNlQmVoYXZpb3Ige1xuICBjb25zdHJ1Y3RvcigpIHtcbiAgICB0aGlzLl9zZWxlY3RlZEl0ZW1zID0gbmV3IFNldCgpOyAvLyBubyBkdXBsaWNhdGUgaW4gU2V0XG4gICAgdGhpcy5fc2VsZWN0ZWRDbGFzcztcbiAgICB0aGlzLl9sYXllciA9IG51bGw7XG4gIH1cblxuICBpbml0aWFsaXplKGxheWVyKSB7XG4gICAgdGhpcy5fbGF5ZXIgPSBsYXllcjtcbiAgICB0aGlzLl9zZWxlY3RlZENsYXNzID0gbGF5ZXIucGFyYW1zLnNlbGVjdGVkQ2xhc3NOYW1lO1xuICB9XG5cbiAgLyoqXG4gICAqIERlc3Ryb3kgdGhlIHJlZmVyZW5jZXMgdG8gdGhlIHNlbGVjdGVkIGl0ZW1zLlxuICAgKiBAdHlwZSB7U3RyaW5nfVxuICAgKiBAdG9kbyAtIHJlbmFtZSB0byBgY2xlYXJTZWxlY3Rpb25gIChyZW1vdmluZyB0aGUgY2xhc3MpID9cbiAgICovXG4gIGRlc3Ryb3koKSB7XG4gICAgdGhpcy5fc2VsZWN0ZWRJdGVtcy5jbGVhcigpO1xuICB9XG5cbiAgLyoqXG4gICAqIFRoZSBjbGFzcyB0byBhZGQgdG8gdGhlIHNoYXBlcyB3aGVuIHNlbGVjdGVkLlxuICAgKiBAdHlwZSB7U3RyaW5nfVxuICAgKi9cbiAgc2V0IHNlbGVjdGVkQ2xhc3ModmFsdWUpIHtcbiAgICB0aGlzLl9zZWxlY3RlZENsYXNzID0gdmFsdWU7XG4gIH1cblxuICAvKipcbiAgICogVGhlIGNsYXNzIHRvIGFkZCB0byB0aGUgc2hhcGVzIHdoZW4gc2VsZWN0ZWQuXG4gICAqIEB0eXBlIHtTdHJpbmd9XG4gICAqL1xuICBnZXQgc2VsZWN0ZWRDbGFzcygpIHtcbiAgICByZXR1cm4gdGhpcy5fc2VsZWN0ZWRDbGFzcztcbiAgfVxuXG4gIC8qKlxuICAgKiBBbiBhcnJheSBjb250YWluaW5nIGFsbCB0aGUgc2VsZWN0ZWQgaXRlbXMgb2YgdGhlIGxheWVyLlxuICAgKiBAdHlwZSB7QXJyYXl9XG4gICAqL1xuICBnZXQgc2VsZWN0ZWRJdGVtcygpIHtcbiAgICByZXR1cm4gWy4uLnRoaXMuX3NlbGVjdGVkSXRlbXNdO1xuICB9XG5cbiAgLyoqXG4gICAqIEBwYXJhbSB7RWxlbWVudH0gJGl0ZW0gLSBUaGUgaXRlbSB0byBzZWxlY3QuXG4gICAqIEBwYXJhbSB7T2JqZWN0fSBkYXR1bSAtIE5vdCB1c2VkIGluIHRoaXMgaW1wbGVtZW50YXRpb24uIENvdWxkIGJlIHVzZWQgdG8gbWFyayB0aGUgZGF0YSBhcyBzZWxlY3RlZC5cbiAgICogQHRvZG8gLSBQYXNzIHRoZSBzaGFwZSBvYmplY3QgdG8gZ2V0IHRoZSBhY2Nlc3NvcnMgP1xuICAgKi9cbiAgc2VsZWN0KCRpdGVtLCBkYXR1bSkge1xuICAgICRpdGVtLmNsYXNzTGlzdC5hZGQodGhpcy5zZWxlY3RlZENsYXNzKTtcbiAgICB0aGlzLl9zZWxlY3RlZEl0ZW1zLmFkZCgkaXRlbSk7XG4gIH1cblxuICAvKipcbiAgICogQHBhcmFtIHtFbGVtZW50fSAkaXRlbSAtIFRoZSBpdGVtIHRvIHVuc2VsZWN0LlxuICAgKiBAcGFyYW0ge09iamVjdH0gZGF0dW0gLSBOb3QgdXNlZCBpbiB0aGlzIGltcGxlbWVudGF0aW9uLiBDb3VsZCBiZSB1c2VkIHRvIG1hcmsgdGhlIGRhdGEgYXMgc2VsZWN0ZWQuXG4gICAqIEB0b2RvIC0gUGFzcyB0aGUgc2hhcGUgb2JqZWN0IHRvIGdldCB0aGUgYWNjZXNzb3JzID9cbiAgICovXG4gIHVuc2VsZWN0KCRpdGVtLCBkYXR1bSkge1xuICAgICRpdGVtLmNsYXNzTGlzdC5yZW1vdmUodGhpcy5zZWxlY3RlZENsYXNzKTtcbiAgICB0aGlzLl9zZWxlY3RlZEl0ZW1zLmRlbGV0ZSgkaXRlbSk7XG4gIH1cblxuICAvKipcbiAgICogQHBhcmFtIHtFbGVtZW50fSAkaXRlbSAtIFRoZSBpdGVtIHRvIHRvZ2dsZSBzZWxlY3Rpb24uXG4gICAqIEBwYXJhbSB7T2JqZWN0fSBkYXR1bSAtIE5vdCB1c2VkIGluIHRoaXMgaW1wbGVtZW50YXRpb24uIENvdWxkIGJlIHVzZWQgdG8gbWFyayB0aGUgZGF0YSBhcyBzZWxlY3RlZC5cbiAgICogQHRvZG8gLSBQYXNzIHRoZSBzaGFwZSBvYmplY3QgdG8gZ2V0IHRoZSBhY2Nlc3NvcnMgP1xuICAgKi9cbiAgdG9nZ2xlU2VsZWN0aW9uKCRpdGVtLCBkYXR1bSkge1xuICAgIGNvbnN0IG1ldGhvZCA9IHRoaXMuX3NlbGVjdGVkSXRlbXMuaGFzKCRpdGVtKSA/ICd1bnNlbGVjdCcgOiAnc2VsZWN0JztcbiAgICB0aGlzW21ldGhvZF0oJGl0ZW0pO1xuICB9XG5cbiAgLyoqXG4gICAqIEludGVyZmFjZSBtZXRob2QgdG8gb3ZlcnJpZGUgaW4gb3JkZXIgdG8gZGVmaW5lIGl0cyBwYXJ0aWN1bGFyIGJlaGF2aW9yIHdoZW4gaW50ZXJhY3RlZCB3aXRoLlxuICAgKiBAcGFyYW0ge09iamVjdH0gcmVuZGVyaW5nQ29udGV4dCAtIFRoZSBsYXllciByZW5kZXJpbmcgY29udGV4dC5cbiAgICogQHBhcmFtIHtCYXNlU2hhcGV9IHNoYXBlIC0gVGhlIHNoYXBlIG9iamVjdCB0byBiZSBlZGl0ZWQuXG4gICAqIEBwYXJhbSB7T2JqZWN0fEFycmF5fSBkYXR1bSAtIFRoZSByZWxhdGVkIGRhdHVtIHRvIG1vZGlmeS5cbiAgICogQHBhcmFtIHtOdW1iZXJ9IGR4IC0gVGhlIHZhbHVlIG9mIHRoZSBpbnRlcmFjdGlvbiBpbiB0aGUgeCBheGlzIChpbiBwaXhlbHMpLlxuICAgKiBAcGFyYW0ge051bWJlcn0gZHkgLSBUaGUgdmFsdWUgb2YgdGhlIGludGVyYWN0aW9uIGluIHRoZSB5IGF4aXMgKGluIHBpeGVscykuXG4gICAqIEBwYXJhbSB7RWxlbWVudH0gJHRhcmdldCAtIFRoZSB0YXJnZXQgRE9NIGVsZW1lbnQgb2YgdGhlIGludGVyYWN0aW9uLlxuICAgKi9cbiAgZWRpdChyZW5kZXJpbmdDb250ZXh0LCBzaGFwZSwgZGF0dW0sIGR4LCBkeSwgJHRhcmdldCkge1xuICAgIC8vIG11c3QgYmUgaW1wbGVtZW50ZWQgaW4gY2hpbGRyZW5cbiAgfVxufVxuIl19

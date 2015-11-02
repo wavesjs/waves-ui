@@ -1,6 +1,9 @@
 import BaseBehavior from './base-behavior';
 
 
+/**
+ * Defines the default behavior for a breakpoint function.
+ */
 export default class BreakpointBehavior extends BaseBehavior {
 
   edit(renderingContext, shape, datum, dx, dy, target) {

@@ -1,6 +1,9 @@
 import BaseBehavior from './base-behavior';
 
 
+/**
+ * Defines the default behavior for a trace visualization.
+ */
 export default class TraceBehavior extends BaseBehavior {
   edit(renderingContext, shape, datum, dx, dy, target) {
     if (target.classList.contains('min')) {
