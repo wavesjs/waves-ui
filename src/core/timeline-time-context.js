@@ -29,7 +29,7 @@ export default class TimelineTimeContext {
       .domain([0, 1])
       .range([0, pixelsPerSecond]);
 
-    this.timeToPixel = scale;
+    this._timeToPixel = scale;
 
     this._originalPixelsPerSecond = this._computedPixelsPerSecond;
   }
@@ -53,7 +53,7 @@ export default class TimelineTimeContext {
 
     // force children scale update
     this._children.forEach(function(child) {
-      if (!child._timeToPixel) { return; }
+      if (child.stretchRatio !== 1) { return; }
       child.stretchRatio = child.stretchRatio;
     });
   }
@@ -102,7 +102,7 @@ export default class TimelineTimeContext {
     this._updateTimeToPixelRange();
 
     this._children.forEach(function(child) {
-      if (!child._timeToPixel) { return; }
+      if (child.stretchRatio !== 1) { return; }
       child.stretchRatio = child.stretchRatio * ratioChange;
     });
   }
@@ -158,15 +158,6 @@ export default class TimelineTimeContext {
    */
   get timeToPixel() {
     return this._timeToPixel;
-  }
-
-  /**
-   * Sets the time to pixel trasfert function.
-   * @todo remove should be a read-only value
-   * @type {Scale.linear}
-   */
-  set timeToPixel(scale) {
-    this._timeToPixel = scale;
   }
 
   _updateTimeToPixelRange() {
