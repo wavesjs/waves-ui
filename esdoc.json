@@ -1,7 +1,6 @@
 {
   "source": "./src",
   "destination": "./doc",
-  "excludes": ["utils"],
   "title": "WavesJS UI",
   "manual": {
     "example": ["./examples/examples.md"]

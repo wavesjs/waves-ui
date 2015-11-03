@@ -4,6 +4,8 @@ import ns from '../core/namespace';
 
 /**
  * A shape to display a cursor.
+ *
+ * [example usage](./examples/layer-cursor.html)
  */
 export default class Cursor extends BaseShape {
   getClassName() { return 'cursor'; }

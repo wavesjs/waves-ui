@@ -3,20 +3,12 @@ import BaseShape from './base-shape';
 
 const xhtmlNS = 'http://www.w3.org/1999/xhtml';
 
-// @TODO create strategies object to clean the `if...else` mess
-// var svgStrategy = {
-//   render() {},
-//   update() {}
-// };
-
-// var canvasStrategy = {
-//   render() {},
-//   update() {}
-// };
-
-
 /**
  * A shape to display a waveform. (for entity data)
+ *
+ * [example usage](./examples/layer-waveform.html)
+ *
+ * @todo - fix problems with canvas strategy.
  */
 export default class Waveform extends BaseShape {
   getClassName() { return 'waveform'; }

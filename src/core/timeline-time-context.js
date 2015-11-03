@@ -14,6 +14,8 @@ import scales from '../utils/scales';
  *
  * It also maintain an array of all references to `LayerTimeContext` instances
  * to propagate to `layers`, changes made on the time to pixel representation.
+ *
+ * [example usage](./examples/time-contexts.html)
  */
 export default class TimelineTimeContext {
   /**

@@ -3,6 +3,8 @@ import Segment from './segment';
 
 /**
  * A shape to display a segment with annotation.
+ *
+ * [example usage](./examples/layer-segment.html)
  */
 export default class AnnotatedSegment extends Segment {
   getClassName() { return 'annotated-segment'; }

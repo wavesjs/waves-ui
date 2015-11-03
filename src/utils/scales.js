@@ -1,4 +1,11 @@
+/**
+ * Lightweight scales mimicing the `d3.js` functionnal API.
+ */
 export default {
+  /**
+   * A linear scale interpolating values between a `domain` and a `range`.
+   * @return {Function}
+   */
   linear() {
     let _domain = [0, 1];
     let _range = [0, 1];

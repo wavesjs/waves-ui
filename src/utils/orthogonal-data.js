@@ -8,7 +8,9 @@ export default class OrthogonalData {
     this._rows = null; // Array of objects
   }
 
-  // verify that data are consistents
+  /**
+   * Check the consistency of the data.
+   */
   _checkConsistency() {
     let size = null;
 
@@ -25,7 +27,7 @@ export default class OrthogonalData {
   }
 
   /**
-   * Update array of objects from object of arrays
+   * Updates array of objects from object of arrays.
    */
   updateFromCols() {
     let keys = Object.keys(this._cols);
@@ -43,7 +45,7 @@ export default class OrthogonalData {
   }
 
   /**
-   * Update object of arrays from array of objects
+   * Updates object of arrays from array of objects.
    */
   updateFromRows() {
     this._rows.forEach((obj, index) => {
@@ -57,7 +59,9 @@ export default class OrthogonalData {
   }
 
   /**
-   * Set an object of arrays
+   * Sets an object of arrays.
+   *
+   * @type {Object<String, Array>}
    */
   set cols(obj) {
     this._cols = obj;
@@ -67,7 +71,18 @@ export default class OrthogonalData {
   }
 
   /**
-   * Set an array of objects
+   * Returns an object of arrays.
+   *
+   * @type {Object<String, Array>}
+   */
+  get cols() {
+    return this._cols;
+  }
+
+  /**
+   * Sets an array of objects.
+   *
+   * @type {Array<Object>}
    */
   set rows(arr) {
     this._rows = arr;
@@ -77,14 +92,9 @@ export default class OrthogonalData {
   }
 
   /**
-   * Get an object of arrays
-   */
-  get cols() {
-    return this._cols;
-  }
-
-  /**
-   * Get an array of objects
+   * Returns an array of objects.
+   *
+   * @type {Array<Object>}
    */
   get rows() {
     return this._rows;

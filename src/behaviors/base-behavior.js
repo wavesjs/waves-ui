@@ -13,8 +13,8 @@
  * `Event`  - (forwarded to) -> `Layer` - (command) -> `Behavior` - (modify) -> `data` - (upates) -> `Shape`
  *
  * The behavior responsability is then to modify the data according to the
- * user interactions, while shapes are always a view of the current state of the data.
- *
+ * user interactions, while shapes are always a view of the current state of the
+ * data.
  */
 export default class BaseBehavior {
   constructor() {

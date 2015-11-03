@@ -30,6 +30,8 @@ import scales from '../utils/scales';
  *
  * The parts of the sound file represented with '*' are hidden from the view
  * ```
+ *
+ * [example usage](./examples/time-contexts.html)
  */
 export default class LayerTimeContext {
   /**

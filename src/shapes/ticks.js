@@ -1,7 +1,7 @@
 import BaseShape from './base-shape';
 
 /**
- * Kind of Marker for entity oriented data. Usefull to display ticks in axis.
+ * Kind of Marker for entity oriented data. Usefull to display a grid.
  */
 export default class Ticks extends BaseShape {
   _getClassName() {

@@ -3,6 +3,8 @@ import Marker from './marker';
 
 /**
  * A shape to display a marker with annotation.
+ *
+ * [example usage](./examples/layer-marker.html)
  */
 export default class AnnotatedMarker extends Marker {
   getClassName() { return 'annotated-marker'; }

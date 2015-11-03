@@ -2,7 +2,10 @@ import BaseState from './base-state';
 
 
 /**
- * A state to interact with a breakpoint function, mimicing Max/MSP's breakpoint function interactions.
+ * A state to interact with a breakpoint function, mimicing Max/MSP's
+ * breakpoint function interactions.
+ *
+ * [example usage](./examples/layer-breakpint.html)
  */
 export default class BreakpointState extends BaseState {
   constructor(timeline, datumGenerator) {

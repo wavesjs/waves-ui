@@ -8,6 +8,8 @@ import BaseState from './base-state';
  * - moving up to zoom out
  * - moving left to move in time, after
  * - moving right to move in time, before
+ *
+ * [example usage](./examples/states-zoom.html)
  */
 export default class CenteredZoomState extends BaseState {
   constructor(timeline) {

@@ -3,6 +3,8 @@ import BaseBehavior from './base-behavior';
 
 /**
  * Defines the default behavior for a breakpoint function.
+ *
+ * [example usage](./examples/layer-breakpoint.html)
  */
 export default class BreakpointBehavior extends BaseBehavior {
   edit(renderingContext, shape, datum, dx, dy, target) {

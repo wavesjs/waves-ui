@@ -7,5 +7,5 @@
 - [layer-segment](../examples/layer-segment.html)
 - [layer-trace](../examples/layer-trace.html)
 - [layer-waveform](../examples/layer-waveform.html)
-- [states-zoom](../examples/layer-zoom.html)
-- [time-contexts](../examples/layer-contexts.html)
+- [states-zoom](../examples/states-zoom.html)
+- [time-contexts](../examples/time-contexts.html)

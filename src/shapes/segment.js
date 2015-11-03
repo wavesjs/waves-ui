@@ -3,6 +3,8 @@ import BaseShape from './base-shape';
 
 /**
  * A shape to display a segment.
+ *
+ * [example usage](./examples/layer-segment.html)
  */
 export default class Segment extends BaseShape {
   getClassName() { return 'segment'; }

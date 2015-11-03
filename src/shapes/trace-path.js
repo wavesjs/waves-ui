@@ -3,6 +3,8 @@ import BaseShape from './base-shape';
 
 /**
  * A shape to display paths in a trace visualization (mean / range). (entity shape)
+ *
+ * [example usage](./examples/layer-trace.html)
  */
 export default class TracePath extends BaseShape {
   getClassName() { return 'trace-common'; }

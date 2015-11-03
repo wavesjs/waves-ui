@@ -4,6 +4,8 @@ import TimeContextBehavior from '../behaviors/time-context-behavior';
 
 /**
  * A state to interact directly with layers time contexts.
+ *
+ * [example usage, see. advanced usage](./examples/layer-waveform.html)
  */
 export default class ContextEditionState extends BaseState {
   constructor(timeline) {

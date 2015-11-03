@@ -3,6 +3,8 @@ import BaseShape from './base-shape';
 
 /**
  * A shape to display a marker.
+ *
+ * [example usage](./examples/layer-marker.html)
  */
 export default class Marker extends BaseShape {
   getClassName() { return 'marker'; }

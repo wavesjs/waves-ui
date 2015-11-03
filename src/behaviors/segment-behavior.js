@@ -3,6 +3,8 @@ import BaseBehavior from './base-behavior';
 
 /**
  * Defines the default behavior for a segment.
+ *
+ * [example usage](./examples/layer-marker.html)
  */
 export default class SegmentBehavior extends BaseBehavior {
   edit(renderingContext, shape, datum, dx, dy, target) {
