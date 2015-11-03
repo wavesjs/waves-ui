@@ -1,0 +1,1394 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExportDefaultDeclaration",
+      "declaration": {
+        "type": "ClassDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "BaseState",
+          "range": [
+            557,
+            566
+          ],
+          "loc": {
+            "start": {
+              "line": 12,
+              "column": 21
+            },
+            "end": {
+              "line": 12,
+              "column": 30
+            }
+          }
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "constructor",
+                "range": [
+                  658,
+                  669
+                ],
+                "loc": {
+                  "start": {
+                    "line": 18,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 18,
+                    "column": 13
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "timeline",
+                    "range": [
+                      670,
+                      678
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 18,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 18,
+                        "column": 22
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "computed": false,
+                          "object": {
+                            "type": "ThisExpression",
+                            "range": [
+                              801,
+                              805
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 23,
+                                "column": 4
+                              },
+                              "end": {
+                                "line": 23,
+                                "column": 8
+                              }
+                            }
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "timeline",
+                            "range": [
+                              806,
+                              814
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 23,
+                                "column": 9
+                              },
+                              "end": {
+                                "line": 23,
+                                "column": 17
+                              }
+                            }
+                          },
+                          "range": [
+                            801,
+                            814
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 23,
+                              "column": 4
+                            },
+                            "end": {
+                              "line": 23,
+                              "column": 17
+                            }
+                          }
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "name": "timeline",
+                          "range": [
+                            817,
+                            825
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 23,
+                              "column": 20
+                            },
+                            "end": {
+                              "line": 23,
+                              "column": 28
+                            }
+                          }
+                        },
+                        "range": [
+                          801,
+                          825
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 23,
+                            "column": 4
+                          },
+                          "end": {
+                            "line": 23,
+                            "column": 28
+                          }
+                        }
+                      },
+                      "range": [
+                        801,
+                        826
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 23,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 23,
+                          "column": 29
+                        }
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "Block",
+                          "value": "*\n     * A reference to the timeline on which the state should be installed.\n     * @type {Timeline}\n     ",
+                          "range": [
+                            686,
+                            796
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 19,
+                              "column": 4
+                            },
+                            "end": {
+                              "line": 22,
+                              "column": 7
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "range": [
+                    680,
+                    830
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 18,
+                      "column": 24
+                    },
+                    "end": {
+                      "line": 24,
+                      "column": 3
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  669,
+                  830
+                ],
+                "loc": {
+                  "start": {
+                    "line": 18,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 24,
+                    "column": 3
+                  }
+                }
+              },
+              "kind": "constructor",
+              "computed": false,
+              "range": [
+                658,
+                830
+              ],
+              "loc": {
+                "start": {
+                  "line": 18,
+                  "column": 2
+                },
+                "end": {
+                  "line": 24,
+                  "column": 3
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n   * Returns timeline tracks collection.\n   *\n   * @type {TrackCollection}\n   ",
+                  "range": [
+                    571,
+                    655
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 13,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 5
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n   * Returns timeline tracks collection.\n   *\n   * @type {TrackCollection<Track>}\n   ",
+                  "range": [
+                    834,
+                    925
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 26,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 30,
+                      "column": 5
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "tracks",
+                "range": [
+                  932,
+                  938
+                ],
+                "loc": {
+                  "start": {
+                    "line": 31,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 31,
+                    "column": 12
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ReturnStatement",
+                      "argument": {
+                        "type": "MemberExpression",
+                        "computed": false,
+                        "object": {
+                          "type": "MemberExpression",
+                          "computed": false,
+                          "object": {
+                            "type": "ThisExpression",
+                            "range": [
+                              954,
+                              958
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 32,
+                                "column": 11
+                              },
+                              "end": {
+                                "line": 32,
+                                "column": 15
+                              }
+                            }
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "timeline",
+                            "range": [
+                              959,
+                              967
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 32,
+                                "column": 16
+                              },
+                              "end": {
+                                "line": 32,
+                                "column": 24
+                              }
+                            }
+                          },
+                          "range": [
+                            954,
+                            967
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 32,
+                              "column": 11
+                            },
+                            "end": {
+                              "line": 32,
+                              "column": 24
+                            }
+                          }
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "tracks",
+                          "range": [
+                            968,
+                            974
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 32,
+                              "column": 25
+                            },
+                            "end": {
+                              "line": 32,
+                              "column": 31
+                            }
+                          }
+                        },
+                        "range": [
+                          954,
+                          974
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 32,
+                            "column": 11
+                          },
+                          "end": {
+                            "line": 32,
+                            "column": 31
+                          }
+                        }
+                      },
+                      "range": [
+                        947,
+                        975
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 32,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 32,
+                          "column": 32
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    941,
+                    979
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 31,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 33,
+                      "column": 3
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  938,
+                  979
+                ],
+                "loc": {
+                  "start": {
+                    "line": 31,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 33,
+                    "column": 3
+                  }
+                }
+              },
+              "kind": "get",
+              "computed": false,
+              "range": [
+                928,
+                979
+              ],
+              "loc": {
+                "start": {
+                  "line": 31,
+                  "column": 2
+                },
+                "end": {
+                  "line": 33,
+                  "column": 3
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n   * Returns timeline tracks collection.\n   *\n   * @type {TrackCollection<Track>}\n   ",
+                  "range": [
+                    834,
+                    925
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 26,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 30,
+                      "column": 5
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n   * Returns all registered layers.\n   *\n   * @type {Array<Layer>}\n   ",
+                  "range": [
+                    983,
+                    1059
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 35,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 39,
+                      "column": 5
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "layers",
+                "range": [
+                  1066,
+                  1072
+                ],
+                "loc": {
+                  "start": {
+                    "line": 40,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 40,
+                    "column": 12
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ReturnStatement",
+                      "argument": {
+                        "type": "MemberExpression",
+                        "computed": false,
+                        "object": {
+                          "type": "MemberExpression",
+                          "computed": false,
+                          "object": {
+                            "type": "MemberExpression",
+                            "computed": false,
+                            "object": {
+                              "type": "ThisExpression",
+                              "range": [
+                                1088,
+                                1092
+                              ],
+                              "loc": {
+                                "start": {
+                                  "line": 41,
+                                  "column": 11
+                                },
+                                "end": {
+                                  "line": 41,
+                                  "column": 15
+                                }
+                              }
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "name": "timeline",
+                              "range": [
+                                1093,
+                                1101
+                              ],
+                              "loc": {
+                                "start": {
+                                  "line": 41,
+                                  "column": 16
+                                },
+                                "end": {
+                                  "line": 41,
+                                  "column": 24
+                                }
+                              }
+                            },
+                            "range": [
+                              1088,
+                              1101
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 41,
+                                "column": 11
+                              },
+                              "end": {
+                                "line": 41,
+                                "column": 24
+                              }
+                            }
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "tracks",
+                            "range": [
+                              1102,
+                              1108
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 41,
+                                "column": 25
+                              },
+                              "end": {
+                                "line": 41,
+                                "column": 31
+                              }
+                            }
+                          },
+                          "range": [
+                            1088,
+                            1108
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 41,
+                              "column": 11
+                            },
+                            "end": {
+                              "line": 41,
+                              "column": 31
+                            }
+                          }
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "layers",
+                          "range": [
+                            1109,
+                            1115
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 41,
+                              "column": 32
+                            },
+                            "end": {
+                              "line": 41,
+                              "column": 38
+                            }
+                          }
+                        },
+                        "range": [
+                          1088,
+                          1115
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 41,
+                            "column": 11
+                          },
+                          "end": {
+                            "line": 41,
+                            "column": 38
+                          }
+                        }
+                      },
+                      "range": [
+                        1081,
+                        1116
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 41,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 41,
+                          "column": 39
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    1075,
+                    1120
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 40,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 42,
+                      "column": 3
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  1072,
+                  1120
+                ],
+                "loc": {
+                  "start": {
+                    "line": 40,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 42,
+                    "column": 3
+                  }
+                }
+              },
+              "kind": "get",
+              "computed": false,
+              "range": [
+                1062,
+                1120
+              ],
+              "loc": {
+                "start": {
+                  "line": 40,
+                  "column": 2
+                },
+                "end": {
+                  "line": 42,
+                  "column": 3
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n   * Returns all registered layers.\n   *\n   * @type {Array<Layer>}\n   ",
+                  "range": [
+                    983,
+                    1059
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 35,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 39,
+                      "column": 5
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n   * Called when the timeline is entering the state.\n   ",
+                  "range": [
+                    1124,
+                    1186
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 44,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 46,
+                      "column": 5
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "enter",
+                "range": [
+                  1189,
+                  1194
+                ],
+                "loc": {
+                  "start": {
+                    "line": 47,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 47,
+                    "column": 7
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    1197,
+                    1199
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 47,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 47,
+                      "column": 12
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  1194,
+                  1199
+                ],
+                "loc": {
+                  "start": {
+                    "line": 47,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 47,
+                    "column": 12
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                1189,
+                1199
+              ],
+              "loc": {
+                "start": {
+                  "line": 47,
+                  "column": 2
+                },
+                "end": {
+                  "line": 47,
+                  "column": 12
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n   * Called when the timeline is entering the state.\n   ",
+                  "range": [
+                    1124,
+                    1186
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 44,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 46,
+                      "column": 5
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n   * Called when the timeline is leaving the state.\n   ",
+                  "range": [
+                    1203,
+                    1264
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 49,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 51,
+                      "column": 5
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "exit",
+                "range": [
+                  1267,
+                  1271
+                ],
+                "loc": {
+                  "start": {
+                    "line": 52,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 52,
+                    "column": 6
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    1274,
+                    1276
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 52,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 52,
+                      "column": 11
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  1271,
+                  1276
+                ],
+                "loc": {
+                  "start": {
+                    "line": 52,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 52,
+                    "column": 11
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                1267,
+                1276
+              ],
+              "loc": {
+                "start": {
+                  "line": 52,
+                  "column": 2
+                },
+                "end": {
+                  "line": 52,
+                  "column": 11
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n   * Called when the timeline is leaving the state.\n   ",
+                  "range": [
+                    1203,
+                    1264
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 49,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 51,
+                      "column": 5
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n   * Main interface method to override when creating a new `State`. Handle event\n   * from mouse or keyboard, should define behavior according to the event\n   * (aka. mousedown, mouseup, ...).\n   *\n   * @param {WaveEvent} e - the event to process.\n   * @param {Array} hitLayers - the layers hit by the mouse event (if surface\n   * event).\n   ",
+                  "range": [
+                    1280,
+                    1628
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 54,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 62,
+                      "column": 5
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "handleEvent",
+                "range": [
+                  1631,
+                  1642
+                ],
+                "loc": {
+                  "start": {
+                    "line": 63,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 63,
+                    "column": 13
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "e",
+                    "range": [
+                      1643,
+                      1644
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 63,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 63,
+                        "column": 15
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "hitLayers",
+                    "range": [
+                      1646,
+                      1655
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 63,
+                        "column": 17
+                      },
+                      "end": {
+                        "line": 63,
+                        "column": 26
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    1657,
+                    1659
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 63,
+                      "column": 28
+                    },
+                    "end": {
+                      "line": 63,
+                      "column": 30
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  1642,
+                  1659
+                ],
+                "loc": {
+                  "start": {
+                    "line": 63,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 63,
+                    "column": 30
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                1631,
+                1659
+              ],
+              "loc": {
+                "start": {
+                  "line": 63,
+                  "column": 2
+                },
+                "end": {
+                  "line": 63,
+                  "column": 30
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n   * Main interface method to override when creating a new `State`. Handle event\n   * from mouse or keyboard, should define behavior according to the event\n   * (aka. mousedown, mouseup, ...).\n   *\n   * @param {WaveEvent} e - the event to process.\n   * @param {Array} hitLayers - the layers hit by the mouse event (if surface\n   * event).\n   ",
+                  "range": [
+                    1280,
+                    1628
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 54,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 62,
+                      "column": 5
+                    }
+                  }
+                }
+              ],
+              "static": false
+            }
+          ],
+          "range": [
+            567,
+            1661
+          ],
+          "loc": {
+            "start": {
+              "line": 12,
+              "column": 31
+            },
+            "end": {
+              "line": 64,
+              "column": 1
+            }
+          }
+        },
+        "range": [
+          551,
+          1661
+        ],
+        "loc": {
+          "start": {
+            "line": 12,
+            "column": 15
+          },
+          "end": {
+            "line": 64,
+            "column": 1
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * `State` instances are used to define the application logic by precising\n * specific user interaction cases, and how they impact the overal temporal\n * representation. The abstractions extending this base class should be\n * considered as the main interface between the visualization and the\n * application logic. All provided states should be seen as simple examples for\n * rapid prototyping,\n *\n * States manage interactions like zooming, browsing, or editing the timeline.\n * Customized states should extend this BaseState.\n ",
+            "range": [
+              0,
+              535
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 11,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": []
+      },
+      "range": [
+        536,
+        1661
+      ],
+      "loc": {
+        "start": {
+          "line": 12,
+          "column": 0
+        },
+        "end": {
+          "line": 64,
+          "column": 1
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * `State` instances are used to define the application logic by precising\n * specific user interaction cases, and how they impact the overal temporal\n * representation. The abstractions extending this base class should be\n * considered as the main interface between the visualization and the\n * application logic. All provided states should be seen as simple examples for\n * rapid prototyping,\n *\n * States manage interactions like zooming, browsing, or editing the timeline.\n * Customized states should extend this BaseState.\n ",
+          "range": [
+            0,
+            535
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 11,
+              "column": 3
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "sourceType": "module",
+  "range": [
+    536,
+    1661
+  ],
+  "loc": {
+    "start": {
+      "line": 12,
+      "column": 0
+    },
+    "end": {
+      "line": 64,
+      "column": 1
+    }
+  },
+  "comments": [
+    {
+      "type": "Block",
+      "value": "*\n * `State` instances are used to define the application logic by precising\n * specific user interaction cases, and how they impact the overal temporal\n * representation. The abstractions extending this base class should be\n * considered as the main interface between the visualization and the\n * application logic. All provided states should be seen as simple examples for\n * rapid prototyping,\n *\n * States manage interactions like zooming, browsing, or editing the timeline.\n * Customized states should extend this BaseState.\n ",
+      "range": [
+        0,
+        535
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n   * Returns timeline tracks collection.\n   *\n   * @type {TrackCollection}\n   ",
+      "range": [
+        571,
+        655
+      ],
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 2
+        },
+        "end": {
+          "line": 17,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     * A reference to the timeline on which the state should be installed.\n     * @type {Timeline}\n     ",
+      "range": [
+        686,
+        796
+      ],
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 4
+        },
+        "end": {
+          "line": 22,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n   * Returns timeline tracks collection.\n   *\n   * @type {TrackCollection<Track>}\n   ",
+      "range": [
+        834,
+        925
+      ],
+      "loc": {
+        "start": {
+          "line": 26,
+          "column": 2
+        },
+        "end": {
+          "line": 30,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n   * Returns all registered layers.\n   *\n   * @type {Array<Layer>}\n   ",
+      "range": [
+        983,
+        1059
+      ],
+      "loc": {
+        "start": {
+          "line": 35,
+          "column": 2
+        },
+        "end": {
+          "line": 39,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n   * Called when the timeline is entering the state.\n   ",
+      "range": [
+        1124,
+        1186
+      ],
+      "loc": {
+        "start": {
+          "line": 44,
+          "column": 2
+        },
+        "end": {
+          "line": 46,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n   * Called when the timeline is leaving the state.\n   ",
+      "range": [
+        1203,
+        1264
+      ],
+      "loc": {
+        "start": {
+          "line": 49,
+          "column": 2
+        },
+        "end": {
+          "line": 51,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n   * Main interface method to override when creating a new `State`. Handle event\n   * from mouse or keyboard, should define behavior according to the event\n   * (aka. mousedown, mouseup, ...).\n   *\n   * @param {WaveEvent} e - the event to process.\n   * @param {Array} hitLayers - the layers hit by the mouse event (if surface\n   * event).\n   ",
+      "range": [
+        1280,
+        1628
+      ],
+      "loc": {
+        "start": {
+          "line": 54,
+          "column": 2
+        },
+        "end": {
+          "line": 62,
+          "column": 5
+        }
+      }
+    }
+  ]
+}

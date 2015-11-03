@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl">
+  <title data-ice="title">WavesJS UI API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/wavesjs/ui" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">axis</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/axis/axis-layer.js~AxisLayer.html">AxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-gridAxisGenerator">gridAxisGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-timeAxisGenerator">timeAxisGenerator</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">behaviors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/base-behavior.js~BaseBehavior.html">BaseBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/breakpoint-behavior.js~BreakpointBehavior.html">BreakpointBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/marker-behavior.js~MarkerBehavior.html">MarkerBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/segment-behavior.js~SegmentBehavior.html">SegmentBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/time-context-behavior.js~TimeContextBehavior.html">TimeContextBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/trace-behavior.js~TraceBehavior.html">TraceBehavior</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/layer-time-context.js~LayerTimeContext.html">LayerTimeContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/layer.js~Layer.html">Layer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/timeline-time-context.js~TimelineTimeContext.html">TimelineTimeContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/timeline.js~Timeline.html">Timeline</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/track-collection.js~TrackCollection.html">TrackCollection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/track.js~Track.html">Track</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">helpers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/annotated-marker-layer.js~AnnotatedMarkerLayer.html">AnnotatedMarkerLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/annotated-segment-layer.js~AnnotatedSegmentLayer.html">AnnotatedSegmentLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/breakpoint-layer.js~BreakpointLayer.html">BreakpointLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/cursor-layer.js~CursorLayer.html">CursorLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/grid-axis-layer.js~GridAxisLayer.html">GridAxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/marker-layer.js~MarkerLayer.html">MarkerLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/segment-layer.js~SegmentLayer.html">SegmentLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/tick-layer.js~TickLayer.html">TickLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/time-axis-layer.js~TimeAxisLayer.html">TimeAxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/trace-layer.js~TraceLayer.html">TraceLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/waveform-layer.js~WaveformLayer.html">WaveformLayer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interactions</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interactions/event-source.js~EventSource.html">EventSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interactions/keyboard.js~Keyboard.html">Keyboard</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interactions/surface.js~Surface.html">Surface</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interactions/wave-event.js~WaveEvent.html">WaveEvent</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">shapes</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/annotated-marker.js~AnnotatedMarker.html">AnnotatedMarker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/annotated-segment.js~AnnotatedSegment.html">AnnotatedSegment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/base-shape.js~BaseShape.html">BaseShape</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/cursor.js~Cursor.html">Cursor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/dot.js~Dot.html">Dot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/line.js~Line.html">Line</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/segment.js~Segment.html">Segment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/ticks.js~Ticks.html">Ticks</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/trace-dots.js~TraceDots.html">TraceDots</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/trace-path.js~TracePath.html">TracePath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/waveform.js~Waveform.html">Waveform</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">states</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/base-state.js~BaseState.html">BaseState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/breakpoint-state.js~BreakpointState.html">BreakpointState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/brush-zoom-state.js~BrushZoomState.html">BrushZoomState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/centered-zoom-state.js~CenteredZoomState.html">CenteredZoomState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/context-edition-state.js~ContextEditionState.html">ContextEditionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/edition-state.js~EditionState.html">EditionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/selection-state.js~SelectionState.html">SelectionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/simple-edition-state.js~SimpleEditionState.html">SimpleEditionState</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">utils</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils/orthogonal-data.js~OrthogonalData.html">OrthogonalData</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="waves-ui">waves - ui</h1>
+<blockquote>
+<p>A library to display and edit audio data and timeseries data in the browser.</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/wavesjs/ui/master/examples/assets/waves-ui-screenshot.png" alt="waves-ui screenshot"></p>
+<p><a href="http://wavesjs.github.io/ui/manual/example.html#examples">Basic examples</a> and 
+<a href="http://wavesjs.github.io/ui/">Full documentation</a></p>
+<h2 id="goals-and-features">Goals and Features</h2>
+<p><em>waves - ui</em> proposes primitives to build interactive temporal visualizations of audio and timeseries data for in-browser rendering. 
+It has been designed by abstracting common features required in both music production environments and analysis authoring tools. 
+Its main goal is to ease the development of audio-based web applications requiring interactive temporal visualizations. 
+Its components have been designed to easily create aligned superposed and/or juxtaposed representations of audio signals and related data streams such as audio descriptors, motion capture signals and descriptors as well as event or segmentation markers and annotations.</p>
+<h2 id="library-overview">Library Overview</h2>
+<p>Synthetic view of the library components and their interconnections:</p>
+<p><code>Timeline</code> 1&#x2B04;n <code>Track</code> 1&#x2B04;n <code>Layer</code> and its associated <code>Shape</code>: <code>Waveform</code>, <code>Marker</code>, <code>Segment</code> ...</p>
+<h3 id="timeline">Timeline</h3>
+<p>The <code>timeline</code> is the main entry point of a temporal representation, it:</p>
+<ul>
+<li>contains factories to manage its <code>tracks</code> and <code>layers</code>,</li>
+<li>provides the context for any visualization of temporal data, gets or sets the view overs its <code>tracks</code> through <code>offset</code>, <code>zoom</code>, <code>pixelsPerSecond</code>, <code>visibleWidth</code>,</li>
+<li>is the central hub for all user interaction events (keyboard, mouse),</li>
+<li>holds the current interaction <code>state</code> which defines how the different timeline elements (tracks, layers, shapes) respond to those events.</li>
+</ul>
+<h3 id="track">Track</h3>
+<p>The <code>tracks</code> simply organize the vertical arrangement of the <code>layers</code>. They are similar to the tracks of a Digital Audio Workstation. </p>
+<p>Each <code>track</code> is associated to a DOM element.</p>
+<h3 id="layer">Layer</h3>
+<p>The <code>layers</code>: </p>
+<ul>
+<li>contain a reference to the audio data or timeserie, </li>
+<li>have <code>start</code>, <code>offset</code>, <code>duration</code>, <code>stretchRatio</code> getters/setters to position it on the overall timeline,</li>
+<li>configure a <code>Shape</code> to display the data, </li>
+<li>set a <code>Behavior</code> to modify the data (both programmatically or based on user interaction dispatched from the <code>timeline</code> and its current <code>state</code>). </li>
+</ul>
+<p>Each <code>layer</code> is associated to a DOM element.</p>
+<h3 id="shape">Shape</h3>
+<p>The library comes with usual shapes to display audio data and timeseries: </p>
+<ul>
+<li><code>waveform</code></li>
+<li><code>segment</code> and <code>annotated-segment</code></li>
+<li><code>marker</code> and <code>annotated-marker</code> </li>
+<li><code>dot</code> and <code>line</code>, for break point functions (used for automation curves)</li>
+<li><code>trace</code></li>
+<li><code>cursor</code> </li>
+</ul>
+<p>The library also provides a template (<code>BaseShape</code>) to create custom shapes to display the data.</p>
+<h3 id="interactions-states">Interactions - states</h3>
+<p>The <code>timeline</code> registers events to listen to from: </p>
+<ul>
+<li>the keyboard,</li>
+<li>the mouse upon each of its tracks. </li>
+</ul>
+<p>A <code>state</code> of the timeline sorts these events and call the appropriate methods to:</p>
+<ul>
+<li>browse and zoom into the tracks (<code>BrushZoomState</code>, <code>CenteredZoomState</code>)</li>
+<li>modify layers time characteristics (<code>ContextEditionState</code>)</li>
+<li>modify layers data (<code>EditionState</code>)</li>
+<li>select layers time characteristics, data (<code>SelectionState</code>)</li>
+</ul>
+<p><code>BaseState</code> is the base class to implement a specific <code>state</code> thus defining a custom event handlers for the <code>Timeline</code>.</p>
+<h3 id="behavior">Behavior</h3>
+<p>The <code>behaviors</code> give an entry point to modify a shape or a layer directly from its rendering. It allows you to programmatically move DOM elements associated to a shape or a layer and modify accordingly the data associated to it. </p>
+<p>The <code>BaseBehavior</code> is the base class to define custom interaction with a shape.</p>
+<h3 id="utils">Utils</h3>
+<p>Traditionally, timeseries data can be formated like an array of object or multiple arrays. An <code>OrthogonalData</code> instance can format the datas in one or another formats.</p>
+<h2 id="use">Use</h2>
+<h4 id="commonjs-browserify-">CommonJS (browserify)</h4>
+<p>install with npm</p>
+<pre><code class="lang-bash"><code class="source-code prettyprint">npm install --save wavesjs/ui</code>
+</code></pre>
+<p>consume in your modules</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">var wavesUI = require(&apos;waves-ui&apos;);</code>
+</code></pre>
+<h4 id="amd-requirejs-">AMD (requireJS)</h4>
+<p>add the waves library to your config</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">requirejs.config({
+  paths: {
+    waves: &apos;path/to/waves-ui.umd&apos;
+  }
+});</code>
+</code></pre>
+<p>consume in your modules</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">define([&apos;waves-ui&apos;], function(wavesUI) {
+  var timeline = wavesUI.timeline();
+  // ...
+});</code>
+</code></pre>
+<h4 id="global">Global</h4>
+<p>Add the script tag in your html file at the bottom of the <code>&lt;body&gt;</code></p>
+<pre><code class="lang-html"><code class="source-code prettyprint">&lt;script scr=&quot;/path/to/waves-ui.umd.js&quot;&gt;&lt;/script&gt;</code>
+</code></pre>
+<p>The library is exposed in the <code>window.wavesUI</code> namespace.</p>
+<h2 id="custom-build">Custom build</h2>
+<p>In order to create your own custom build, you need to
+remove/comment all the component you don&apos;t need from <code>waves-ui.js</code>, then run</p>
+<pre><code class="lang-bash"><code class="source-code prettyprint">npm run bundle</code>
+</code></pre>
+<p><em><code>core/timeline</code>, <code>core/layer</code>, and <code>helpers/utils</code> are mandatory</em></p>
+<h2 id="pull-request-tests-and-coverage">Pull-Request, Tests and Coverage</h2>
+<p>To collaborate, you need to install dependencies referenced in &quot;globalDependencies[nonStandard]&quot; key of package.json so that <code>npm run test</code>, <code>npm run coverage</code> will correctly run. (We didn&apos;t put this dependencies in the package.json because you have probably already installed these ones globally and because they are huge.)</p>
+<p>Pull-Request are reviewed as long as they: </p>
+<ul>
+<li>provide test </li>
+<li>keep a good code coverage</li>
+<li>fill an explained use-case regarding the library goals</li>
+</ul>
+<h2 id="license">License</h2>
+<p>This module is released under the BSD-3-Clause license.</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>This code is part of the <a href="http://wave.ircam.fr">WAVE</a> project, funded by ANR (The French National Research Agency).</p>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.1)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

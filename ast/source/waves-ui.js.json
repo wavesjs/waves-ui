@@ -1,0 +1,7988 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "LayerTimeContext",
+            "range": [
+              15,
+              31
+            ],
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 7
+              },
+              "end": {
+                "line": 2,
+                "column": 23
+              }
+            }
+          },
+          "range": [
+            15,
+            31
+          ],
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 7
+            },
+            "end": {
+              "line": 2,
+              "column": 23
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./core/layer-time-context",
+        "raw": "'./core/layer-time-context'",
+        "range": [
+          37,
+          64
+        ],
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 29
+          },
+          "end": {
+            "line": 2,
+            "column": 56
+          }
+        }
+      },
+      "range": [
+        8,
+        65
+      ],
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 57
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Line",
+          "value": " core",
+          "range": [
+            0,
+            7
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "Layer",
+            "range": [
+              73,
+              78
+            ],
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 7
+              },
+              "end": {
+                "line": 3,
+                "column": 12
+              }
+            }
+          },
+          "range": [
+            73,
+            78
+          ],
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 7
+            },
+            "end": {
+              "line": 3,
+              "column": 12
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./core/layer",
+        "raw": "'./core/layer'",
+        "range": [
+          84,
+          98
+        ],
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 18
+          },
+          "end": {
+            "line": 3,
+            "column": 32
+          }
+        }
+      },
+      "range": [
+        66,
+        99
+      ],
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 33
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "namespace",
+            "range": [
+              107,
+              116
+            ],
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 7
+              },
+              "end": {
+                "line": 4,
+                "column": 16
+              }
+            }
+          },
+          "range": [
+            107,
+            116
+          ],
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 7
+            },
+            "end": {
+              "line": 4,
+              "column": 16
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./core/namespace",
+        "raw": "'./core/namespace'",
+        "range": [
+          122,
+          140
+        ],
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 22
+          },
+          "end": {
+            "line": 4,
+            "column": 40
+          }
+        }
+      },
+      "range": [
+        100,
+        141
+      ],
+      "loc": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 4,
+          "column": 41
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "TimelineTimeContext",
+            "range": [
+              149,
+              168
+            ],
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 7
+              },
+              "end": {
+                "line": 5,
+                "column": 26
+              }
+            }
+          },
+          "range": [
+            149,
+            168
+          ],
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 7
+            },
+            "end": {
+              "line": 5,
+              "column": 26
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./core/timeline-time-context",
+        "raw": "'./core/timeline-time-context'",
+        "range": [
+          174,
+          204
+        ],
+        "loc": {
+          "start": {
+            "line": 5,
+            "column": 32
+          },
+          "end": {
+            "line": 5,
+            "column": 62
+          }
+        }
+      },
+      "range": [
+        142,
+        205
+      ],
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 63
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "Timeline",
+            "range": [
+              213,
+              221
+            ],
+            "loc": {
+              "start": {
+                "line": 6,
+                "column": 7
+              },
+              "end": {
+                "line": 6,
+                "column": 15
+              }
+            }
+          },
+          "range": [
+            213,
+            221
+          ],
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 7
+            },
+            "end": {
+              "line": 6,
+              "column": 15
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./core/timeline",
+        "raw": "'./core/timeline'",
+        "range": [
+          227,
+          244
+        ],
+        "loc": {
+          "start": {
+            "line": 6,
+            "column": 21
+          },
+          "end": {
+            "line": 6,
+            "column": 38
+          }
+        }
+      },
+      "range": [
+        206,
+        245
+      ],
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 0
+        },
+        "end": {
+          "line": 6,
+          "column": 39
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "TrackCollection",
+            "range": [
+              253,
+              268
+            ],
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 7
+              },
+              "end": {
+                "line": 7,
+                "column": 22
+              }
+            }
+          },
+          "range": [
+            253,
+            268
+          ],
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 7
+            },
+            "end": {
+              "line": 7,
+              "column": 22
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./core/track-collection",
+        "raw": "'./core/track-collection'",
+        "range": [
+          274,
+          299
+        ],
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 28
+          },
+          "end": {
+            "line": 7,
+            "column": 53
+          }
+        }
+      },
+      "range": [
+        246,
+        300
+      ],
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 7,
+          "column": 54
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "Track",
+            "range": [
+              308,
+              313
+            ],
+            "loc": {
+              "start": {
+                "line": 8,
+                "column": 7
+              },
+              "end": {
+                "line": 8,
+                "column": 12
+              }
+            }
+          },
+          "range": [
+            308,
+            313
+          ],
+          "loc": {
+            "start": {
+              "line": 8,
+              "column": 7
+            },
+            "end": {
+              "line": 8,
+              "column": 12
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./core/track",
+        "raw": "'./core/track'",
+        "range": [
+          319,
+          333
+        ],
+        "loc": {
+          "start": {
+            "line": 8,
+            "column": 18
+          },
+          "end": {
+            "line": 8,
+            "column": 32
+          }
+        }
+      },
+      "range": [
+        301,
+        334
+      ],
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 0
+        },
+        "end": {
+          "line": 8,
+          "column": 33
+        }
+      },
+      "trailingComments": [
+        {
+          "type": "Line",
+          "value": " shapes",
+          "range": [
+            336,
+            345
+          ],
+          "loc": {
+            "start": {
+              "line": 10,
+              "column": 0
+            },
+            "end": {
+              "line": 10,
+              "column": 9
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "AnnotatedMarker",
+            "range": [
+              353,
+              368
+            ],
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 7
+              },
+              "end": {
+                "line": 11,
+                "column": 22
+              }
+            }
+          },
+          "range": [
+            353,
+            368
+          ],
+          "loc": {
+            "start": {
+              "line": 11,
+              "column": 7
+            },
+            "end": {
+              "line": 11,
+              "column": 22
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./shapes/annotated-marker",
+        "raw": "'./shapes/annotated-marker'",
+        "range": [
+          374,
+          401
+        ],
+        "loc": {
+          "start": {
+            "line": 11,
+            "column": 28
+          },
+          "end": {
+            "line": 11,
+            "column": 55
+          }
+        }
+      },
+      "range": [
+        346,
+        402
+      ],
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 56
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Line",
+          "value": " shapes",
+          "range": [
+            336,
+            345
+          ],
+          "loc": {
+            "start": {
+              "line": 10,
+              "column": 0
+            },
+            "end": {
+              "line": 10,
+              "column": 9
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "AnnotatedSegment",
+            "range": [
+              410,
+              426
+            ],
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 7
+              },
+              "end": {
+                "line": 12,
+                "column": 23
+              }
+            }
+          },
+          "range": [
+            410,
+            426
+          ],
+          "loc": {
+            "start": {
+              "line": 12,
+              "column": 7
+            },
+            "end": {
+              "line": 12,
+              "column": 23
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./shapes/annotated-segment",
+        "raw": "'./shapes/annotated-segment'",
+        "range": [
+          432,
+          460
+        ],
+        "loc": {
+          "start": {
+            "line": 12,
+            "column": 29
+          },
+          "end": {
+            "line": 12,
+            "column": 57
+          }
+        }
+      },
+      "range": [
+        403,
+        461
+      ],
+      "loc": {
+        "start": {
+          "line": 12,
+          "column": 0
+        },
+        "end": {
+          "line": 12,
+          "column": 58
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "BaseShape",
+            "range": [
+              469,
+              478
+            ],
+            "loc": {
+              "start": {
+                "line": 13,
+                "column": 7
+              },
+              "end": {
+                "line": 13,
+                "column": 16
+              }
+            }
+          },
+          "range": [
+            469,
+            478
+          ],
+          "loc": {
+            "start": {
+              "line": 13,
+              "column": 7
+            },
+            "end": {
+              "line": 13,
+              "column": 16
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./shapes/base-shape",
+        "raw": "'./shapes/base-shape'",
+        "range": [
+          484,
+          505
+        ],
+        "loc": {
+          "start": {
+            "line": 13,
+            "column": 22
+          },
+          "end": {
+            "line": 13,
+            "column": 43
+          }
+        }
+      },
+      "range": [
+        462,
+        506
+      ],
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 0
+        },
+        "end": {
+          "line": 13,
+          "column": 44
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "Cursor",
+            "range": [
+              514,
+              520
+            ],
+            "loc": {
+              "start": {
+                "line": 14,
+                "column": 7
+              },
+              "end": {
+                "line": 14,
+                "column": 13
+              }
+            }
+          },
+          "range": [
+            514,
+            520
+          ],
+          "loc": {
+            "start": {
+              "line": 14,
+              "column": 7
+            },
+            "end": {
+              "line": 14,
+              "column": 13
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./shapes/cursor",
+        "raw": "'./shapes/cursor'",
+        "range": [
+          526,
+          543
+        ],
+        "loc": {
+          "start": {
+            "line": 14,
+            "column": 19
+          },
+          "end": {
+            "line": 14,
+            "column": 36
+          }
+        }
+      },
+      "range": [
+        507,
+        544
+      ],
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 0
+        },
+        "end": {
+          "line": 14,
+          "column": 37
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "Dot",
+            "range": [
+              552,
+              555
+            ],
+            "loc": {
+              "start": {
+                "line": 15,
+                "column": 7
+              },
+              "end": {
+                "line": 15,
+                "column": 10
+              }
+            }
+          },
+          "range": [
+            552,
+            555
+          ],
+          "loc": {
+            "start": {
+              "line": 15,
+              "column": 7
+            },
+            "end": {
+              "line": 15,
+              "column": 10
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./shapes/dot",
+        "raw": "'./shapes/dot'",
+        "range": [
+          561,
+          575
+        ],
+        "loc": {
+          "start": {
+            "line": 15,
+            "column": 16
+          },
+          "end": {
+            "line": 15,
+            "column": 30
+          }
+        }
+      },
+      "range": [
+        545,
+        576
+      ],
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 0
+        },
+        "end": {
+          "line": 15,
+          "column": 31
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "Line",
+            "range": [
+              584,
+              588
+            ],
+            "loc": {
+              "start": {
+                "line": 16,
+                "column": 7
+              },
+              "end": {
+                "line": 16,
+                "column": 11
+              }
+            }
+          },
+          "range": [
+            584,
+            588
+          ],
+          "loc": {
+            "start": {
+              "line": 16,
+              "column": 7
+            },
+            "end": {
+              "line": 16,
+              "column": 11
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./shapes/line",
+        "raw": "'./shapes/line'",
+        "range": [
+          594,
+          609
+        ],
+        "loc": {
+          "start": {
+            "line": 16,
+            "column": 17
+          },
+          "end": {
+            "line": 16,
+            "column": 32
+          }
+        }
+      },
+      "range": [
+        577,
+        610
+      ],
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 0
+        },
+        "end": {
+          "line": 16,
+          "column": 33
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "Marker",
+            "range": [
+              618,
+              624
+            ],
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 7
+              },
+              "end": {
+                "line": 17,
+                "column": 13
+              }
+            }
+          },
+          "range": [
+            618,
+            624
+          ],
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 7
+            },
+            "end": {
+              "line": 17,
+              "column": 13
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./shapes/marker",
+        "raw": "'./shapes/marker'",
+        "range": [
+          630,
+          647
+        ],
+        "loc": {
+          "start": {
+            "line": 17,
+            "column": 19
+          },
+          "end": {
+            "line": 17,
+            "column": 36
+          }
+        }
+      },
+      "range": [
+        611,
+        648
+      ],
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 0
+        },
+        "end": {
+          "line": 17,
+          "column": 37
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "Segment",
+            "range": [
+              656,
+              663
+            ],
+            "loc": {
+              "start": {
+                "line": 18,
+                "column": 7
+              },
+              "end": {
+                "line": 18,
+                "column": 14
+              }
+            }
+          },
+          "range": [
+            656,
+            663
+          ],
+          "loc": {
+            "start": {
+              "line": 18,
+              "column": 7
+            },
+            "end": {
+              "line": 18,
+              "column": 14
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./shapes/segment",
+        "raw": "'./shapes/segment'",
+        "range": [
+          669,
+          687
+        ],
+        "loc": {
+          "start": {
+            "line": 18,
+            "column": 20
+          },
+          "end": {
+            "line": 18,
+            "column": 38
+          }
+        }
+      },
+      "range": [
+        649,
+        688
+      ],
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 0
+        },
+        "end": {
+          "line": 18,
+          "column": 39
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "Ticks",
+            "range": [
+              696,
+              701
+            ],
+            "loc": {
+              "start": {
+                "line": 19,
+                "column": 7
+              },
+              "end": {
+                "line": 19,
+                "column": 12
+              }
+            }
+          },
+          "range": [
+            696,
+            701
+          ],
+          "loc": {
+            "start": {
+              "line": 19,
+              "column": 7
+            },
+            "end": {
+              "line": 19,
+              "column": 12
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./shapes/ticks",
+        "raw": "'./shapes/ticks'",
+        "range": [
+          707,
+          723
+        ],
+        "loc": {
+          "start": {
+            "line": 19,
+            "column": 18
+          },
+          "end": {
+            "line": 19,
+            "column": 34
+          }
+        }
+      },
+      "range": [
+        689,
+        724
+      ],
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 0
+        },
+        "end": {
+          "line": 19,
+          "column": 35
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "TracePath",
+            "range": [
+              732,
+              741
+            ],
+            "loc": {
+              "start": {
+                "line": 20,
+                "column": 7
+              },
+              "end": {
+                "line": 20,
+                "column": 16
+              }
+            }
+          },
+          "range": [
+            732,
+            741
+          ],
+          "loc": {
+            "start": {
+              "line": 20,
+              "column": 7
+            },
+            "end": {
+              "line": 20,
+              "column": 16
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./shapes/trace-path",
+        "raw": "'./shapes/trace-path'",
+        "range": [
+          747,
+          768
+        ],
+        "loc": {
+          "start": {
+            "line": 20,
+            "column": 22
+          },
+          "end": {
+            "line": 20,
+            "column": 43
+          }
+        }
+      },
+      "range": [
+        725,
+        769
+      ],
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 0
+        },
+        "end": {
+          "line": 20,
+          "column": 44
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "TraceDots",
+            "range": [
+              777,
+              786
+            ],
+            "loc": {
+              "start": {
+                "line": 21,
+                "column": 7
+              },
+              "end": {
+                "line": 21,
+                "column": 16
+              }
+            }
+          },
+          "range": [
+            777,
+            786
+          ],
+          "loc": {
+            "start": {
+              "line": 21,
+              "column": 7
+            },
+            "end": {
+              "line": 21,
+              "column": 16
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./shapes/trace-dots",
+        "raw": "'./shapes/trace-dots'",
+        "range": [
+          792,
+          813
+        ],
+        "loc": {
+          "start": {
+            "line": 21,
+            "column": 22
+          },
+          "end": {
+            "line": 21,
+            "column": 43
+          }
+        }
+      },
+      "range": [
+        770,
+        814
+      ],
+      "loc": {
+        "start": {
+          "line": 21,
+          "column": 0
+        },
+        "end": {
+          "line": 21,
+          "column": 44
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "Waveform",
+            "range": [
+              822,
+              830
+            ],
+            "loc": {
+              "start": {
+                "line": 22,
+                "column": 7
+              },
+              "end": {
+                "line": 22,
+                "column": 15
+              }
+            }
+          },
+          "range": [
+            822,
+            830
+          ],
+          "loc": {
+            "start": {
+              "line": 22,
+              "column": 7
+            },
+            "end": {
+              "line": 22,
+              "column": 15
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./shapes/waveform",
+        "raw": "'./shapes/waveform'",
+        "range": [
+          836,
+          855
+        ],
+        "loc": {
+          "start": {
+            "line": 22,
+            "column": 21
+          },
+          "end": {
+            "line": 22,
+            "column": 40
+          }
+        }
+      },
+      "range": [
+        815,
+        856
+      ],
+      "loc": {
+        "start": {
+          "line": 22,
+          "column": 0
+        },
+        "end": {
+          "line": 22,
+          "column": 41
+        }
+      },
+      "trailingComments": [
+        {
+          "type": "Line",
+          "value": " behaviors",
+          "range": [
+            858,
+            870
+          ],
+          "loc": {
+            "start": {
+              "line": 24,
+              "column": 0
+            },
+            "end": {
+              "line": 24,
+              "column": 12
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "BaseBehavior",
+            "range": [
+              878,
+              890
+            ],
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 7
+              },
+              "end": {
+                "line": 25,
+                "column": 19
+              }
+            }
+          },
+          "range": [
+            878,
+            890
+          ],
+          "loc": {
+            "start": {
+              "line": 25,
+              "column": 7
+            },
+            "end": {
+              "line": 25,
+              "column": 19
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./behaviors/base-behavior",
+        "raw": "'./behaviors/base-behavior'",
+        "range": [
+          896,
+          923
+        ],
+        "loc": {
+          "start": {
+            "line": 25,
+            "column": 25
+          },
+          "end": {
+            "line": 25,
+            "column": 52
+          }
+        }
+      },
+      "range": [
+        871,
+        924
+      ],
+      "loc": {
+        "start": {
+          "line": 25,
+          "column": 0
+        },
+        "end": {
+          "line": 25,
+          "column": 53
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Line",
+          "value": " behaviors",
+          "range": [
+            858,
+            870
+          ],
+          "loc": {
+            "start": {
+              "line": 24,
+              "column": 0
+            },
+            "end": {
+              "line": 24,
+              "column": 12
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "BreakpointBehavior",
+            "range": [
+              932,
+              950
+            ],
+            "loc": {
+              "start": {
+                "line": 26,
+                "column": 7
+              },
+              "end": {
+                "line": 26,
+                "column": 25
+              }
+            }
+          },
+          "range": [
+            932,
+            950
+          ],
+          "loc": {
+            "start": {
+              "line": 26,
+              "column": 7
+            },
+            "end": {
+              "line": 26,
+              "column": 25
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./behaviors/breakpoint-behavior",
+        "raw": "'./behaviors/breakpoint-behavior'",
+        "range": [
+          956,
+          989
+        ],
+        "loc": {
+          "start": {
+            "line": 26,
+            "column": 31
+          },
+          "end": {
+            "line": 26,
+            "column": 64
+          }
+        }
+      },
+      "range": [
+        925,
+        990
+      ],
+      "loc": {
+        "start": {
+          "line": 26,
+          "column": 0
+        },
+        "end": {
+          "line": 26,
+          "column": 65
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "MarkerBehavior",
+            "range": [
+              998,
+              1012
+            ],
+            "loc": {
+              "start": {
+                "line": 27,
+                "column": 7
+              },
+              "end": {
+                "line": 27,
+                "column": 21
+              }
+            }
+          },
+          "range": [
+            998,
+            1012
+          ],
+          "loc": {
+            "start": {
+              "line": 27,
+              "column": 7
+            },
+            "end": {
+              "line": 27,
+              "column": 21
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./behaviors/marker-behavior",
+        "raw": "'./behaviors/marker-behavior'",
+        "range": [
+          1018,
+          1047
+        ],
+        "loc": {
+          "start": {
+            "line": 27,
+            "column": 27
+          },
+          "end": {
+            "line": 27,
+            "column": 56
+          }
+        }
+      },
+      "range": [
+        991,
+        1048
+      ],
+      "loc": {
+        "start": {
+          "line": 27,
+          "column": 0
+        },
+        "end": {
+          "line": 27,
+          "column": 57
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "SegmentBehavior",
+            "range": [
+              1056,
+              1071
+            ],
+            "loc": {
+              "start": {
+                "line": 28,
+                "column": 7
+              },
+              "end": {
+                "line": 28,
+                "column": 22
+              }
+            }
+          },
+          "range": [
+            1056,
+            1071
+          ],
+          "loc": {
+            "start": {
+              "line": 28,
+              "column": 7
+            },
+            "end": {
+              "line": 28,
+              "column": 22
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./behaviors/segment-behavior",
+        "raw": "'./behaviors/segment-behavior'",
+        "range": [
+          1077,
+          1107
+        ],
+        "loc": {
+          "start": {
+            "line": 28,
+            "column": 28
+          },
+          "end": {
+            "line": 28,
+            "column": 58
+          }
+        }
+      },
+      "range": [
+        1049,
+        1108
+      ],
+      "loc": {
+        "start": {
+          "line": 28,
+          "column": 0
+        },
+        "end": {
+          "line": 28,
+          "column": 59
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "TimeContextBehavior",
+            "range": [
+              1116,
+              1135
+            ],
+            "loc": {
+              "start": {
+                "line": 29,
+                "column": 7
+              },
+              "end": {
+                "line": 29,
+                "column": 26
+              }
+            }
+          },
+          "range": [
+            1116,
+            1135
+          ],
+          "loc": {
+            "start": {
+              "line": 29,
+              "column": 7
+            },
+            "end": {
+              "line": 29,
+              "column": 26
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./behaviors/time-context-behavior",
+        "raw": "'./behaviors/time-context-behavior'",
+        "range": [
+          1141,
+          1176
+        ],
+        "loc": {
+          "start": {
+            "line": 29,
+            "column": 32
+          },
+          "end": {
+            "line": 29,
+            "column": 67
+          }
+        }
+      },
+      "range": [
+        1109,
+        1177
+      ],
+      "loc": {
+        "start": {
+          "line": 29,
+          "column": 0
+        },
+        "end": {
+          "line": 29,
+          "column": 68
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "TraceBehavior",
+            "range": [
+              1185,
+              1198
+            ],
+            "loc": {
+              "start": {
+                "line": 30,
+                "column": 7
+              },
+              "end": {
+                "line": 30,
+                "column": 20
+              }
+            }
+          },
+          "range": [
+            1185,
+            1198
+          ],
+          "loc": {
+            "start": {
+              "line": 30,
+              "column": 7
+            },
+            "end": {
+              "line": 30,
+              "column": 20
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./behaviors/trace-behavior",
+        "raw": "'./behaviors/trace-behavior'",
+        "range": [
+          1204,
+          1232
+        ],
+        "loc": {
+          "start": {
+            "line": 30,
+            "column": 26
+          },
+          "end": {
+            "line": 30,
+            "column": 54
+          }
+        }
+      },
+      "range": [
+        1178,
+        1233
+      ],
+      "loc": {
+        "start": {
+          "line": 30,
+          "column": 0
+        },
+        "end": {
+          "line": 30,
+          "column": 55
+        }
+      },
+      "trailingComments": [
+        {
+          "type": "Line",
+          "value": " interactions",
+          "range": [
+            1235,
+            1250
+          ],
+          "loc": {
+            "start": {
+              "line": 32,
+              "column": 0
+            },
+            "end": {
+              "line": 32,
+              "column": 15
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "EventSource",
+            "range": [
+              1258,
+              1269
+            ],
+            "loc": {
+              "start": {
+                "line": 33,
+                "column": 7
+              },
+              "end": {
+                "line": 33,
+                "column": 18
+              }
+            }
+          },
+          "range": [
+            1258,
+            1269
+          ],
+          "loc": {
+            "start": {
+              "line": 33,
+              "column": 7
+            },
+            "end": {
+              "line": 33,
+              "column": 18
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./interactions/event-source",
+        "raw": "'./interactions/event-source'",
+        "range": [
+          1275,
+          1304
+        ],
+        "loc": {
+          "start": {
+            "line": 33,
+            "column": 24
+          },
+          "end": {
+            "line": 33,
+            "column": 53
+          }
+        }
+      },
+      "range": [
+        1251,
+        1305
+      ],
+      "loc": {
+        "start": {
+          "line": 33,
+          "column": 0
+        },
+        "end": {
+          "line": 33,
+          "column": 54
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Line",
+          "value": " interactions",
+          "range": [
+            1235,
+            1250
+          ],
+          "loc": {
+            "start": {
+              "line": 32,
+              "column": 0
+            },
+            "end": {
+              "line": 32,
+              "column": 15
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "Keyboard",
+            "range": [
+              1313,
+              1321
+            ],
+            "loc": {
+              "start": {
+                "line": 34,
+                "column": 7
+              },
+              "end": {
+                "line": 34,
+                "column": 15
+              }
+            }
+          },
+          "range": [
+            1313,
+            1321
+          ],
+          "loc": {
+            "start": {
+              "line": 34,
+              "column": 7
+            },
+            "end": {
+              "line": 34,
+              "column": 15
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./interactions/keyboard",
+        "raw": "'./interactions/keyboard'",
+        "range": [
+          1327,
+          1352
+        ],
+        "loc": {
+          "start": {
+            "line": 34,
+            "column": 21
+          },
+          "end": {
+            "line": 34,
+            "column": 46
+          }
+        }
+      },
+      "range": [
+        1306,
+        1353
+      ],
+      "loc": {
+        "start": {
+          "line": 34,
+          "column": 0
+        },
+        "end": {
+          "line": 34,
+          "column": 47
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "Surface",
+            "range": [
+              1361,
+              1368
+            ],
+            "loc": {
+              "start": {
+                "line": 35,
+                "column": 7
+              },
+              "end": {
+                "line": 35,
+                "column": 14
+              }
+            }
+          },
+          "range": [
+            1361,
+            1368
+          ],
+          "loc": {
+            "start": {
+              "line": 35,
+              "column": 7
+            },
+            "end": {
+              "line": 35,
+              "column": 14
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./interactions/surface",
+        "raw": "'./interactions/surface'",
+        "range": [
+          1374,
+          1398
+        ],
+        "loc": {
+          "start": {
+            "line": 35,
+            "column": 20
+          },
+          "end": {
+            "line": 35,
+            "column": 44
+          }
+        }
+      },
+      "range": [
+        1354,
+        1399
+      ],
+      "loc": {
+        "start": {
+          "line": 35,
+          "column": 0
+        },
+        "end": {
+          "line": 35,
+          "column": 45
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "WaveEvent",
+            "range": [
+              1407,
+              1416
+            ],
+            "loc": {
+              "start": {
+                "line": 36,
+                "column": 7
+              },
+              "end": {
+                "line": 36,
+                "column": 16
+              }
+            }
+          },
+          "range": [
+            1407,
+            1416
+          ],
+          "loc": {
+            "start": {
+              "line": 36,
+              "column": 7
+            },
+            "end": {
+              "line": 36,
+              "column": 16
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./interactions/wave-event",
+        "raw": "'./interactions/wave-event'",
+        "range": [
+          1422,
+          1449
+        ],
+        "loc": {
+          "start": {
+            "line": 36,
+            "column": 22
+          },
+          "end": {
+            "line": 36,
+            "column": 49
+          }
+        }
+      },
+      "range": [
+        1400,
+        1450
+      ],
+      "loc": {
+        "start": {
+          "line": 36,
+          "column": 0
+        },
+        "end": {
+          "line": 36,
+          "column": 50
+        }
+      },
+      "trailingComments": [
+        {
+          "type": "Line",
+          "value": " states",
+          "range": [
+            1452,
+            1461
+          ],
+          "loc": {
+            "start": {
+              "line": 38,
+              "column": 0
+            },
+            "end": {
+              "line": 38,
+              "column": 9
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "BaseState",
+            "range": [
+              1469,
+              1478
+            ],
+            "loc": {
+              "start": {
+                "line": 39,
+                "column": 7
+              },
+              "end": {
+                "line": 39,
+                "column": 16
+              }
+            }
+          },
+          "range": [
+            1469,
+            1478
+          ],
+          "loc": {
+            "start": {
+              "line": 39,
+              "column": 7
+            },
+            "end": {
+              "line": 39,
+              "column": 16
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./states/base-state",
+        "raw": "'./states/base-state'",
+        "range": [
+          1484,
+          1505
+        ],
+        "loc": {
+          "start": {
+            "line": 39,
+            "column": 22
+          },
+          "end": {
+            "line": 39,
+            "column": 43
+          }
+        }
+      },
+      "range": [
+        1462,
+        1506
+      ],
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 0
+        },
+        "end": {
+          "line": 39,
+          "column": 44
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Line",
+          "value": " states",
+          "range": [
+            1452,
+            1461
+          ],
+          "loc": {
+            "start": {
+              "line": 38,
+              "column": 0
+            },
+            "end": {
+              "line": 38,
+              "column": 9
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "BreakpointState",
+            "range": [
+              1514,
+              1529
+            ],
+            "loc": {
+              "start": {
+                "line": 40,
+                "column": 7
+              },
+              "end": {
+                "line": 40,
+                "column": 22
+              }
+            }
+          },
+          "range": [
+            1514,
+            1529
+          ],
+          "loc": {
+            "start": {
+              "line": 40,
+              "column": 7
+            },
+            "end": {
+              "line": 40,
+              "column": 22
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./states/breakpoint-state",
+        "raw": "'./states/breakpoint-state'",
+        "range": [
+          1535,
+          1562
+        ],
+        "loc": {
+          "start": {
+            "line": 40,
+            "column": 28
+          },
+          "end": {
+            "line": 40,
+            "column": 55
+          }
+        }
+      },
+      "range": [
+        1507,
+        1563
+      ],
+      "loc": {
+        "start": {
+          "line": 40,
+          "column": 0
+        },
+        "end": {
+          "line": 40,
+          "column": 56
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "BrushZoomState",
+            "range": [
+              1571,
+              1585
+            ],
+            "loc": {
+              "start": {
+                "line": 41,
+                "column": 7
+              },
+              "end": {
+                "line": 41,
+                "column": 21
+              }
+            }
+          },
+          "range": [
+            1571,
+            1585
+          ],
+          "loc": {
+            "start": {
+              "line": 41,
+              "column": 7
+            },
+            "end": {
+              "line": 41,
+              "column": 21
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./states/brush-zoom-state",
+        "raw": "'./states/brush-zoom-state'",
+        "range": [
+          1591,
+          1618
+        ],
+        "loc": {
+          "start": {
+            "line": 41,
+            "column": 27
+          },
+          "end": {
+            "line": 41,
+            "column": 54
+          }
+        }
+      },
+      "range": [
+        1564,
+        1619
+      ],
+      "loc": {
+        "start": {
+          "line": 41,
+          "column": 0
+        },
+        "end": {
+          "line": 41,
+          "column": 55
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "CenteredZoomState",
+            "range": [
+              1627,
+              1644
+            ],
+            "loc": {
+              "start": {
+                "line": 42,
+                "column": 7
+              },
+              "end": {
+                "line": 42,
+                "column": 24
+              }
+            }
+          },
+          "range": [
+            1627,
+            1644
+          ],
+          "loc": {
+            "start": {
+              "line": 42,
+              "column": 7
+            },
+            "end": {
+              "line": 42,
+              "column": 24
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./states/centered-zoom-state",
+        "raw": "'./states/centered-zoom-state'",
+        "range": [
+          1650,
+          1680
+        ],
+        "loc": {
+          "start": {
+            "line": 42,
+            "column": 30
+          },
+          "end": {
+            "line": 42,
+            "column": 60
+          }
+        }
+      },
+      "range": [
+        1620,
+        1681
+      ],
+      "loc": {
+        "start": {
+          "line": 42,
+          "column": 0
+        },
+        "end": {
+          "line": 42,
+          "column": 61
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "ContextEditionState",
+            "range": [
+              1689,
+              1708
+            ],
+            "loc": {
+              "start": {
+                "line": 43,
+                "column": 7
+              },
+              "end": {
+                "line": 43,
+                "column": 26
+              }
+            }
+          },
+          "range": [
+            1689,
+            1708
+          ],
+          "loc": {
+            "start": {
+              "line": 43,
+              "column": 7
+            },
+            "end": {
+              "line": 43,
+              "column": 26
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./states/context-edition-state",
+        "raw": "'./states/context-edition-state'",
+        "range": [
+          1714,
+          1746
+        ],
+        "loc": {
+          "start": {
+            "line": 43,
+            "column": 32
+          },
+          "end": {
+            "line": 43,
+            "column": 64
+          }
+        }
+      },
+      "range": [
+        1682,
+        1747
+      ],
+      "loc": {
+        "start": {
+          "line": 43,
+          "column": 0
+        },
+        "end": {
+          "line": 43,
+          "column": 65
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "EditionState",
+            "range": [
+              1755,
+              1767
+            ],
+            "loc": {
+              "start": {
+                "line": 44,
+                "column": 7
+              },
+              "end": {
+                "line": 44,
+                "column": 19
+              }
+            }
+          },
+          "range": [
+            1755,
+            1767
+          ],
+          "loc": {
+            "start": {
+              "line": 44,
+              "column": 7
+            },
+            "end": {
+              "line": 44,
+              "column": 19
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./states/edition-state",
+        "raw": "'./states/edition-state'",
+        "range": [
+          1773,
+          1797
+        ],
+        "loc": {
+          "start": {
+            "line": 44,
+            "column": 25
+          },
+          "end": {
+            "line": 44,
+            "column": 49
+          }
+        }
+      },
+      "range": [
+        1748,
+        1798
+      ],
+      "loc": {
+        "start": {
+          "line": 44,
+          "column": 0
+        },
+        "end": {
+          "line": 44,
+          "column": 50
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "SelectionState",
+            "range": [
+              1806,
+              1820
+            ],
+            "loc": {
+              "start": {
+                "line": 45,
+                "column": 7
+              },
+              "end": {
+                "line": 45,
+                "column": 21
+              }
+            }
+          },
+          "range": [
+            1806,
+            1820
+          ],
+          "loc": {
+            "start": {
+              "line": 45,
+              "column": 7
+            },
+            "end": {
+              "line": 45,
+              "column": 21
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./states/selection-state",
+        "raw": "'./states/selection-state'",
+        "range": [
+          1826,
+          1852
+        ],
+        "loc": {
+          "start": {
+            "line": 45,
+            "column": 27
+          },
+          "end": {
+            "line": 45,
+            "column": 53
+          }
+        }
+      },
+      "range": [
+        1799,
+        1853
+      ],
+      "loc": {
+        "start": {
+          "line": 45,
+          "column": 0
+        },
+        "end": {
+          "line": 45,
+          "column": 54
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "SimpleEditionState",
+            "range": [
+              1861,
+              1879
+            ],
+            "loc": {
+              "start": {
+                "line": 46,
+                "column": 7
+              },
+              "end": {
+                "line": 46,
+                "column": 25
+              }
+            }
+          },
+          "range": [
+            1861,
+            1879
+          ],
+          "loc": {
+            "start": {
+              "line": 46,
+              "column": 7
+            },
+            "end": {
+              "line": 46,
+              "column": 25
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./states/simple-edition-state",
+        "raw": "'./states/simple-edition-state'",
+        "range": [
+          1885,
+          1916
+        ],
+        "loc": {
+          "start": {
+            "line": 46,
+            "column": 31
+          },
+          "end": {
+            "line": 46,
+            "column": 62
+          }
+        }
+      },
+      "range": [
+        1854,
+        1917
+      ],
+      "loc": {
+        "start": {
+          "line": 46,
+          "column": 0
+        },
+        "end": {
+          "line": 46,
+          "column": 63
+        }
+      },
+      "trailingComments": [
+        {
+          "type": "Line",
+          "value": " helpers",
+          "range": [
+            1919,
+            1929
+          ],
+          "loc": {
+            "start": {
+              "line": 48,
+              "column": 0
+            },
+            "end": {
+              "line": 48,
+              "column": 10
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "AnnotatedMarkerLayer",
+            "range": [
+              1937,
+              1957
+            ],
+            "loc": {
+              "start": {
+                "line": 49,
+                "column": 7
+              },
+              "end": {
+                "line": 49,
+                "column": 27
+              }
+            }
+          },
+          "range": [
+            1937,
+            1957
+          ],
+          "loc": {
+            "start": {
+              "line": 49,
+              "column": 7
+            },
+            "end": {
+              "line": 49,
+              "column": 27
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./helpers/annotated-marker-layer",
+        "raw": "'./helpers/annotated-marker-layer'",
+        "range": [
+          1963,
+          1997
+        ],
+        "loc": {
+          "start": {
+            "line": 49,
+            "column": 33
+          },
+          "end": {
+            "line": 49,
+            "column": 67
+          }
+        }
+      },
+      "range": [
+        1930,
+        1998
+      ],
+      "loc": {
+        "start": {
+          "line": 49,
+          "column": 0
+        },
+        "end": {
+          "line": 49,
+          "column": 68
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Line",
+          "value": " helpers",
+          "range": [
+            1919,
+            1929
+          ],
+          "loc": {
+            "start": {
+              "line": 48,
+              "column": 0
+            },
+            "end": {
+              "line": 48,
+              "column": 10
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "AnnotatedSegmentLayer",
+            "range": [
+              2006,
+              2027
+            ],
+            "loc": {
+              "start": {
+                "line": 50,
+                "column": 7
+              },
+              "end": {
+                "line": 50,
+                "column": 28
+              }
+            }
+          },
+          "range": [
+            2006,
+            2027
+          ],
+          "loc": {
+            "start": {
+              "line": 50,
+              "column": 7
+            },
+            "end": {
+              "line": 50,
+              "column": 28
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./helpers/annotated-segment-layer",
+        "raw": "'./helpers/annotated-segment-layer'",
+        "range": [
+          2033,
+          2068
+        ],
+        "loc": {
+          "start": {
+            "line": 50,
+            "column": 34
+          },
+          "end": {
+            "line": 50,
+            "column": 69
+          }
+        }
+      },
+      "range": [
+        1999,
+        2069
+      ],
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 0
+        },
+        "end": {
+          "line": 50,
+          "column": 70
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "BreakpointLayer",
+            "range": [
+              2077,
+              2092
+            ],
+            "loc": {
+              "start": {
+                "line": 51,
+                "column": 7
+              },
+              "end": {
+                "line": 51,
+                "column": 22
+              }
+            }
+          },
+          "range": [
+            2077,
+            2092
+          ],
+          "loc": {
+            "start": {
+              "line": 51,
+              "column": 7
+            },
+            "end": {
+              "line": 51,
+              "column": 22
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./helpers/breakpoint-layer",
+        "raw": "'./helpers/breakpoint-layer'",
+        "range": [
+          2098,
+          2126
+        ],
+        "loc": {
+          "start": {
+            "line": 51,
+            "column": 28
+          },
+          "end": {
+            "line": 51,
+            "column": 56
+          }
+        }
+      },
+      "range": [
+        2070,
+        2127
+      ],
+      "loc": {
+        "start": {
+          "line": 51,
+          "column": 0
+        },
+        "end": {
+          "line": 51,
+          "column": 57
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "CursorLayer",
+            "range": [
+              2135,
+              2146
+            ],
+            "loc": {
+              "start": {
+                "line": 52,
+                "column": 7
+              },
+              "end": {
+                "line": 52,
+                "column": 18
+              }
+            }
+          },
+          "range": [
+            2135,
+            2146
+          ],
+          "loc": {
+            "start": {
+              "line": 52,
+              "column": 7
+            },
+            "end": {
+              "line": 52,
+              "column": 18
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./helpers/cursor-layer",
+        "raw": "'./helpers/cursor-layer'",
+        "range": [
+          2152,
+          2176
+        ],
+        "loc": {
+          "start": {
+            "line": 52,
+            "column": 24
+          },
+          "end": {
+            "line": 52,
+            "column": 48
+          }
+        }
+      },
+      "range": [
+        2128,
+        2177
+      ],
+      "loc": {
+        "start": {
+          "line": 52,
+          "column": 0
+        },
+        "end": {
+          "line": 52,
+          "column": 49
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "GridAxisLayer",
+            "range": [
+              2185,
+              2198
+            ],
+            "loc": {
+              "start": {
+                "line": 53,
+                "column": 7
+              },
+              "end": {
+                "line": 53,
+                "column": 20
+              }
+            }
+          },
+          "range": [
+            2185,
+            2198
+          ],
+          "loc": {
+            "start": {
+              "line": 53,
+              "column": 7
+            },
+            "end": {
+              "line": 53,
+              "column": 20
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./helpers/grid-axis-layer",
+        "raw": "'./helpers/grid-axis-layer'",
+        "range": [
+          2204,
+          2231
+        ],
+        "loc": {
+          "start": {
+            "line": 53,
+            "column": 26
+          },
+          "end": {
+            "line": 53,
+            "column": 53
+          }
+        }
+      },
+      "range": [
+        2178,
+        2232
+      ],
+      "loc": {
+        "start": {
+          "line": 53,
+          "column": 0
+        },
+        "end": {
+          "line": 53,
+          "column": 54
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "MarkerLayer",
+            "range": [
+              2240,
+              2251
+            ],
+            "loc": {
+              "start": {
+                "line": 54,
+                "column": 7
+              },
+              "end": {
+                "line": 54,
+                "column": 18
+              }
+            }
+          },
+          "range": [
+            2240,
+            2251
+          ],
+          "loc": {
+            "start": {
+              "line": 54,
+              "column": 7
+            },
+            "end": {
+              "line": 54,
+              "column": 18
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./helpers/marker-layer",
+        "raw": "'./helpers/marker-layer'",
+        "range": [
+          2257,
+          2281
+        ],
+        "loc": {
+          "start": {
+            "line": 54,
+            "column": 24
+          },
+          "end": {
+            "line": 54,
+            "column": 48
+          }
+        }
+      },
+      "range": [
+        2233,
+        2282
+      ],
+      "loc": {
+        "start": {
+          "line": 54,
+          "column": 0
+        },
+        "end": {
+          "line": 54,
+          "column": 49
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "SegmentLayer",
+            "range": [
+              2290,
+              2302
+            ],
+            "loc": {
+              "start": {
+                "line": 55,
+                "column": 7
+              },
+              "end": {
+                "line": 55,
+                "column": 19
+              }
+            }
+          },
+          "range": [
+            2290,
+            2302
+          ],
+          "loc": {
+            "start": {
+              "line": 55,
+              "column": 7
+            },
+            "end": {
+              "line": 55,
+              "column": 19
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./helpers/segment-layer",
+        "raw": "'./helpers/segment-layer'",
+        "range": [
+          2308,
+          2333
+        ],
+        "loc": {
+          "start": {
+            "line": 55,
+            "column": 25
+          },
+          "end": {
+            "line": 55,
+            "column": 50
+          }
+        }
+      },
+      "range": [
+        2283,
+        2334
+      ],
+      "loc": {
+        "start": {
+          "line": 55,
+          "column": 0
+        },
+        "end": {
+          "line": 55,
+          "column": 51
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "TickLayer",
+            "range": [
+              2342,
+              2351
+            ],
+            "loc": {
+              "start": {
+                "line": 56,
+                "column": 7
+              },
+              "end": {
+                "line": 56,
+                "column": 16
+              }
+            }
+          },
+          "range": [
+            2342,
+            2351
+          ],
+          "loc": {
+            "start": {
+              "line": 56,
+              "column": 7
+            },
+            "end": {
+              "line": 56,
+              "column": 16
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./helpers/tick-layer",
+        "raw": "'./helpers/tick-layer'",
+        "range": [
+          2357,
+          2379
+        ],
+        "loc": {
+          "start": {
+            "line": 56,
+            "column": 22
+          },
+          "end": {
+            "line": 56,
+            "column": 44
+          }
+        }
+      },
+      "range": [
+        2335,
+        2380
+      ],
+      "loc": {
+        "start": {
+          "line": 56,
+          "column": 0
+        },
+        "end": {
+          "line": 56,
+          "column": 45
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "TimeAxisLayer",
+            "range": [
+              2388,
+              2401
+            ],
+            "loc": {
+              "start": {
+                "line": 57,
+                "column": 7
+              },
+              "end": {
+                "line": 57,
+                "column": 20
+              }
+            }
+          },
+          "range": [
+            2388,
+            2401
+          ],
+          "loc": {
+            "start": {
+              "line": 57,
+              "column": 7
+            },
+            "end": {
+              "line": 57,
+              "column": 20
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./helpers/time-axis-layer",
+        "raw": "'./helpers/time-axis-layer'",
+        "range": [
+          2407,
+          2434
+        ],
+        "loc": {
+          "start": {
+            "line": 57,
+            "column": 26
+          },
+          "end": {
+            "line": 57,
+            "column": 53
+          }
+        }
+      },
+      "range": [
+        2381,
+        2435
+      ],
+      "loc": {
+        "start": {
+          "line": 57,
+          "column": 0
+        },
+        "end": {
+          "line": 57,
+          "column": 54
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "TraceLayer",
+            "range": [
+              2443,
+              2453
+            ],
+            "loc": {
+              "start": {
+                "line": 58,
+                "column": 7
+              },
+              "end": {
+                "line": 58,
+                "column": 17
+              }
+            }
+          },
+          "range": [
+            2443,
+            2453
+          ],
+          "loc": {
+            "start": {
+              "line": 58,
+              "column": 7
+            },
+            "end": {
+              "line": 58,
+              "column": 17
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./helpers/trace-layer",
+        "raw": "'./helpers/trace-layer'",
+        "range": [
+          2459,
+          2482
+        ],
+        "loc": {
+          "start": {
+            "line": 58,
+            "column": 23
+          },
+          "end": {
+            "line": 58,
+            "column": 46
+          }
+        }
+      },
+      "range": [
+        2436,
+        2483
+      ],
+      "loc": {
+        "start": {
+          "line": 58,
+          "column": 0
+        },
+        "end": {
+          "line": 58,
+          "column": 47
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "WaveformLayer",
+            "range": [
+              2491,
+              2504
+            ],
+            "loc": {
+              "start": {
+                "line": 59,
+                "column": 7
+              },
+              "end": {
+                "line": 59,
+                "column": 20
+              }
+            }
+          },
+          "range": [
+            2491,
+            2504
+          ],
+          "loc": {
+            "start": {
+              "line": 59,
+              "column": 7
+            },
+            "end": {
+              "line": 59,
+              "column": 20
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./helpers/waveform-layer",
+        "raw": "'./helpers/waveform-layer'",
+        "range": [
+          2510,
+          2536
+        ],
+        "loc": {
+          "start": {
+            "line": 59,
+            "column": 26
+          },
+          "end": {
+            "line": 59,
+            "column": 52
+          }
+        }
+      },
+      "range": [
+        2484,
+        2537
+      ],
+      "loc": {
+        "start": {
+          "line": 59,
+          "column": 0
+        },
+        "end": {
+          "line": 59,
+          "column": 53
+        }
+      },
+      "trailingComments": [
+        {
+          "type": "Line",
+          "value": " axis",
+          "range": [
+            2539,
+            2546
+          ],
+          "loc": {
+            "start": {
+              "line": 61,
+              "column": 0
+            },
+            "end": {
+              "line": 61,
+              "column": 7
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "AxisLayer",
+            "range": [
+              2554,
+              2563
+            ],
+            "loc": {
+              "start": {
+                "line": 62,
+                "column": 7
+              },
+              "end": {
+                "line": 62,
+                "column": 16
+              }
+            }
+          },
+          "range": [
+            2554,
+            2563
+          ],
+          "loc": {
+            "start": {
+              "line": 62,
+              "column": 7
+            },
+            "end": {
+              "line": 62,
+              "column": 16
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./axis/axis-layer",
+        "raw": "'./axis/axis-layer'",
+        "range": [
+          2569,
+          2588
+        ],
+        "loc": {
+          "start": {
+            "line": 62,
+            "column": 22
+          },
+          "end": {
+            "line": 62,
+            "column": 41
+          }
+        }
+      },
+      "range": [
+        2547,
+        2589
+      ],
+      "loc": {
+        "start": {
+          "line": 62,
+          "column": 0
+        },
+        "end": {
+          "line": 62,
+          "column": 42
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Line",
+          "value": " axis",
+          "range": [
+            2539,
+            2546
+          ],
+          "loc": {
+            "start": {
+              "line": 61,
+              "column": 0
+            },
+            "end": {
+              "line": 61,
+              "column": 7
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "timeAxisGenerator",
+            "range": [
+              2597,
+              2614
+            ],
+            "loc": {
+              "start": {
+                "line": 63,
+                "column": 7
+              },
+              "end": {
+                "line": 63,
+                "column": 24
+              }
+            }
+          },
+          "range": [
+            2597,
+            2614
+          ],
+          "loc": {
+            "start": {
+              "line": 63,
+              "column": 7
+            },
+            "end": {
+              "line": 63,
+              "column": 24
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./axis/time-axis-generator",
+        "raw": "'./axis/time-axis-generator'",
+        "range": [
+          2620,
+          2648
+        ],
+        "loc": {
+          "start": {
+            "line": 63,
+            "column": 30
+          },
+          "end": {
+            "line": 63,
+            "column": 58
+          }
+        }
+      },
+      "range": [
+        2590,
+        2649
+      ],
+      "loc": {
+        "start": {
+          "line": 63,
+          "column": 0
+        },
+        "end": {
+          "line": 63,
+          "column": 59
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "gridAxisGenerator",
+            "range": [
+              2657,
+              2674
+            ],
+            "loc": {
+              "start": {
+                "line": 64,
+                "column": 7
+              },
+              "end": {
+                "line": 64,
+                "column": 24
+              }
+            }
+          },
+          "range": [
+            2657,
+            2674
+          ],
+          "loc": {
+            "start": {
+              "line": 64,
+              "column": 7
+            },
+            "end": {
+              "line": 64,
+              "column": 24
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./axis/grid-axis-generator",
+        "raw": "'./axis/grid-axis-generator'",
+        "range": [
+          2680,
+          2708
+        ],
+        "loc": {
+          "start": {
+            "line": 64,
+            "column": 30
+          },
+          "end": {
+            "line": 64,
+            "column": 58
+          }
+        }
+      },
+      "range": [
+        2650,
+        2709
+      ],
+      "loc": {
+        "start": {
+          "line": 64,
+          "column": 0
+        },
+        "end": {
+          "line": 64,
+          "column": 59
+        }
+      },
+      "trailingComments": [
+        {
+          "type": "Line",
+          "value": " utils",
+          "range": [
+            2711,
+            2719
+          ],
+          "loc": {
+            "start": {
+              "line": 66,
+              "column": 0
+            },
+            "end": {
+              "line": 66,
+              "column": 8
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "format",
+            "range": [
+              2727,
+              2733
+            ],
+            "loc": {
+              "start": {
+                "line": 67,
+                "column": 7
+              },
+              "end": {
+                "line": 67,
+                "column": 13
+              }
+            }
+          },
+          "range": [
+            2727,
+            2733
+          ],
+          "loc": {
+            "start": {
+              "line": 67,
+              "column": 7
+            },
+            "end": {
+              "line": 67,
+              "column": 13
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./utils/format",
+        "raw": "'./utils/format'",
+        "range": [
+          2739,
+          2755
+        ],
+        "loc": {
+          "start": {
+            "line": 67,
+            "column": 19
+          },
+          "end": {
+            "line": 67,
+            "column": 35
+          }
+        }
+      },
+      "range": [
+        2720,
+        2756
+      ],
+      "loc": {
+        "start": {
+          "line": 67,
+          "column": 0
+        },
+        "end": {
+          "line": 67,
+          "column": 36
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Line",
+          "value": " utils",
+          "range": [
+            2711,
+            2719
+          ],
+          "loc": {
+            "start": {
+              "line": 66,
+              "column": 0
+            },
+            "end": {
+              "line": 66,
+              "column": 8
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "OrthogonalData",
+            "range": [
+              2764,
+              2778
+            ],
+            "loc": {
+              "start": {
+                "line": 68,
+                "column": 7
+              },
+              "end": {
+                "line": 68,
+                "column": 21
+              }
+            }
+          },
+          "range": [
+            2764,
+            2778
+          ],
+          "loc": {
+            "start": {
+              "line": 68,
+              "column": 7
+            },
+            "end": {
+              "line": 68,
+              "column": 21
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./utils/orthogonal-data",
+        "raw": "'./utils/orthogonal-data'",
+        "range": [
+          2784,
+          2809
+        ],
+        "loc": {
+          "start": {
+            "line": 68,
+            "column": 27
+          },
+          "end": {
+            "line": 68,
+            "column": 52
+          }
+        }
+      },
+      "range": [
+        2757,
+        2810
+      ],
+      "loc": {
+        "start": {
+          "line": 68,
+          "column": 0
+        },
+        "end": {
+          "line": 68,
+          "column": 53
+        }
+      }
+    },
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "scales",
+            "range": [
+              2818,
+              2824
+            ],
+            "loc": {
+              "start": {
+                "line": 69,
+                "column": 7
+              },
+              "end": {
+                "line": 69,
+                "column": 13
+              }
+            }
+          },
+          "range": [
+            2818,
+            2824
+          ],
+          "loc": {
+            "start": {
+              "line": 69,
+              "column": 7
+            },
+            "end": {
+              "line": 69,
+              "column": 13
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "./utils/scales",
+        "raw": "'./utils/scales'",
+        "range": [
+          2830,
+          2846
+        ],
+        "loc": {
+          "start": {
+            "line": 69,
+            "column": 19
+          },
+          "end": {
+            "line": 69,
+            "column": 35
+          }
+        }
+      },
+      "range": [
+        2811,
+        2847
+      ],
+      "loc": {
+        "start": {
+          "line": 69,
+          "column": 0
+        },
+        "end": {
+          "line": 69,
+          "column": 36
+        }
+      }
+    },
+    {
+      "type": "ExportDefaultDeclaration",
+      "declaration": {
+        "type": "ObjectExpression",
+        "properties": [
+          {
+            "type": "Property",
+            "key": {
+              "type": "Identifier",
+              "name": "core",
+              "range": [
+                2868,
+                2872
+              ],
+              "loc": {
+                "start": {
+                  "line": 72,
+                  "column": 2
+                },
+                "end": {
+                  "line": 72,
+                  "column": 6
+                }
+              }
+            },
+            "value": {
+              "type": "ObjectExpression",
+              "properties": [
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "LayerTimeContext",
+                    "range": [
+                      2880,
+                      2896
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 73,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 73,
+                        "column": 20
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "LayerTimeContext",
+                    "range": [
+                      2880,
+                      2896
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 73,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 73,
+                        "column": 20
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    2880,
+                    2896
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 73,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 73,
+                      "column": 20
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "Layer",
+                    "range": [
+                      2898,
+                      2903
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 73,
+                        "column": 22
+                      },
+                      "end": {
+                        "line": 73,
+                        "column": 27
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "Layer",
+                    "range": [
+                      2898,
+                      2903
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 73,
+                        "column": 22
+                      },
+                      "end": {
+                        "line": 73,
+                        "column": 27
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    2898,
+                    2903
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 73,
+                      "column": 22
+                    },
+                    "end": {
+                      "line": 73,
+                      "column": 27
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "namespace",
+                    "range": [
+                      2905,
+                      2914
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 73,
+                        "column": 29
+                      },
+                      "end": {
+                        "line": 73,
+                        "column": 38
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "namespace",
+                    "range": [
+                      2905,
+                      2914
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 73,
+                        "column": 29
+                      },
+                      "end": {
+                        "line": 73,
+                        "column": 38
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    2905,
+                    2914
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 73,
+                      "column": 29
+                    },
+                    "end": {
+                      "line": 73,
+                      "column": 38
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "TimelineTimeContext",
+                    "range": [
+                      2920,
+                      2939
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 74,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 74,
+                        "column": 23
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "TimelineTimeContext",
+                    "range": [
+                      2920,
+                      2939
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 74,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 74,
+                        "column": 23
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    2920,
+                    2939
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 74,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 74,
+                      "column": 23
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "Timeline",
+                    "range": [
+                      2941,
+                      2949
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 74,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 74,
+                        "column": 33
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "Timeline",
+                    "range": [
+                      2941,
+                      2949
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 74,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 74,
+                        "column": 33
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    2941,
+                    2949
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 74,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 74,
+                      "column": 33
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "TrackCollection",
+                    "range": [
+                      2951,
+                      2966
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 74,
+                        "column": 35
+                      },
+                      "end": {
+                        "line": 74,
+                        "column": 50
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "TrackCollection",
+                    "range": [
+                      2951,
+                      2966
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 74,
+                        "column": 35
+                      },
+                      "end": {
+                        "line": 74,
+                        "column": 50
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    2951,
+                    2966
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 74,
+                      "column": 35
+                    },
+                    "end": {
+                      "line": 74,
+                      "column": 50
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "Track",
+                    "range": [
+                      2968,
+                      2973
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 74,
+                        "column": 52
+                      },
+                      "end": {
+                        "line": 74,
+                        "column": 57
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "Track",
+                    "range": [
+                      2968,
+                      2973
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 74,
+                        "column": 52
+                      },
+                      "end": {
+                        "line": 74,
+                        "column": 57
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    2968,
+                    2973
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 74,
+                      "column": 52
+                    },
+                    "end": {
+                      "line": 74,
+                      "column": 57
+                    }
+                  }
+                }
+              ],
+              "range": [
+                2874,
+                2977
+              ],
+              "loc": {
+                "start": {
+                  "line": 72,
+                  "column": 8
+                },
+                "end": {
+                  "line": 75,
+                  "column": 3
+                }
+              }
+            },
+            "kind": "init",
+            "method": false,
+            "shorthand": false,
+            "computed": false,
+            "range": [
+              2868,
+              2977
+            ],
+            "loc": {
+              "start": {
+                "line": 72,
+                "column": 2
+              },
+              "end": {
+                "line": 75,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Property",
+            "key": {
+              "type": "Identifier",
+              "name": "shapes",
+              "range": [
+                2981,
+                2987
+              ],
+              "loc": {
+                "start": {
+                  "line": 76,
+                  "column": 2
+                },
+                "end": {
+                  "line": 76,
+                  "column": 8
+                }
+              }
+            },
+            "value": {
+              "type": "ObjectExpression",
+              "properties": [
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "AnnotatedMarker",
+                    "range": [
+                      2995,
+                      3010
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 77,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 77,
+                        "column": 19
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "AnnotatedMarker",
+                    "range": [
+                      2995,
+                      3010
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 77,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 77,
+                        "column": 19
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    2995,
+                    3010
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 77,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 77,
+                      "column": 19
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "AnnotatedSegment",
+                    "range": [
+                      3012,
+                      3028
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 77,
+                        "column": 21
+                      },
+                      "end": {
+                        "line": 77,
+                        "column": 37
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "AnnotatedSegment",
+                    "range": [
+                      3012,
+                      3028
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 77,
+                        "column": 21
+                      },
+                      "end": {
+                        "line": 77,
+                        "column": 37
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3012,
+                    3028
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 77,
+                      "column": 21
+                    },
+                    "end": {
+                      "line": 77,
+                      "column": 37
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "BaseShape",
+                    "range": [
+                      3030,
+                      3039
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 77,
+                        "column": 39
+                      },
+                      "end": {
+                        "line": 77,
+                        "column": 48
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "BaseShape",
+                    "range": [
+                      3030,
+                      3039
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 77,
+                        "column": 39
+                      },
+                      "end": {
+                        "line": 77,
+                        "column": 48
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3030,
+                    3039
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 77,
+                      "column": 39
+                    },
+                    "end": {
+                      "line": 77,
+                      "column": 48
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "Cursor",
+                    "range": [
+                      3041,
+                      3047
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 77,
+                        "column": 50
+                      },
+                      "end": {
+                        "line": 77,
+                        "column": 56
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "Cursor",
+                    "range": [
+                      3041,
+                      3047
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 77,
+                        "column": 50
+                      },
+                      "end": {
+                        "line": 77,
+                        "column": 56
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3041,
+                    3047
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 77,
+                      "column": 50
+                    },
+                    "end": {
+                      "line": 77,
+                      "column": 56
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "Dot",
+                    "range": [
+                      3053,
+                      3056
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 7
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "Dot",
+                    "range": [
+                      3053,
+                      3056
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 7
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3053,
+                    3056
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 78,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 78,
+                      "column": 7
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "Line",
+                    "range": [
+                      3058,
+                      3062
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 9
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 13
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "Line",
+                    "range": [
+                      3058,
+                      3062
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 9
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 13
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3058,
+                    3062
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 78,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 78,
+                      "column": 13
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "Marker",
+                    "range": [
+                      3064,
+                      3070
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 21
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "Marker",
+                    "range": [
+                      3064,
+                      3070
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 21
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3064,
+                    3070
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 78,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 78,
+                      "column": 21
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "Segment",
+                    "range": [
+                      3072,
+                      3079
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 23
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 30
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "Segment",
+                    "range": [
+                      3072,
+                      3079
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 23
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 30
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3072,
+                    3079
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 78,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 78,
+                      "column": 30
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "Ticks",
+                    "range": [
+                      3081,
+                      3086
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 32
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 37
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "Ticks",
+                    "range": [
+                      3081,
+                      3086
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 32
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 37
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3081,
+                    3086
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 78,
+                      "column": 32
+                    },
+                    "end": {
+                      "line": 78,
+                      "column": 37
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "TracePath",
+                    "range": [
+                      3088,
+                      3097
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 39
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 48
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "TracePath",
+                    "range": [
+                      3088,
+                      3097
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 39
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 48
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3088,
+                    3097
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 78,
+                      "column": 39
+                    },
+                    "end": {
+                      "line": 78,
+                      "column": 48
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "TraceDots",
+                    "range": [
+                      3099,
+                      3108
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 50
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 59
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "TraceDots",
+                    "range": [
+                      3099,
+                      3108
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 50
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 59
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3099,
+                    3108
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 78,
+                      "column": 50
+                    },
+                    "end": {
+                      "line": 78,
+                      "column": 59
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "Waveform",
+                    "range": [
+                      3110,
+                      3118
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 61
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 69
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "Waveform",
+                    "range": [
+                      3110,
+                      3118
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 78,
+                        "column": 61
+                      },
+                      "end": {
+                        "line": 78,
+                        "column": 69
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3110,
+                    3118
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 78,
+                      "column": 61
+                    },
+                    "end": {
+                      "line": 78,
+                      "column": 69
+                    }
+                  }
+                }
+              ],
+              "range": [
+                2989,
+                3122
+              ],
+              "loc": {
+                "start": {
+                  "line": 76,
+                  "column": 10
+                },
+                "end": {
+                  "line": 79,
+                  "column": 3
+                }
+              }
+            },
+            "kind": "init",
+            "method": false,
+            "shorthand": false,
+            "computed": false,
+            "range": [
+              2981,
+              3122
+            ],
+            "loc": {
+              "start": {
+                "line": 76,
+                "column": 2
+              },
+              "end": {
+                "line": 79,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Property",
+            "key": {
+              "type": "Identifier",
+              "name": "behaviors",
+              "range": [
+                3126,
+                3135
+              ],
+              "loc": {
+                "start": {
+                  "line": 80,
+                  "column": 2
+                },
+                "end": {
+                  "line": 80,
+                  "column": 11
+                }
+              }
+            },
+            "value": {
+              "type": "ObjectExpression",
+              "properties": [
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "BaseBehavior",
+                    "range": [
+                      3143,
+                      3155
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 81,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 81,
+                        "column": 16
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "BaseBehavior",
+                    "range": [
+                      3143,
+                      3155
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 81,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 81,
+                        "column": 16
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3143,
+                    3155
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 81,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 81,
+                      "column": 16
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "BreakpointBehavior",
+                    "range": [
+                      3157,
+                      3175
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 81,
+                        "column": 18
+                      },
+                      "end": {
+                        "line": 81,
+                        "column": 36
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "BreakpointBehavior",
+                    "range": [
+                      3157,
+                      3175
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 81,
+                        "column": 18
+                      },
+                      "end": {
+                        "line": 81,
+                        "column": 36
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3157,
+                    3175
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 81,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 81,
+                      "column": 36
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "MarkerBehavior",
+                    "range": [
+                      3177,
+                      3191
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 81,
+                        "column": 38
+                      },
+                      "end": {
+                        "line": 81,
+                        "column": 52
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "MarkerBehavior",
+                    "range": [
+                      3177,
+                      3191
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 81,
+                        "column": 38
+                      },
+                      "end": {
+                        "line": 81,
+                        "column": 52
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3177,
+                    3191
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 81,
+                      "column": 38
+                    },
+                    "end": {
+                      "line": 81,
+                      "column": 52
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "SegmentBehavior",
+                    "range": [
+                      3193,
+                      3208
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 81,
+                        "column": 54
+                      },
+                      "end": {
+                        "line": 81,
+                        "column": 69
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "SegmentBehavior",
+                    "range": [
+                      3193,
+                      3208
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 81,
+                        "column": 54
+                      },
+                      "end": {
+                        "line": 81,
+                        "column": 69
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3193,
+                    3208
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 81,
+                      "column": 54
+                    },
+                    "end": {
+                      "line": 81,
+                      "column": 69
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "TimeContextBehavior",
+                    "range": [
+                      3214,
+                      3233
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 82,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 82,
+                        "column": 23
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "TimeContextBehavior",
+                    "range": [
+                      3214,
+                      3233
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 82,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 82,
+                        "column": 23
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3214,
+                    3233
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 82,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 82,
+                      "column": 23
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "TraceBehavior",
+                    "range": [
+                      3235,
+                      3248
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 82,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 82,
+                        "column": 38
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "TraceBehavior",
+                    "range": [
+                      3235,
+                      3248
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 82,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 82,
+                        "column": 38
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3235,
+                    3248
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 82,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 82,
+                      "column": 38
+                    }
+                  }
+                }
+              ],
+              "range": [
+                3137,
+                3252
+              ],
+              "loc": {
+                "start": {
+                  "line": 80,
+                  "column": 13
+                },
+                "end": {
+                  "line": 83,
+                  "column": 3
+                }
+              }
+            },
+            "kind": "init",
+            "method": false,
+            "shorthand": false,
+            "computed": false,
+            "range": [
+              3126,
+              3252
+            ],
+            "loc": {
+              "start": {
+                "line": 80,
+                "column": 2
+              },
+              "end": {
+                "line": 83,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Property",
+            "key": {
+              "type": "Identifier",
+              "name": "interactions",
+              "range": [
+                3256,
+                3268
+              ],
+              "loc": {
+                "start": {
+                  "line": 84,
+                  "column": 2
+                },
+                "end": {
+                  "line": 84,
+                  "column": 14
+                }
+              }
+            },
+            "value": {
+              "type": "ObjectExpression",
+              "properties": [
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "EventSource",
+                    "range": [
+                      3272,
+                      3283
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 84,
+                        "column": 18
+                      },
+                      "end": {
+                        "line": 84,
+                        "column": 29
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "EventSource",
+                    "range": [
+                      3272,
+                      3283
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 84,
+                        "column": 18
+                      },
+                      "end": {
+                        "line": 84,
+                        "column": 29
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3272,
+                    3283
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 84,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 84,
+                      "column": 29
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "Keyboard",
+                    "range": [
+                      3285,
+                      3293
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 84,
+                        "column": 31
+                      },
+                      "end": {
+                        "line": 84,
+                        "column": 39
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "Keyboard",
+                    "range": [
+                      3285,
+                      3293
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 84,
+                        "column": 31
+                      },
+                      "end": {
+                        "line": 84,
+                        "column": 39
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3285,
+                    3293
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 84,
+                      "column": 31
+                    },
+                    "end": {
+                      "line": 84,
+                      "column": 39
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "Surface",
+                    "range": [
+                      3295,
+                      3302
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 84,
+                        "column": 41
+                      },
+                      "end": {
+                        "line": 84,
+                        "column": 48
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "Surface",
+                    "range": [
+                      3295,
+                      3302
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 84,
+                        "column": 41
+                      },
+                      "end": {
+                        "line": 84,
+                        "column": 48
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3295,
+                    3302
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 84,
+                      "column": 41
+                    },
+                    "end": {
+                      "line": 84,
+                      "column": 48
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "WaveEvent",
+                    "range": [
+                      3304,
+                      3313
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 84,
+                        "column": 50
+                      },
+                      "end": {
+                        "line": 84,
+                        "column": 59
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "WaveEvent",
+                    "range": [
+                      3304,
+                      3313
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 84,
+                        "column": 50
+                      },
+                      "end": {
+                        "line": 84,
+                        "column": 59
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3304,
+                    3313
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 84,
+                      "column": 50
+                    },
+                    "end": {
+                      "line": 84,
+                      "column": 59
+                    }
+                  }
+                }
+              ],
+              "range": [
+                3270,
+                3315
+              ],
+              "loc": {
+                "start": {
+                  "line": 84,
+                  "column": 16
+                },
+                "end": {
+                  "line": 84,
+                  "column": 61
+                }
+              }
+            },
+            "kind": "init",
+            "method": false,
+            "shorthand": false,
+            "computed": false,
+            "range": [
+              3256,
+              3315
+            ],
+            "loc": {
+              "start": {
+                "line": 84,
+                "column": 2
+              },
+              "end": {
+                "line": 84,
+                "column": 61
+              }
+            }
+          },
+          {
+            "type": "Property",
+            "key": {
+              "type": "Identifier",
+              "name": "states",
+              "range": [
+                3319,
+                3325
+              ],
+              "loc": {
+                "start": {
+                  "line": 85,
+                  "column": 2
+                },
+                "end": {
+                  "line": 85,
+                  "column": 8
+                }
+              }
+            },
+            "value": {
+              "type": "ObjectExpression",
+              "properties": [
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "BaseState",
+                    "range": [
+                      3333,
+                      3342
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 86,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 86,
+                        "column": 13
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "BaseState",
+                    "range": [
+                      3333,
+                      3342
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 86,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 86,
+                        "column": 13
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3333,
+                    3342
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 86,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 86,
+                      "column": 13
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "BreakpointState",
+                    "range": [
+                      3344,
+                      3359
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 86,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 86,
+                        "column": 30
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "BreakpointState",
+                    "range": [
+                      3344,
+                      3359
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 86,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 86,
+                        "column": 30
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3344,
+                    3359
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 86,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 86,
+                      "column": 30
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "BrushZoomState",
+                    "range": [
+                      3361,
+                      3375
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 86,
+                        "column": 32
+                      },
+                      "end": {
+                        "line": 86,
+                        "column": 46
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "BrushZoomState",
+                    "range": [
+                      3361,
+                      3375
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 86,
+                        "column": 32
+                      },
+                      "end": {
+                        "line": 86,
+                        "column": 46
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3361,
+                    3375
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 86,
+                      "column": 32
+                    },
+                    "end": {
+                      "line": 86,
+                      "column": 46
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "CenteredZoomState",
+                    "range": [
+                      3377,
+                      3394
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 86,
+                        "column": 48
+                      },
+                      "end": {
+                        "line": 86,
+                        "column": 65
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "CenteredZoomState",
+                    "range": [
+                      3377,
+                      3394
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 86,
+                        "column": 48
+                      },
+                      "end": {
+                        "line": 86,
+                        "column": 65
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3377,
+                    3394
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 86,
+                      "column": 48
+                    },
+                    "end": {
+                      "line": 86,
+                      "column": 65
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "ContextEditionState",
+                    "range": [
+                      3400,
+                      3419
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 87,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 87,
+                        "column": 23
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "ContextEditionState",
+                    "range": [
+                      3400,
+                      3419
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 87,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 87,
+                        "column": 23
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3400,
+                    3419
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 87,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 87,
+                      "column": 23
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "EditionState",
+                    "range": [
+                      3421,
+                      3433
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 87,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 87,
+                        "column": 37
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "EditionState",
+                    "range": [
+                      3421,
+                      3433
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 87,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 87,
+                        "column": 37
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3421,
+                    3433
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 87,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 87,
+                      "column": 37
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "SelectionState",
+                    "range": [
+                      3435,
+                      3449
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 87,
+                        "column": 39
+                      },
+                      "end": {
+                        "line": 87,
+                        "column": 53
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "SelectionState",
+                    "range": [
+                      3435,
+                      3449
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 87,
+                        "column": 39
+                      },
+                      "end": {
+                        "line": 87,
+                        "column": 53
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3435,
+                    3449
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 87,
+                      "column": 39
+                    },
+                    "end": {
+                      "line": 87,
+                      "column": 53
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "SimpleEditionState",
+                    "range": [
+                      3451,
+                      3469
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 87,
+                        "column": 55
+                      },
+                      "end": {
+                        "line": 87,
+                        "column": 73
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "SimpleEditionState",
+                    "range": [
+                      3451,
+                      3469
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 87,
+                        "column": 55
+                      },
+                      "end": {
+                        "line": 87,
+                        "column": 73
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3451,
+                    3469
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 87,
+                      "column": 55
+                    },
+                    "end": {
+                      "line": 87,
+                      "column": 73
+                    }
+                  }
+                }
+              ],
+              "range": [
+                3327,
+                3473
+              ],
+              "loc": {
+                "start": {
+                  "line": 85,
+                  "column": 10
+                },
+                "end": {
+                  "line": 88,
+                  "column": 3
+                }
+              }
+            },
+            "kind": "init",
+            "method": false,
+            "shorthand": false,
+            "computed": false,
+            "range": [
+              3319,
+              3473
+            ],
+            "loc": {
+              "start": {
+                "line": 85,
+                "column": 2
+              },
+              "end": {
+                "line": 88,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Property",
+            "key": {
+              "type": "Identifier",
+              "name": "helpers",
+              "range": [
+                3477,
+                3484
+              ],
+              "loc": {
+                "start": {
+                  "line": 89,
+                  "column": 2
+                },
+                "end": {
+                  "line": 89,
+                  "column": 9
+                }
+              }
+            },
+            "value": {
+              "type": "ObjectExpression",
+              "properties": [
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "AnnotatedMarkerLayer",
+                    "range": [
+                      3492,
+                      3512
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 90,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 90,
+                        "column": 24
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "AnnotatedMarkerLayer",
+                    "range": [
+                      3492,
+                      3512
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 90,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 90,
+                        "column": 24
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3492,
+                    3512
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 90,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 90,
+                      "column": 24
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "AnnotatedSegmentLayer",
+                    "range": [
+                      3514,
+                      3535
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 90,
+                        "column": 26
+                      },
+                      "end": {
+                        "line": 90,
+                        "column": 47
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "AnnotatedSegmentLayer",
+                    "range": [
+                      3514,
+                      3535
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 90,
+                        "column": 26
+                      },
+                      "end": {
+                        "line": 90,
+                        "column": 47
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3514,
+                    3535
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 90,
+                      "column": 26
+                    },
+                    "end": {
+                      "line": 90,
+                      "column": 47
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "BreakpointLayer",
+                    "range": [
+                      3537,
+                      3552
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 90,
+                        "column": 49
+                      },
+                      "end": {
+                        "line": 90,
+                        "column": 64
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "BreakpointLayer",
+                    "range": [
+                      3537,
+                      3552
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 90,
+                        "column": 49
+                      },
+                      "end": {
+                        "line": 90,
+                        "column": 64
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3537,
+                    3552
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 90,
+                      "column": 49
+                    },
+                    "end": {
+                      "line": 90,
+                      "column": 64
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "CursorLayer",
+                    "range": [
+                      3558,
+                      3569
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 91,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 91,
+                        "column": 15
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "CursorLayer",
+                    "range": [
+                      3558,
+                      3569
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 91,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 91,
+                        "column": 15
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3558,
+                    3569
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 91,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 91,
+                      "column": 15
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "GridAxisLayer",
+                    "range": [
+                      3571,
+                      3584
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 91,
+                        "column": 17
+                      },
+                      "end": {
+                        "line": 91,
+                        "column": 30
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "GridAxisLayer",
+                    "range": [
+                      3571,
+                      3584
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 91,
+                        "column": 17
+                      },
+                      "end": {
+                        "line": 91,
+                        "column": 30
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3571,
+                    3584
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 91,
+                      "column": 17
+                    },
+                    "end": {
+                      "line": 91,
+                      "column": 30
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "MarkerLayer",
+                    "range": [
+                      3586,
+                      3597
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 91,
+                        "column": 32
+                      },
+                      "end": {
+                        "line": 91,
+                        "column": 43
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "MarkerLayer",
+                    "range": [
+                      3586,
+                      3597
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 91,
+                        "column": 32
+                      },
+                      "end": {
+                        "line": 91,
+                        "column": 43
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3586,
+                    3597
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 91,
+                      "column": 32
+                    },
+                    "end": {
+                      "line": 91,
+                      "column": 43
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "SegmentLayer",
+                    "range": [
+                      3599,
+                      3611
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 91,
+                        "column": 45
+                      },
+                      "end": {
+                        "line": 91,
+                        "column": 57
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "SegmentLayer",
+                    "range": [
+                      3599,
+                      3611
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 91,
+                        "column": 45
+                      },
+                      "end": {
+                        "line": 91,
+                        "column": 57
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3599,
+                    3611
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 91,
+                      "column": 45
+                    },
+                    "end": {
+                      "line": 91,
+                      "column": 57
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "TickLayer",
+                    "range": [
+                      3613,
+                      3622
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 91,
+                        "column": 59
+                      },
+                      "end": {
+                        "line": 91,
+                        "column": 68
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "TickLayer",
+                    "range": [
+                      3613,
+                      3622
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 91,
+                        "column": 59
+                      },
+                      "end": {
+                        "line": 91,
+                        "column": 68
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3613,
+                    3622
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 91,
+                      "column": 59
+                    },
+                    "end": {
+                      "line": 91,
+                      "column": 68
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "TimeAxisLayer",
+                    "range": [
+                      3628,
+                      3641
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 92,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 92,
+                        "column": 17
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "TimeAxisLayer",
+                    "range": [
+                      3628,
+                      3641
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 92,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 92,
+                        "column": 17
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3628,
+                    3641
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 92,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 92,
+                      "column": 17
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "TraceLayer",
+                    "range": [
+                      3643,
+                      3653
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 92,
+                        "column": 19
+                      },
+                      "end": {
+                        "line": 92,
+                        "column": 29
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "TraceLayer",
+                    "range": [
+                      3643,
+                      3653
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 92,
+                        "column": 19
+                      },
+                      "end": {
+                        "line": 92,
+                        "column": 29
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3643,
+                    3653
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 92,
+                      "column": 19
+                    },
+                    "end": {
+                      "line": 92,
+                      "column": 29
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "WaveformLayer",
+                    "range": [
+                      3655,
+                      3668
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 92,
+                        "column": 31
+                      },
+                      "end": {
+                        "line": 92,
+                        "column": 44
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "WaveformLayer",
+                    "range": [
+                      3655,
+                      3668
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 92,
+                        "column": 31
+                      },
+                      "end": {
+                        "line": 92,
+                        "column": 44
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3655,
+                    3668
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 92,
+                      "column": 31
+                    },
+                    "end": {
+                      "line": 92,
+                      "column": 44
+                    }
+                  }
+                }
+              ],
+              "range": [
+                3486,
+                3672
+              ],
+              "loc": {
+                "start": {
+                  "line": 89,
+                  "column": 11
+                },
+                "end": {
+                  "line": 93,
+                  "column": 3
+                }
+              }
+            },
+            "kind": "init",
+            "method": false,
+            "shorthand": false,
+            "computed": false,
+            "range": [
+              3477,
+              3672
+            ],
+            "loc": {
+              "start": {
+                "line": 89,
+                "column": 2
+              },
+              "end": {
+                "line": 93,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Property",
+            "key": {
+              "type": "Identifier",
+              "name": "axis",
+              "range": [
+                3676,
+                3680
+              ],
+              "loc": {
+                "start": {
+                  "line": 94,
+                  "column": 2
+                },
+                "end": {
+                  "line": 94,
+                  "column": 6
+                }
+              }
+            },
+            "value": {
+              "type": "ObjectExpression",
+              "properties": [
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "AxisLayer",
+                    "range": [
+                      3688,
+                      3697
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 95,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 95,
+                        "column": 13
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "AxisLayer",
+                    "range": [
+                      3688,
+                      3697
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 95,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 95,
+                        "column": 13
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3688,
+                    3697
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 95,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 95,
+                      "column": 13
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "timeAxisGenerator",
+                    "range": [
+                      3699,
+                      3716
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 95,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 95,
+                        "column": 32
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "timeAxisGenerator",
+                    "range": [
+                      3699,
+                      3716
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 95,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 95,
+                        "column": 32
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3699,
+                    3716
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 95,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 95,
+                      "column": 32
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "gridAxisGenerator",
+                    "range": [
+                      3718,
+                      3735
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 95,
+                        "column": 34
+                      },
+                      "end": {
+                        "line": 95,
+                        "column": 51
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "gridAxisGenerator",
+                    "range": [
+                      3718,
+                      3735
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 95,
+                        "column": 34
+                      },
+                      "end": {
+                        "line": 95,
+                        "column": 51
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3718,
+                    3735
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 95,
+                      "column": 34
+                    },
+                    "end": {
+                      "line": 95,
+                      "column": 51
+                    }
+                  }
+                }
+              ],
+              "range": [
+                3682,
+                3739
+              ],
+              "loc": {
+                "start": {
+                  "line": 94,
+                  "column": 8
+                },
+                "end": {
+                  "line": 96,
+                  "column": 3
+                }
+              }
+            },
+            "kind": "init",
+            "method": false,
+            "shorthand": false,
+            "computed": false,
+            "range": [
+              3676,
+              3739
+            ],
+            "loc": {
+              "start": {
+                "line": 94,
+                "column": 2
+              },
+              "end": {
+                "line": 96,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Property",
+            "key": {
+              "type": "Identifier",
+              "name": "utils",
+              "range": [
+                3743,
+                3748
+              ],
+              "loc": {
+                "start": {
+                  "line": 97,
+                  "column": 2
+                },
+                "end": {
+                  "line": 97,
+                  "column": 7
+                }
+              }
+            },
+            "value": {
+              "type": "ObjectExpression",
+              "properties": [
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "format",
+                    "range": [
+                      3756,
+                      3762
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 98,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 98,
+                        "column": 10
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "format",
+                    "range": [
+                      3756,
+                      3762
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 98,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 98,
+                        "column": 10
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3756,
+                    3762
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 98,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 98,
+                      "column": 10
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "OrthogonalData",
+                    "range": [
+                      3764,
+                      3778
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 98,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 98,
+                        "column": 26
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "OrthogonalData",
+                    "range": [
+                      3764,
+                      3778
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 98,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 98,
+                        "column": 26
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3764,
+                    3778
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 98,
+                      "column": 12
+                    },
+                    "end": {
+                      "line": 98,
+                      "column": 26
+                    }
+                  }
+                },
+                {
+                  "type": "Property",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "scales",
+                    "range": [
+                      3780,
+                      3786
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 98,
+                        "column": 28
+                      },
+                      "end": {
+                        "line": 98,
+                        "column": 34
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "Identifier",
+                    "name": "scales",
+                    "range": [
+                      3780,
+                      3786
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 98,
+                        "column": 28
+                      },
+                      "end": {
+                        "line": 98,
+                        "column": 34
+                      }
+                    }
+                  },
+                  "kind": "init",
+                  "method": false,
+                  "shorthand": true,
+                  "computed": false,
+                  "range": [
+                    3780,
+                    3786
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 98,
+                      "column": 28
+                    },
+                    "end": {
+                      "line": 98,
+                      "column": 34
+                    }
+                  }
+                }
+              ],
+              "range": [
+                3750,
+                3790
+              ],
+              "loc": {
+                "start": {
+                  "line": 97,
+                  "column": 9
+                },
+                "end": {
+                  "line": 99,
+                  "column": 3
+                }
+              }
+            },
+            "kind": "init",
+            "method": false,
+            "shorthand": false,
+            "computed": false,
+            "range": [
+              3743,
+              3790
+            ],
+            "loc": {
+              "start": {
+                "line": 97,
+                "column": 2
+              },
+              "end": {
+                "line": 99,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "range": [
+          2864,
+          3792
+        ],
+        "loc": {
+          "start": {
+            "line": 71,
+            "column": 15
+          },
+          "end": {
+            "line": 100,
+            "column": 1
+          }
+        },
+        "leadingComments": [],
+        "trailingComments": []
+      },
+      "range": [
+        2849,
+        3793
+      ],
+      "loc": {
+        "start": {
+          "line": 71,
+          "column": 0
+        },
+        "end": {
+          "line": 100,
+          "column": 2
+        }
+      }
+    }
+  ],
+  "sourceType": "module",
+  "range": [
+    8,
+    3793
+  ],
+  "loc": {
+    "start": {
+      "line": 2,
+      "column": 0
+    },
+    "end": {
+      "line": 100,
+      "column": 2
+    }
+  },
+  "comments": [
+    {
+      "type": "Line",
+      "value": " core",
+      "range": [
+        0,
+        7
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": " shapes",
+      "range": [
+        336,
+        345
+      ],
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": " behaviors",
+      "range": [
+        858,
+        870
+      ],
+      "loc": {
+        "start": {
+          "line": 24,
+          "column": 0
+        },
+        "end": {
+          "line": 24,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": " interactions",
+      "range": [
+        1235,
+        1250
+      ],
+      "loc": {
+        "start": {
+          "line": 32,
+          "column": 0
+        },
+        "end": {
+          "line": 32,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": " states",
+      "range": [
+        1452,
+        1461
+      ],
+      "loc": {
+        "start": {
+          "line": 38,
+          "column": 0
+        },
+        "end": {
+          "line": 38,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": " helpers",
+      "range": [
+        1919,
+        1929
+      ],
+      "loc": {
+        "start": {
+          "line": 48,
+          "column": 0
+        },
+        "end": {
+          "line": 48,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": " axis",
+      "range": [
+        2539,
+        2546
+      ],
+      "loc": {
+        "start": {
+          "line": 61,
+          "column": 0
+        },
+        "end": {
+          "line": 61,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": " utils",
+      "range": [
+        2711,
+        2719
+      ],
+      "loc": {
+        "start": {
+          "line": 66,
+          "column": 0
+        },
+        "end": {
+          "line": 66,
+          "column": 8
+        }
+      }
+    }
+  ]
+}

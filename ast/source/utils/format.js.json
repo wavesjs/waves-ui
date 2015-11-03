@@ -1,0 +1,629 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExportDefaultDeclaration",
+      "declaration": {
+        "type": "ObjectExpression",
+        "properties": [
+          {
+            "type": "Property",
+            "key": {
+              "type": "Identifier",
+              "name": "padLeft",
+              "range": [
+                320,
+                327
+              ],
+              "loc": {
+                "start": {
+                  "line": 12,
+                  "column": 2
+                },
+                "end": {
+                  "line": 12,
+                  "column": 9
+                }
+              }
+            },
+            "value": {
+              "type": "FunctionExpression",
+              "id": null,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "name": "input",
+                  "range": [
+                    328,
+                    333
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 12,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 12,
+                      "column": 15
+                    }
+                  }
+                },
+                {
+                  "type": "Identifier",
+                  "name": "sign",
+                  "range": [
+                    335,
+                    339
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 12,
+                      "column": 17
+                    },
+                    "end": {
+                      "line": 12,
+                      "column": 21
+                    }
+                  }
+                },
+                {
+                  "type": "Identifier",
+                  "name": "length",
+                  "range": [
+                    341,
+                    347
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 12,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 12,
+                      "column": 29
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "AssignmentExpression",
+                      "operator": "+=",
+                      "left": {
+                        "type": "Identifier",
+                        "name": "input",
+                        "range": [
+                          355,
+                          360
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 13,
+                            "column": 4
+                          },
+                          "end": {
+                            "line": 13,
+                            "column": 9
+                          }
+                        }
+                      },
+                      "right": {
+                        "type": "Literal",
+                        "value": "",
+                        "raw": "''",
+                        "range": [
+                          364,
+                          366
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 13,
+                            "column": 13
+                          },
+                          "end": {
+                            "line": 13,
+                            "column": 15
+                          }
+                        }
+                      },
+                      "range": [
+                        355,
+                        366
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 13,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 13,
+                          "column": 15
+                        }
+                      }
+                    },
+                    "range": [
+                      355,
+                      367
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 13,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 13,
+                        "column": 16
+                      }
+                    }
+                  },
+                  {
+                    "type": "WhileStatement",
+                    "test": {
+                      "type": "BinaryExpression",
+                      "operator": "<",
+                      "left": {
+                        "type": "MemberExpression",
+                        "computed": false,
+                        "object": {
+                          "type": "Identifier",
+                          "name": "input",
+                          "range": [
+                            379,
+                            384
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 14,
+                              "column": 11
+                            },
+                            "end": {
+                              "line": 14,
+                              "column": 16
+                            }
+                          }
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "length",
+                          "range": [
+                            385,
+                            391
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 14,
+                              "column": 17
+                            },
+                            "end": {
+                              "line": 14,
+                              "column": 23
+                            }
+                          }
+                        },
+                        "range": [
+                          379,
+                          391
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 14,
+                            "column": 11
+                          },
+                          "end": {
+                            "line": 14,
+                            "column": 23
+                          }
+                        }
+                      },
+                      "right": {
+                        "type": "Identifier",
+                        "name": "length",
+                        "range": [
+                          394,
+                          400
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 14,
+                            "column": 26
+                          },
+                          "end": {
+                            "line": 14,
+                            "column": 32
+                          }
+                        }
+                      },
+                      "range": [
+                        379,
+                        400
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 14,
+                          "column": 11
+                        },
+                        "end": {
+                          "line": 14,
+                          "column": 32
+                        }
+                      }
+                    },
+                    "body": {
+                      "type": "BlockStatement",
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "expression": {
+                            "type": "AssignmentExpression",
+                            "operator": "=",
+                            "left": {
+                              "type": "Identifier",
+                              "name": "input",
+                              "range": [
+                                410,
+                                415
+                              ],
+                              "loc": {
+                                "start": {
+                                  "line": 15,
+                                  "column": 6
+                                },
+                                "end": {
+                                  "line": 15,
+                                  "column": 11
+                                }
+                              }
+                            },
+                            "right": {
+                              "type": "BinaryExpression",
+                              "operator": "+",
+                              "left": {
+                                "type": "Identifier",
+                                "name": "sign",
+                                "range": [
+                                  418,
+                                  422
+                                ],
+                                "loc": {
+                                  "start": {
+                                    "line": 15,
+                                    "column": 14
+                                  },
+                                  "end": {
+                                    "line": 15,
+                                    "column": 18
+                                  }
+                                }
+                              },
+                              "right": {
+                                "type": "Identifier",
+                                "name": "input",
+                                "range": [
+                                  425,
+                                  430
+                                ],
+                                "loc": {
+                                  "start": {
+                                    "line": 15,
+                                    "column": 21
+                                  },
+                                  "end": {
+                                    "line": 15,
+                                    "column": 26
+                                  }
+                                }
+                              },
+                              "range": [
+                                418,
+                                430
+                              ],
+                              "loc": {
+                                "start": {
+                                  "line": 15,
+                                  "column": 14
+                                },
+                                "end": {
+                                  "line": 15,
+                                  "column": 26
+                                }
+                              }
+                            },
+                            "range": [
+                              410,
+                              430
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 15,
+                                "column": 6
+                              },
+                              "end": {
+                                "line": 15,
+                                "column": 26
+                              }
+                            }
+                          },
+                          "range": [
+                            410,
+                            431
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 15,
+                              "column": 6
+                            },
+                            "end": {
+                              "line": 15,
+                              "column": 27
+                            }
+                          }
+                        }
+                      ],
+                      "range": [
+                        402,
+                        437
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 14,
+                          "column": 34
+                        },
+                        "end": {
+                          "line": 16,
+                          "column": 5
+                        }
+                      }
+                    },
+                    "range": [
+                      372,
+                      437
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 14,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 16,
+                        "column": 5
+                      }
+                    }
+                  },
+                  {
+                    "type": "ReturnStatement",
+                    "argument": {
+                      "type": "Identifier",
+                      "name": "input",
+                      "range": [
+                        449,
+                        454
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 17,
+                          "column": 11
+                        },
+                        "end": {
+                          "line": 17,
+                          "column": 16
+                        }
+                      }
+                    },
+                    "range": [
+                      442,
+                      455
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 17,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 17,
+                        "column": 17
+                      }
+                    }
+                  }
+                ],
+                "range": [
+                  349,
+                  459
+                ],
+                "loc": {
+                  "start": {
+                    "line": 12,
+                    "column": 31
+                  },
+                  "end": {
+                    "line": 18,
+                    "column": 3
+                  }
+                }
+              },
+              "generator": false,
+              "expression": false,
+              "range": [
+                327,
+                459
+              ],
+              "loc": {
+                "start": {
+                  "line": 12,
+                  "column": 9
+                },
+                "end": {
+                  "line": 18,
+                  "column": 3
+                }
+              }
+            },
+            "kind": "init",
+            "method": true,
+            "shorthand": false,
+            "computed": false,
+            "range": [
+              320,
+              459
+            ],
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 2
+              },
+              "end": {
+                "line": 18,
+                "column": 3
+              }
+            },
+            "leadingComments": [
+              {
+                "type": "Block",
+                "value": "*\n   * Add a `sign` to the left of a given `input` to match `length`\n   *\n   * @param {String} input - The string to format.\n   * @param {String} sign - The character to add to the left.\n   * @param {Number} length - The length of the output string.\n   ",
+                "range": [
+                  60,
+                  317
+                ],
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 11,
+                    "column": 5
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "range": [
+          56,
+          461
+        ],
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 15
+          },
+          "end": {
+            "line": 19,
+            "column": 1
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Formatting helpers functions.\n ",
+            "range": [
+              0,
+              40
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 3,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": []
+      },
+      "range": [
+        41,
+        462
+      ],
+      "loc": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 19,
+          "column": 2
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Formatting helpers functions.\n ",
+          "range": [
+            0,
+            40
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 3,
+              "column": 3
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "sourceType": "module",
+  "range": [
+    41,
+    462
+  ],
+  "loc": {
+    "start": {
+      "line": 4,
+      "column": 0
+    },
+    "end": {
+      "line": 19,
+      "column": 2
+    }
+  },
+  "comments": [
+    {
+      "type": "Block",
+      "value": "*\n * Formatting helpers functions.\n ",
+      "range": [
+        0,
+        40
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n   * Add a `sign` to the left of a given `input` to match `length`\n   *\n   * @param {String} input - The string to format.\n   * @param {String} sign - The character to add to the left.\n   * @param {Number} length - The length of the output string.\n   ",
+      "range": [
+        60,
+        317
+      ],
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 2
+        },
+        "end": {
+          "line": 11,
+          "column": 5
+        }
+      }
+    }
+  ]
+}

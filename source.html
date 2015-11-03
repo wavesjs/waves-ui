@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="">
+  <title data-ice="title">Source | WavesJS UI API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/wavesjs/ui" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">axis</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/axis/axis-layer.js~AxisLayer.html">AxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-gridAxisGenerator">gridAxisGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-timeAxisGenerator">timeAxisGenerator</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">behaviors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/base-behavior.js~BaseBehavior.html">BaseBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/breakpoint-behavior.js~BreakpointBehavior.html">BreakpointBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/marker-behavior.js~MarkerBehavior.html">MarkerBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/segment-behavior.js~SegmentBehavior.html">SegmentBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/time-context-behavior.js~TimeContextBehavior.html">TimeContextBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/trace-behavior.js~TraceBehavior.html">TraceBehavior</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/layer-time-context.js~LayerTimeContext.html">LayerTimeContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/layer.js~Layer.html">Layer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/timeline-time-context.js~TimelineTimeContext.html">TimelineTimeContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/timeline.js~Timeline.html">Timeline</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/track-collection.js~TrackCollection.html">TrackCollection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/track.js~Track.html">Track</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">helpers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/annotated-marker-layer.js~AnnotatedMarkerLayer.html">AnnotatedMarkerLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/annotated-segment-layer.js~AnnotatedSegmentLayer.html">AnnotatedSegmentLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/breakpoint-layer.js~BreakpointLayer.html">BreakpointLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/cursor-layer.js~CursorLayer.html">CursorLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/grid-axis-layer.js~GridAxisLayer.html">GridAxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/marker-layer.js~MarkerLayer.html">MarkerLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/segment-layer.js~SegmentLayer.html">SegmentLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/tick-layer.js~TickLayer.html">TickLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/time-axis-layer.js~TimeAxisLayer.html">TimeAxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/trace-layer.js~TraceLayer.html">TraceLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/waveform-layer.js~WaveformLayer.html">WaveformLayer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interactions</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interactions/event-source.js~EventSource.html">EventSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interactions/keyboard.js~Keyboard.html">Keyboard</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interactions/surface.js~Surface.html">Surface</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interactions/wave-event.js~WaveEvent.html">WaveEvent</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">shapes</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/annotated-marker.js~AnnotatedMarker.html">AnnotatedMarker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/annotated-segment.js~AnnotatedSegment.html">AnnotatedSegment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/base-shape.js~BaseShape.html">BaseShape</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/cursor.js~Cursor.html">Cursor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/dot.js~Dot.html">Dot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/line.js~Line.html">Line</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/segment.js~Segment.html">Segment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/ticks.js~Ticks.html">Ticks</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/trace-dots.js~TraceDots.html">TraceDots</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/trace-path.js~TracePath.html">TracePath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/waveform.js~Waveform.html">Waveform</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">states</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/base-state.js~BaseState.html">BaseState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/breakpoint-state.js~BreakpointState.html">BreakpointState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/brush-zoom-state.js~BrushZoomState.html">BrushZoomState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/centered-zoom-state.js~CenteredZoomState.html">CenteredZoomState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/context-edition-state.js~ContextEditionState.html">ContextEditionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/edition-state.js~EditionState.html">EditionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/selection-state.js~SelectionState.html">SelectionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/simple-edition-state.js~SimpleEditionState.html">SimpleEditionState</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">utils</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils/orthogonal-data.js~OrthogonalData.html">OrthogonalData</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">245/391</span></h1>
+
+<table class="files-summary" data-ice="files" data-use-coverage="true">
+  <thead>
+    <tr>
+      <td>File</td>
+      <td>Identifier</td>
+      <td class="coverage">Document</td>
+      <td style="display: none;">Size</td>
+      <td style="display: none;">Lines</td>
+      <td style="display: none;">Updated</td>
+    </tr>
+  </thead>
+  <tbody>
+    
+  <tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/axis/axis-layer.js.html">src/axis/axis-layer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/axis/axis-layer.js~AxisLayer.html">AxisLayer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">9/9</span></td>
+      <td style="display: none;" data-ice="size">4507 byte</td>
+      <td style="display: none;" data-ice="lines">146</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/axis/grid-axis-generator.js.html">src/axis/grid-axis-generator.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-gridAxisGenerator">gridAxisGenerator</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">1802 byte</td>
+      <td style="display: none;" data-ice="lines">51</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:50:06 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/axis/time-axis-generator.js.html">src/axis/time-axis-generator.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-timeAxisGenerator">timeAxisGenerator</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
+      <td style="display: none;" data-ice="size">2725 byte</td>
+      <td style="display: none;" data-ice="lines">104</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:28:57 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/behaviors/base-behavior.js.html#errorLines=20,26">src/behaviors/base-behavior.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/behaviors/base-behavior.js~BaseBehavior.html">BaseBehavior</a></span></td>
+      <td class="coverage"><span data-ice="coverage">81 %</span><span data-ice="coverageCount" class="coverage-count">9/11</span></td>
+      <td style="display: none;" data-ice="size">3570 byte</td>
+      <td style="display: none;" data-ice="lines">115</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:29:29 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/behaviors/breakpoint-behavior.js.html#errorLines=10">src/behaviors/breakpoint-behavior.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/behaviors/breakpoint-behavior.js~BreakpointBehavior.html">BreakpointBehavior</a></span></td>
+      <td class="coverage"><span data-ice="coverage">50 %</span><span data-ice="coverageCount" class="coverage-count">1/2</span></td>
+      <td style="display: none;" data-ice="size">1330 byte</td>
+      <td style="display: none;" data-ice="lines">43</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:30:15 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/behaviors/marker-behavior.js.html#errorLines=10">src/behaviors/marker-behavior.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/behaviors/marker-behavior.js~MarkerBehavior.html">MarkerBehavior</a></span></td>
+      <td class="coverage"><span data-ice="coverage">50 %</span><span data-ice="coverageCount" class="coverage-count">1/2</span></td>
+      <td style="display: none;" data-ice="size">446 byte</td>
+      <td style="display: none;" data-ice="lines">16</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:30:05 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/behaviors/segment-behavior.js.html#errorLines=10">src/behaviors/segment-behavior.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/behaviors/segment-behavior.js~SegmentBehavior.html">SegmentBehavior</a></span></td>
+      <td class="coverage"><span data-ice="coverage">50 %</span><span data-ice="coverageCount" class="coverage-count">1/2</span></td>
+      <td style="display: none;" data-ice="size">2203 byte</td>
+      <td style="display: none;" data-ice="lines">65</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:30:24 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/behaviors/time-context-behavior.js.html#errorLines=48,7">src/behaviors/time-context-behavior.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/behaviors/time-context-behavior.js~TimeContextBehavior.html">TimeContextBehavior</a></span></td>
+      <td class="coverage"><span data-ice="coverage">33 %</span><span data-ice="coverageCount" class="coverage-count">1/3</span></td>
+      <td style="display: none;" data-ice="size">2206 byte</td>
+      <td style="display: none;" data-ice="lines">62</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:32:38 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/behaviors/trace-behavior.js.html#errorLines=10">src/behaviors/trace-behavior.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/behaviors/trace-behavior.js~TraceBehavior.html">TraceBehavior</a></span></td>
+      <td class="coverage"><span data-ice="coverage">50 %</span><span data-ice="coverageCount" class="coverage-count">1/2</span></td>
+      <td style="display: none;" data-ice="size">1340 byte</td>
+      <td style="display: none;" data-ice="lines">40</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:32:51 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/layer-time-context.js.html">src/core/layer-time-context.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/layer-time-context.js~LayerTimeContext.html">LayerTimeContext</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">14/14</span></td>
+      <td style="display: none;" data-ice="size">4974 byte</td>
+      <td style="display: none;" data-ice="lines">188</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:33:12 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/layer.js.html">src/core/layer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/layer.js~Layer.html">Layer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">52/52</span></td>
+      <td style="display: none;" data-ice="size">24077 byte</td>
+      <td style="display: none;" data-ice="lines">801</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/namespace.js.html">src/core/namespace.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">45 byte</td>
+      <td style="display: none;" data-ice="lines">1</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/timeline-time-context.js.html">src/core/timeline-time-context.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/timeline-time-context.js~TimelineTimeContext.html">TimelineTimeContext</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">15/15</span></td>
+      <td style="display: none;" data-ice="size">4990 byte</td>
+      <td style="display: none;" data-ice="lines">196</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:37:15 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/timeline.js.html">src/core/timeline.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/timeline.js~Timeline.html">Timeline</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">32/32</span></td>
+      <td style="display: none;" data-ice="size">12860 byte</td>
+      <td style="display: none;" data-ice="lines">474</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/track-collection.js.html#errorLines=10">src/core/track-collection.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/track-collection.js~TrackCollection.html">TrackCollection</a></span></td>
+      <td class="coverage"><span data-ice="coverage">87 %</span><span data-ice="coverageCount" class="coverage-count">7/8</span></td>
+      <td style="display: none;" data-ice="size">2698 byte</td>
+      <td style="display: none;" data-ice="lines">97</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/track.js.html">src/core/track.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/track.js~Track.html">Track</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">21/21</span></td>
+      <td style="display: none;" data-ice="size">7752 byte</td>
+      <td style="display: none;" data-ice="lines">277</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/helpers/annotated-marker-layer.js.html">src/helpers/annotated-marker-layer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/helpers/annotated-marker-layer.js~AnnotatedMarkerLayer.html">AnnotatedMarkerLayer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">664 byte</td>
+      <td style="display: none;" data-ice="lines">23</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/helpers/annotated-segment-layer.js.html">src/helpers/annotated-segment-layer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/helpers/annotated-segment-layer.js~AnnotatedSegmentLayer.html">AnnotatedSegmentLayer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">938 byte</td>
+      <td style="display: none;" data-ice="lines">33</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/helpers/breakpoint-layer.js.html">src/helpers/breakpoint-layer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/helpers/breakpoint-layer.js~BreakpointLayer.html">BreakpointLayer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">1012 byte</td>
+      <td style="display: none;" data-ice="lines">34</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/helpers/cursor-layer.js.html#errorLines=30,34">src/helpers/cursor-layer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/helpers/cursor-layer.js~CursorLayer.html">CursorLayer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">50 %</span><span data-ice="coverageCount" class="coverage-count">2/4</span></td>
+      <td style="display: none;" data-ice="size">817 byte</td>
+      <td style="display: none;" data-ice="lines">37</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/helpers/grid-axis-layer.js.html">src/helpers/grid-axis-layer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/helpers/grid-axis-layer.js~GridAxisLayer.html">GridAxisLayer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">653 byte</td>
+      <td style="display: none;" data-ice="lines">27</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/helpers/marker-layer.js.html">src/helpers/marker-layer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/helpers/marker-layer.js~MarkerLayer.html">MarkerLayer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">933 byte</td>
+      <td style="display: none;" data-ice="lines">33</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/helpers/segment-layer.js.html">src/helpers/segment-layer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/helpers/segment-layer.js~SegmentLayer.html">SegmentLayer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">891 byte</td>
+      <td style="display: none;" data-ice="lines">33</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/helpers/tick-layer.js.html">src/helpers/tick-layer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/helpers/tick-layer.js~TickLayer.html">TickLayer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">747 byte</td>
+      <td style="display: none;" data-ice="lines">25</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/helpers/time-axis-layer.js.html">src/helpers/time-axis-layer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/helpers/time-axis-layer.js~TimeAxisLayer.html">TimeAxisLayer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">578 byte</td>
+      <td style="display: none;" data-ice="lines">22</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/helpers/trace-layer.js.html">src/helpers/trace-layer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/helpers/trace-layer.js~TraceLayer.html">TraceLayer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">1344 byte</td>
+      <td style="display: none;" data-ice="lines">36</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/helpers/waveform-layer.js.html">src/helpers/waveform-layer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/helpers/waveform-layer.js~WaveformLayer.html">WaveformLayer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">805 byte</td>
+      <td style="display: none;" data-ice="lines">33</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/interactions/event-source.js.html#errorLines=9">src/interactions/event-source.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/interactions/event-source.js~EventSource.html">EventSource</a></span></td>
+      <td class="coverage"><span data-ice="coverage">66 %</span><span data-ice="coverageCount" class="coverage-count">2/3</span></td>
+      <td style="display: none;" data-ice="size">449 byte</td>
+      <td style="display: none;" data-ice="lines">23</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/interactions/keyboard.js.html">src/interactions/keyboard.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/interactions/keyboard.js~Keyboard.html">Keyboard</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">3/3</span></td>
+      <td style="display: none;" data-ice="size">1372 byte</td>
+      <td style="display: none;" data-ice="lines">54</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/interactions/surface.js.html">src/interactions/surface.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/interactions/surface.js~Surface.html">Surface</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">3/3</span></td>
+      <td style="display: none;" data-ice="size">4695 byte</td>
+      <td style="display: none;" data-ice="lines">156</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/interactions/wave-event.js.html#errorLines=12,13,14,16,17">src/interactions/wave-event.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/interactions/wave-event.js~WaveEvent.html">WaveEvent</a></span></td>
+      <td class="coverage"><span data-ice="coverage">28 %</span><span data-ice="coverageCount" class="coverage-count">2/7</span></td>
+      <td style="display: none;" data-ice="size">667 byte</td>
+      <td style="display: none;" data-ice="lines">19</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/shapes/annotated-marker.js.html#errorLines=10,18,19,22,38">src/shapes/annotated-marker.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/shapes/annotated-marker.js~AnnotatedMarker.html">AnnotatedMarker</a></span></td>
+      <td class="coverage"><span data-ice="coverage">16 %</span><span data-ice="coverageCount" class="coverage-count">1/6</span></td>
+      <td style="display: none;" data-ice="size">1333 byte</td>
+      <td style="display: none;" data-ice="lines">48</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:34:03 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/shapes/annotated-segment.js.html#errorLines=10,18,19,22,38">src/shapes/annotated-segment.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/shapes/annotated-segment.js~AnnotatedSegment.html">AnnotatedSegment</a></span></td>
+      <td class="coverage"><span data-ice="coverage">16 %</span><span data-ice="coverageCount" class="coverage-count">1/6</span></td>
+      <td style="display: none;" data-ice="size">1341 byte</td>
+      <td style="display: none;" data-ice="lines">48</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:34:14 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/shapes/base-shape.js.html">src/shapes/base-shape.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/shapes/base-shape.js~BaseShape.html">BaseShape</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">13/13</span></td>
+      <td style="display: none;" data-ice="size">6097 byte</td>
+      <td style="display: none;" data-ice="lines">178</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/shapes/cursor.js.html#errorLines=11,24,27,37">src/shapes/cursor.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/shapes/cursor.js~Cursor.html">Cursor</a></span></td>
+      <td class="coverage"><span data-ice="coverage">33 %</span><span data-ice="coverageCount" class="coverage-count">2/6</span></td>
+      <td style="display: none;" data-ice="size">1102 byte</td>
+      <td style="display: none;" data-ice="lines">47</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:34:25 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/shapes/dot.js.html#errorLines=10,17,20,25,37">src/shapes/dot.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/shapes/dot.js~Dot.html">Dot</a></span></td>
+      <td class="coverage"><span data-ice="coverage">16 %</span><span data-ice="coverageCount" class="coverage-count">1/6</span></td>
+      <td style="display: none;" data-ice="size">1207 byte</td>
+      <td style="display: none;" data-ice="lines">47</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:34:38 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/shapes/line.js.html#errorLines=11,21,24,29">src/shapes/line.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/shapes/line.js~Line.html">Line</a></span></td>
+      <td class="coverage"><span data-ice="coverage">20 %</span><span data-ice="coverageCount" class="coverage-count">1/5</span></td>
+      <td style="display: none;" data-ice="size">1378 byte</td>
+      <td style="display: none;" data-ice="lines">53</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:34:50 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/shapes/marker.js.html#errorLines=10,26,31,32,43,59,71">src/shapes/marker.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/shapes/marker.js~Marker.html">Marker</a></span></td>
+      <td class="coverage"><span data-ice="coverage">12 %</span><span data-ice="coverageCount" class="coverage-count">1/8</span></td>
+      <td style="display: none;" data-ice="size">2538 byte</td>
+      <td style="display: none;" data-ice="lines">85</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:35:00 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/shapes/segment.js.html#errorLines=10,25,28,30,38,45,59,88">src/shapes/segment.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/shapes/segment.js~Segment.html">Segment</a></span></td>
+      <td class="coverage"><span data-ice="coverage">11 %</span><span data-ice="coverageCount" class="coverage-count">1/9</span></td>
+      <td style="display: none;" data-ice="size">3701 byte</td>
+      <td style="display: none;" data-ice="lines">101</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:35:13 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/shapes/ticks.js.html#errorLines=23,24,28">src/shapes/ticks.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/shapes/ticks.js~Ticks.html">Ticks</a></span></td>
+      <td class="coverage"><span data-ice="coverage">25 %</span><span data-ice="coverageCount" class="coverage-count">1/4</span></td>
+      <td style="display: none;" data-ice="size">2827 byte</td>
+      <td style="display: none;" data-ice="lines">90</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:35:33 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/shapes/trace-dots.js.html#errorLines=10,25,28,30,36,42,56,74">src/shapes/trace-dots.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/shapes/trace-dots.js~TraceDots.html">TraceDots</a></span></td>
+      <td class="coverage"><span data-ice="coverage">11 %</span><span data-ice="coverageCount" class="coverage-count">1/9</span></td>
+      <td style="display: none;" data-ice="size">2878 byte</td>
+      <td style="display: none;" data-ice="lines">87</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:35:43 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/shapes/trace-path.js.html#errorLines=10,24,26,28,33,40">src/shapes/trace-path.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/shapes/trace-path.js~TracePath.html">TracePath</a></span></td>
+      <td class="coverage"><span data-ice="coverage">14 %</span><span data-ice="coverageCount" class="coverage-count">1/7</span></td>
+      <td style="display: none;" data-ice="size">2795 byte</td>
+      <td style="display: none;" data-ice="lines">97</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:35:52 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/shapes/waveform.js.html#errorLines=14,30,35,59">src/shapes/waveform.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/shapes/waveform.js~Waveform.html">Waveform</a></span></td>
+      <td class="coverage"><span data-ice="coverage">20 %</span><span data-ice="coverageCount" class="coverage-count">1/5</span></td>
+      <td style="display: none;" data-ice="size">4901 byte</td>
+      <td style="display: none;" data-ice="lines">150</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:49:38 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/states/base-state.js.html">src/states/base-state.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/states/base-state.js~BaseState.html">BaseState</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">8/8</span></td>
+      <td style="display: none;" data-ice="size">1662 byte</td>
+      <td style="display: none;" data-ice="lines">64</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/states/breakpoint-state.js.html#errorLines=11,14,15,16,19,20,22,36,37,77,90">src/states/breakpoint-state.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/states/breakpoint-state.js~BreakpointState.html">BreakpointState</a></span></td>
+      <td class="coverage"><span data-ice="coverage">8 %</span><span data-ice="coverageCount" class="coverage-count">1/12</span></td>
+      <td style="display: none;" data-ice="size">2372 byte</td>
+      <td style="display: none;" data-ice="lines">94</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:37:44 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/states/brush-zoom-state.js.html#errorLines=13,17,34,35,36,53,64,91">src/states/brush-zoom-state.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/states/brush-zoom-state.js~BrushZoomState.html">BrushZoomState</a></span></td>
+      <td class="coverage"><span data-ice="coverage">11 %</span><span data-ice="coverageCount" class="coverage-count">1/9</span></td>
+      <td style="display: none;" data-ice="size">2377 byte</td>
+      <td style="display: none;" data-ice="lines">99</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:48:51 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/states/centered-zoom-state.js.html#errorLines=15,17,22,23,26,40,41,42,49,82">src/states/centered-zoom-state.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/states/centered-zoom-state.js~CenteredZoomState.html">CenteredZoomState</a></span></td>
+      <td class="coverage"><span data-ice="coverage">9 %</span><span data-ice="coverageCount" class="coverage-count">1/11</span></td>
+      <td style="display: none;" data-ice="size">2714 byte</td>
+      <td style="display: none;" data-ice="lines">83</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:48:33 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/states/context-edition-state.js.html#errorLines=11,15,29,30,31,36,42,58">src/states/context-edition-state.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/states/context-edition-state.js~ContextEditionState.html">ContextEditionState</a></span></td>
+      <td class="coverage"><span data-ice="coverage">11 %</span><span data-ice="coverageCount" class="coverage-count">1/9</span></td>
+      <td style="display: none;" data-ice="size">1435 byte</td>
+      <td style="display: none;" data-ice="lines">63</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:47:56 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/states/edition-state.js.html#errorLines=11,12,15,16,18,32,36,45,47,8">src/states/edition-state.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/states/edition-state.js~EditionState.html">EditionState</a></span></td>
+      <td class="coverage"><span data-ice="coverage">9 %</span><span data-ice="coverageCount" class="coverage-count">1/11</span></td>
+      <td style="display: none;" data-ice="size">928 byte</td>
+      <td style="display: none;" data-ice="lines">49</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/states/selection-state.js.html#errorLines=109,12,14,15,150,154,16,21,25,33,9,92,96">src/states/selection-state.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/states/selection-state.js~SelectionState.html">SelectionState</a></span></td>
+      <td class="coverage"><span data-ice="coverage">7 %</span><span data-ice="coverageCount" class="coverage-count">1/14</span></td>
+      <td style="display: none;" data-ice="size">3998 byte</td>
+      <td style="display: none;" data-ice="lines">169</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/states/simple-edition-state.js.html#errorLines=11,12,15,16,18,32,52,62,8">src/states/simple-edition-state.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/states/simple-edition-state.js~SimpleEditionState.html">SimpleEditionState</a></span></td>
+      <td class="coverage"><span data-ice="coverage">10 %</span><span data-ice="coverageCount" class="coverage-count">1/10</span></td>
+      <td style="display: none;" data-ice="size">1418 byte</td>
+      <td style="display: none;" data-ice="lines">65</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/utils/format.js.html">src/utils/format.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">463 byte</td>
+      <td style="display: none;" data-ice="lines">19</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:42:01 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/utils/orthogonal-data.js.html#errorLines=6">src/utils/orthogonal-data.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/utils/orthogonal-data.js~OrthogonalData.html">OrthogonalData</a></span></td>
+      <td class="coverage"><span data-ice="coverage">87 %</span><span data-ice="coverageCount" class="coverage-count">7/8</span></td>
+      <td style="display: none;" data-ice="size">2007 byte</td>
+      <td style="display: none;" data-ice="lines">102</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:53:19 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/utils/scales.js.html">src/utils/scales.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">974 byte</td>
+      <td style="display: none;" data-ice="lines">49</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:45:22 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/waves-ui.js.html">src/waves-ui.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">3794 byte</td>
+      <td style="display: none;" data-ice="lines">100</td>
+      <td style="display: none;" data-ice="updated">2015-11-03 11:23:10 (UTC)</td>
+    </tr>
+</tbody>
+</table>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.1)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

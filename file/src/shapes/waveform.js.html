@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/shapes/waveform.js | WavesJS UI API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/wavesjs/ui" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">axis</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/axis/axis-layer.js~AxisLayer.html">AxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-gridAxisGenerator">gridAxisGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-timeAxisGenerator">timeAxisGenerator</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">behaviors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/base-behavior.js~BaseBehavior.html">BaseBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/breakpoint-behavior.js~BreakpointBehavior.html">BreakpointBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/marker-behavior.js~MarkerBehavior.html">MarkerBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/segment-behavior.js~SegmentBehavior.html">SegmentBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/time-context-behavior.js~TimeContextBehavior.html">TimeContextBehavior</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/behaviors/trace-behavior.js~TraceBehavior.html">TraceBehavior</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/layer-time-context.js~LayerTimeContext.html">LayerTimeContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/layer.js~Layer.html">Layer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/timeline-time-context.js~TimelineTimeContext.html">TimelineTimeContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/timeline.js~Timeline.html">Timeline</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/track-collection.js~TrackCollection.html">TrackCollection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/track.js~Track.html">Track</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">helpers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/annotated-marker-layer.js~AnnotatedMarkerLayer.html">AnnotatedMarkerLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/annotated-segment-layer.js~AnnotatedSegmentLayer.html">AnnotatedSegmentLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/breakpoint-layer.js~BreakpointLayer.html">BreakpointLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/cursor-layer.js~CursorLayer.html">CursorLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/grid-axis-layer.js~GridAxisLayer.html">GridAxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/marker-layer.js~MarkerLayer.html">MarkerLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/segment-layer.js~SegmentLayer.html">SegmentLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/tick-layer.js~TickLayer.html">TickLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/time-axis-layer.js~TimeAxisLayer.html">TimeAxisLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/trace-layer.js~TraceLayer.html">TraceLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/waveform-layer.js~WaveformLayer.html">WaveformLayer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interactions</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interactions/event-source.js~EventSource.html">EventSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interactions/keyboard.js~Keyboard.html">Keyboard</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interactions/surface.js~Surface.html">Surface</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interactions/wave-event.js~WaveEvent.html">WaveEvent</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">shapes</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/annotated-marker.js~AnnotatedMarker.html">AnnotatedMarker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/annotated-segment.js~AnnotatedSegment.html">AnnotatedSegment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/base-shape.js~BaseShape.html">BaseShape</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/cursor.js~Cursor.html">Cursor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/dot.js~Dot.html">Dot</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/line.js~Line.html">Line</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/segment.js~Segment.html">Segment</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/ticks.js~Ticks.html">Ticks</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/trace-dots.js~TraceDots.html">TraceDots</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/trace-path.js~TracePath.html">TracePath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/shapes/waveform.js~Waveform.html">Waveform</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">states</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/base-state.js~BaseState.html">BaseState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/breakpoint-state.js~BreakpointState.html">BreakpointState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/brush-zoom-state.js~BrushZoomState.html">BrushZoomState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/centered-zoom-state.js~CenteredZoomState.html">CenteredZoomState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/context-edition-state.js~ContextEditionState.html">ContextEditionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/edition-state.js~EditionState.html">EditionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/selection-state.js~SelectionState.html">SelectionState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/states/simple-edition-state.js~SimpleEditionState.html">SimpleEditionState</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">utils</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/utils/orthogonal-data.js~OrthogonalData.html">OrthogonalData</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/shapes/waveform.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import BaseShape from &apos;./base-shape&apos;;
+
+
+const xhtmlNS = &apos;http://www.w3.org/1999/xhtml&apos;;
+
+/**
+ * A shape to display a waveform. (for entity data)
+ *
+ * [example usage](./examples/layer-waveform.html)
+ *
+ * @todo - fix problems with canvas strategy.
+ */
+export default class Waveform extends BaseShape {
+  getClassName() { return &apos;waveform&apos;; }
+
+  _getAccessorList() {
+    // return { y: 0 };
+    return {};
+  }
+
+  _getDefaults() {
+    return {
+      sampleRate: 44100,
+      color: &apos;#000000&apos;,
+      opacity: 1,
+      // renderingStrategy: &apos;svg&apos; // canvas is bugged (translation, etc...)
+    };
+  }
+
+  render(renderingContext) {
+    if (this.$el) { return this.$el; }
+
+    // if (this.params.renderingStrategy === &apos;svg&apos;) {
+
+      this.$el = document.createElementNS(this.ns, &apos;path&apos;);
+      this.$el.setAttributeNS(null, &apos;fill&apos;, &apos;none&apos;);
+      this.$el.setAttributeNS(null, &apos;shape-rendering&apos;, &apos;crispEdges&apos;);
+      this.$el.setAttributeNS(null, &apos;stroke&apos;, this.params.color);
+      this.$el.style.opacity = this.params.opacity;
+
+    // } else if (this.params.renderingStrategy === &apos;canvas&apos;) {
+
+    //   this.$el = document.createElementNS(this.ns, &apos;foreignObject&apos;);
+    //   this.$el.setAttributeNS(null, &apos;width&apos;, renderingContext.width);
+    //   this.$el.setAttributeNS(null, &apos;height&apos;, renderingContext.height);
+
+    //   const canvas = document.createElementNS(xhtmlNS, &apos;xhtml:canvas&apos;);
+
+    //   this._ctx = canvas.getContext(&apos;2d&apos;);
+    //   this._ctx.canvas.width = renderingContext.width;
+    //   this._ctx.canvas.height = renderingContext.height;
+
+    //   this.$el.appendChild(canvas);
+    // }
+
+    return this.$el;
+  }
+
+  update(renderingContext, datum) {
+    // define nbr of samples per pixels
+    const sliceMethod = datum instanceof Float32Array ? &apos;subarray&apos; : &apos;slice&apos;;
+    const nbrSamples = datum.length;
+    const duration = nbrSamples / this.params.sampleRate;
+    const width = renderingContext.timeToPixel(duration);
+    const samplesPerPixel = nbrSamples / width;
+
+    if (!samplesPerPixel || datum.length &lt; samplesPerPixel) { return; }
+
+    // compute/draw visible area only
+    // @TODO refactor this ununderstandable mess
+    let minX = Math.max(-renderingContext.offsetX, 0);
+    let trackDecay = renderingContext.trackOffsetX + renderingContext.startX;
+    if (trackDecay &lt; 0) { minX = -trackDecay; }
+
+    let maxX = minX;
+    maxX += (renderingContext.width - minX &lt; renderingContext.visibleWidth) ?
+      renderingContext.width : renderingContext.visibleWidth;
+
+    // get min/max per pixels, clamped to the visible area
+    const invert = renderingContext.timeToPixel.invert;
+    const sampleRate = this.params.sampleRate;
+    const minMax = [];
+
+    for (let px = minX; px &lt; maxX; px++) {
+      const startTime = invert(px);
+      const startSample = startTime * sampleRate;
+      const extract = datum[sliceMethod](startSample, startSample + samplesPerPixel);
+
+      let min = Infinity;
+      let max = -Infinity;
+
+      for (let j = 0, l = extract.length; j &lt; l; j++) {
+        let sample = extract[j];
+        if (sample &lt; min) { min = sample; }
+        if (sample &gt; max) { max = sample; }
+      }
+      // disallow Infinity
+      min = !isFinite(min) ? 0 : min;
+      max = !isFinite(max) ? 0 : max;
+      if (min === 0 &amp;&amp; max === 0) { continue; }
+
+      minMax.push([px, min, max]);
+    }
+
+    if (!minMax.length) { return; }
+
+    const PIXEL = 0;
+    const MIN   = 1;
+    const MAX   = 2;
+    const ZERO  = renderingContext.valueToPixel(0);
+    // rendering strategies
+    // if (this.params.renderingStrategy === &apos;svg&apos;) {
+
+      let instructions = minMax.map((datum, index) =&gt; {
+        const x  = datum[PIXEL];
+        let y1 = Math.round(renderingContext.valueToPixel(datum[MIN]));
+        let y2 = Math.round(renderingContext.valueToPixel(datum[MAX]));
+        // return `${x},${ZERO}L${x},${y1}L${x},${y2}L${x},${ZERO}`;
+        return `${x},${y1}L${x},${y2}`;
+      });
+
+      const d = &apos;M&apos; + instructions.join(&apos;L&apos;);
+      this.$el.setAttributeNS(null, &apos;d&apos;, d);
+
+    // } else if (this.params.renderingStrategy === &apos;canvas&apos;) {
+
+    //   this._ctx.canvas.width = width;
+    //   this.$el.setAttribute(&apos;width&apos;, width);
+    //   // fix chrome bug with translate
+    //   if (navigator.userAgent.toLowerCase().indexOf(&apos;chrome&apos;) &gt; -1) {
+    //     this.$el.setAttribute(&apos;x&apos;, renderingContext.offsetX);
+    //   }
+
+    //   this._ctx.strokeStyle = this.params.color;
+    //   this._ctx.globalAlpha = this.params.opacity;
+    //   this._ctx.moveTo(renderingContext.timeToPixel(0), renderingContext.valueToPixel(0));
+
+    //   minMax.forEach((datum) =&gt; {
+    //     const x  = datum[PIXEL];
+    //     let y1 = Math.round(renderingContext.valueToPixel(datum[MIN]));
+    //     let y2 = Math.round(renderingContext.valueToPixel(datum[MAX]));
+
+    //     this._ctx.moveTo(x, y1);
+    //     this._ctx.lineTo(x, y2);
+    //   });
+
+    //   this._ctx.stroke();
+    // }
+  }
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.1)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
