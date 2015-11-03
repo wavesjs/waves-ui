@@ -10,6 +10,8 @@ import Layer from '../core/layer';
  *
  * It also handle it's own data and its updates. The `_generateData` method is
  * responsible to create some usefull data to visualize
+ *
+ * [example usage for the layer-axis](../../../examples/layer-axis.html)
  */
 export default class AxisLayer extends Layer {
   /**
