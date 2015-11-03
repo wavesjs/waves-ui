@@ -24,14 +24,21 @@ export default class AxisLayer extends Layer {
     this._generator = generator;
   }
 
-  // can't access timeContext from outside
+  /** @private */
   set stretchRatio(value) { return; }
+  /** @private */
   set offset(value) { return; }
+  /** @private */
   set start(value) { return; }
+  /** @private */
   set duration(value) { return; }
+  /** @private */
   get stretchRatio() { return; }
+  /** @private */
   get offset() { return; }
+  /** @private */
   get start() { return; }
+  /** @private */
   get duration() { return; }
 
 
@@ -82,10 +89,9 @@ export default class AxisLayer extends Layer {
     this._renderingContext.visibleWidth = this.timeContext.visibleWidth;
   }
 
-  render() {
-    super.render();
-  }
-
+  /**
+   * Generates the data and update the layer.
+   */
   update() {
     this._generateData();
     super.update();
