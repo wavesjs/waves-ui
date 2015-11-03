@@ -97,4 +97,4 @@ export default {
   utils: {
     format, OrthogonalData, scales
   }
-}
+};

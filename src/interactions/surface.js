@@ -2,23 +2,26 @@ import EventSource from './event-source';
 import WaveEvent from './wave-event';
 
 
-const body = window.document.body;
-
 /**
- * `Surface` normalizes mouse user interactions with the timeline upon the DOM container element of `Track` instances.
- * As soon as a `track` is added to a `timeline`, its attached `Surface` instance will emit the mouse events.
+ * Normalizes mouse user interactions with the timeline upon the DOM
+ * container element of `Track` instances. As soon as a `track` is added to a
+ * `timeline`, its attached `Surface` instance will emit the mouse events.
  */
 export default class Surface extends EventSource {
   /**
-   * @param {DOMElement} el - the DOM element to monitor
+   * @param {DOMElement} el - The DOM element to listen.
+   * @todo - Add some padding to the surface.
    */
-  constructor(el /*, padding of the current surface @TODO */) {
-    super(el);
+  constructor($el) {
+    super($el);
 
+    /**
+     * The name of the event source.
+     * @type {String}
+     */
     this.sourceName = 'surface';
-    // this.isMouseDown = false;
-    this.mouseDownEvent = null;
-    this.lastEvent = null;
+    this._mouseDownEvent = null;
+    this._lastEvent = null;
   }
 
   /**
@@ -30,22 +33,22 @@ export default class Surface extends EventSource {
     const pos = this._getRelativePosition(e);
     event.x = pos.x;
     event.y = pos.y;
-    this.dx = null;
-    this.dy = null;
-    this.area = null; // @TODO rename
 
     return event;
   }
 
   /**
-   * @param {Event} e - raw event from listener
-   * @return {Object} The x, y coordinates coordinates relative to the surface element
+   * Returns the x, y coordinates coordinates relative to the surface element.
+   *
+   * @param {Event} e - Raw event from listener.
+   * @return {Object}
+   * @todo - handle padding.
    */
   _getRelativePosition(e) {
     // @TODO: should be able to ignore padding
     let x = 0;
     let y = 0;
-    const clientRect = this.el.getBoundingClientRect();
+    const clientRect = this.$el.getBoundingClientRect();
     const scrollLeft = document.body.scrollLeft + document.documentElement.scrollLeft;
     const scrollTop  = document.body.scrollTop + document.documentElement.scrollTop;
 
@@ -62,8 +65,6 @@ export default class Surface extends EventSource {
     // clientRect refers to the client, not to the page
     x = x - (clientRect.left + scrollLeft);
     y = y - (clientRect.top  + scrollTop );
-
-    // Should handle padding
 
     return { x, y };
   }
@@ -82,9 +83,9 @@ export default class Surface extends EventSource {
   }
 
   /**
-   * Keep this private to avoid double event binding
-   * Main logic of the surface is here
-   * Should be extended with needed events (mouseenter, mouseleave, wheel ...)
+   * Keep this private to avoid double event binding. Main logic of the surface
+   * is here. Should be extended with needed events (mouseenter, mouseleave,
+   * wheel ...).
    */
   _bindEvents() {
     const onMouseDown = (e) => {
@@ -92,9 +93,9 @@ export default class Surface extends EventSource {
       window.getSelection().removeAllRanges();
       const event = this._createEvent('mousedown', e);
 
-      this.isMouseDown = true;
-      this.mouseDownEvent = event;
-      this.lastEvent = event;
+
+      this._mouseDownEvent = event;
+      this._lastEvent = event;
       // Register mousemove and mouseup listeners on window
       window.addEventListener('mousemove', onMouseMove, false);
       window.addEventListener('mouseup', onMouseUp, false);
@@ -104,20 +105,20 @@ export default class Surface extends EventSource {
 
     const onMouseMove = (e) => {
       let event = this._createEvent('mousemove', e);
-      this._defineArea(event, this.mouseDownEvent, this.lastEvent);
+      this._defineArea(event, this._mouseDownEvent, this._lastEvent);
       // Update `lastEvent` for next call
-      this.lastEvent = event;
+      this._lastEvent = event;
 
       this.emit('event', event);
     };
 
     const onMouseUp = (e) => {
       let event = this._createEvent('mouseup', e);
-      this._defineArea(event, this.mouseDownEvent, this.lastEvent);
+      this._defineArea(event, this._mouseDownEvent, this._lastEvent);
 
-      this.isMouseDown = false;
-      this.mouseDownEvent = null;
-      this.lastEvent = null;
+
+      this._mouseDownEvent = null;
+      this._lastEvent = null;
       // Remove mousemove and mouseup listeners on window
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
@@ -146,10 +147,10 @@ export default class Surface extends EventSource {
     };
 
     // Bind callbacks
-    this.el.addEventListener('mousedown', onMouseDown, false);
-    this.el.addEventListener('click', onClick, false);
-    this.el.addEventListener('dblclick', onDblClick, false);
-    this.el.addEventListener('mouseover', onMouseOver, false);
-    this.el.addEventListener('mouseout', onMouseOut, false);
+    this.$el.addEventListener('mousedown', onMouseDown, false);
+    this.$el.addEventListener('click', onClick, false);
+    this.$el.addEventListener('dblclick', onDblClick, false);
+    this.$el.addEventListener('mouseover', onMouseOver, false);
+    this.$el.addEventListener('mouseout', onMouseOut, false);
   }
 }

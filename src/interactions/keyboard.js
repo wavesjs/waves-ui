@@ -2,12 +2,24 @@ import EventSource from './event-source';
 import WaveEvent from './wave-event';
 
 
+/**
+ * A global event sourve for the keyboard. Only one instance of this source
+ * can be created. The first created timeline instanciate the singleton, each
+ * subsequent instanciation returns the first created instance.
+ */
 export default class Keyboard extends EventSource {
-  constructor(el) {
+  /**
+   * @param {Element} $el - The element on which to install the listener.
+   */
+  constructor($el) {
     // kind of singleton
     if (Keyboard._instance) { return Keyboard._instance; }
 
-    super(el);
+    super($el);
+    /**
+     * The name of the source
+     * @type {String}
+     */
     this.sourceName = 'keyboard';
 
     Keyboard._instance = this;
@@ -36,7 +48,7 @@ export default class Keyboard extends EventSource {
       this.emit('event', event);
     };
 
-    this.el.addEventListener('keydown', onKeyDown, false);
-    this.el.addEventListener('keyup', onKeyUp, false);
+    this.$el.addEventListener('keydown', onKeyDown, false);
+    this.$el.addEventListener('keyup', onKeyUp, false);
   }
 }

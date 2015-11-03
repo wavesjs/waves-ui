@@ -2,13 +2,21 @@ import scales from '../utils/scales';
 
 
 /**
- * A `LayerTimeContext` instance represents a time segment into a `TimelineTimeContext`. It must be attached to a `TimelineTimeContext` (the one of the timeline it belongs to). It relies on its parent's `timeToPixel` (time to pixel transfert function) to create the time to pixel representation of the Layer (the view) it is attached to.
+ * A `LayerTimeContext` instance represents a time segment into a `TimelineTimeContext`.
+ * It must be attached to a `TimelineTimeContext` (the one of the timeline it
+ * belongs to). It relies on its parent's `timeToPixel` (time to pixel transfert
+ * function) to create the time to pixel representation of the Layer (the view) it is attached to.
  *
  * The `layerTimeContext` has four important attributes:
- * - `start` represent the time at which temporal data must be represented in the timeline (for instance the begining of a soundfile in a DAW).
- * - `offset` represents offset time of the data in the context of a Layer. (@TODO give a use case example here "crop ?", and/or explain that it's not a common use case).
+ * - `start` represent the time at which temporal data must be represented
+ *   in the timeline (for instance the begining of a soundfile in a DAW).
+ * - `offset` represents offset time of the data in the context of a Layer.
+ *   (@TODO give a use case example here "crop ?", and/or explain that it's not a common use case).
  * - `duration` is the duration of the view on the data.
- * - `stretchRatio` is the stretch applyed to the temporal data contained in the view (this value can be seen as a local zoom on the data, or as a stretch on the time components of the data). When applyed, the stretch ratio maintain the start position of the view in the timeline.
+ * - `stretchRatio` is the stretch applyed to the temporal data contained in
+ *   the view (this value can be seen as a local zoom on the data, or as a stretch
+ *   on the time components of the data). When applyed, the stretch ratio maintain
+ *   the start position of the view in the timeline.
  *
  * ```
  * + timeline -----------------------------------------------------------------
@@ -32,6 +40,7 @@ export default class LayerTimeContext {
 
     /**
      * The `TimelineTimeContext` instance of the timeline.
+     *
      * @type {TimelineTimeContext}
      */
     this.parent = parent;
@@ -47,6 +56,7 @@ export default class LayerTimeContext {
 
   /**
    * Creates a clone of the current time context.
+   *
    * @return {LayerTimeContext}
    */
   clone() {
@@ -63,6 +73,7 @@ export default class LayerTimeContext {
 
   /**
    * Returns the start position of the time context (in seconds).
+   *
    * @type {Number}
    */
   get start() {
@@ -71,6 +82,7 @@ export default class LayerTimeContext {
 
   /**
    * Sets the start position of the time context (in seconds).
+   *
    * @type {Number}
    */
   set start(value) {
@@ -79,6 +91,7 @@ export default class LayerTimeContext {
 
   /**
    * Returns the duration of the time context (in seconds).
+   *
    * @type {Number}
    */
   get duration() {
@@ -87,6 +100,7 @@ export default class LayerTimeContext {
 
   /**
    * Sets the duration of the time context (in seconds).
+   *
    * @type {Number}
    */
   set duration(value) {
@@ -95,6 +109,7 @@ export default class LayerTimeContext {
 
   /**
    * Returns the offset of the time context (in seconds).
+   *
    * @type {Number}
    */
   get offset() {
@@ -103,6 +118,7 @@ export default class LayerTimeContext {
 
   /**
    * Sets the offset of the time context (in seconds).
+   *
    * @type {Number}
    */
   set offset(value) {
@@ -111,6 +127,7 @@ export default class LayerTimeContext {
 
   /**
    * Returns the stretch ratio of the time context.
+   *
    * @type {Number}
    */
   get stretchRatio() {
@@ -119,6 +136,7 @@ export default class LayerTimeContext {
 
   /**
    * Sets the stretch ratio of the time context.
+   *
    * @type {Number}
    */
   set stretchRatio(value) {
@@ -138,7 +156,10 @@ export default class LayerTimeContext {
   }
 
   /**
-   * Returns the time to pixel transfert function of the time context. If the `stretchRatio` attribute is equal to 1, this function is the global one from the `TimelineTimeContext` instance.
+   * Returns the time to pixel transfert function of the time context. If
+   * the `stretchRatio` attribute is equal to 1, this function is the global
+   * one from the `TimelineTimeContext` instance.
+   *
    * @type {Function}
    */
   get timeToPixel() {
@@ -151,6 +172,7 @@ export default class LayerTimeContext {
 
   /**
    * Helper function to convert pixel to time.
+   *
    * @param {Number} px
    * @return {Number}
    */

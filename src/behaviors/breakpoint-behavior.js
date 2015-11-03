@@ -5,7 +5,6 @@ import BaseBehavior from './base-behavior';
  * Defines the default behavior for a breakpoint function.
  */
 export default class BreakpointBehavior extends BaseBehavior {
-
   edit(renderingContext, shape, datum, dx, dy, target) {
     const data  = this._layer.data;
     const layerHeight = renderingContext.height;
@@ -39,5 +38,4 @@ export default class BreakpointBehavior extends BaseBehavior {
     shape.cx(datum, renderingContext.timeToPixel.invert(targetX));
     shape.cy(datum, renderingContext.valueToPixel.invert(targetY));
   }
-
 }

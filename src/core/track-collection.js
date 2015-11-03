@@ -2,7 +2,9 @@ import Layer from './layer';
 
 
 /**
- * Collection hosting all the `Track` instances registered into the timeline. It provides shorcuts to trigger `render` / `update` methods on tracks or layers. Extend built-in Array
+ * Collection hosting all the `Track` instances registered into the timeline.
+ * It provides shorcuts to trigger `render` / `update` methods on tracks or
+ * layers. Extend built-in Array
  */
 export default class TrackCollection extends Array {
   constructor(timeline) {
@@ -40,7 +42,9 @@ export default class TrackCollection extends Array {
   }
 
   /**
-   * @type {Array<Layer>} - An array of all registered layers.
+   * An array of all registered layers.
+   *
+   * @type {Array<Layer>}
    */
   get layers() {
     let layers = [];
@@ -58,8 +62,11 @@ export default class TrackCollection extends Array {
   }
 
   /**
-   * Updates all tracks and layers. When done, the timeline triggers a `update` event.
-   * @param {Layer|String} layerOrGroup - Filter the layers to update by passing the `Layer` instance to update or a `groupId`
+   * Updates all tracks and layers. When done, the timeline triggers a
+   * `update` event.
+   *
+   * @param {Layer|String} layerOrGroup - Filter the layers to update by
+   *    passing the `Layer` instance to update or a `groupId`
    */
   update(layerOrGroup) {
     const layers = this._getLayersOrGroups(layerOrGroup);
@@ -68,7 +75,8 @@ export default class TrackCollection extends Array {
   }
 
   /**
-   * Updates all `Track` containers, layers are not updated with this method. When done, the timeline triggers a `update:containers` event.
+   * Updates all `Track` containers, layers are not updated with this method.
+   * When done, the timeline triggers a `update:containers` event.
    */
   updateContainer(/* trackOrTrackIds */) {
     this.forEach((track) => track.updateContainer());
@@ -77,7 +85,9 @@ export default class TrackCollection extends Array {
 
   /**
    * Updates all layers. When done, the timeline triggers a `update:layers` event.
-   * @param {Layer|String} layerOrGroup - Filter the layers to update by passing the `Layer` instance to update or a `groupId`
+   *
+   * @param {Layer|String} layerOrGroup - Filter the layers to update by
+   *    passing the `Layer` instance to update or a `groupId`
    */
   updateLayers(layerOrGroup) {
     const layers = this._getLayersOrGroups(layerOrGroup);

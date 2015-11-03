@@ -3,16 +3,19 @@ import Layer from '../core/layer';
 
 
 /**
- *  Simplified Layer for Axis
+ * Simplified Layer for Axis. The main difference with a regular layer is that
+ * an axis layer use the `Timeline~timeContext` attributes to render it's layout
+ * and stay synchronized with the tracks visible area. All getters and setters
+ * to the `TimelineTimeContext` attributes are bypassed.
  *
- *  This layer should stay into the timeline's visibleArea (no offset)
- *  It also handle it's own data and its updates
- *  `_generateData` is responsible to create some usefull data to visualize
+ * It also handle it's own data and its updates. The `_generateData` method is
+ * responsible to create some usefull data to visualize
  */
 export default class AxisLayer extends Layer {
   /**
-   *  @param {Function} generator - a function to create data according the a timeContext
-   *  @param {Object} options - layer options
+   * @param {Function} generator - A function to create data according to
+   *    the `Timeline~timeContext`.
+   * @param {Object} options - Layer options, cf. Layer for available options.
    */
   constructor(generator, options) {
     super('entity', [], options);
@@ -21,7 +24,7 @@ export default class AxisLayer extends Layer {
 
   // can't access timeContext from outside
   set stretchRatio(value) { return; }
-  set offset(value) { console.log(value); return; }
+  set offset(value) { return; }
   set start(value) { return; }
   set duration(value) { return; }
   get stretchRatio() { return; }
@@ -30,17 +33,27 @@ export default class AxisLayer extends Layer {
   get duration() { return; }
 
 
+  /**
+   * The generator that creates the data to be rendered to display the axis.
+   *
+   * @type {Function}
+   */
   set generator(func) {
     this._generator = func;
   }
 
+  /**
+   * The generator that creates the data to be rendered to display the axis.
+   *
+   * @type {Function}
+   */
   get generator() {
     return this._generator;
   }
 
   /**
-   *  This method is the main difference with a classical layer
-   *  This one generates and maintains it's own data
+   * This method is the main difference with a classical layer. An `AxisLayer`
+   * instance generates and maintains it's own data.
    */
   _generateData() {
     const data = this._generator(this.timeContext);
@@ -51,9 +64,7 @@ export default class AxisLayer extends Layer {
   }
 
   /**
-   *  update the values in `_renderingContext`
-   *  is particulary needed when updating `stretchRatio` as the pointer
-   *  to the `timeToPixel` scale may change
+   * Updates the rendering context for the shapes.
    */
   _updateRenderingContext() {
     this._renderingContext.timeToPixel = this.timeContext.timeToPixel;
@@ -79,8 +90,8 @@ export default class AxisLayer extends Layer {
   }
 
   /**
-   *  render the DOM in memory on layer creation to be able to use it before
-   *  the layer is actually inserted in the DOM
+   * Render the DOM in memory on layer creation to be able to use it before
+   * the layer is actually inserted in the DOM
    */
   _renderContainer() {
     // wrapper group for `start, top and context flip matrix
@@ -104,7 +115,7 @@ export default class AxisLayer extends Layer {
   }
 
   /**
-   *  updates the context of the layer
+   * Updates the layout of the layer.
    */
   updateContainer() {
     this._updateRenderingContext();

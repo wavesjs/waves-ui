@@ -2,16 +2,25 @@ import scales from '../utils/scales';
 
 
 /**
- * Defines and maintains global aspects of the visualization concerning the relations between time and pixels.
+ * Defines and maintains global aspects of the visualization concerning the
+ * relations between time and pixels.
  *
- * The `TimelineTimeContext` instance (unique across a visualization) keeps the main reference on how many pixels should be used to represent one second though its `timeToPixel` method. The attributes `zoom`, `offset` (i.e. from origin) and `visibleWidth` allow for navigating in time and for maintaining view consistency upon the DOM structure (`<svg>` and `<g>` tags) created by the registered tracks.
+ * The `TimelineTimeContext` instance (unique across a visualization) keeps the
+ * main reference on how many pixels should be used to represent one second
+ * though its `timeToPixel` method. The attributes `zoom`, `offset` (i.e. from
+ * origin) and `visibleWidth` allow for navigating in time and for maintaining
+ * view consistency upon the DOM structure (`<svg>` and `<g>` tags) created by
+ * the registered tracks.
  *
- * It also maintain an array of all references to `LayerTimeContext` instances to propagate to `layers`, changes made on the time to pixel representation.
+ * It also maintain an array of all references to `LayerTimeContext` instances
+ * to propagate to `layers`, changes made on the time to pixel representation.
  */
 export default class TimelineTimeContext {
   /**
-   * @param {Number} pixelsPerSecond - The number of pixels that should be used to display one second.
-   * @param {Number} visibleWidth - The default with of the visible area displayed in `tracks` (in pixels).
+   * @param {Number} pixelsPerSecond - The number of pixels that should be
+   *    used to display one second.
+   * @param {Number} visibleWidth - The default with of the visible area
+   *    displayed in `tracks` (in pixels).
    */
   constructor(pixelsPerSecond, visibleWidth) {
     this._children = [];
@@ -36,6 +45,7 @@ export default class TimelineTimeContext {
 
   /**
    * Returns the number of pixels per seconds ignoring the current zoom value.
+   *
    * @type {Number}
    */
   get pixelsPerSecond() {
@@ -43,7 +53,10 @@ export default class TimelineTimeContext {
   }
 
   /**
-   * Updates all the caracteristics of this object according to the new given value of pixels per seconds. Propagates the changes to the `LayerTimeContext` children.
+   * Updates all the caracteristics of this object according to the new
+   * given value of pixels per seconds. Propagates the changes to the
+   * `LayerTimeContext` children.
+   *
    * @type {Number}
    */
   set pixelsPerSecond(value) {
@@ -60,6 +73,7 @@ export default class TimelineTimeContext {
 
   /**
    * Returns the number of pixels per seconds including the current zoom value.
+   *
    * @type {Number}
    */
   get computedPixelsPerSecond() {
@@ -67,7 +81,9 @@ export default class TimelineTimeContext {
   }
 
   /**
-   * Returns the current offset applied to the registered `Track` instances from origin (in seconds).
+   * Returns the current offset applied to the registered `Track` instances
+   * from origin (in seconds).
+   *
    * @type {Number}
    */
   get offset() {
@@ -75,7 +91,9 @@ export default class TimelineTimeContext {
   }
 
   /**
-   * Sets the offset to apply to the registered `Track` instances from origin (in seconds).
+   * Sets the offset to apply to the registered `Track` instances from origin
+   * (in seconds).
+   *
    * @type {Number}
    */
   set offset(value) {
@@ -84,6 +102,7 @@ export default class TimelineTimeContext {
 
   /**
    * Returns the current zoom level applied to the whole visualization.
+   *
    * @type {Number}
    */
   get zoom() {
@@ -92,6 +111,7 @@ export default class TimelineTimeContext {
 
   /**
    * Sets the zoom ratio for the whole visualization.
+   *
    * @type {Number}
    */
   set zoom(value) {
@@ -109,6 +129,7 @@ export default class TimelineTimeContext {
 
   /**
    * Returns the visible width of the `Track` instances.
+   *
    * @type {Number}
    */
   get visibleWidth() {
@@ -117,6 +138,7 @@ export default class TimelineTimeContext {
 
   /**
    * Sets the visible width of the `Track` instances.
+   *
    * @type {Number}
    */
   set visibleWidth(value) {
@@ -130,6 +152,7 @@ export default class TimelineTimeContext {
 
   /**
    * Returns the duration displayed by `Track` instances.
+   *
    * @type {Number}
    */
   get visibleDuration() {
@@ -137,7 +160,9 @@ export default class TimelineTimeContext {
   }
 
   /**
-   * Returns if the duration displayed by tracks should be maintained when their width is updated.
+   * Returns if the duration displayed by tracks should be maintained when
+   * their width is updated.
+   *
    * @type {Number}
    */
   get maintainVisibleDuration() {
@@ -145,7 +170,9 @@ export default class TimelineTimeContext {
   }
 
   /**
-   * Defines if the duration displayed by tracks should be maintained when their width is updated.
+   * Defines if the duration displayed by tracks should be maintained when
+   * their width is updated.
+   *
    * @type {Boolean}
    */
   set maintainVisibleDuration(bool) {
@@ -154,6 +181,7 @@ export default class TimelineTimeContext {
 
   /**
    * Returns the time to pixel trasfert function.
+   *
    * @type {Function}
    */
   get timeToPixel() {

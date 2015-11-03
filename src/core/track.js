@@ -2,9 +2,13 @@ import ns from './namespace';
 
 
 /**
- * Acts as a placeholder to organize the vertical layout of the visualization and the horizontal alignement to an abscissa that correspond to a common time reference. It basically offer a view on the overall timeline.
+ * Acts as a placeholder to organize the vertical layout of the visualization
+ * and the horizontal alignement to an abscissa that correspond to a common
+ * time reference. It basically offer a view on the overall timeline.
  *
- * Tracks are inserted into a given DOM element, allowing to create DAW like representations. Each `Track` instance can host multiple `Layer` instances. A track must be added to a timeline before being updated.
+ * Tracks are inserted into a given DOM element, allowing to create DAW like
+ * representations. Each `Track` instance can host multiple `Layer` instances.
+ * A track must be added to a timeline before being updated.
  *
  * ### A timeline with 3 tracks:
  *
@@ -45,7 +49,6 @@ import ns from './namespace';
  */
 export default class Track {
   /**
-   * Create the track of the given `height` in the given `$el`
    * @param {DOMElement} $el
    * @param {Number} [height = 100]
    */
@@ -87,6 +90,7 @@ export default class Track {
 
   /**
    * Returns the height of the track.
+   *
    * @type {Number}
    */
   get height() {
@@ -95,7 +99,9 @@ export default class Track {
 
   /**
    * Sets the height of the track.
-   * @todo propagate to layers, keeping ratio? could be handy for vertical resize. This is why a set/get is implemented here.
+   *
+   * @todo propagate to layers, keeping ratio? could be handy for vertical
+   *    resize. This is why a set/get is implemented here.
    * @type {Number}
    */
   set height(value) {
@@ -103,7 +109,9 @@ export default class Track {
   }
 
   /**
-   * This method is called when the track is added to the timeline. The track cannot be updated without being added to a timeline.
+   * This method is called when the track is added to the timeline. The
+   * track cannot be updated without being added to a timeline.
+   *
    * @private
    * @param {TimelineTimeContext} renderingContext
    */
@@ -171,6 +179,7 @@ export default class Track {
 
   /**
    * Adds a layer to the track.
+   *
    * @param {Layer} layer - the layer to add to the track.
    */
   add(layer) {
@@ -181,6 +190,7 @@ export default class Track {
 
   /**
    * Removes a layer from the track. The layer can be reused elsewhere.
+   *
    * @param {Layer} layer - the layer to remove from the track.
    */
   remove(layer) {
@@ -191,6 +201,7 @@ export default class Track {
 
   /**
    * Tests if a given element belongs to the track.
+   *
    * @param {Element} $el
    * @return {bool}
    */
@@ -215,6 +226,7 @@ export default class Track {
 
   /**
    * Updates the track DOM structure and updates the layers.
+   *
    * @param {Array<Layer>} [layers=null] - if not null, a subset of the layers to update.
    */
   update(layers = null) {
@@ -244,6 +256,7 @@ export default class Track {
 
   /**
    * Updates the layers.
+   *
    * @param {Array<Layer>} [layers=null] - if not null, a subset of the layers to update.
    */
   updateLayers(layers = null) {
