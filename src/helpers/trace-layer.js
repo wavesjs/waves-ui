@@ -4,7 +4,18 @@ import TraceDots from '../shapes/trace-dots';
 import TraceBehavior from '../behaviors/trace-behavior';
 
 
+/**
+ * Helper to create a trace layer.
+ *
+ * [example usage](./examples/layer-trace.html)
+ */
 export default class TraceLayer extends Layer {
+  /**
+   * @param {Array} data - The data to render.
+   * @param {Object} options - An object to configure the layer.
+   * @param {Object} accessors - The accessors to configure the mapping
+   *    between shapes and data.
+   */
   constructor(data, options = {}, accessors = {}) {
     options = Object.assign({ displayDots: true }, options);
     super(options.displayDots ? 'collection' : 'entity', data, options);
