@@ -68,7 +68,7 @@ export default class TimelineTimeContext {
 
     // force children scale update
     this._children.forEach(function(child) {
-      if (child.stretchRatio !== 1) { return; }
+      if (child.stretchRatio === 1) { return; }
       child.stretchRatio = child.stretchRatio;
     });
   }
@@ -124,7 +124,7 @@ export default class TimelineTimeContext {
     this._updateTimeToPixelRange();
 
     this._children.forEach(function(child) {
-      if (child.stretchRatio !== 1) { return; }
+      if (child.stretchRatio === 1) { return; }
       child.stretchRatio = child.stretchRatio * ratioChange;
     });
   }
