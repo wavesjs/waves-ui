@@ -22,13 +22,6 @@ export default class AxisLayer extends Layer {
   constructor(generator, options) {
     super('entity', [], options);
     this._generator = generator;
-
-    /** @type {Element} */
-    this.$el = null;
-    /** @type {Element} */
-    this.$offset = null;
-    /** @type {Element} */
-    this.$background = null;
   }
 
   /** @private */
