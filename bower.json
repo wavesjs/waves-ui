@@ -1,6 +1,6 @@
 {
   "name": "ui",
-  "homepage": "https://github.com/Parisson/ui",
+  "homepage": "https://github.com/wavesjs/ui",
   "main": ["waves-ui.umd.js", "waves-ui.min.js"],
   "ignore": [
     "**/.*",
