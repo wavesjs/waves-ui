@@ -1,0 +1,19 @@
+{
+  "name": "ui",
+  "homepage": "https://github.com/wavesjs/ui",
+  "main": ["waves-ui.umd.js", "waves-ui.min.js"],
+  "ignore": [
+    "**/.*",
+    "bin",
+    "dist",
+    "examples",
+    "doc",
+    "src",
+    "tests",
+    "AUTHORS",
+    "LICENCE",
+    "README.md",
+    "esdoc.js",
+    "package.json"
+  ]
+}
