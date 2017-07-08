@@ -25,7 +25,8 @@ export default class MarkerLayer extends Layer {
     }
 
     this.configureShape(Marker, accessors, {
-      displayHandlers: options.displayHandlers
+      displayHandlers: options.displayHandlers,
+      opacity: options.opacity,
     });
 
     this.setBehavior(new MarkerBehavior());

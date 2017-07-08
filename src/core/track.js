@@ -183,7 +183,6 @@ export default class Track {
    * @param {Layer} layer - the layer to add to the track.
    */
   add(layer) {
-    console.log(layer);
     this.layers.push(layer);
     // Create a default renderingContext for the layer if missing
     this.$layout.appendChild(layer.$el);
