@@ -68,33 +68,38 @@ import format from './utils/format';
 import OrthogonalData from './utils/orthogonal-data';
 import scales from './utils/scales';
 
-export default {
-  core: {
-    LayerTimeContext, Layer, namespace,
-    TimelineTimeContext, Timeline, TrackCollection, Track
-  },
-  shapes: {
-    AnnotatedMarker, AnnotatedSegment, BaseShape, Cursor,
-    Dot, Line, Marker, Segment, Ticks, TracePath, TraceDots, Waveform
-  },
-  behaviors: {
-    BaseBehavior, BreakpointBehavior, MarkerBehavior, SegmentBehavior,
-    TimeContextBehavior, TraceBehavior
-  },
-  interactions: { EventSource, Keyboard, Surface, WaveEvent },
-  states: {
-    BaseState, BreakpointState, BrushZoomState, CenteredZoomState,
-    ContextEditionState, EditionState, SelectionState, SimpleEditionState
-  },
-  helpers: {
-    AnnotatedMarkerLayer, AnnotatedSegmentLayer, BreakpointLayer,
-    CursorLayer, GridAxisLayer, MarkerLayer, SegmentLayer, TickLayer,
-    TimeAxisLayer, TraceLayer, WaveformLayer
-  },
-  axis: {
-    AxisLayer, timeAxisGenerator, gridAxisGenerator
-  },
-  utils: {
-    format, OrthogonalData, scales
-  }
+export const core = {
+  LayerTimeContext, Layer, namespace,
+  TimelineTimeContext, Timeline, TrackCollection, Track
+};
+
+export const shapes = {
+  AnnotatedMarker, AnnotatedSegment, BaseShape, Cursor,
+  Dot, Line, Marker, Segment, Ticks, TracePath, TraceDots, Waveform
+};
+
+export const behaviors = {
+  BaseBehavior, BreakpointBehavior, MarkerBehavior, SegmentBehavior,
+  TimeContextBehavior, TraceBehavior
+};
+
+export const interactions = { EventSource, Keyboard, Surface, WaveEvent };
+
+export const states = {
+  BaseState, BreakpointState, BrushZoomState, CenteredZoomState,
+  ContextEditionState, EditionState, SelectionState, SimpleEditionState
+};
+
+export const helpers = {
+  AnnotatedMarkerLayer, AnnotatedSegmentLayer, BreakpointLayer,
+  CursorLayer, GridAxisLayer, MarkerLayer, SegmentLayer, TickLayer,
+  TimeAxisLayer, TraceLayer, WaveformLayer
+};
+
+export const axis = {
+  AxisLayer, timeAxisGenerator, gridAxisGenerator
+};
+
+export const utils = {
+  format, OrthogonalData, scales
 };
