@@ -1,6 +1,14 @@
+# junk files
 .DS_Store
-node_modules
 npm-debug.log
-coverage*
-test-*
-doc
+
+# working folder
+node_modules
+dist
+
+# comment in master branch
+docs
+
+# to check
+package-lock.json
+

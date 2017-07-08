@@ -1,6 +1,6 @@
 # waves - ui
 
-> A library to display and edit audio data and timeseries data in the browser.
+_Low level components for the display and edition of audio and timeseries data._
 
 ![waves-ui screenshot](https://raw.githubusercontent.com/wavesjs/ui/master/examples/assets/waves-ui-screenshot.png)
 
