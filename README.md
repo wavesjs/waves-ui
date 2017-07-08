@@ -18,8 +18,8 @@ import * as ui from 'waves-ui';
 
 ## Documentation
 
-- [Basic examples](http://wavesjs.github.io/ui/manual/example.html#examples)  
-- [Full documentation](http://wavesjs.github.io/ui/)
+- [Basic examples](http://wavesjs.github.io/waves-ui/manual/example.html#examples)  
+- [Full documentation](http://wavesjs.github.io/waves-ui/)
 
 ## Goals and Features
 
