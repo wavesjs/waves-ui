@@ -6,11 +6,10 @@ import Layer from './layer';
  * It provides shorcuts to trigger `render` / `update` methods on tracks or
  * layers. Extend built-in Array
  */
-export default class TrackCollection extends Array {
+export default class TrackCollection {
   constructor(timeline) {
-    super();
-
     this._timeline = timeline;
+    this._tracks = new Set();
   }
 
   // @note - should be in the timeline ?
@@ -29,16 +28,12 @@ export default class TrackCollection extends Array {
     return layers;
   }
 
-  // @NOTE keep this ?
-  // could prepare some vertical resizing ability
-  // this should be able to modify the layers yScale to be really usefull
-
   /**
    * @type {Number} - Updates the height of all tracks at once.
    * @todo - Propagate to layers, not usefull for now.
    */
   set height(value) {
-    this.forEach((track) => track.height = value);
+    this._tracks.forEach((track) => track.height = value);
   }
 
   /**
@@ -48,16 +43,42 @@ export default class TrackCollection extends Array {
    */
   get layers() {
     let layers = [];
-    this.forEach((track) => layers = layers.concat(track.layers));
+    this._tracks.forEach(track => layers = layers.concat(track.layers));
 
     return layers;
+  }
+
+  /**
+   * Check if a given track belongs to the collection.
+   *
+   * @param {Track} track - Track to be tested
+   * @returns {Boolean}
+   */
+  has(track) {
+    return this._tracks.has(track);
+  }
+
+  /**
+   * Add a track to the collection.
+   *
+   * @param {Track} track - Track to add to the collection
+   */
+  add(track) {
+    this._tracks.add(track);
+  }
+
+  // @todo
+  remove(track) {}
+
+  forEach(callback) {
+    this._tracks.forEach(callback);
   }
 
   /**
    * Render all tracks and layers. When done, the timeline triggers a `render` event.
    */
   render() {
-    this.forEach((track) => track.render());
+    this._tracks.forEach(track => track.render());
     this._timeline.emit('render');
   }
 
@@ -65,12 +86,13 @@ export default class TrackCollection extends Array {
    * Updates all tracks and layers. When done, the timeline triggers a
    * `update` event.
    *
+   * @todo - filtering is probably broken...
    * @param {Layer|String} layerOrGroup - Filter the layers to update by
    *    passing the `Layer` instance to update or a `groupId`
    */
   update(layerOrGroup) {
     const layers = this._getLayersOrGroups(layerOrGroup);
-    this.forEach((track) => track.update(layers));
+    this._tracks.forEach(track => track.update(layers));
     this._timeline.emit('update', layers);
   }
 
@@ -79,19 +101,20 @@ export default class TrackCollection extends Array {
    * When done, the timeline triggers a `update:containers` event.
    */
   updateContainer(/* trackOrTrackIds */) {
-    this.forEach((track) => track.updateContainer());
+    this._tracks.forEach(track => track.updateContainer());
     this._timeline.emit('update:containers');
   }
 
   /**
    * Updates all layers. When done, the timeline triggers a `update:layers` event.
    *
+   * @todo - filtering is probably broken...
    * @param {Layer|String} layerOrGroup - Filter the layers to update by
    *    passing the `Layer` instance to update or a `groupId`
    */
   updateLayers(layerOrGroup) {
     const layers = this._getLayersOrGroups(layerOrGroup);
-    this.forEach((track) => track.updateLayers(layers));
+    this._tracks.forEach(track => track.updateLayers(layers));
     this._timeline.emit('update:layers', layers);
   }
 }

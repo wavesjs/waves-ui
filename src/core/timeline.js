@@ -299,14 +299,13 @@ export default class Timeline extends events.EventEmitter {
    *    in conjonction with `addLayer` method.
    */
   add(track, trackId = null) {
-    if (this.tracks.indexOf(track) !== -1) {
+    if (this.tracks.has(track))
       throw new Error('track already added to the timeline');
-    }
 
     this._registerTrackId(track, trackId);
     track.configure(this.timeContext);
 
-    this.tracks.push(track);
+    this.tracks.add(track);
     this.createInteraction(this._surfaceCtor, track.$el);
   }
 
@@ -317,7 +316,7 @@ export default class Timeline extends events.EventEmitter {
    * @todo not implemented.
    */
   remove(track) {
-    // should destroy interaction too, avoid ghost eventListeners
+    // should destroy all interactions too, avoid ghost eventListeners
   }
 
   /**
@@ -468,7 +467,7 @@ export default class Timeline extends events.EventEmitter {
   /**
    * Iterates through the added tracks.
    */
-  *[Symbol.iterator]() {
-    yield* this.tracks[Symbol.iterator]();
-  }
+  // *[Symbol.iterator]() {
+  //   yield* this.tracks[Symbol.iterator]();
+  // }
 }
