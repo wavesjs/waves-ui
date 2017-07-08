@@ -86,6 +86,8 @@ export default class Surface extends EventSource {
    * Keep this private to avoid double event binding. Main logic of the surface
    * is here. Should be extended with needed events (mouseenter, mouseleave,
    * wheel ...).
+   *
+   * @todo - throttle
    */
   _bindEvents() {
     const onMouseDown = (e) => {
