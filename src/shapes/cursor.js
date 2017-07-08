@@ -7,7 +7,7 @@ import ns from '../core/namespace';
  *
  * [example usage](./examples/layer-cursor.html)
  */
-export default class Cursor extends BaseShape {
+class Cursor extends BaseShape {
   getClassName() { return 'cursor'; }
 
   _getAccessorList() {
@@ -22,12 +22,9 @@ export default class Cursor extends BaseShape {
   }
 
   render(renderingContext) {
-    if (this.$el) { return this.$el; }
-
     this.$el = document.createElementNS(ns, 'line');
     this.$el.setAttributeNS(null, 'x', 0);
     this.$el.setAttributeNS(null, 'y1', 0);
-    this.$el.setAttributeNS(null, 'y2', renderingContext.height);
     this.$el.setAttributeNS(null, 'shape-rendering', 'crispEdges');
     this.$el.style.stroke = this.params.color;
 
@@ -35,8 +32,11 @@ export default class Cursor extends BaseShape {
   }
 
   update(renderingContext, datum) {
-    const x = Math.round(renderingContext.timeToPixel(this.x(datum))) + 0.5;
+    const floatX = renderingContext.timeToPixel(this.x(datum));
+    const x = Math.round(floatX);
+
     this.$el.setAttributeNS(null, 'transform', `translate(${x}, 0)`);
+    this.$el.setAttributeNS(null, 'y2', renderingContext.height);
   }
 
   /**
@@ -45,3 +45,5 @@ export default class Cursor extends BaseShape {
    */
   inArea() { return false; }
 }
+
+export default Cursor;
