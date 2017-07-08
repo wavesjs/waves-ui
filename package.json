@@ -33,8 +33,7 @@
     "devel": true
   },
   "dependencies": {
-    "babel-runtime": "^6.23.0",
-    "klaw": "^2.0.0"
+    "babel-runtime": "^6.23.0"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
@@ -48,6 +47,7 @@
     "fs-extra": "^3.0.1",
     "jsdoc": "^3.4.2",
     "jsdoc-template": "github:ircam-jstools/jsdoc-template",
+    "klaw": "^2.0.0",
     "np": "^2.16.0",
     "tape": "^4.6.2",
     "uglify-js": "^3.0.23",
