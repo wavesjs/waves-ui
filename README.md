@@ -4,8 +4,22 @@ _Low level components for the display and edition of audio and timeseries data._
 
 ![waves-ui screenshot](https://raw.githubusercontent.com/wavesjs/ui/master/examples/assets/waves-ui-screenshot.png)
 
-[Basic examples](http://wavesjs.github.io/ui/manual/example.html#examples) and 
-[Full documentation](http://wavesjs.github.io/ui/)
+## Usage
+
+```bash
+npm install --save wavesjs/waves-ui
+```
+
+consume in your modules
+
+```javascript
+import * as ui from 'waves-ui';
+```
+
+## Documentation
+
+- [Basic examples](http://wavesjs.github.io/ui/manual/example.html#examples)  
+- [Full documentation](http://wavesjs.github.io/ui/)
 
 ## Goals and Features
 
@@ -80,54 +94,6 @@ The `BaseBehavior` is the base class to define custom interaction with a shape.
 ### Utils
 
 Traditionally, timeseries data can be formated like an array of object or multiple arrays. An `OrthogonalData` instance can format the datas in one or another formats.
-
-## Use
-
-#### CommonJS (browserify)
-
-install with npm
-
-```bash
-npm install --save wavesjs/ui
-```
-
-consume in your modules
-
-```javascript
-var wavesUI = require('waves-ui');
-```
-
-#### AMD (requireJS)
-
-add the waves library to your config
-
-```javascript
-requirejs.config({
-  paths: {
-    waves: 'path/to/waves-ui.umd'
-  }
-});
-```
-
-consume in your modules
-
-```javascript
-define(['waves-ui'], function(wavesUI) {
-  var timeline = wavesUI.timeline();
-  // ...
-});
-```
-
-#### Global
-
-Add the script tag in your html file at the bottom of the `<body>`
-
-```html
-<script scr="/path/to/waves-ui.umd.js"></script>
-```
-
-The library is exposed in the `window.wavesUI` namespace.
-
 
 ## Custom build
 
