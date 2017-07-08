@@ -108,11 +108,14 @@ export default class Layer extends events.EventEmitter {
     this._isContextEditable = false;
     this._behavior = null;
 
+    this._height = this.params.height;
+    this._top = this.params.top;
+
     this.data = data;
 
     this._valueToPixel = scales.linear()
       .domain(this.params.yDomain)
-      .range([0, this.params.height]);
+      .range([0, this._height]);
 
     // initialize timeContext layout
     this._renderContainer();
@@ -310,6 +313,14 @@ export default class Layer extends events.EventEmitter {
     }
   }
 
+  updateHeight(prevTrackHeight, newTrackHeight) {
+    const ratio = newTrackHeight / prevTrackHeight;
+
+    this._height = this._height * ratio;
+    this._top = this._top * ratio;
+    this._valueToPixel.range([0, this._height])
+  }
+
   // --------------------------------------
   // Initialization
   // --------------------------------------
@@ -418,7 +429,7 @@ export default class Layer extends events.EventEmitter {
     this._renderingContext.timeToPixel = this.timeContext.timeToPixel;
     this._renderingContext.valueToPixel = this._valueToPixel;
 
-    this._renderingContext.height = this.params.height;
+    this._renderingContext.height = this._height;
     this._renderingContext.width  = this.timeContext.timeToPixel(this.timeContext.duration);
     // for foreign object issue in chrome
     this._renderingContext.offsetX = this.timeContext.timeToPixel(this.timeContext.offset);
@@ -641,18 +652,18 @@ export default class Layer extends events.EventEmitter {
     const start    = this.timeContext.parent.timeToPixel(this.timeContext.start);
     const duration = this.timeContext.timeToPixel(this.timeContext.duration);
     const offset   = this.timeContext.timeToPixel(this.timeContext.offset);
-    const top      = this.params.top;
+    const top      = this._top;
     // be aware af context's translations - constrain in working view
     let x1 = Math.max(area.left, start);
     let x2 = Math.min(area.left + area.width, start + duration);
     x1 -= (start + offset);
     x2 -= (start + offset);
     // keep consistent with context y coordinates system
-    let y1 = this.params.height - (area.top + area.height);
-    let y2 = this.params.height - area.top;
+    let y1 = this._height - (area.top + area.height);
+    let y2 = this._height - area.top;
 
-    y1 += this.params.top;
-    y2 += this.params.top;
+    y1 += this._top;
+    y2 += this._top;
 
     const $filteredItems = [];
 
@@ -765,8 +776,8 @@ export default class Layer extends events.EventEmitter {
     // x is relative to timeline's timeContext
     const x      = timeContext.parent.timeToPixel(timeContext.start);
     const offset = timeContext.timeToPixel(timeContext.offset);
-    const top    = this.params.top;
-    const height = this.params.height;
+    const top    = this._top;
+    const height = this._height;
     // matrix to invert the coordinate system
     const translateMatrix = `matrix(1, 0, 0, -1, ${x}, ${top + height})`;
 

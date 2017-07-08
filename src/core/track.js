@@ -100,12 +100,13 @@ export default class Track {
   /**
    * Sets the height of the track.
    *
-   * @todo propagate to layers, keeping ratio? could be handy for vertical
-   *    resize. This is why a set/get is implemented here.
    * @type {Number}
    */
   set height(value) {
+    const prevHeight = this._height;
     this._height = value;
+
+    this.layers.forEach(layer => layer.updateHeight(prevHeight, this._height));
   }
 
   /**
@@ -125,7 +126,7 @@ export default class Track {
   destroy() {
     // Detach everything from the DOM
     this.$el.removeChild(this.$svg);
-    this.layers.forEach((layer) => this.$layout.removeChild(layer.$el));
+    this.layers.forEach(layer => this.$layout.removeChild(layer.$el));
     // clean references
     this.$el = null;
     this.renderingContext = null;
