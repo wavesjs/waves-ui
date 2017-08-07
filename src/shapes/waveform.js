@@ -10,7 +10,7 @@ const xhtmlNS = 'http://www.w3.org/1999/xhtml';
  *
  * @todo - fix problems with canvas strategy.
  */
-export default class Waveform extends BaseShape {
+class Waveform extends BaseShape {
   getClassName() { return 'waveform'; }
 
   _getAccessorList() {
@@ -28,15 +28,16 @@ export default class Waveform extends BaseShape {
   }
 
   render(renderingContext) {
-    if (this.$el) { return this.$el; }
+    if (this.$el)
+      return this.$el;
 
     // if (this.params.renderingStrategy === 'svg') {
 
-      this.$el = document.createElementNS(this.ns, 'path');
-      this.$el.setAttributeNS(null, 'fill', 'none');
-      this.$el.setAttributeNS(null, 'shape-rendering', 'crispEdges');
-      this.$el.setAttributeNS(null, 'stroke', this.params.color);
-      this.$el.style.opacity = this.params.opacity;
+    this.$el = document.createElementNS(this.ns, 'path');
+    this.$el.setAttributeNS(null, 'fill', 'none');
+    this.$el.setAttributeNS(null, 'shape-rendering', 'crispEdges');
+    this.$el.setAttributeNS(null, 'stroke', this.params.color);
+    this.$el.style.opacity = this.params.opacity;
 
     // } else if (this.params.renderingStrategy === 'canvas') {
 
@@ -91,60 +92,67 @@ export default class Waveform extends BaseShape {
 
       for (let j = 0, l = extract.length; j < l; j++) {
         let sample = extract[j];
-        if (sample < min) { min = sample; }
-        if (sample > max) { max = sample; }
+        if (sample < min) min = sample;
+        if (sample > max) max = sample;
       }
       // disallow Infinity
       min = !isFinite(min) ? 0 : min;
       max = !isFinite(max) ? 0 : max;
-      if (min === 0 && max === 0) { continue; }
 
       minMax.push([px, min, max]);
     }
 
-    if (!minMax.length) { return; }
+    if (minMax.length) {
 
-    const PIXEL = 0;
-    const MIN   = 1;
-    const MAX   = 2;
-    const ZERO  = renderingContext.valueToPixel(0);
-    // rendering strategies
-    // if (this.params.renderingStrategy === 'svg') {
+      const PIXEL = 0;
+      const MIN   = 1;
+      const MAX   = 2;
 
-      let instructions = minMax.map((datum, index) => {
+      // rendering strategies
+      // if (this.params.renderingStrategy === 'svg') {
+
+      let d = 'M';
+
+      for (let i = 0, l = minMax.length; i < l; i++) {
+        const datum = minMax[i];
         const x  = datum[PIXEL];
         let y1 = Math.round(renderingContext.valueToPixel(datum[MIN]));
         let y2 = Math.round(renderingContext.valueToPixel(datum[MAX]));
-        // return `${x},${ZERO}L${x},${y1}L${x},${y2}L${x},${ZERO}`;
-        return `${x},${y1}L${x},${y2}`;
-      });
 
-      const d = 'M' + instructions.join('L');
+        d += `${x},${y1}L${x},${y2}`;
+
+        if (i < l - 1)
+          d += 'L';
+      }
+
       this.$el.setAttributeNS(null, 'd', d);
 
-    // } else if (this.params.renderingStrategy === 'canvas') {
+      // } else if (this.params.renderingStrategy === 'canvas') {
 
-    //   this._ctx.canvas.width = width;
-    //   this.$el.setAttribute('width', width);
-    //   // fix chrome bug with translate
-    //   if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
-    //     this.$el.setAttribute('x', renderingContext.offsetX);
-    //   }
+      //   this._ctx.canvas.width = width;
+      //   this.$el.setAttribute('width', width);
+      //   // fix chrome bug with translate
+      //   if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+      //     this.$el.setAttribute('x', renderingContext.offsetX);
+      //   }
 
-    //   this._ctx.strokeStyle = this.params.color;
-    //   this._ctx.globalAlpha = this.params.opacity;
-    //   this._ctx.moveTo(renderingContext.timeToPixel(0), renderingContext.valueToPixel(0));
+      //   this._ctx.strokeStyle = this.params.color;
+      //   this._ctx.globalAlpha = this.params.opacity;
+      //   this._ctx.moveTo(renderingContext.timeToPixel(0), renderingContext.valueToPixel(0));
 
-    //   minMax.forEach((datum) => {
-    //     const x  = datum[PIXEL];
-    //     let y1 = Math.round(renderingContext.valueToPixel(datum[MIN]));
-    //     let y2 = Math.round(renderingContext.valueToPixel(datum[MAX]));
+      //   minMax.forEach((datum) => {
+      //     const x  = datum[PIXEL];
+      //     let y1 = Math.round(renderingContext.valueToPixel(datum[MIN]));
+      //     let y2 = Math.round(renderingContext.valueToPixel(datum[MAX]));
 
-    //     this._ctx.moveTo(x, y1);
-    //     this._ctx.lineTo(x, y2);
-    //   });
+      //     this._ctx.moveTo(x, y1);
+      //     this._ctx.lineTo(x, y2);
+      //   });
 
-    //   this._ctx.stroke();
-    // }
+      //   this._ctx.stroke();
+      // }
+    }
   }
 }
+
+export default Waveform;
