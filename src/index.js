@@ -8,8 +8,6 @@ import TrackCollection from './core/track-collection';
 import Track from './core/track';
 
 // shapes
-import AnnotatedMarker from './shapes/annotated-marker';
-import AnnotatedSegment from './shapes/annotated-segment';
 import BaseShape from './shapes/base-shape';
 import Cursor from './shapes/cursor';
 import Dot from './shapes/dot';
@@ -74,8 +72,8 @@ export const core = {
 };
 
 export const shapes = {
-  AnnotatedMarker, AnnotatedSegment, BaseShape, Cursor,
-  Dot, Line, Marker, Segment, Ticks, TracePath, TraceDots, Waveform
+  BaseShape, Cursor, Dot, Line, Marker, Segment,
+  Ticks, TracePath, TraceDots, Waveform
 };
 
 export const behaviors = {
