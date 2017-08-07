@@ -7,7 +7,7 @@ import BaseShape from './base-shape';
  *
  * [example usage](./examples/layer-breakpoint.html)
  */
-export default class Line extends BaseShape {
+class Line extends BaseShape {
   getClassName() { return 'line'; }
 
   _getAccessorList() {
@@ -30,24 +30,24 @@ export default class Line extends BaseShape {
     data = data.slice(0);
     data.sort((a, b) => this.cx(a) < this.cx(b) ? -1 : 1);
 
+    let path = 'M';
+    const length = data.length;
+
+    for (let i = 0; i < length; i++) {
+      const x = renderingContext.timeToPixel(this.cx(datum));
+      const y = renderingContext.valueToPixel(this.cy(datum)) - 0.5;
+      path += `${x},${y}`;
+
+      if (i < length - 1)
+        path += 'L';
+    }
+
     this.$el.setAttributeNS(null, 'd', this._buildLine(renderingContext, data));
     this.$el.style.stroke = this.params.color;
     this.$el.style.fill = 'none';
 
     data = null;
   }
-
-  // builds the `path.d` attribute
-  // @TODO create some ShapeHelper ?
-  _buildLine(renderingContext, data) {
-    if (!data.length) { return ''; }
-    // sort data
-    let instructions = data.map((datum, index) => {
-      const x = renderingContext.timeToPixel(this.cx(datum));
-      const y = renderingContext.valueToPixel(this.cy(datum)) - 0.5;
-      return `${x},${y}`;
-    });
-
-    return 'M' + instructions.join('L');
-  }
 }
+
+export default Line;
