@@ -4,7 +4,7 @@ import BaseState from './base-state';
 /**
  * A state to edit shapes in the more general way. Interact only with selected shapes.
  */
-export default class EditionState extends BaseState {
+class EditionState extends BaseState {
   constructor(timeline) {
     super(timeline);
 
@@ -47,3 +47,5 @@ export default class EditionState extends BaseState {
     this.mouseDown = false;
   }
 }
+
+export default EditionState;
