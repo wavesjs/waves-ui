@@ -7,7 +7,7 @@ import WaveEvent from './wave-event';
  * container element of `Track` instances. As soon as a `track` is added to a
  * `timeline`, its attached `Surface` instance will emit the mouse events.
  */
-export default class Surface extends EventSource {
+class Surface extends EventSource {
   /**
    * @param {DOMElement} el - The DOM element to listen.
    * @todo - Add some padding to the surface.
@@ -22,12 +22,22 @@ export default class Surface extends EventSource {
     this.sourceName = 'surface';
     this._mouseDownEvent = null;
     this._lastEvent = null;
+
+    this._onMouseDown = this._onMouseDown.bind(this);
+    this._onMouseMove = this._onMouseMove.bind(this);
+    this._onMouseUp = this._onMouseUp.bind(this);
+    this._onClick = this._onClick.bind(this);
+    this._onDblClick = this._onDblClick.bind(this);
+    this._onMouseOver = this._onMouseOver.bind(this);
+    this._onMouseOut = this._onMouseOut.bind(this);
+
+    this.bindEvents();
   }
 
   /**
    * Factory method for `Event` class
    */
-  _createEvent(type, e) {
+  createEvent(type, e) {
     const event = new WaveEvent(this.sourceName, type, e);
 
     const pos = this._getRelativePosition(e);
@@ -35,6 +45,35 @@ export default class Surface extends EventSource {
     event.y = pos.y;
 
     return event;
+  }
+
+  /**
+   * Keep this private to avoid double event binding. Main logic of the surface
+   * is here. Should be extended with needed events (mouseenter, mouseleave,
+   * wheel ...).
+   *
+   * @todo - throttle
+   * @private
+   */
+  bindEvents() {
+    // Bind callbacks
+    this.$el.addEventListener('mousedown', this._onMouseDown, false);
+    this.$el.addEventListener('click', this._onClick, false);
+    this.$el.addEventListener('dblclick', this._onDblClick, false);
+    this.$el.addEventListener('mouseover', this._onMouseOver, false);
+    this.$el.addEventListener('mouseout', this._onMouseOut, false);
+  }
+
+  unbindEvents() {
+    // Bind callbacks
+    this.$el.removeEventListener('mousedown', this._onMouseDown, false);
+    this.$el.removeEventListener('click', this._onClick, false);
+    this.$el.removeEventListener('dblclick', this._onDblClick, false);
+    this.$el.removeEventListener('mouseover', this._onMouseOver, false);
+    this.$el.removeEventListener('mouseout', this._onMouseOut, false);
+
+    window.removeEventListener('mousemove', this._onMouseMove);
+    window.removeEventListener('mouseup', this._onMouseUp);
   }
 
   /**
@@ -82,77 +121,63 @@ export default class Surface extends EventSource {
     e.area = { left, top, width, height };
   }
 
-  /**
-   * Keep this private to avoid double event binding. Main logic of the surface
-   * is here. Should be extended with needed events (mouseenter, mouseleave,
-   * wheel ...).
-   *
-   * @todo - throttle
-   */
-  _bindEvents() {
-    const onMouseDown = (e) => {
-      // By removing the previous selection we prevent bypassing the mousemove events coming from SVG in Firefox.
-      window.getSelection().removeAllRanges();
-      const event = this._createEvent('mousedown', e);
+  _onMouseDown(e) {
+    // by removing the previous selection we prevent bypassing the mousemove events coming from SVG in Firefox.
+    window.getSelection().removeAllRanges();
+    const event = this.createEvent('mousedown', e);
 
 
-      this._mouseDownEvent = event;
-      this._lastEvent = event;
-      // Register mousemove and mouseup listeners on window
-      window.addEventListener('mousemove', onMouseMove, false);
-      window.addEventListener('mouseup', onMouseUp, false);
+    this._mouseDownEvent = event;
+    this._lastEvent = event;
+    // Register mousemove and mouseup listeners on window
+    window.addEventListener('mousemove', this._onMouseMove, false);
+    window.addEventListener('mouseup', this._onMouseUp, false);
 
-      this.emit('event', event);
-    };
+    this.emit('event', event);
+  }
 
-    const onMouseMove = (e) => {
-      let event = this._createEvent('mousemove', e);
-      this._defineArea(event, this._mouseDownEvent, this._lastEvent);
-      // Update `lastEvent` for next call
-      this._lastEvent = event;
+  _onMouseMove(e) {
+    let event = this.createEvent('mousemove', e);
+    this._defineArea(event, this._mouseDownEvent, this._lastEvent);
+    // Update `lastEvent` for next call
+    this._lastEvent = event;
 
-      this.emit('event', event);
-    };
+    this.emit('event', event);
+  }
 
-    const onMouseUp = (e) => {
-      let event = this._createEvent('mouseup', e);
-      this._defineArea(event, this._mouseDownEvent, this._lastEvent);
+  _onMouseUp(e) {
+    let event = this.createEvent('mouseup', e);
+    this._defineArea(event, this._mouseDownEvent, this._lastEvent);
 
 
-      this._mouseDownEvent = null;
-      this._lastEvent = null;
-      // Remove mousemove and mouseup listeners on window
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onMouseUp);
+    this._mouseDownEvent = null;
+    this._lastEvent = null;
+    // Remove mousemove and mouseup listeners on window
+    window.removeEventListener('mousemove', this._onMouseMove);
+    window.removeEventListener('mouseup', this._onMouseUp);
 
-      this.emit('event', event);
-    };
+    this.emit('event', event);
+  }
 
-    const onClick = (e) => {
-      let event = this._createEvent('click', e);
-      this.emit('event', event);
-    };
+  _onClick(e) {
+    let event = this.createEvent('click', e);
+    this.emit('event', event);
+  }
 
-    const onDblClick = (e) => {
-      let event = this._createEvent('dblclick', e);
-      this.emit('event', event);
-    };
+  _onDblClick(e) {
+    let event = this.createEvent('dblclick', e);
+    this.emit('event', event);
+  }
 
-    const onMouseOver = (e) => {
-      let event = this._createEvent('mouseover', e);
-      this.emit('event', event);
-    };
+  _onMouseOver(e) {
+    let event = this.createEvent('mouseover', e);
+    this.emit('event', event);
+  }
 
-    const onMouseOut = (e) => {
-      let event = this._createEvent('mouseout', e);
-      this.emit('event', event);
-    };
-
-    // Bind callbacks
-    this.$el.addEventListener('mousedown', onMouseDown, false);
-    this.$el.addEventListener('click', onClick, false);
-    this.$el.addEventListener('dblclick', onDblClick, false);
-    this.$el.addEventListener('mouseover', onMouseOver, false);
-    this.$el.addEventListener('mouseout', onMouseOut, false);
+  _onMouseOut(e) {
+    let event = this.createEvent('mouseout', e);
+    this.emit('event', event);
   }
 }
+
+export default Surface;

@@ -12,9 +12,6 @@ export default class Keyboard extends EventSource {
    * @param {Element} $el - The element on which to install the listener.
    */
   constructor($el) {
-    // kind of singleton
-    if (Keyboard._instance) { return Keyboard._instance; }
-
     super($el);
     /**
      * The name of the source
@@ -22,33 +19,42 @@ export default class Keyboard extends EventSource {
      */
     this.sourceName = 'keyboard';
 
-    Keyboard._instance = this;
+    this._onKeyDown = this._onKeyDown.bind(this);
+    this._onKeyUp = this._onKeyUp.bind(this);
+
+    this.bindEvents();
   }
 
-  _createEvent(type, e) {
+  createEvent(type, e) {
     const event = new WaveEvent(this.sourceName, type, e);
 
     event.shiftKey = e.shiftKey;
     event.ctrlKey = e.ctrlKey;
     event.altKey = e.altKey;
     event.metaKey = e.metaKey;
-    event.char = String.fromCharCode(e.keyCode);
+    event.which = e.which;
+    event.char = String.fromCharCode(e.which);
 
     return event;
   }
 
-  _bindEvents() {
-    const onKeyDown = (e) => {
-      let event = this._createEvent('keydown', e);
-      this.emit('event', event);
-    };
+  bindEvents() {
+    this.$el.addEventListener('keydown', this._onKeyDown, false);
+    this.$el.addEventListener('keyup', this._onKeyUp, false);
+  }
 
-    const onKeyUp = (e) => {
-      let event = this._createEvent('keyup', e);
-      this.emit('event', event);
-    };
+  unbindEvents() {
+    this.$el.removeEventListener('keydown', this._onKeyDown, false);
+    this.$el.removeEventListener('keyup', this._onKeyUp, false);
+  }
 
-    this.$el.addEventListener('keydown', onKeyDown, false);
-    this.$el.addEventListener('keyup', onKeyUp, false);
+  _onKeyDown(e) {
+    let event = this.createEvent('keydown', e);
+    this.emit('event', event);
+  }
+
+  _onKeyUp(e) {
+    let event = this.createEvent('keyup', e);
+    this.emit('event', event);
   }
 }
