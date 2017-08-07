@@ -57,6 +57,7 @@ export default class Ticks extends BaseShape {
       this.$el.appendChild(tick);
 
       const label = this.label(datum);
+
       if (label) {
         const $label = document.createElementNS(this.ns, 'text');
         $label.classList.add('label');
