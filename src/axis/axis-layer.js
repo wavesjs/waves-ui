@@ -79,13 +79,10 @@ export default class AxisLayer extends Layer {
     this._renderingContext.timeToPixel = this.timeContext.timeToPixel;
     this._renderingContext.valueToPixel = this._valueToPixel;
     this._renderingContext.height = this.params.height;
-    this._renderingContext.width  = this.timeContext.timeToPixel(this.timeContext.duration);
+    // this._renderingContext.width  = this.timeContext.timeToPixel(this.timeContext.duration);
 
     // for foreign object issue in chrome
     this._renderingContext.offsetX = this.timeContext.timeToPixel(this.timeContext.offset);
-
-    // expose some timeline attributes - allow to improve perf in some cases - cf. Waveform
-    this._renderingContext.trackOffsetX = this.timeContext.timeToPixel(this.timeContext.offset);
     this._renderingContext.visibleWidth = this.timeContext.visibleWidth;
   }
 
@@ -113,7 +110,6 @@ export default class AxisLayer extends Layer {
     this.$offset.classList.add('offset', 'items');
     // layer background
     this.$background = document.createElementNS(ns, 'rect');
-    this.$background.setAttributeNS(null, 'height', '100%');
     this.$background.classList.add('background');
     this.$background.style.fillOpacity = 0;
     this.$background.style.pointerEvents = 'none';
@@ -128,12 +124,16 @@ export default class AxisLayer extends Layer {
   updateContainer() {
     this._updateRenderingContext();
 
-    const top    = this.params.top;
+    const top = this.params.top;
     const height = this.params.height;
+    const left = Math.max(0, -this._renderingContext.offsetX);
     // matrix to invert the coordinate system
     const translateMatrix = `matrix(1, 0, 0, -1, 0, ${top + height})`;
     this.$el.setAttributeNS(null, 'transform', translateMatrix);
 
-    this.$background.setAttributeNS(null, 'width', height);
+    // keep background on the visible area
+    this.$background.setAttributeNS(null, 'height', height);
+    this.$background.setAttributeNS(null, 'width', this.timeContext.visibleWidth);
+    this.$background.setAttributeNS(null, 'x', left);
   }
 }
