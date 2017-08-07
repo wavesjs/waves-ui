@@ -13,11 +13,15 @@ export default class EventSource extends events.EventEmitter {
      * @type {Element}
      */
     this.$el = $el;
-
-    this._bindEvents();
   }
 
-  _createEvent(type, e) {}
+  destroy() {
+    this.unbindEvents();
+  }
 
-  _bindEvents() {}
+  createEvent(type, e) {}
+
+  bindEvents() {}
+
+  unbindEvents() {}
 }
