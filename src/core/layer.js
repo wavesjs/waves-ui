@@ -2,6 +2,7 @@ import events from 'events';
 import ns from './namespace';
 import scales from '../utils/scales';
 import Segment from '../shapes/segment';
+import BaseShape from '../shapes/base-shape';
 import TimeContextBehavior from '../behaviors/time-context-behavior';
 
 // time context bahevior
@@ -333,9 +334,10 @@ export default class Layer extends events.EventEmitter {
     // wrapper group for `start, top and context flip matrix
     this.$el = document.createElementNS(ns, 'g');
     this.$el.classList.add('layer');
-    if (this.params.className !== null) {
+
+    if (this.params.className !== null)
       this.$el.classList.add(this.params.className);
-    }
+
     // clip the context with a `svg` element
     this.$boundingBox = document.createElementNS(ns, 'svg');
     this.$boundingBox.classList.add('bounding-box');
@@ -507,11 +509,11 @@ export default class Layer extends events.EventEmitter {
   /**
    * Edit item(s) according to the `edit` defined in the registered `Behavior`.
    *
-   * @param {Element|Element[]} $items - The item(s) to edit.
-   * @param {Number} dx - The modification to apply in the x axis (in pixels).
-   * @param {Number} dy - The modification to apply in the y axis (in pixels).
-   * @param {Element} $target - The target of the interaction (for example, left
-   *    handler DOM element in a segment).
+   * @param {Element|Element[]} $items - Item(s) to edit
+   * @param {Number} dx - Modification to apply in the x axis (in pixel domain)
+   * @param {Number} dy - Modification to apply in the y axis (in pixel domain)
+   * @param {Element} $target - Target of the interaction (for example, left
+   *  handler DOM element in a segment).
    */
   edit($items, dx, dy, $target) {
     if (!this._behavior) { return; }
@@ -585,6 +587,28 @@ export default class Layer extends events.EventEmitter {
   }
 
   /**
+   * Returns the shape associated to a specific item.
+   *
+   * @param {Element} $item
+   * @return {Shape}
+   */
+  getShapeFromItem($item) {
+    return this.hasItem($item) ? this._$itemShapeMap.get($item) : null;
+  }
+
+  /**
+   * Returns the shape associated to a specific item from any DOM element
+   * composing the shape.
+   *
+   * @param {Element} $item
+   * @return {Shape}
+   */
+  getShapeFromDOMElement($el) {
+    const $item = this.getItemFromDOMElement($el);
+    return this.getShapeFromItem($item);
+  }
+
+  /**
    * Returns the datum associated to a specific item.
    *
    * @param {Element} $item
@@ -604,8 +628,7 @@ export default class Layer extends events.EventEmitter {
    * @return {Object|Array|null}
    */
   getDatumFromDOMElement($el) {
-    var $item = this.getItemFromDOMElement($el);
-    if ($item === null) { return null; }
+    const $item = this.getItemFromDOMElement($el);
     return this.getDatumFromItem($item);
   }
 
