@@ -68,8 +68,8 @@ export default class TimelineTimeContext {
 
     // force children scale update
     this._children.forEach(function(child) {
-      if (child.stretchRatio === 1) { return; }
-      child.stretchRatio = child.stretchRatio;
+      if (child.stretchRatio !== 1)
+        child.stretchRatio = child.stretchRatio;
     });
   }
 
@@ -124,8 +124,8 @@ export default class TimelineTimeContext {
     this._updateTimeToPixelRange();
 
     this._children.forEach(function(child) {
-      if (child.stretchRatio === 1) { return; }
-      child.stretchRatio = child.stretchRatio * ratioChange;
+      if (child.stretchRatio !== 1)
+        child.stretchRatio = child.stretchRatio * ratioChange;
     });
   }
 
@@ -144,12 +144,11 @@ export default class TimelineTimeContext {
    * @type {Number}
    */
   set visibleWidth(value) {
-    const widthRatio = value / this.visibleWidth;
+    const widthRatio = value / this._visibleWidth;
     this._visibleWidth = value;
 
-    if (this.maintainVisibleDuration) {
-      this.pixelsPerSecond = this._computedPixelsPerSecond * widthRatio;
-    }
+    if (this.maintainVisibleDuration)
+      this.pixelsPerSecond = this.pixelsPerSecond * widthRatio;
   }
 
   /**
