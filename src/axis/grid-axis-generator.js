@@ -3,11 +3,11 @@
  *
  * [example usage](./examples/layer-axis.html)
  *
- * @param {Number} bpm - The number of beats per minutes.
- * @param {String} signature - The meter of the mesure (`'4/4'`, `'3/8'`, ...).
- * @return {Function} - The configured function returning the data when called.
+ * @param {Number} bpm - Number of beats per minutes
+ * @param {String} signature - Meter of the mesure (`'4/4'`, `'3/8'`, ...)
+ * @return {Function} - Function that generate data to be diplayed
  */
-export default function gridAxisGenerator(bpm, signature) {
+function gridAxisGenerator(bpm, signature) {
   const _bps =  bpm / 60; // sec
   const _unit = 1 / parseInt(signature.split('/')[1], 10);
   const _nbrUnitsPerMesure = parseInt(signature.split('/')[0], 10);
@@ -50,3 +50,5 @@ export default function gridAxisGenerator(bpm, signature) {
     return data;
   };
 }
+
+export default gridAxisGenerator;
