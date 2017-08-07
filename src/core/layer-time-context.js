@@ -165,9 +165,8 @@ export default class LayerTimeContext {
    * @type {Function}
    */
   get timeToPixel() {
-    if (!this._timeToPixel) {
+    if (!this._timeToPixel)
       return this.parent.timeToPixel;
-    }
 
     return this._timeToPixel;
   }
