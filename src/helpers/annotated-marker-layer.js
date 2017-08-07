@@ -17,7 +17,10 @@ export default class AnnotatedMarkerLayer extends Layer {
   constructor(data, options = {}) {
     super('collection', data, options);
 
-    this.configureShape(AnnotatedMarker);
+    this.configureShape(AnnotatedMarker, {
+      displayLabels: true,
+    });
+
     this.setBehavior(new MarkerBehavior());
   }
 }

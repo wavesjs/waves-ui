@@ -20,7 +20,8 @@ export default class AnnotatedSegmentLayer extends Layer {
 
     options = Object.assign({
       displayHandlers: true,
-      opacity: 0.6
+      opacity: 0.6,
+      displayLabels: true,
     }, options);
 
     this.configureShape(AnnotatedSegment, accessors, {

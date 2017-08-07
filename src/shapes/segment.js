@@ -10,7 +10,7 @@ export default class Segment extends BaseShape {
   getClassName() { return 'segment'; }
 
   _getAccessorList() {
-    return { x: 0, y: 0, width: 0, height: 1, color: '#000000', opacity: 1 };
+    return { x: 0, y: 0, width: 0, height: 1, color: '#000000', opacity: 1, label: '' };
   }
 
   _getDefaults() {
@@ -18,7 +18,8 @@ export default class Segment extends BaseShape {
       displayHandlers: true,
       handlerWidth: 2,
       handlerOpacity: 0.8,
-      opacity: 0.6
+      opacity: 0.6,
+      displayLabels: false,
     };
   }
 
@@ -53,6 +54,21 @@ export default class Segment extends BaseShape {
       this.$el.appendChild(this.$rightHandler);
     }
 
+    if (this.params.displayLabels) {
+      // prefer html `div` over svg `text` tag because we then use the `contenteditable` property
+      this.$foreignObject = document.createElementNS(this.ns, 'foreignObject');
+
+      this.$label = document.createElement('div');
+      this.$label.style.display = 'block';
+      this.$label.style.width = '50px';
+      this.$label.style.fontSize = '12px';
+      this.$label.style.fontFamily = 'arial';
+      this.$label.style.userSelect = 'none';
+
+      this.$foreignObject.appendChild(this.$label);
+      this.$el.appendChild(this.$foreignObject);
+    }
+
     return this.$el;
   }
 
@@ -72,6 +88,7 @@ export default class Segment extends BaseShape {
     this.$segment.setAttributeNS(null, 'height', height);
     this.$segment.style.fill = color;
 
+
     if (this.params.displayHandlers) {
       // display handlers
       this.$leftHandler.setAttributeNS(null, 'height', height);
@@ -82,6 +99,12 @@ export default class Segment extends BaseShape {
       this.$rightHandler.setAttributeNS(null, 'height', height);
       this.$rightHandler.setAttributeNS(null, 'transform', rightHandlerTranslate);
       this.$rightHandler.style.fill = color;
+    }
+
+    if (this.params.displayLabels) {
+      const matrix = `matrix(1, 0, 0, -1, 4, ${height - 2})`
+      this.$foreignObject.setAttributeNS(null, 'transform', matrix);
+      this.$label.innerHTML = this.label(datum);
     }
   }
 
