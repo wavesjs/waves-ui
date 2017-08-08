@@ -4,7 +4,7 @@ npm-debug.log
 
 # working folder
 node_modules
-dist
+# dist
 
 # comment in master branch
 docs
