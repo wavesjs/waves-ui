@@ -25,6 +25,7 @@ import Waveform from './shapes/waveform';
 import BaseBehavior from './behaviors/base-behavior';
 import BreakpointBehavior from './behaviors/breakpoint-behavior';
 import MarkerBehavior from './behaviors/marker-behavior';
+import CollisionSegmentBehavior from './behaviors/collision-segment-behavior';
 import SegmentBehavior from './behaviors/segment-behavior';
 import TimeContextBehavior from './behaviors/time-context-behavior';
 import TraceBehavior from './behaviors/trace-behavior';
@@ -78,8 +79,8 @@ export default {
     Dot, Line, Marker, Segment, Ticks, TracePath, TraceDots, Waveform
   },
   behaviors: {
-    BaseBehavior, BreakpointBehavior, MarkerBehavior, SegmentBehavior,
-    TimeContextBehavior, TraceBehavior
+    BaseBehavior, BreakpointBehavior, MarkerBehavior, CollisionSegmentBehavior,
+    SegmentBehavior, TimeContextBehavior, TraceBehavior
   },
   interactions: { EventSource, Keyboard, Surface, WaveEvent },
   states: {
