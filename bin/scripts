@@ -4,7 +4,7 @@ var childProcess = require('child_process');
 var util = require('util');
 var path = require('path');
 
-var babel = require('babel');
+var babel = require('babel-core');
 var browserify = require('browserify');
 var fse = require('fs-extra');
 var nodeWatch = require('node-watch');
