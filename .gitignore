@@ -12,3 +12,4 @@ docs
 # to check
 package-lock.json
 
+/yarn.lock
