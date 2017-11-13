@@ -147,7 +147,7 @@
     var timeContext = new wavesUI.core.LayerTimeContext(timeline.timeContext);
 
     segmentLayer.setTimeContext(timeContext);
-    segmentLayer.configureShape(wavesUI.shapes.AnnotatedSegment, {
+    segmentLayer.configureShape(wavesUI.shapes.Segment, {
       x: function(d, v) {
         if (v !== undefined) { d.start = v; }
         return d.start;
@@ -155,7 +155,12 @@
       width: function(d, v) {
         if (v !== undefined) { d.duration = v; }
         return d.duration;
+      },
+      label: function(d) {
+        return d.text;
       }
+    }, {
+      displayLabels: true,
     });
 
     segmentLayer.setBehavior(new wavesUI.behaviors.SegmentBehavior());

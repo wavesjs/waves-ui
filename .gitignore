@@ -12,3 +12,5 @@ docs
 # to check
 package-lock.json
 
+waves-ui.min.js
+waves-ui.umd.js

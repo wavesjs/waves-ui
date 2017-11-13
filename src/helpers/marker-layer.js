@@ -18,11 +18,15 @@ export default class MarkerLayer extends Layer {
   constructor(data, options = {}, accessors = {}) {
     super('collection', data, options);
 
-    options = Object.assign({ displayHandlers: true }, options);
+    options = Object.assign({
+      displayHandlers: true,
+      displayLabels: false,
+    }, options);
+
     const color = options.color;
-    if (color) {
-      accessors.color = function() { return color; };
-    }
+
+    if (color)
+      accessors.color = () => color;
 
     this.configureShape(Marker, accessors, {
       displayHandlers: options.displayHandlers,

@@ -75,14 +75,19 @@
     var timeContext = new wavesUI.core.LayerTimeContext(timeline.timeContext);
 
     markerLayer.setTimeContext(timeContext);
-    markerLayer.configureShape(wavesUI.shapes.AnnotatedMarker, {
+    markerLayer.configureShape(wavesUI.shapes.Marker, {
       x: function(d, v) {
         if (v !== undefined) { d.time = v; }
         return d.time;
       },
       color: function() {
         return 'orange';
-      }
+      },
+      label: function(d) {
+        return d.text;
+      },
+    }, {
+      displayLabels: true,
     });
 
     markerLayer.setBehavior(new wavesUI.behaviors.MarkerBehavior());

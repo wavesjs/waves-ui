@@ -44,8 +44,8 @@ import SelectionState from './states/selection-state';
 import SimpleEditionState from './states/simple-edition-state';
 
 // helpers
-import AnnotatedMarkerLayer from './helpers/annotated-marker-layer';
-import AnnotatedSegmentLayer from './helpers/annotated-segment-layer';
+// import AnnotatedMarkerLayer from './helpers/annotated-marker-layer';
+// import AnnotatedSegmentLayer from './helpers/annotated-segment-layer';
 import BreakpointLayer from './helpers/breakpoint-layer';
 import CursorLayer from './helpers/cursor-layer';
 import GridAxisLayer from './helpers/grid-axis-layer';
@@ -89,9 +89,8 @@ export const states = {
 };
 
 export const helpers = {
-  AnnotatedMarkerLayer, AnnotatedSegmentLayer, BreakpointLayer,
-  CursorLayer, GridAxisLayer, MarkerLayer, SegmentLayer, TickLayer,
-  TimeAxisLayer, TraceLayer, WaveformLayer
+  BreakpointLayer, CursorLayer, GridAxisLayer, MarkerLayer, SegmentLayer,
+  TickLayer, TimeAxisLayer, TraceLayer, WaveformLayer
 };
 
 export const axis = {
