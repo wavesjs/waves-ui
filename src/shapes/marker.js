@@ -1,4 +1,4 @@
-import BaseShape from './base-shape';
+import BaseShape from './BaseShape';
 
 
 /**
@@ -6,7 +6,7 @@ import BaseShape from './base-shape';
  *
  * [example usage](./examples/layer-marker.html)
  */
-export default class Marker extends BaseShape {
+class Marker extends BaseShape {
   getClassName() { return 'marker'; }
 
   _getAccessorList() {
@@ -109,3 +109,5 @@ export default class Marker extends BaseShape {
     return area > 0;
   }
 }
+
+export default Marker;

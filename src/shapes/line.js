@@ -1,4 +1,4 @@
-import BaseShape from './base-shape';
+import BaseShape from './BaseShape';
 
 
 /**

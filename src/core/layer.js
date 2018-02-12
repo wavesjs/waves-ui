@@ -1,9 +1,9 @@
-import events from 'events';
+import { EventEmitter } from 'events';
 import ns from './namespace';
 import scales from '../utils/scales';
-import Segment from '../shapes/segment';
-import BaseShape from '../shapes/base-shape';
-import TimeContextBehavior from '../behaviors/time-context-behavior';
+import Segment from '../shapes/Segment';
+import BaseShape from '../shapes/BaseShape';
+import TimeContextBehavior from '../behaviors/TimeContextBehavior';
 
 // time context bahevior
 let timeContextBehavior = null;
@@ -34,7 +34,7 @@ let timeContextBehaviorCtor = TimeContextBehavior;
  * </g>
  * ```
  */
-export default class Layer extends events.EventEmitter {
+class Layer extends EventEmitter {
   /**
    * @param {String} dataType - Defines how the layer should look at the data.
    *    Can be 'entity' or 'collection'.
@@ -114,9 +114,12 @@ export default class Layer extends events.EventEmitter {
 
     this.data = data;
 
+    // console.log(this.params.yDomain);
+    // console.log([this._height, 0])
     this._valueToPixel = scales.linear()
       .domain(this.params.yDomain)
       .range([0, this._height]);
+      // .range([this._height, 0]);
 
     // initialize timeContext layout
     this._renderContainer();
@@ -803,8 +806,8 @@ export default class Layer extends events.EventEmitter {
     const height = this._height;
     // matrix to invert the coordinate system
     const translateMatrix = `matrix(1, 0, 0, -1, ${x}, ${top + height})`;
-
     this.$el.setAttributeNS(null, 'transform', translateMatrix);
+    // this.$el.setAttributeNS(null, 'transform', `translate(${x}, ${top})`);
 
     this.$boundingBox.setAttributeNS(null, 'width', width);
     this.$boundingBox.setAttributeNS(null, 'height', height);
@@ -833,3 +836,5 @@ export default class Layer extends events.EventEmitter {
     }
   }
 }
+
+export default Layer;

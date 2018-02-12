@@ -1,5 +1,5 @@
-import EventSource from './event-source';
-import WaveEvent from './wave-event';
+import EventSource from './EventSource';
+import WaveEvent from './WaveEvent';
 
 
 /**
@@ -7,7 +7,7 @@ import WaveEvent from './wave-event';
  * can be created. The first created timeline instanciate the singleton, each
  * subsequent instanciation returns the first created instance.
  */
-export default class Keyboard extends EventSource {
+class Keyboard extends EventSource {
   /**
    * @param {Element} $el - The element on which to install the listener.
    */
@@ -58,3 +58,5 @@ export default class Keyboard extends EventSource {
     this.emit('event', event);
   }
 }
+
+export default Keyboard;

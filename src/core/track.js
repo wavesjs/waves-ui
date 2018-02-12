@@ -47,7 +47,7 @@ import ns from './namespace';
  * </svg>
  * ```
  */
-export default class Track {
+class Track {
   /**
    * @param {DOMElement} $el
    * @param {Number} [height = 100]
@@ -276,3 +276,5 @@ export default class Track {
     yield* this.layers[Symbol.iterator]();
   }
 }
+
+export default Track;

@@ -1,9 +1,9 @@
-import BaseShape from './base-shape';
+import BaseShape from './BaseShape';
 
 /**
  * Kind of Marker for entity oriented data. Usefull to display a grid.
  */
-export default class Ticks extends BaseShape {
+class Ticks extends BaseShape {
   _getClassName() {
     return 'tick';
   }
@@ -90,3 +90,5 @@ export default class Ticks extends BaseShape {
     this.$el.appendChild(fragment);
   }
 }
+
+export default Ticks;
