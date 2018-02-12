@@ -1,0 +1,38 @@
+{
+  "name": "es6-next-prototyping-client",
+  "version": "1.0.1",
+  "description": "ESNext client prototyping boilerplate",
+  "main": "dist/main.js",
+  "author": "Benjamin Matuszewski",
+  "license": "ISC",
+  "scripts": {
+    "bundle": "./bin/runner --bundle",
+    "transpile": "./bin/runner --transpile",
+    "prewatch": "npm run transpile",
+    "watch": "./bin/runner --watch",
+    "serve": "./bin/runner --serve",
+    "postinstall": "npm run bundle"
+  },
+  "dependencies": {
+    "@ircam/basic-controllers": "^1.0.3",
+    "babel-runtime": "^6.9.2",
+    "waves-loaders": "github:wavesjs/waves-loaders",
+    "waves-ui": "github:wavesjs/waves-ui"
+  },
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.14.0",
+    "babel-plugin-transform-runtime": "^6.12.0",
+    "babel-preset-latest": "^6.14.0",
+    "benchmark": "^1.0.0",
+    "browserify": "^13.0.0",
+    "colors": "^1.1.2",
+    "connect": "^3.3.5",
+    "fs-extra": "^0.26.5",
+    "ora": "^0.2.0",
+    "portfinder": "^0.4.0",
+    "serve-favicon": "^2.2.0",
+    "serve-static": "^1.9.2",
+    "watch": "^0.17.1"
+  }
+}
