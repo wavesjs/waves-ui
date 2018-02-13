@@ -6,7 +6,7 @@ import BaseShape from './BaseShape';
  *
  * [example usage](./examples/layer-trace.html)
  */
-export default class TracePath extends BaseShape {
+class TracePath extends BaseShape {
   getClassName() { return 'trace-common'; }
 
   _getAccessorList() {
@@ -95,3 +95,5 @@ export default class TracePath extends BaseShape {
     return instructions;
   }
 }
+
+export default TracePath;
