@@ -1,0 +1,15 @@
+html {
+  font-size: 62.5%;
+  font-family: arial;
+}
+
+body {
+  margin: 0;
+}
+
+h1 {
+  font-size: 2rem;
+  margin: 0;
+  padding: 10px;
+  color: rgba(0, 0, 0, 0.9);
+}
