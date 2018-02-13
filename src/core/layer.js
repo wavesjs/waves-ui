@@ -434,17 +434,28 @@ class Layer extends EventEmitter {
     this._renderingContext.timeToPixel = this.timeContext.timeToPixel;
     this._renderingContext.valueToPixel = this._valueToPixel;
 
-    this._renderingContext.height = this._height;
-    this._renderingContext.width  = this.timeContext.timeToPixel(this.timeContext.duration);
-    // for foreign object issue in chrome
-    this._renderingContext.offsetX = this.timeContext.timeToPixel(this.timeContext.offset);
-    this._renderingContext.startX = this.timeContext.parent.timeToPixel(this.timeContext.start);
+    const height = this._height;
+    const width  = this.timeContext.timeToPixel(this.timeContext.duration);
+    const offsetX = this.timeContext.timeToPixel(this.timeContext.offset);
+    const startX = this.timeContext.parent.timeToPixel(this.timeContext.start);
+    const trackOffsetX = this.timeContext.parent.timeToPixel(this.timeContext.parent.offset);
+    const visibleWidth = this.timeContext.parent.visibleWidth;
 
-    // @todo replace with `minX` and `maxX` representing the visible pixels in which
-    // the shapes should be rendered, could allow to not update the DOM of shapes
-    // who are not in this area.
-    this._renderingContext.trackOffsetX = this.timeContext.parent.timeToPixel(this.timeContext.parent.offset);
-    this._renderingContext.visibleWidth = this.timeContext.parent.visibleWidth;
+    // @todo - make this mess more readable
+    let minX = Math.max(-offsetX, 0);
+    let trackDecay = trackOffsetX + startX;
+    if (trackDecay < 0)
+      minX = -trackDecay;
+
+    let maxX = minX;
+    maxX += (width - minX < visibleWidth) ? width : visibleWidth;
+
+    this._renderingContext.height = height;
+    this._renderingContext.width = width;
+    this._renderingContext.offsetX = offsetX;
+    this._renderingContext.startX = startX;
+    this._renderingContext.minX = minX;
+    this._renderingContext.maxX = maxX;
   }
 
   // --------------------------------------
@@ -800,9 +811,9 @@ class Layer extends EventEmitter {
     const timeContext = this.timeContext;
     const width  = timeContext.timeToPixel(timeContext.duration);
     // x is relative to timeline's timeContext
-    const x      = timeContext.parent.timeToPixel(timeContext.start);
+    const x = timeContext.parent.timeToPixel(timeContext.start);
     const offset = timeContext.timeToPixel(timeContext.offset);
-    const top    = this._top;
+    const top = this._top;
     const height = this._height;
     // matrix to invert the coordinate system
     const translateMatrix = `matrix(1, 0, 0, -1, ${x}, ${top + height})`;
