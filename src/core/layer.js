@@ -55,6 +55,7 @@ class Layer extends EventEmitter {
    * @param {Number} [options.hittable=false] - Defines if the layer can be interacted
    *    with. Basically, the layer is not returned by `BaseState.getHitLayers` when
    *    set to false (a common use case is a layer that contains a cursor)
+   * @param {Number} [zIndex=0] - zIndex of the layer, should be >= 0
    */
   constructor(dataType, data, options = {}) {
     super();
@@ -70,6 +71,7 @@ class Layer extends EventEmitter {
       hittable: true, // when false the layer is not returned by `BaseState.getHitLayers`
       id: '', // used ?
       overflow: 'hidden', // usefull ?
+      zIndex: 0, // zIndex of the layer, cannot be negative
     };
 
     /**
