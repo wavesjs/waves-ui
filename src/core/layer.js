@@ -452,12 +452,15 @@ class Layer extends EventEmitter {
     let maxX = minX;
     maxX += (width - minX < visibleWidth) ? width : visibleWidth;
 
-    this._renderingContext.height = height;
     this._renderingContext.width = width;
+    this._renderingContext.height = height;
     this._renderingContext.offsetX = offsetX;
     this._renderingContext.startX = startX;
     this._renderingContext.minX = minX;
     this._renderingContext.maxX = maxX;
+    // needed for canvas foreignObjects in chrome and safari
+    this._renderingContext.trackOffsetX = trackOffsetX;
+    // this._renderingContext.visibleWidth = visibleWidth;
   }
 
   // --------------------------------------

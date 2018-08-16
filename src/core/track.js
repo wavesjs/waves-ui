@@ -186,7 +186,6 @@ class Track {
   add(layer) {
     let insertIndex = null;
 
-    // zIndex -
     if (layer.params.zIndex < 0)
       layer.params.zIndex = 0;
 

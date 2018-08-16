@@ -62,6 +62,7 @@ class Marker extends BaseShape {
       this.$label.style.fontSize = '12px';
       this.$label.style.fontFamily = 'arial';
       this.$label.style.userSelect = 'none';
+      this.$label.style.outlineWidth = '1px';
 
       this.$foreignObject.appendChild(this.$label);
       this.$el.appendChild(this.$foreignObject);
@@ -73,7 +74,7 @@ class Marker extends BaseShape {
   }
 
   update(renderingContext, datum) {
-    const x = renderingContext.timeToPixel(this.x(datum)) - 0.5;
+    const x = renderingContext.timeToPixel(this.x(datum));
     const color = this.color(datum);
     const height = renderingContext.height;
 
