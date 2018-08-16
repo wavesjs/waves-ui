@@ -1,9 +1,9 @@
-import events from 'events';
+import { EventEmitter } from 'events';
 import ns from './namespace';
 import scales from '../utils/scales';
-import Segment from '../shapes/segment';
-import BaseShape from '../shapes/base-shape';
-import TimeContextBehavior from '../behaviors/time-context-behavior';
+import Segment from '../shapes/Segment';
+import BaseShape from '../shapes/BaseShape';
+import TimeContextBehavior from '../behaviors/TimeContextBehavior';
 
 // time context bahevior
 let timeContextBehavior = null;
@@ -34,7 +34,7 @@ let timeContextBehaviorCtor = TimeContextBehavior;
  * </g>
  * ```
  */
-export default class Layer extends events.EventEmitter {
+class Layer extends EventEmitter {
   /**
    * @param {String} dataType - Defines how the layer should look at the data.
    *    Can be 'entity' or 'collection'.
@@ -55,6 +55,7 @@ export default class Layer extends events.EventEmitter {
    * @param {Number} [options.hittable=false] - Defines if the layer can be interacted
    *    with. Basically, the layer is not returned by `BaseState.getHitLayers` when
    *    set to false (a common use case is a layer that contains a cursor)
+   * @param {Number} [zIndex=0] - zIndex of the layer, should be >= 0
    */
   constructor(dataType, data, options = {}) {
     super();
@@ -70,6 +71,7 @@ export default class Layer extends events.EventEmitter {
       hittable: true, // when false the layer is not returned by `BaseState.getHitLayers`
       id: '', // used ?
       overflow: 'hidden', // usefull ?
+      zIndex: 0, // zIndex of the layer, cannot be negative
     };
 
     /**
@@ -114,9 +116,12 @@ export default class Layer extends events.EventEmitter {
 
     this.data = data;
 
+    // console.log(this.params.yDomain);
+    // console.log([this._height, 0])
     this._valueToPixel = scales.linear()
       .domain(this.params.yDomain)
       .range([0, this._height]);
+      // .range([this._height, 0]);
 
     // initialize timeContext layout
     this._renderContainer();
@@ -431,17 +436,31 @@ export default class Layer extends events.EventEmitter {
     this._renderingContext.timeToPixel = this.timeContext.timeToPixel;
     this._renderingContext.valueToPixel = this._valueToPixel;
 
-    this._renderingContext.height = this._height;
-    this._renderingContext.width  = this.timeContext.timeToPixel(this.timeContext.duration);
-    // for foreign object issue in chrome
-    this._renderingContext.offsetX = this.timeContext.timeToPixel(this.timeContext.offset);
-    this._renderingContext.startX = this.timeContext.parent.timeToPixel(this.timeContext.start);
+    const height = this._height;
+    const width  = this.timeContext.timeToPixel(this.timeContext.duration);
+    const offsetX = this.timeContext.timeToPixel(this.timeContext.offset);
+    const startX = this.timeContext.parent.timeToPixel(this.timeContext.start);
+    const trackOffsetX = this.timeContext.parent.timeToPixel(this.timeContext.parent.offset);
+    const visibleWidth = this.timeContext.parent.visibleWidth;
 
-    // @todo replace with `minX` and `maxX` representing the visible pixels in which
-    // the shapes should be rendered, could allow to not update the DOM of shapes
-    // who are not in this area.
-    this._renderingContext.trackOffsetX = this.timeContext.parent.timeToPixel(this.timeContext.parent.offset);
-    this._renderingContext.visibleWidth = this.timeContext.parent.visibleWidth;
+    // @todo - make this mess more readable
+    let minX = Math.max(-offsetX, 0);
+    let trackDecay = trackOffsetX + startX;
+    if (trackDecay < 0)
+      minX = -trackDecay;
+
+    let maxX = minX;
+    maxX += (width - minX < visibleWidth) ? width : visibleWidth;
+
+    this._renderingContext.width = width;
+    this._renderingContext.height = height;
+    this._renderingContext.offsetX = offsetX;
+    this._renderingContext.startX = startX;
+    this._renderingContext.minX = minX;
+    this._renderingContext.maxX = maxX;
+    // needed for canvas foreignObjects in chrome and safari
+    this._renderingContext.trackOffsetX = trackOffsetX;
+    // this._renderingContext.visibleWidth = visibleWidth;
   }
 
   // --------------------------------------
@@ -797,14 +816,14 @@ export default class Layer extends events.EventEmitter {
     const timeContext = this.timeContext;
     const width  = timeContext.timeToPixel(timeContext.duration);
     // x is relative to timeline's timeContext
-    const x      = timeContext.parent.timeToPixel(timeContext.start);
+    const x = timeContext.parent.timeToPixel(timeContext.start);
     const offset = timeContext.timeToPixel(timeContext.offset);
-    const top    = this._top;
+    const top = this._top;
     const height = this._height;
     // matrix to invert the coordinate system
     const translateMatrix = `matrix(1, 0, 0, -1, ${x}, ${top + height})`;
-
     this.$el.setAttributeNS(null, 'transform', translateMatrix);
+    // this.$el.setAttributeNS(null, 'transform', `translate(${x}, ${top})`);
 
     this.$boundingBox.setAttributeNS(null, 'width', width);
     this.$boundingBox.setAttributeNS(null, 'height', height);
@@ -833,3 +852,5 @@ export default class Layer extends events.EventEmitter {
     }
   }
 }
+
+export default Layer;

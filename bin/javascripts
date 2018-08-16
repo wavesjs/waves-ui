@@ -107,9 +107,10 @@ function getTranspiler(srcDirectory, distDirectory, isAllowed, babelOptions, bro
      * Uglify the `inFilename` into `outFilename`.
      */
     uglify: function(inFilename, outFilename) {
-      var result = uglify.minify(inFilename);
-      var startTime = new Date().getTime();
+      var content = fse.readFileSync(inFilename);
+      var result = uglify.minify(content.toString());
 
+      var startTime = new Date().getTime();
 
       fse.outputFile(outFilename, result.code, function(err) {
         if (err)

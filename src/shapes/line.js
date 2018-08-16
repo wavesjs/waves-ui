@@ -1,4 +1,4 @@
-import BaseShape from './base-shape';
+import BaseShape from './BaseShape';
 
 
 /**
@@ -34,6 +34,7 @@ class Line extends BaseShape {
     const length = data.length;
 
     for (let i = 0; i < length; i++) {
+      const datum = data[i];
       const x = renderingContext.timeToPixel(this.cx(datum));
       const y = renderingContext.valueToPixel(this.cy(datum)) - 0.5;
       path += `${x},${y}`;
@@ -42,7 +43,7 @@ class Line extends BaseShape {
         path += 'L';
     }
 
-    this.$el.setAttributeNS(null, 'd', this._buildLine(renderingContext, data));
+    this.$el.setAttributeNS(null, 'd', path);
     this.$el.style.stroke = this.params.color;
     this.$el.style.fill = 'none';
 

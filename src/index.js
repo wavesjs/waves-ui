@@ -1,69 +1,67 @@
 // core
-import LayerTimeContext from './core/layer-time-context';
-import Layer from './core/layer';
+import LayerTimeContext from './core/LayerTimeContext';
+import Layer from './core/Layer';
 import namespace from './core/namespace';
-import TimelineTimeContext from './core/timeline-time-context';
+import TimelineTimeContext from './core/TimelineTimeContext';
 import Timeline from './core/timeline';
-import TrackCollection from './core/track-collection';
-import Track from './core/track';
+import TrackCollection from './core/TrackCollection';
+import Track from './core/Track';
 
 // shapes
-import BaseShape from './shapes/base-shape';
-import Cursor from './shapes/cursor';
-import Dot from './shapes/dot';
-import Line from './shapes/line';
-import Marker from './shapes/marker';
-import Segment from './shapes/segment';
-import Ticks from './shapes/ticks';
-import TracePath from './shapes/trace-path';
-import TraceDots from './shapes/trace-dots';
-import Waveform from './shapes/waveform';
+import BaseShape from './shapes/BaseShape';
+import Cursor from './shapes/Cursor';
+import Dot from './shapes/Dot';
+import Line from './shapes/Line';
+import Marker from './shapes/Marker';
+import Segment from './shapes/Segment';
+import Ticks from './shapes/Ticks';
+import TraceDots from './shapes/TraceDots';
+import TracePath from './shapes/TracePath';
+import Waveform from './shapes/Waveform';
 
 // behaviors
-import BaseBehavior from './behaviors/base-behavior';
-import BreakpointBehavior from './behaviors/breakpoint-behavior';
-import MarkerBehavior from './behaviors/marker-behavior';
-import SegmentBehavior from './behaviors/segment-behavior';
-import TimeContextBehavior from './behaviors/time-context-behavior';
-import TraceBehavior from './behaviors/trace-behavior';
+import BaseBehavior from './behaviors/BaseBehavior';
+import BreakpointBehavior from './behaviors/BreakpointBehavior';
+import MarkerBehavior from './behaviors/MarkerBehavior';
+import SegmentBehavior from './behaviors/SegmentBehavior';
+import TimeContextBehavior from './behaviors/TimeContextBehavior';
+import TraceBehavior from './behaviors/TraceBehavior';
 
 // interactions
-import EventSource from './interactions/event-source';
-import Keyboard from './interactions/keyboard';
-import Surface from './interactions/surface';
-import WaveEvent from './interactions/wave-event';
+import EventSource from './interactions/EventSource';
+import Keyboard from './interactions/Keyboard';
+import Surface from './interactions/Surface';
+import WaveEvent from './interactions/WaveEvent';
 
 // states
-import BaseState from './states/base-state';
-import BreakpointState from './states/breakpoint-state';
-import BrushZoomState from './states/brush-zoom-state';
-import CenteredZoomState from './states/centered-zoom-state';
-import ContextEditionState from './states/context-edition-state';
-import EditionState from './states/edition-state';
-import SelectionState from './states/selection-state';
-import SimpleEditionState from './states/simple-edition-state';
+import BaseState from './states/BaseState';
+import BreakpointState from './states/BreakpointState';
+import BrushZoomState from './states/BrushZoomState';
+import CenteredZoomState from './states/CenteredZoomState';
+import ContextEditionState from './states/ContextEditionState';
+import EditionState from './states/EditionState';
+import SelectionState from './states/SelectionState';
+import SimpleEditionState from './states/SimpleEditionState';
 
 // helpers
-import AnnotatedMarkerLayer from './helpers/annotated-marker-layer';
-import AnnotatedSegmentLayer from './helpers/annotated-segment-layer';
-import BreakpointLayer from './helpers/breakpoint-layer';
-import CursorLayer from './helpers/cursor-layer';
-import GridAxisLayer from './helpers/grid-axis-layer';
-import MarkerLayer from './helpers/marker-layer';
-import SegmentLayer from './helpers/segment-layer';
-import TickLayer from './helpers/tick-layer';
-import TimeAxisLayer from './helpers/time-axis-layer';
-import TraceLayer from './helpers/trace-layer';
-import WaveformLayer from './helpers/waveform-layer';
+import BreakpointLayer from './helpers/BreakpointLayer';
+import CursorLayer from './helpers/CursorLayer';
+import GridAxisLayer from './helpers/GridAxisLayer';
+import MarkerLayer from './helpers/MarkerLayer';
+import SegmentLayer from './helpers/SegmentLayer';
+import TickLayer from './helpers/TickLayer';
+import TimeAxisLayer from './helpers/TimeAxisLayer';
+import TraceLayer from './helpers/TraceLayer';
+import WaveformLayer from './helpers/WaveformLayer';
 
 // axis
-import AxisLayer from './axis/axis-layer';
-import timeAxisGenerator from './axis/time-axis-generator';
-import gridAxisGenerator from './axis/grid-axis-generator';
+import AxisLayer from './axis/AxisLayer';
+import gridAxisGenerator from './axis/gridAxisGenerator';
+import timeAxisGenerator from './axis/timeAxisGenerator';
 
 // utils
 import format from './utils/format';
-import OrthogonalData from './utils/orthogonal-data';
+import OrthogonalData from './utils/OrthogonalData';
 import scales from './utils/scales';
 
 export const core = {
@@ -89,9 +87,8 @@ export const states = {
 };
 
 export const helpers = {
-  AnnotatedMarkerLayer, AnnotatedSegmentLayer, BreakpointLayer,
-  CursorLayer, GridAxisLayer, MarkerLayer, SegmentLayer, TickLayer,
-  TimeAxisLayer, TraceLayer, WaveformLayer
+  BreakpointLayer, CursorLayer, GridAxisLayer, MarkerLayer, SegmentLayer,
+  TickLayer, TimeAxisLayer, TraceLayer, WaveformLayer
 };
 
 export const axis = {

@@ -1,4 +1,4 @@
-import BaseShape from './base-shape';
+import BaseShape from './BaseShape';
 
 
 /**
@@ -6,7 +6,7 @@ import BaseShape from './base-shape';
  *
  * [example usage](./examples/layer-segment.html)
  */
-export default class Segment extends BaseShape {
+class Segment extends BaseShape {
   getClassName() { return 'segment'; }
 
   _getAccessorList() {
@@ -64,6 +64,7 @@ export default class Segment extends BaseShape {
       this.$label.style.fontSize = '12px';
       this.$label.style.fontFamily = 'arial';
       this.$label.style.userSelect = 'none';
+      this.$label.style.outlineWidth = '1px';
 
       this.$foreignObject.appendChild(this.$label);
       this.$el.appendChild(this.$foreignObject);
@@ -122,3 +123,5 @@ export default class Segment extends BaseShape {
     return area > 0;
   }
 }
+
+export default Segment;

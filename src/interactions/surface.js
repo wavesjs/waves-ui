@@ -1,5 +1,5 @@
-import EventSource from './event-source';
-import WaveEvent from './wave-event';
+import EventSource from './EventSource';
+import WaveEvent from './WaveEvent';
 
 
 /**

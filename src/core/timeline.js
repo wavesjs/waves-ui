@@ -1,11 +1,11 @@
 import events from 'events';
 
-import Keyboard from '../interactions/keyboard';
-import LayerTimeContext from './layer-time-context';
-import Surface from '../interactions/surface';
-import TimelineTimeContext from './timeline-time-context';
-import Track from './track';
-import TrackCollection from './track-collection';
+import Keyboard from '../interactions/Keyboard';
+import LayerTimeContext from './LayerTimeContext';
+import Surface from '../interactions/Surface';
+import TimelineTimeContext from './TimelineTimeContext';
+import Track from './Track';
+import TrackCollection from './TrackCollection';
 
 
 /**

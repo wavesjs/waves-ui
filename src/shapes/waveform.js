@@ -1,4 +1,4 @@
-import BaseShape from './base-shape';
+import BaseShape from './BaseShape';
 
 
 const xhtmlNS = 'http://www.w3.org/1999/xhtml';
@@ -67,15 +67,7 @@ class Waveform extends BaseShape {
 
     if (!samplesPerPixel || datum.length < samplesPerPixel) { return; }
 
-    // compute/draw visible area only
-    // @TODO refactor this ununderstandable mess
-    let minX = Math.max(-renderingContext.offsetX, 0);
-    let trackDecay = renderingContext.trackOffsetX + renderingContext.startX;
-    if (trackDecay < 0) { minX = -trackDecay; }
-
-    let maxX = minX;
-    maxX += (renderingContext.width - minX < renderingContext.visibleWidth) ?
-      renderingContext.width : renderingContext.visibleWidth;
+    const { minX, maxX } = renderingContext;
 
     // get min/max per pixels, clamped to the visible area
     const invert = renderingContext.timeToPixel.invert;

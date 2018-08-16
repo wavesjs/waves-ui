@@ -47,7 +47,7 @@ import ns from './namespace';
  * </svg>
  * ```
  */
-export default class Track {
+class Track {
   /**
    * @param {DOMElement} $el
    * @param {Number} [height = 100]
@@ -184,9 +184,24 @@ export default class Track {
    * @param {Layer} layer - the layer to add to the track.
    */
   add(layer) {
-    this.layers.push(layer);
-    // Create a default renderingContext for the layer if missing
-    this.$layout.appendChild(layer.$el);
+    let insertIndex = null;
+
+    if (layer.params.zIndex < 0)
+      layer.params.zIndex = 0;
+
+    for (let i = 0; i < this.layers.length; i++) {
+      if (layer.params.zIndex < this.layers[i].params.zIndex) {
+        insertIndex = i;
+        break;
+      }
+    }
+
+    if (insertIndex === null)
+      insertIndex = this.layers.length;
+
+    this.layers.splice(insertIndex, 0, layer);
+    // append at the zIndex place
+    this.$layout.insertBefore(layer.$el, this.$layout.children[insertIndex]);
   }
 
   /**
@@ -276,3 +291,5 @@ export default class Track {
     yield* this.layers[Symbol.iterator]();
   }
 }
+
+export default Track;

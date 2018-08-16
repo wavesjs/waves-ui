@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+var connect = require('connect');
+var log = require('./log');
+var path = require('path');
+var portfinder = require('portfinder');
+var serveStatic = require('serve-static');
+var serveFavicon = require('serve-favicon');
+
+'use strict';
+
+portfinder.basePort = 3000;
+
+
+const server = {
+  start: function(middleware) {
+    var app = connect();
+
+    if (middleware)
+      app.use(middleware);
+
+    app.use(serveFavicon('./assets/favicon.ico'));
+    app.use(serveStatic('.', { index: ['index.html'] }));
+
+    portfinder.getPort(function(err, port) {
+      if (err)
+        console.log(err.message);
+
+      app.listen(port, function() { log.serverStart(port); });
+    });
+  },
+
+  bundleMiddleware: function(transpiler, entryPoint, outFilename) {
+    return function(req, res, next) {
+      if (req.url === '/' + path.basename(outFilename))
+        transpiler.bundle(entryPoint, outFilename, next); // rebundle
+      else
+        next();
+    }
+  }
+}
+
+module.exports = server;
