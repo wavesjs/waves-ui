@@ -3,7 +3,7 @@ import LayerTimeContext from './core/LayerTimeContext';
 import Layer from './core/Layer';
 import namespace from './core/namespace';
 import TimelineTimeContext from './core/TimelineTimeContext';
-import Timeline from './core/timeline';
+import Timeline from './core/Timeline';
 import TrackCollection from './core/TrackCollection';
 import Track from './core/Track';
 
